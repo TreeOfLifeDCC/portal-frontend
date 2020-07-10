@@ -1,0 +1,78 @@
+<div class="container" style="padding-top: 65px;">
+  <div class="row">
+    <div class="col-sm-6 col-md-3">Content1</div>
+    <div class="col-sm-6 col-md-3">Content2</div>
+    <div class="col-sm-6 col-md-3">Content3</div>
+    <div class="col-sm-6 col-md-3">Content4</div>
+  </div>
+</div>
+
+<div class="container" style="padding-top: 65px;">
+  <div class="row">
+    <div class="col-md-2">
+      <div class="row">
+        <div class="col-md-12 col-sm-6">
+          <div class="card bg-lite mb-3 filter-top">
+            <h6 class="card-header">Column 1 Filter</h6>
+            <ul class="list-group">
+              <li class="list-group-item d-flex justify-content-between align-items-center">
+                Filter 1
+              </li>
+              <li class="list-group-item d-flex justify-content-between align-items-center">
+                Filter 2
+              </li>
+            </ul>
+          </div>
+        </div>
+        <div class="col-md-12 col-sm-6">
+          <div class="card bg-lite mb-3">
+            <h6 class="card-header">Column 2 Filter</h6>
+            <ul class="list-group ">
+              <li class="list-group-item d-flex justify-content-between align-items-center">
+                Filter 3
+              </li>
+              <li class="list-group-item d-flex justify-content-between align-items-center">
+                Filter 4
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-10">
+      <mat-table #table [dataSource]="dataSource" matSort>
+        <!-- First Column -->
+        <ng-container matColumnDef="column1">
+          <mat-header-cell *matHeaderCellDef mat-sort-header> Column 1 </mat-header-cell>
+          <mat-cell *matCellDef="let element"> {{element.column1}} </mat-cell>
+        </ng-container>
+
+        <!-- Second Column -->
+        <ng-container matColumnDef="column2">
+          <mat-header-cell *matHeaderCellDef mat-sort-header> Column 2 </mat-header-cell>
+          <mat-cell *matCellDef="let element"> {{element.column2}} </mat-cell>
+        </ng-container>
+
+        <!-- Third Column -->
+        <ng-container matColumnDef="column3">
+          <mat-header-cell *matHeaderCellDef mat-sort-header> Column 3 </mat-header-cell>
+          <mat-cell *matCellDef="let element"> {{element.column3}} </mat-cell>
+        </ng-container>
+        <!-- Fourth Column -->
+        <ng-container matColumnDef="column4">
+          <mat-header-cell *matHeaderCellDef mat-sort-header> Column 4 </mat-header-cell>
+          <mat-cell *matCellDef="let element"> {{element.column4 }} </mat-cell>
+        </ng-container>
+        <!-- Fifth Column -->
+        <ng-container matColumnDef="column5">
+          <mat-header-cell *matHeaderCellDef mat-sort-header> Column 5 </mat-header-cell>
+          <mat-cell *matCellDef="let element"> {{element.column5 }} </mat-cell>
+        </ng-container>
+
+        <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+        <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+      </mat-table>
+      <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
+    </div>
+  </div>
+</div>
