@@ -30,7 +30,7 @@ deploy-app-master:
         - 'printf "apiVersion: v1\nkind: Secret\n$(kubectl create secret docker-registry gitlab-registry --docker-server=$CI_REGISTRY --docker-username=$CI_DEPLOY_USER --docker-password=$CI_DEPLOY_PASSWORD --docker-email=$GITLAB_USER_EMAIL -o yaml --dry-run)" | kubectl apply -f -'
         - sed 's=_APP_NAME_='"$CI_PROJECT_NAME"'=g; s=_IMAGE_='"$CI_REGISTRY_IMAGE\:$CI_COMMIT_SHORT_SHA"'=g' kubernetes.template.yml > kubernetes.yml;
         - cat kubernetes.yml
-        - sed 's=_APP_NAME_='"$CI_PROJECT_NAME"'=g' ingress.frontend.template.yml > ingress.yml;
+        - sed 's=_APP_NAME_='"$CI_PROJECT_NAME"'=g' ingress.production.template.yml > ingress.yml;
         - cat ingress.yml
         - kubectl apply -f kubernetes.yml
         - kubectl apply -f ingress.yml
