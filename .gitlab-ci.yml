@@ -39,4 +39,4 @@ deploy-app-master:
         - kubectl get ingress
         - kubectl get pods
       only:
-        - master
+        - dev
