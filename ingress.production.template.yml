@@ -10,7 +10,7 @@ spec:
   - host:
     http:
       paths:
-      - path: _APP_NAME_
+      - path: /
         backend:
           serviceName: _APP_NAME_
           servicePort: 80
