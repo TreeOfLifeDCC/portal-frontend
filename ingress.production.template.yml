@@ -1,0 +1,16 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: ingress-k8s-example
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /$2
+    nginx.ingress.kubernetes.io/ssl-redirect: "false"
+spec:
+  rules:
+  - host:
+    http:
+      paths:
+      - path: _APP_NAME_(/|$)(.*)
+        backend:
+          serviceName: _APP_NAME_
+          servicePort: 80
