@@ -11,11 +11,11 @@ import { MatSortModule } from '@angular/material/sort';
 import { MatTableModule } from '@angular/material/table';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatPaginatorModule } from '@angular/material/paginator';
-import { DetailsComponent } from './component/details/details.component';
+import { SpecimensComponent } from './specimens/specimens.component';
 
 
 @NgModule({
-  declarations: [DashboardComponent, DetailsComponent],
+  declarations: [DashboardComponent, SpecimensComponent],
   imports: [
     CommonModule,
     DashboardRoutingModule,

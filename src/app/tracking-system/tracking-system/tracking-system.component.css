@@ -1,0 +1,30 @@
+.jumbotron {
+    background: url("../../../assets/DTL_website_banner_2020_FINAL_WEB.jpg") no-repeat center center;
+    background-size: cover;
+    height: 31%;
+}
+
+table {
+    width: 100%;
+}
+
+.mat-form-field {
+    font-size: 14px;
+    width: 100%;
+}
+
+button {
+    margin-left: 5px;
+}
+
+.card-header, .btn-success, .badge-success {
+    background-color: #8FBC45;
+}
+
+.btn-primary, .active {
+    background-color: #4BBEFD;
+}
+
+.page-header {
+    color: #4BBEFD;
+}
