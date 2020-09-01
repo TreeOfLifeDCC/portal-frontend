@@ -11,9 +11,9 @@
             <div class="row">
                 <div class="col-md-12 col-sm-6">
                     <div class="card bg-lite mb-3 filter-top">
-                        <h6 class="card-header">Organism</h6>
+                        <h3 class="card-header">Organism</h3>
                         <ul class="list-group">
-                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                            <li class="list-group-item d-flex justify-content-between align-items-center active">
                                 Lutra lutra
                                 <span class="badge badge-pill badge-info">1</span>
                             </li>
@@ -30,7 +30,7 @@
                 </div>
                 <div class="col-md-12 col-sm-6">
                     <div class="card bg-lite mb-3">
-                        <h6 class="card-header">Common Name</h6>
+                        <h3 class="card-header">Common Name</h3>
                         <ul class="list-group ">
                             <li class="list-group-item d-flex justify-content-between align-items-center">
                                 Eurasian river otter
@@ -50,50 +50,62 @@
             </div>
         </div>
         <div class="col-md-10">
-            <h1>Tracking system</h1>
-            <mat-table #table [dataSource]="dataSource" matSort>
+            <h1 class="page-header">Tracking system</h1>
+            <h1>Filters:
+                <button type="button" class="btn btn-success">
+                    Lutra lutra <span class="badge badge-light">X</span>
+                </button>
+                <button type="button" class="btn btn-primary">
+                    Remove all filters
+                </button>
+            </h1>
+            <mat-form-field>
+                <mat-label>Search</mat-label>
+                <input matInput (keyup)="applyFilter($event)" placeholder="Ex. lutra" #input>
+            </mat-form-field>
+            <table mat-table #table [dataSource]="dataSource" matSort>
                 <!-- First Column -->
-                <ng-container matColumnDef="Organism">
+                <ng-container matColumnDef="organism">
                     <mat-header-cell *matHeaderCellDef mat-sort-header> Organism </mat-header-cell>
                     <mat-cell *matCellDef="let element"> {{element.organism}} </mat-cell>
                 </ng-container>
 
                 <!-- Second Column -->
-                <ng-container matColumnDef="Common name">
+                <ng-container matColumnDef="common_name">
                     <mat-header-cell *matHeaderCellDef mat-sort-header> Common name </mat-header-cell>
                     <mat-cell *matCellDef="let element"> {{element.common_name}} </mat-cell>
                 </ng-container>
 
                 <!-- Third Column -->
-                <ng-container matColumnDef="Metadata submitted to BioSamples">
+                <ng-container matColumnDef="metadata_submitted_to_biosamples">
                     <mat-header-cell *matHeaderCellDef mat-sort-header> Metadata submitted to BioSamples </mat-header-cell>
                     <mat-cell *matCellDef="let element">
                         <span class="badge badge-pill badge-success">{{element.metadata_submitted_to_biosamples}} </span>
                     </mat-cell>
                 </ng-container>
                 <!-- Fourth Column -->
-                <ng-container matColumnDef="Raw data submitted to ENA">
+                <ng-container matColumnDef="raw_data_submitted_to_ena">
                     <mat-header-cell *matHeaderCellDef mat-sort-header> Raw data submitted to ENA </mat-header-cell>
                     <mat-cell *matCellDef="let element">
                         <span class="badge badge-pill badge-success">{{element.raw_data_submitted_to_ena }}</span>
                     </mat-cell>
                 </ng-container>
                 <!-- Fifth Column -->
-                <ng-container matColumnDef="Mapped reads submitted to ENA">
+                <ng-container matColumnDef="mapped_reads_submitted_to_ena">
                     <mat-header-cell *matHeaderCellDef mat-sort-header> Mapped reads submitted to ENA </mat-header-cell>
                     <mat-cell *matCellDef="let element">
                         <span class="badge badge-pill badge-success">{{element.mapped_reads_submitted_to_ena }} </span>
                     </mat-cell>
                 </ng-container>
 
-                <ng-container matColumnDef="Assemblies submitted to ENA">
+                <ng-container matColumnDef="assemblies_submitted_to_ena">
                     <mat-header-cell *matHeaderCellDef mat-sort-header> Assemblies submitted to ENA </mat-header-cell>
                     <mat-cell *matCellDef="let element">
                         <span class="badge badge-pill badge-warning">{{element.assemblies_submitted_to_ena }} </span>
                     </mat-cell>
                 </ng-container>
 
-                <ng-container matColumnDef="Annotation submitted to ENA">
+                <ng-container matColumnDef="annotation_submitted_to_ena">
                     <mat-header-cell *matHeaderCellDef mat-sort-header> Annotation submitted to ENA </mat-header-cell>
                     <mat-cell *matCellDef="let element">
                         <span class="badge badge-pill badge-warning">{{element.annotation_submitted_to_ena }} </span>
@@ -102,7 +114,7 @@
 
                 <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
                 <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
-            </mat-table>
+            </table>
             <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
         </div>
     </div>
