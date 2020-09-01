@@ -18,6 +18,13 @@ const routes: Routes = [
   {
     path: '',
     children: [
+      {path: 'tracking_system', loadChildren: () => import('./tracking-system/tracking-system.module').then(
+          m => m.TrackingSystemModule)}
+    ]
+  },
+  {
+    path: '',
+    children: [
       { path: '404', loadChildren: () => import('./not-found/not-found.module').then(m => m.NotFoundModule) },
       { path: '**', loadChildren: () => import('./not-found/not-found.module').then(m => m.NotFoundModule) }
     ]
