@@ -11,11 +11,18 @@
       <div class="row">
         <div class="col-md-12 col-sm-6">
           <div class="card bg-lite mb-3 filter-top">
-            <h6 class="card-header">Column 1 Filter</h6>
+            <h6 class="card-header">BioSample ID</h6>
             <ul class="list-group">
               <li class="list-group-item d-flex justify-content-between align-items-center">
                 Filter 1
               </li>
+            </ul>
+          </div>
+        </div>
+        <div class="col-md-12 col-sm-6">
+          <div class="card bg-lite mb-3">
+            <h6 class="card-header">Sex</h6>
+            <ul class="list-group ">
               <li class="list-group-item d-flex justify-content-between align-items-center">
                 Filter 2
               </li>
@@ -24,11 +31,18 @@
         </div>
         <div class="col-md-12 col-sm-6">
           <div class="card bg-lite mb-3">
-            <h6 class="card-header">Column 2 Filter</h6>
+            <h6 class="card-header">Organism</h6>
             <ul class="list-group ">
               <li class="list-group-item d-flex justify-content-between align-items-center">
                 Filter 3
               </li>
+            </ul>
+          </div>
+        </div>
+        <div class="col-md-12 col-sm-6">
+          <div class="card bg-lite mb-3">
+            <h6 class="card-header">Common name</h6>
+            <ul class="list-group ">
               <li class="list-group-item d-flex justify-content-between align-items-center">
                 Filter 4
               </li>
@@ -41,31 +55,27 @@
       <h1>Organisms</h1>
       <mat-table #table [dataSource]="dataSource" matSort>
         <!-- First Column -->
-        <ng-container matColumnDef="column1">
-          <mat-header-cell *matHeaderCellDef mat-sort-header> Column 1 </mat-header-cell>
-          <mat-cell *matCellDef="let element"> {{element.column1}} </mat-cell>
+        <ng-container matColumnDef="BioSampleId">
+          <mat-header-cell *matHeaderCellDef mat-sort-header> BioSample ID </mat-header-cell>
+          <mat-cell *matCellDef="let element">
+            <a [routerLink]="['/dashboard/details/',element.accession]">{{element.accession}}</a> </mat-cell>
         </ng-container>
 
         <!-- Second Column -->
-        <ng-container matColumnDef="column2">
-          <mat-header-cell *matHeaderCellDef mat-sort-header> Column 2 </mat-header-cell>
-          <mat-cell *matCellDef="let element"> {{element.column2}} </mat-cell>
+        <ng-container matColumnDef="Sex">
+          <mat-header-cell *matHeaderCellDef mat-sort-header> Sex </mat-header-cell>
+          <mat-cell *matCellDef="let element"> {{element.sex[0].text}} </mat-cell>
         </ng-container>
 
         <!-- Third Column -->
-        <ng-container matColumnDef="column3">
-          <mat-header-cell *matHeaderCellDef mat-sort-header> Column 3 </mat-header-cell>
-          <mat-cell *matCellDef="let element"> {{element.column3}} </mat-cell>
+        <ng-container matColumnDef="Organism">
+          <mat-header-cell *matHeaderCellDef mat-sort-header> Organism </mat-header-cell>
+          <mat-cell *matCellDef="let element"> {{element.organism}} </mat-cell>
         </ng-container>
         <!-- Fourth Column -->
-        <ng-container matColumnDef="column4">
-          <mat-header-cell *matHeaderCellDef mat-sort-header> Column 4 </mat-header-cell>
-          <mat-cell *matCellDef="let element"> {{element.column4 }} </mat-cell>
-        </ng-container>
-        <!-- Fifth Column -->
-        <ng-container matColumnDef="column5">
-          <mat-header-cell *matHeaderCellDef mat-sort-header> Column 5 </mat-header-cell>
-          <mat-cell *matCellDef="let element"> {{element.column5 }} </mat-cell>
+        <ng-container matColumnDef="CommonName">
+          <mat-header-cell *matHeaderCellDef mat-sort-header> Common Name </mat-header-cell>
+          <mat-cell *matCellDef="let element"> {{element.commonName }} </mat-cell>
         </ng-container>
 
         <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>

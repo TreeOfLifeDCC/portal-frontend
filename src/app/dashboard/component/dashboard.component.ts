@@ -13,7 +13,7 @@ import { Title } from '@angular/platform-browser';
   styleUrls: ['./dashboard.component.css']
 })
 export class DashboardComponent implements OnInit {
-  displayedColumns = ['column1', 'column2', 'column3', 'column4', 'column5'];
+  displayedColumns = ['BioSampleId', 'Sex', 'Organism', 'CommonName'];
   dataSource = new MatTableDataSource<Sample>(samples);
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort, {}) sort: MatSort;
