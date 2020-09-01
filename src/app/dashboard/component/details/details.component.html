@@ -1,0 +1,9 @@
+<div class="container" style="padding-top: 65px;">
+    <h1 class="text-center">{{bioSampleId}}</h1>
+    <dl class="row">
+        <ng-container *ngFor="let sample of bioSampleObj | keyvalue">
+            <dt class="col-sm-3" *ngIf=sample?.value>{{sample.key}}</dt>
+            <dd class="col-sm-9" *ngIf=sample?.value>{{sample.value}}</dd>
+        </ng-container>
+    </dl>
+</div>
