@@ -16,7 +16,7 @@ build-app-master:
     - docker build --pull -t "$CI_REGISTRY_IMAGE:$CI_COMMIT_SHORT_SHA" .
     - docker push "$CI_REGISTRY_IMAGE:$CI_COMMIT_SHORT_SHA"
   only:
-    - dev
+    - master
 
 deploy-app-master:
       stage: deploy
@@ -39,4 +39,4 @@ deploy-app-master:
         - kubectl get ingress
         - kubectl get pods
       only:
-        - dev
+        - master
