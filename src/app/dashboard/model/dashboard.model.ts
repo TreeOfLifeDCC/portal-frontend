@@ -26,6 +26,7 @@ export interface Sample {
     specimenVoucher?: any;
     projectName?: any;
     customField: CustomField[];
+    experiment: Experiment[];
   }
   
   interface CustomField {
@@ -44,6 +45,18 @@ export interface Sample {
   interface OntologyDTO {
     text: string;
     ontologyTerms: string[];
+  }
+
+  interface Experiment {
+    study_accession: string;
+    sample_accession: string;
+    experiment_accession: string;
+    run_accession: string;
+    tax_id: string;
+    scientific_name: string;
+    fastq_ftp: string[];
+    submitted_ftp: string[];
+    sra_ftp: string[];
   }
 
 
@@ -156,6 +169,17 @@ export interface Sample {
             value: "2020-05-20",
             unit: null,
             ontologyTerms: []
+        }],
+        experiment: [{
+            study_accession: "PRJEB22206",
+            sample_accession: "SAMEA994731",
+            experiment_accession: "ERX3338754",
+            run_accession: "ERR3313238",
+            tax_id: "9657",
+            scientific_name: "Lutra lutra",
+            fastq_ftp: ["ftp.sra.ebi.ac.uk/vol1/fastq/ERR331/008/ERR3313238/ERR3313238_subreads.fastq.gz"],
+            submitted_ftp: ["ftp.sra.ebi.ac.uk/vol1/run/ERR331/ERR3313238/m54097_180801_114742.subreads.bam","ftp.sra.ebi.ac.uk/vol1/run/ERR331/ERR3313238/m54097_180801_114742.subreads.bam.bai"],
+            sra_ftp: ["ftp.sra.ebi.ac.uk/vol1/err/ERR331/008/ERR3313238"]
         }]
     },
     {
@@ -262,6 +286,17 @@ export interface Sample {
             value: "2020-05-20",
             unit: null,
             ontologyTerms: []
+        }],
+        experiment: [{
+            study_accession: "PRJEB22206",
+            sample_accession: "SAMEA994726",
+            experiment_accession: "ERX3338758",
+            run_accession: "ERR3313242",
+            tax_id: "30640",
+            scientific_name: "Sciurus carolinensis",
+            fastq_ftp: ["ftp.sra.ebi.ac.uk/vol1/fastq/ERR331/002/ERR3313242/ERR3313242_subreads.fastq.gz"],
+            submitted_ftp: ["ftp.sra.ebi.ac.uk/vol1/run/ERR331/ERR3313242/m54097_180803_131457.subreads.bam","ftp.sra.ebi.ac.uk/vol1/run/ERR331/ERR3313242/m54097_180803_131457.subreads.bam.bai"],
+            sra_ftp: ["ftp.sra.ebi.ac.uk/vol1/err/ERR331/002/ERR3313242"]
         }]
     },
     {
@@ -373,6 +408,17 @@ export interface Sample {
             value: "2020-05-20",
             unit: null,
             ontologyTerms: []
+        }],
+        experiment: [{
+            study_accession: "PRJEB22206",
+            sample_accession: "SAMEA994733",
+            experiment_accession: "ERX3224905",
+            run_accession: "ERR3197129",
+            tax_id: "55149",
+            scientific_name: "Sciurus vulgaris",
+            fastq_ftp: ["ftp.sra.ebi.ac.uk/vol1/fastq/ERR319/009/ERR3197129/ERR3197129_subreads.fastq.gz"],
+            submitted_ftp: ["ftp.sra.ebi.ac.uk/vol1/run/ERR319/ERR3197129/m54205_180301_123230.subreads.bam","ftp.sra.ebi.ac.uk/vol1/run/ERR319/ERR3197129/m54205_180301_123230.subreads.bam.bai"],
+            sra_ftp: ["ftp.sra.ebi.ac.uk/vol1/err/ERR319/009/ERR3197129"]
         }]
     }
 ];
