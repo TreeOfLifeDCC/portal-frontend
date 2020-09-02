@@ -1,9 +1,56 @@
 <div class="container" style="padding-top: 65px;">
     <h1 class="text-center">{{bioSampleId}}</h1>
     <dl class="row">
-        <ng-container *ngFor="let sample of bioSampleObj | keyvalue">
-            <dt class="col-sm-3" *ngIf=sample?.value>{{sample.key}}</dt>
-            <dd class="col-sm-9" *ngIf=sample?.value>{{sample.value}}</dd>
-        </ng-container>
+        <dt class="col-sm-3">Name:</dt>
+        <dd class="col-sm-9">{{bioSampleObj.commonName}}</dd>
+
+        <dt class="col-sm-3">BioSample ID:</dt>
+        <dd class="col-sm-9"><a href="http://www.ebi.ac.uk/biosamples/samples/{{bioSampleObj.accession}}"
+                target="_blank">{{bioSampleObj.accession}}</a></dd>
+
+        <dt class="col-sm-3">Organism:</dt>
+        <dd class="col-sm-9">{{bioSampleObj.organism}}</dd>
+
+        <dt class="col-sm-3">Sex:</dt>
+        <dd class="col-sm-9"><a href="{{bioSampleObj.sex[0].ontologyTerms[0]}}"
+                target="_blank">{{bioSampleObj.sex[0].text}}</a></dd>
+
+        <dt class="col-sm-3">Scientific Name:</dt>
+        <dd class="col-sm-9">{{bioSampleObj.scientificName}}</dd>
+
+        <dt class="col-sm-3">Tax ID:</dt>
+        <dd class="col-sm-9">{{bioSampleObj.taxonId}}</dd>
+
+        <div class="container">
+            <hr>
+            <h1 class="col-sm-12">Custom Fields</h1>
+            <div class="row" *ngFor="let sample of bioSampleObj.customField">
+                <dt class="col-sm-3">{{sample?.name}}</dt>
+                <dd class="col-sm-9">
+                    <a *ngIf="sample.ontologyTerms.lenght > 0; else simple"
+                        href="{{sample.ontologyTerms[0]}}">{{sample?.value}}</a>
+                    <ng-template #simple>
+                        {{sample?.value}}
+                    </ng-template>
+                </dd>
+            </div>
+        </div>
+        <div class="container">
+            <hr>
+            <h1 class="col-sm-12">Related Samples</h1>
+            <div class="row">
+                <dt class="col-sm-4">BioSample ID</dt>
+                <dt class="col-sm-4">Relationship</dt>
+                <dt class="col-sm-4">BioSample ID</dt>
+            </div>
+            <div class="row" *ngFor="let rel of bioSampleObj.relationship">
+                <dd class="col-sm-4"><a href="http://www.ebi.ac.uk/biosamples/samples/{{rel.source}}"
+                        target="_blank">{{rel.source}}</a></dd>
+                <dd class="col-sm-4">{{rel.type}}</dd>
+                <dd class="col-sm-4"><a href="http://www.ebi.ac.uk/biosamples/samples/{{rel.target}}"
+                        target="_blank">{{rel.target}}</a></dd>
+            </div>
+        </div>
+
     </dl>
 </div>

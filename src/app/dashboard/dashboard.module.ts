@@ -4,6 +4,7 @@ import { CommonModule } from '@angular/common';
 import { DashboardRoutingModule } from './dashboard-routing.module';
 import { DashboardComponent } from './component/dashboard.component';
 import { SpecimensComponent } from './specimens/specimens.component';
+import { DetailsComponent } from './component/details/details.component';
 
 import {FormsModule} from '@angular/forms';
 import {MatButtonModule} from '@angular/material/button';
@@ -17,7 +18,7 @@ import {MatInputModule} from '@angular/material/input';
 
 
 @NgModule({
-  declarations: [DashboardComponent, SpecimensComponent],
+  declarations: [DashboardComponent, SpecimensComponent, DetailsComponent],
   imports: [
     CommonModule,
     DashboardRoutingModule,

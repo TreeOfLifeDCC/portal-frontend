@@ -98,7 +98,7 @@ export interface Sample {
             ontologyTerms: []
         }, {
             name: "date received",
-            value: "'2018-09-19'",
+            value: "2018-09-19",
             unit: null,
             ontologyTerms: []
         }, {
@@ -148,12 +148,12 @@ export interface Sample {
             ontologyTerms: []
         }, {
             name: "releaseDate",
-            value: "'2018-02-01'",
+            value: "2018-02-01",
             unit: null,
             ontologyTerms: []
         }, {
             name: "updateDate",
-            value: "'2020-05-20'",
+            value: "2020-05-20",
             unit: null,
             ontologyTerms: []
         }]
