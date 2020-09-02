@@ -2,13 +2,14 @@ import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 
 import { DashboardComponent } from './component/dashboard.component';
+import { DetailsComponent } from './component/details/details.component';
 import {SpecimensComponent} from './specimens/specimens.component';
 
 const routes: Routes = [
     { path: '', redirectTo: 'organisms', pathMatch: 'full' },
     { path : 'organisms', component: DashboardComponent },
     { path: 'specimens', component: SpecimensComponent},
-    { path : 'details/:id', component: DashboardComponent },
+    { path : 'organisms/details/:id', component: DetailsComponent },
 
     ];
 

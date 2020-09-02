@@ -18,8 +18,8 @@ export class DetailsComponent implements OnInit {
       if (sample['accession'] == this.bioSampleId)
         this.bioSampleObj = sample
     });
-    console.log(this.bioSampleId);
-    console.log(this.bioSampleObj);
+
+    console.log(this.bioSampleObj.customField);
   }
 
   ngOnInit(): void {

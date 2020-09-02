@@ -72,7 +72,7 @@
         <ng-container matColumnDef="accession">
           <mat-header-cell *matHeaderCellDef mat-sort-header> BioSample ID </mat-header-cell>
           <mat-cell *matCellDef="let element">
-            <a [routerLink]="['/dashboard/details/',element.accession]">{{element.accession}}</a> </mat-cell>
+            <a [routerLink]="['/dashboard/organisms/details/',element.accession]">{{element.accession}}</a> </mat-cell>
         </ng-container>
 
         <!-- Second Column -->
