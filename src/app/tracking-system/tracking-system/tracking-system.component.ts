@@ -10,7 +10,7 @@ import {Title} from '@angular/platform-browser';
   templateUrl: './tracking-system.component.html',
   styleUrls: ['./tracking-system.component.css']
 })
-export class TrackingSystemComponent implements OnInit {
+export class TrackingSystemComponent implements OnInit, AfterViewInit {
   displayedColumns = ['organism', 'common_name', 'metadata_submitted_to_biosamples',
     'raw_data_submitted_to_ena', 'mapped_reads_submitted_to_ena', 'assemblies_submitted_to_ena',
     'annotation_submitted_to_ena'];
@@ -30,7 +30,6 @@ export class TrackingSystemComponent implements OnInit {
   ngOnInit(): void {
     this.titleService.setTitle('Tracking system');
     this.dataSource.sort = this.sort;
-    this.dataSource.paginator = this.paginator;
     this.getFilters(samples);
   }
 
@@ -95,6 +94,10 @@ export class TrackingSystemComponent implements OnInit {
     this.filters = filters;
     this.organismFilters = Object.entries(this.filters.organism);
     this.commonNameFilters = Object.entries(this.filters.common_name);
+  }
+
+  ngAfterViewInit() {
+    this.dataSource.paginator = this.paginator;
   }
 
 }

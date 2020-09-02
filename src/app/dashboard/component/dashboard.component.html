@@ -14,21 +14,12 @@
           <div class="card bg-lite mb-3 filter-top">
             <h3 class="card-header">Organism</h3>
             <ul class="list-group">
-              <!-- <li *ngFor="let filter of bioSampleObj" class="list-group-item d-flex justify-content-between align-items-center" (click)=filterProduct(filter.organism)>
-                <a>{{filter.organism}}</a>
-              </li> -->
-              <li class="list-group-item d-flex justify-content-between align-items-center">
-                Lutra lutra
-                <span class="badge badge-pill badge-info">1</span>
-              </li>
-              <li class="list-group-item d-flex justify-content-between align-items-center">
-                Sciurus carolinensis
-                <span class="badge badge-pill badge-info">1</span>
-              </li>
-              <li class="list-group-item d-flex justify-content-between align-items-center">
-                Sciurus vulgaris
-                <span class="badge badge-pill badge-info">1</span>
-              </li>
+              <li class="list-group-item d-flex justify-content-between align-items-center"
+                  [ngClass]="checkFilterIsActive(filter[0])"
+                  (click)="onFilterClick(filter[0])"
+                  style="cursor: pointer" *ngFor="let filter of organismFilters">
+                {{filter[0]}}
+                <span class="badge badge-pill badge-info">{{filter[1]}}</span>
             </ul>
           </div>
         </div>
@@ -36,17 +27,12 @@
           <div class="card bg-lite mb-3">
             <h3 class="card-header">Common Name</h3>
             <ul class="list-group ">
-              <li class="list-group-item d-flex justify-content-between align-items-center">
-                Eurasian river otter
-                <span class="badge badge-pill badge-info">1</span>
-              </li>
-              <li class="list-group-item d-flex justify-content-between align-items-center">
-                Grey squirrel
-                <span class="badge badge-pill badge-info">1</span>
-              </li>
-              <li class="list-group-item d-flex justify-content-between align-items-center">
-                Eurasian red squirrel
-                <span class="badge badge-pill badge-info">1</span>
+              <li class="list-group-item d-flex justify-content-between align-items-center"
+                  [ngClass]="checkFilterIsActive(filter[0])"
+                  (click)="onFilterClick(filter[0])"
+                  style="cursor: pointer" *ngFor="let filter of commonNameFilters">
+                {{filter[0]}}
+                <span class="badge badge-pill badge-info">{{filter[1]}}</span>
               </li>
             </ul>
           </div>
@@ -55,11 +41,12 @@
     </div>
     <div class="col-md-10">
       <h1 class="page-header">Organisms</h1>
-      <h1>Filters:
-        <button type="button" class="btn btn-success">
-          Eurasian red squirrel <span class="badge badge-light">X</span>
+      <h1 *ngIf="activeFilters.length !== 0">Filters:
+        <button type="button" class="btn btn-success" *ngFor="let filter of activeFilters">
+          {{filter}}
+          <span class="badge badge-light" (click)="removeFilter(filter)">X</span>
         </button>
-        <button type="button" class="btn btn-primary">
+        <button type="button" class="btn btn-primary" (click)="removeAllFilters()">
           Remove all filters
         </button>
       </h1>
