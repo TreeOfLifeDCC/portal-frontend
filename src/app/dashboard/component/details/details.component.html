@@ -81,26 +81,26 @@
                     <tbody>
                         <tr *ngFor="let exp of bioSampleObj.experiment">
                             <td><a class="no-underline"
-                                    href="https://www.ebi.ac.uk/ena/browser/view/{{exp.sample_accession}}"
-                                    target="_blank">{{exp.sample_accession}}</a></td>
+                                    href="https://www.ebi.ac.uk/ena/browser/view/{{exp.sample_accession}}">{{exp.sample_accession}}</a>
+                            </td>
                             <td><a class="no-underline"
-                                    href="https://www.ebi.ac.uk/ena/browser/view/{{exp.experiment_accession}}"
-                                    target="_blank">{{exp.experiment_accession}}</a></td>
+                                    href="https://www.ebi.ac.uk/ena/browser/view/{{exp.experiment_accession}}">{{exp.experiment_accession}}</a>
+                            </td>
                             <td><a class="no-underline"
-                                    href="https://www.ebi.ac.uk/ena/browser/view/{{exp.run_accession}}"
-                                    target="_blank">{{exp.run_accession}}</a></td>
+                                    href="https://www.ebi.ac.uk/ena/browser/view/{{exp.run_accession}}">{{exp.run_accession}}</a>
+                            </td>
                             <td><a class="no-underline"
-                                    href="https://www.ebi.ac.uk/ena/browser/view/{{exp.study_accession}}"
-                                    target="_blank">{{exp.study_accession}}</a></td>
-                            <td><a class="no-underline" href="https://www.ebi.ac.uk/ena/browser/view/{{exp.tax_id}}"
-                                    target="_blank">{{exp.tax_id}}</a></td>
+                                    href="https://www.ebi.ac.uk/ena/browser/view/{{exp.study_accession}}">{{exp.study_accession}}</a>
+                            </td>
+                            <td><a class="no-underline"
+                                    href="https://www.ebi.ac.uk/ena/browser/view/{{exp.tax_id}}">{{exp.tax_id}}</a></td>
                             <td>{{exp.scientific_name}}</td>
                             <td>
                                 <ul class="list-group ">
                                     <li *ngFor="let fastq of exp.fastq_ftp"
                                         class="d-flex justify-content-between align-items-center">
-                                        <a href="{{fastq}}" class="btn btn-link btn-reduced-padding"
-                                            target="_blank">{{exp.run_accession}}...fastq.gz</a>
+                                        <a href="ftp://{{fastq}}"
+                                            class="btn btn-link btn-reduced-padding">{{exp.run_accession}}...fastq.gz</a>
                                     </li>
                                 </ul>
                             </td>
@@ -108,8 +108,8 @@
                                 <ul class="list-group ">
                                     <li *ngFor="let submitted_ftp of exp.submitted_ftp"
                                         class="d-flex justify-content-between align-items-center">
-                                        <a href="{{submitted_ftp}}" class="btn btn-link btn-reduced-padding"
-                                            target="_blank">{{exp.study_accession}}</a>
+                                        <a href="ftp://{{submitted_ftp}}"
+                                            class="btn btn-link btn-reduced-padding">{{exp.study_accession}}</a>
                                     </li>
                                 </ul>
                             </td>
@@ -117,8 +117,8 @@
                                 <ul class="list-group ">
                                     <li *ngFor="let sra_ftp of exp.sra_ftp"
                                         class="d-flex justify-content-between align-items-center">
-                                        <a href="{{sra_ftp}}" class="btn btn-link btn-reduced-padding"
-                                            target="_blank">{{exp.run_accession}}</a>
+                                        <a href="ftp://{{sra_ftp}}"
+                                            class="btn btn-link btn-reduced-padding">{{exp.run_accession}}</a>
                                     </li>
                                 </ul>
                             </td>
