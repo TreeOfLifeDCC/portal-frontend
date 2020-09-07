@@ -16,7 +16,6 @@ import {MatPaginatorModule} from '@angular/material/paginator';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatInputModule} from '@angular/material/input';
 
-
 @NgModule({
   declarations: [DashboardComponent, SpecimensComponent, DetailsComponent],
   imports: [

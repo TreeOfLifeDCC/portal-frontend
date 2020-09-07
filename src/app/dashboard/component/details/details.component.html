@@ -21,7 +21,7 @@
         <dt class="col-sm-3">Tax ID:</dt>
         <dd class="col-sm-9">{{bioSampleObj.taxonId}}</dd>
 
-        <div class="container">
+        <div class="col-sm-12">
             <hr>
             <div class="row" *ngFor="let sample of bioSampleObj.customField">
                 <dt class="col-sm-3">{{sample?.name}}</dt>
@@ -35,7 +35,7 @@
             </div>
         </div>
         <!-- Relationship Section -->
-        <div class="container">
+        <div class="col-sm-12">
             <hr>
             <h1 class="col-sm-12 page-header">Related Samples</h1>
             <div class="table-responsive">
@@ -59,71 +59,80 @@
             </div>
         </div>
         <!-- Experiment Files Section -->
-        <div class="container">
+        <div class="col-sm-12">
             <hr>
             <h1 class="col-sm-12 page-header">Related files</h1>
-            <div class="table-responsive">
-                <table class="table table-striped table-hover table-borderless table-sm" cellspacing="0" width="100%">
-                    <thead>
-                        <tr>
-                            <th>Sample Accession</th>
-                            <th>Experiment Accession</th>
-                            <th>Run Accession</th>
-                            <th>Study Accession</th>
-                            <th>Tax Id</th>
-                            <th>Scientific Name</th>
-                            <th>FASTQ FTP</th>
-                            <th>Submitted FTP</th>
-                            <th>SRA FTP</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr *ngFor="let exp of bioSampleObj.experiment">
-                            <td><a class="no-underline"
-                                    href="https://www.ebi.ac.uk/ena/browser/view/{{exp.sample_accession}}">{{exp.sample_accession}}</a>
-                            </td>
-                            <td><a class="no-underline"
-                                    href="https://www.ebi.ac.uk/ena/browser/view/{{exp.experiment_accession}}">{{exp.experiment_accession}}</a>
-                            </td>
-                            <td><a class="no-underline"
-                                    href="https://www.ebi.ac.uk/ena/browser/view/{{exp.run_accession}}">{{exp.run_accession}}</a>
-                            </td>
-                            <td><a class="no-underline"
-                                    href="https://www.ebi.ac.uk/ena/browser/view/{{exp.study_accession}}">{{exp.study_accession}}</a>
-                            </td>
-                            <td><a class="no-underline"
-                                    href="https://www.ebi.ac.uk/ena/browser/view/{{exp.tax_id}}">{{exp.tax_id}}</a></td>
-                            <td>{{exp.scientific_name}}</td>
-                            <td>
-                                <ul class="list-group ">
-                                    <li *ngFor="let fastq of exp.fastq_ftp"
-                                        class="d-flex justify-content-between align-items-center">
-                                        <a href="ftp://{{fastq}}"
-                                            class="btn btn-link btn-reduced-padding">{{exp.run_accession}}...fastq.gz</a>
-                                    </li>
-                                </ul>
-                            </td>
-                            <td>
-                                <ul class="list-group ">
-                                    <li *ngFor="let submitted_ftp of exp.submitted_ftp"
-                                        class="d-flex justify-content-between align-items-center">
-                                        <a href="ftp://{{submitted_ftp}}"
-                                            class="btn btn-link btn-reduced-padding">{{exp.study_accession}}</a>
-                                    </li>
-                                </ul>
-                            </td>
-                            <td>
-                                <ul class="list-group ">
-                                    <li *ngFor="let sra_ftp of exp.sra_ftp"
-                                        class="d-flex justify-content-between align-items-center">
-                                        <a href="ftp://{{sra_ftp}}"
-                                            class="btn btn-link btn-reduced-padding">{{exp.run_accession}}</a>
-                                    </li>
-                                </ul>
-                            </td>
-                        </tr>
-                </table>
-            </div>
+            <table mat-table #table [dataSource]="dataSource" matSort class="table table-striped table-hover table-borderless table-sm">
+                <!-- First Column -->
+                <ng-container matColumnDef="sample_accession">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header> Sample Accession </mat-header-cell>
+                    <mat-cell *matCellDef="let element">
+                        <a class="no-underline" target="_blank"
+                            href="https://www.ebi.ac.uk/ena/browser/view/{{element.sample_accession}}">{{element.sample_accession}}</a>
+                    </mat-cell>
+                </ng-container>
+
+                <!-- Second Column -->
+                <ng-container matColumnDef="experiment_accession">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header> Experiment Accession </mat-header-cell>
+                    <mat-cell *matCellDef="let element"> <a class="no-underline" target="_blank"
+                            href="https://www.ebi.ac.uk/ena/browser/view/{{element.experiment_accession}}">{{element.experiment_accession}}</a>
+                    </mat-cell>
+                </ng-container>
+                <!-- Third Column -->
+                <ng-container matColumnDef="run_accession">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header> Run Accession </mat-header-cell>
+                    <mat-cell *matCellDef="let element"> <a class="no-underline" target="_blank"
+                            href="https://www.ebi.ac.uk/ena/browser/view/{{element.run_accession}}">{{element.run_accession}}</a>
+                    </mat-cell>
+                </ng-container>
+
+                <!-- Fourth Column -->
+                <ng-container matColumnDef="study_accession">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header> Study Accession </mat-header-cell>
+                    <mat-cell *matCellDef="let element"> <a class="no-underline" target="_blank"
+                            href="https://www.ebi.ac.uk/ena/browser/view/{{element.study_accession}}">{{element.study_accession}}</a>
+                    </mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="tax_id">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header> Tax Id </mat-header-cell>
+                    <mat-cell *matCellDef="let element"> <a class="no-underline" target="_blank"
+                            href="https://www.ebi.ac.uk/ena/browser/view/{{element.tax_id}}">{{element.tax_id}}</a>
+                    </mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="scientific_name">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header> Scientific Name </mat-header-cell>
+                    <mat-cell *matCellDef="let element"> {{element.scientific_name}} </mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="fastq_ftp">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header> RAW Data </mat-header-cell>
+                    <mat-cell *matCellDef="let element">
+                        <ul class="list-group ">
+                            <li *ngFor="let fastq of element.fastq_ftp">
+                                <a href="ftp://{{fastq}}">{{element.run_accession}}</a>
+                            </li>
+                        </ul>
+                    </mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="submitted_ftp">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header> Mapped Reads </mat-header-cell>
+                    <mat-cell *matCellDef="let element">
+                        <ul class="list-group ">
+                            <li *ngFor="let submitted_ftp of element.submitted_ftp">
+                                <a href="ftp://{{submitted_ftp}}">{{element.study_accession}}</a>
+                            </li>
+                        </ul>
+                    </mat-cell>
+                </ng-container>
+
+                <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+                <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+            </table>
+            <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
         </div>
     </dl>
 </div>
