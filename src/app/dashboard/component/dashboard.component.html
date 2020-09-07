@@ -15,9 +15,8 @@
             <h3 class="card-header">Organism</h3>
             <ul class="list-group">
               <li class="list-group-item d-flex justify-content-between align-items-center"
-                  [ngClass]="checkFilterIsActive(filter[0])"
-                  (click)="onFilterClick(filter[0])"
-                  style="cursor: pointer" *ngFor="let filter of organismFilters">
+                [ngClass]="checkFilterIsActive(filter[0])" (click)="onFilterClick(filter[0])" style="cursor: pointer"
+                *ngFor="let filter of organismFilters">
                 {{filter[0]}}
                 <span class="badge badge-pill badge-info">{{filter[1]}}</span>
             </ul>
@@ -28,9 +27,8 @@
             <h3 class="card-header">Common Name</h3>
             <ul class="list-group ">
               <li class="list-group-item d-flex justify-content-between align-items-center"
-                  [ngClass]="checkFilterIsActive(filter[0])"
-                  (click)="onFilterClick(filter[0])"
-                  style="cursor: pointer" *ngFor="let filter of commonNameFilters">
+                [ngClass]="checkFilterIsActive(filter[0])" (click)="onFilterClick(filter[0])" style="cursor: pointer"
+                *ngFor="let filter of commonNameFilters">
                 {{filter[0]}}
                 <span class="badge badge-pill badge-info">{{filter[1]}}</span>
               </li>
@@ -77,6 +75,13 @@
         <ng-container matColumnDef="sex">
           <mat-header-cell *matHeaderCellDef mat-sort-header> Sex </mat-header-cell>
           <mat-cell *matCellDef="let element"> {{element.sex[0].text}} </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="trackingSystem">
+          <mat-header-cell *matHeaderCellDef mat-sort-header> Tracking status </mat-header-cell>
+          <mat-cell *matCellDef="let element">
+            <span class="badge badge-pill badge-success">Complete</span>
+          </mat-cell>
         </ng-container>
 
         <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>

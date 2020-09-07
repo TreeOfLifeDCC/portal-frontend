@@ -11,7 +11,7 @@ import { Title } from '@angular/platform-browser';
   styleUrls: ['./dashboard.component.css']
 })
 export class DashboardComponent implements OnInit, AfterViewInit {
-  displayedColumns = ['accession', 'organism', 'commonName', 'sex'];
+  displayedColumns = ['accession', 'organism', 'commonName', 'sex', 'trackingSystem'];
   dataSource = new MatTableDataSource<Sample>(samples);
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort, { static: true }) sort: MatSort;
