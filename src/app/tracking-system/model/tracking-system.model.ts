@@ -16,8 +16,8 @@ export const samples: Sample[] = [
         metadata_submitted_to_biosamples: 'Done',
         raw_data_submitted_to_ena: 'Done',
         mapped_reads_submitted_to_ena: 'Done',
-        assemblies_submitted_to_ena: 'Waiting',
-        annotation_submitted_to_ena: 'Waiting'
+        assemblies_submitted_to_ena: 'Done',
+        annotation_submitted_to_ena: 'Done'
     },
     {
         organism: 'Sciurus carolinensis',
@@ -25,8 +25,8 @@ export const samples: Sample[] = [
         metadata_submitted_to_biosamples: 'Done',
         raw_data_submitted_to_ena: 'Done',
         mapped_reads_submitted_to_ena: 'Done',
-        assemblies_submitted_to_ena: 'Waiting',
-        annotation_submitted_to_ena: 'Waiting'
+        assemblies_submitted_to_ena: 'Done',
+        annotation_submitted_to_ena: 'Done'
     },
     {
         organism: 'Sciurus vulgaris',
@@ -34,7 +34,7 @@ export const samples: Sample[] = [
         metadata_submitted_to_biosamples: 'Done',
         raw_data_submitted_to_ena: 'Done',
         mapped_reads_submitted_to_ena: 'Done',
-        assemblies_submitted_to_ena: 'Waiting',
-        annotation_submitted_to_ena: 'Waiting'
+        assemblies_submitted_to_ena: 'Done',
+        annotation_submitted_to_ena: 'Done'
     }
 ];

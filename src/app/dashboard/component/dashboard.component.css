@@ -32,3 +32,8 @@ button {
 .page-header {
     color: #4BBEFD;
 }
+
+.display-4 {
+    margin-top: 30px;
+    font-family: "Comic Sans MS", cursive, sans-serif;
+}

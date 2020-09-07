@@ -8,12 +8,16 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CookieLawModule } from 'angular2-cookie-law';
 
 import { HeaderComponent } from './shared/header/header.component';
+import { AboutComponent } from './about/about.component';
+import { HelpComponent } from './help/help.component';
 
 
 @NgModule({
   declarations: [
     AppComponent,
-    HeaderComponent
+    HeaderComponent,
+    AboutComponent,
+    HelpComponent
   ],
   imports: [
     BrowserModule,
