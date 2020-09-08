@@ -1,8 +1,7 @@
 <div class="jumbotron jumbotron-fluid">
   <div class="container">
-    <h1 class="display-4">Sequencing the genomes of </h1>
-    <h1 class="display-4">all 60,000 eukaryotic species </h1>
-    <h1 class="display-4">of Britain and Ireland</h1>
+    <h1 class="display-2">Sequencing all 60,000 eukaryotic</h1>
+    <h1 class="display-2">species of Britain and Ireland </h1>
   </div>
 </div>
 
@@ -31,6 +30,17 @@
                 *ngFor="let filter of commonNameFilters">
                 {{filter[0]}}
                 <span class="badge badge-pill badge-info">{{filter[1]}}</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+        <div class="col-md-12 col-sm-6">
+          <div class="card bg-lite mb-3">
+            <h3 class="card-header">Tracking Status</h3>
+            <ul class="list-group ">
+              <li class="list-group-item d-flex justify-content-between align-items-center" style="cursor: pointer">
+                Completed
+                <span class="badge badge-pill badge-info">{{3}}</span>
               </li>
             </ul>
           </div>
