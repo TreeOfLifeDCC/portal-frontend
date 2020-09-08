@@ -10,6 +10,7 @@ import { CookieLawModule } from 'angular2-cookie-law';
 import { HeaderComponent } from './shared/header/header.component';
 import { AboutComponent } from './about/about.component';
 import { HelpComponent } from './help/help.component';
+import { HomeComponent } from './home/home.component';
 
 
 @NgModule({
@@ -17,7 +18,8 @@ import { HelpComponent } from './help/help.component';
     AppComponent,
     HeaderComponent,
     AboutComponent,
-    HelpComponent
+    HelpComponent,
+    HomeComponent
   ],
   imports: [
     BrowserModule,

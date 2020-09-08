@@ -1,0 +1,50 @@
+<div class="jumbotron jumbotron-fluid">
+    <div class="container">
+        <h1 class="display-4">Sequencing all 60,000 </h1>
+        <h1 class="display-4">eukaryotic species </h1>
+        <h1 class="display-4">of Britain and Ireland</h1>
+    </div>
+</div>
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-8">
+            <h1 class="page-header text-center">
+                Darwin Tree of Life Data Portal
+            </h1>
+            <h2>
+                The Darwin Tree of Life project aims to sequence the genomes of all 60,000 species of eukaryotic
+                organisms in Britain and Ireland. It is a collaboration between biodiversity, genomics and analysis
+                partners that hopes to transform the way we do biology, conservation and biotechnology.
+            </h2>
+            <div class="row">
+                <div class="col-md-6">
+                    <button type="button" class="btn btn-primary btn-lg" [routerLink]="['/dashboard', 'organisms']">
+                        <span class="material-icons">table_chart</span>
+                        Data Portal
+                    </button>
+                </div>
+                <div class="col-md-6">
+                    <button type="button" class="btn btn-primary btn-lg" [routerLink]="['/tracking_system']">
+                        <span class="material-icons">timeline</span>
+                        Status Tracking
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 text-center">
+            <h1 class="page-header">
+                Tweets
+            </h1>
+            <div class="text-center">
+                <a class="twitter-timeline" href="https://twitter.com/darwintreelife?ref_src=twsrc%5Etfw"
+                   data-height="300"
+                   data-theme="light"
+                   data-width="650"
+                   data-chrome="noborders nofooter noscrollbar transparent">
+                </a>
+                <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+            </div>
+        </div>
+    </div>
+</div>
