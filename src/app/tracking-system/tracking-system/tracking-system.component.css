@@ -39,7 +39,11 @@ button {
     justify-content: center;
   }
   
-  .mat-cell {
+.mat-cell {
     text-align: center;
     justify-content:center;
-  }
+}
+
+.display-2 {
+    color: ghostwhite;
+}
