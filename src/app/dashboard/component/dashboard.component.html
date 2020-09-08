@@ -39,9 +39,11 @@
           <div class="card bg-lite mb-3">
             <h3 class="card-header">Tracking Status</h3>
             <ul class="list-group ">
-              <li class="list-group-item d-flex justify-content-between align-items-center" style="cursor: pointer">
-                Completed
-                <span class="badge badge-pill badge-info">{{3}}</span>
+              <li class="list-group-item d-flex justify-content-between align-items-center"
+                [ngClass]="checkFilterIsActive(filter[0])" (click)="onFilterClick(filter[0])" style="cursor: pointer"
+                *ngFor="let filter of trackingSystemFilters">
+                {{filter[0]}}
+                <span class="badge badge-pill badge-info">{{filter[1]}}</span>
               </li>
             </ul>
           </div>
@@ -91,7 +93,7 @@
         <ng-container matColumnDef="trackingSystem">
           <mat-header-cell *matHeaderCellDef mat-sort-header> Tracking status </mat-header-cell>
           <mat-cell *matCellDef="let element">
-            <span class="badge badge-pill badge-success">Complete</span>
+            <span class="badge badge-pill badge-success">{{element.trackingSystem}}</span>
           </mat-cell>
         </ng-container>
 

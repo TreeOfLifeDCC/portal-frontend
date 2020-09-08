@@ -27,6 +27,7 @@ export interface Sample {
     projectName?: any;
     customField: CustomField[];
     experiment: Experiment[];
+    trackingSystem: string;
 }
 
 interface CustomField {
@@ -434,7 +435,8 @@ export const samples: Sample[] = [
                 submitted_ftp: ["ftp.sra.ebi.ac.uk/vol1/run/ERR331/ERR3316172/26530_1#4.cram"],
                 sra_ftp: []
             }
-        ]
+        ],
+        trackingSystem: "Completed"
     },
     {
         accession: "SAMEA994726",
@@ -595,7 +597,8 @@ export const samples: Sample[] = [
         { study_accession: "PRJEB22206", sample_accession: "SAMEA994726", experiment_accession: "ERX3341685", run_accession: "ERR3316175", tax_id: "30640", scientific_name: "Sciurus carolinensis", fastq_ftp: ["ftp.sra.ebi.ac.uk/vol1/fastq/ERR331/005/ERR3316175/ERR3316175_1.fastq.gz", "ftp.sra.ebi.ac.uk/vol1/fastq/ERR331/005/ERR3316175/ERR3316175_2.fastq.gz"], submitted_ftp: ["ftp.sra.ebi.ac.uk/vol1/run/ERR331/ERR3316175/26530_8#3.cram"], sra_ftp: [] },
         { study_accession: "PRJEB22206", sample_accession: "SAMEA994726", experiment_accession: "ERX3341686", run_accession: "ERR3316176", tax_id: "30640", scientific_name: "Sciurus carolinensis", fastq_ftp: ["ftp.sra.ebi.ac.uk/vol1/fastq/ERR331/006/ERR3316176/ERR3316176_1.fastq.gz", "ftp.sra.ebi.ac.uk/vol1/fastq/ERR331/006/ERR3316176/ERR3316176_2.fastq.gz"], submitted_ftp: ["ftp.sra.ebi.ac.uk/vol1/run/ERR331/ERR3316176/26530_8#4.cram"], sra_ftp: [] },
         { study_accession: "PRJEB22206", sample_accession: "SAMEA994726", experiment_accession: "ERX3863398", run_accession: "ERR3850937", tax_id: "30640", scientific_name: "Sciurus carolinensis", fastq_ftp: ["ftp.sra.ebi.ac.uk/vol1/fastq/ERR385/007/ERR3850937/ERR3850937_1.fastq.gz", "ftp.sra.ebi.ac.uk/vol1/fastq/ERR385/007/ERR3850937/ERR3850937_2.fastq.gz"], submitted_ftp: ["ftp.sra.ebi.ac.uk/vol1/run/ERR385/ERR3850937/30075_3#1.cram"], sra_ftp: [] }
-        ]
+        ],
+        trackingSystem: "Completed"
 
     },
     {
@@ -895,6 +898,7 @@ export const samples: Sample[] = [
             submitted_ftp: ["ftp.sra.ebi.ac.uk/vol1/run/ERR319/ERR3197129/m54205_180301_123230.subreads.bam", "ftp.sra.ebi.ac.uk/vol1/run/ERR319/ERR3197129/m54205_180301_123230.subreads.bam.bai"],
             sra_ftp: ["ftp.sra.ebi.ac.uk/vol1/err/ERR319/009/ERR3197129"]
         }
-        ]
+        ],
+        trackingSystem: "Completed"
     }
 ];

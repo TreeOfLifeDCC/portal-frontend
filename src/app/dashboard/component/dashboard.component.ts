@@ -18,10 +18,12 @@ export class DashboardComponent implements OnInit, AfterViewInit {
   activeFilters = [];
   filters = {
     organism: {},
-    common_name: {}
+    common_name: {},
+    trackingSystem: {}
   };
   organismFilters = [];
   commonNameFilters = [];
+  trackingSystemFilters = [];
 
   public bioSampleObj;
   
@@ -83,7 +85,8 @@ export class DashboardComponent implements OnInit, AfterViewInit {
   getFilters(data: any) {
     const filters = {
       organism: {},
-      common_name: {}
+      common_name: {},
+      trackingSystem: {}
     };
     for (const item of data) {
       if (item.organism in filters.organism) {
@@ -96,10 +99,16 @@ export class DashboardComponent implements OnInit, AfterViewInit {
       } else {
         filters.common_name[item.commonName] = 1;
       }
+      if (item.trackingSystem in filters.trackingSystem) {
+        filters.trackingSystem[item.trackingSystem] += 1;
+      } else {
+        filters.trackingSystem[item.trackingSystem] = 1;
+      }
     }
     this.filters = filters;
     this.organismFilters = Object.entries(this.filters.organism);
     this.commonNameFilters = Object.entries(this.filters.common_name);
+    this.trackingSystemFilters = Object.entries(this.filters.trackingSystem);
   }
 
 }
