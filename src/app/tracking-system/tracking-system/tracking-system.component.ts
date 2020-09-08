@@ -28,7 +28,7 @@ export class TrackingSystemComponent implements OnInit, AfterViewInit {
   constructor(private titleService: Title) { }
 
   ngOnInit(): void {
-    this.titleService.setTitle('Tracking system');
+    this.titleService.setTitle('Status tracking');
     this.dataSource.sort = this.sort;
     this.getFilters(samples);
   }
