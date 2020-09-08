@@ -16,3 +16,12 @@
 .btn-primary {
     background-color: #8FBC45;
 }
+
+.btn-block {
+    height: 150%;
+}
+
+.material-icons {
+    vertical-align: middle;
+    font-size: 50px;
+}
