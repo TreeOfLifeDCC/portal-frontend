@@ -9,7 +9,7 @@ import { Sample } from '../model/dashboard.model';
 })
 export class DashboardService {
 
-  private API_BASE_URL: string = 'http://localhost:8080'
+  private API_BASE_URL: string = 'http://frontendsvc:8080'
 
   constructor(private http: HttpClient) { }
 
