@@ -1,9 +1,17 @@
 import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
-import { MatSort } from '@angular/material/sort';
-import { Sample, samples } from '../model/dashboard.model';
+import { HttpParams } from '@angular/common/http';
+import { Location } from '@angular/common'; 
+import { Router, ActivatedRoute } from '@angular/router';
+
+
+
 import { MatPaginator } from '@angular/material/paginator';
+import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { Title } from '@angular/platform-browser';
+import { Sample, samples } from '../model/dashboard.model';
+import { DashboardService } from '../services/dashboard.service';
+
 
 @Component({
   selector: 'app-dashboard',
@@ -12,9 +20,12 @@ import { Title } from '@angular/platform-browser';
 })
 export class DashboardComponent implements OnInit, AfterViewInit {
   displayedColumns = ['accession', 'organism', 'commonName', 'sex', 'trackingSystem'];
-  dataSource = new MatTableDataSource<Sample>(samples);
+  bioSamples: Sample[];
+  loading: boolean = true;
+  dataSource = new MatTableDataSource<Sample>();
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort, { static: true }) sort: MatSort;
+
   activeFilters = [];
   filters = {
     organism: {},
@@ -24,51 +35,105 @@ export class DashboardComponent implements OnInit, AfterViewInit {
   organismFilters = [];
   commonNameFilters = [];
   trackingSystemFilters = [];
+  bioSampleObj;
 
-  public bioSampleObj;
-  
-  constructor(private titleService: Title) { }
+  constructor(private titleService: Title, private dashboardService: DashboardService, 
+    private route: ActivatedRoute, private router: Router) { }
 
   ngOnInit(): void {
+    this.getAllBiosamples(0, 10);
     this.titleService.setTitle('Dashboard');
-    this.dataSource.sort = this.sort;
-    this.bioSampleObj = this.dataSource.data;
-    this.getFilters(samples);
   }
 
-  // tslint:disable-next-line:typedef
   ngAfterViewInit() {
     this.dataSource.paginator = this.paginator;
+    this.dataSource.sort = this.sort;
   }
 
-  // tslint:disable-next-line:typedef
+  getAllBiosamples(offset, limit) {
+    this.dashboardService.getAllBiosample(offset, limit)
+      .subscribe(
+        data => {
+          this.loading = false;
+          this.bioSamples = data.biosamples;
+          this.bioSamples.length = data.count;
+
+          this.dataSource = new MatTableDataSource<Sample>(this.bioSamples);
+          this.getFilters(this.bioSamples);
+          this.dataSource.paginator = this.paginator;
+          this.dataSource.sort = this.sort;
+        },
+        err => console.log(err)
+      )
+  }
+
+  getNextBiosamples(currentSize, offset, limit) {
+    this.dashboardService.getAllBiosample(offset, limit)
+      .subscribe(
+        data => {
+          this.loading = false;
+          this.bioSamples.length = currentSize;
+          this.bioSamples.push(...data.biosamples);
+          this.bioSamples.length = data.count;
+          this.dataSource = new MatTableDataSource<Sample>(this.bioSamples);
+          this.dataSource._updateChangeSubscription();
+          this.dataSource.sort = this.sort;
+          this.dataSource.paginator = this.paginator;
+        },
+        err => console.log(err)
+      )
+  }
+
+  pageChanged(event) {
+    this.loading = true;
+
+    let pageIndex = event.pageIndex;
+    let pageSize = event.pageSize;
+
+    let previousIndex = event.previousPageIndex;
+
+    let previousSize = pageSize * pageIndex;
+
+    this.getNextBiosamples(previousSize, (pageIndex).toString(), pageSize.toString());
+  }
+
   applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
     this.dataSource.filter = filterValue.trim().toLowerCase();
   }
 
-  // tslint:disable-next-line:typedef
   checkFilterIsActive(filter: string) {
     if (this.activeFilters.indexOf(filter) !== -1) {
       return 'active';
     }
   }
 
-  // tslint:disable-next-line:typedef
-  onFilterClick(filter: string) {
+  onFilterClick(label: string, filter: string) {
     this.activeFilters.push(filter);
     this.dataSource.filter = filter.trim().toLowerCase();
     this.getFilters(this.dataSource.filteredData);
   }
 
-  // tslint:disable-next-line:typedef
+  queryParamFilter(label, filter) {
+    let params = new HttpParams(this.route.snapshot.queryParams)
+      .append(label, filter);
+
+    this.router.navigate([], {
+      relativeTo: this.route,
+      queryParams: {
+        params
+      },
+      queryParamsHandling: 'merge',
+      preserveFragment: true
+    });
+  }
+
   removeAllFilters() {
     this.activeFilters = [];
     this.dataSource.filter = undefined;
     this.getFilters(samples);
   }
 
-  // tslint:disable-next-line:typedef
   removeFilter(filter: string) {
     const filterIndex = this.activeFilters.indexOf(filter);
     this.activeFilters.splice(filterIndex, 1);
@@ -81,7 +146,6 @@ export class DashboardComponent implements OnInit, AfterViewInit {
     }
   }
 
-  // tslint:disable-next-line:typedef
   getFilters(data: any) {
     const filters = {
       organism: {},

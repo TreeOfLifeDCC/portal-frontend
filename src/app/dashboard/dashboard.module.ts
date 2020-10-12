@@ -16,6 +16,8 @@ import {MatPaginatorModule} from '@angular/material/paginator';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatInputModule} from '@angular/material/input';
 
+import { DashboardService } from '../dashboard/services/dashboard.service'
+
 @NgModule({
   declarations: [DashboardComponent, SpecimensComponent, DetailsComponent],
   imports: [
@@ -30,6 +32,7 @@ import {MatInputModule} from '@angular/material/input';
     MatPaginatorModule,
     MatFormFieldModule,
     MatInputModule
-  ]
+  ],
+  providers: [DashboardService]
 })
 export class DashboardModule { }
