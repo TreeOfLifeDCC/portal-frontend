@@ -40,15 +40,3 @@ spec:
       name: http
   selector:
       app: _APP_NAME_
-
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: frontendsvc
-  namespace: portal-frontend-2494-frontend
-spec:
-  type: ExternalName
-  externalName: portal-backend.portal-backend-2622-backend.svc.cluster.local
-  ports:
-  - port: 8080

@@ -33,6 +33,7 @@ deploy-app-master:
         - sed 's=_APP_NAME_='"$CI_PROJECT_NAME"'=g' ingress.production.template.yml > ingress.yml;
         - cat ingress.yml
         - kubectl apply -f kubernetes.yml
+        - kubectl apply -f frontend-external-svc.yml
         - kubectl apply -f ingress.yml
         - kubectl get deployments
         - kubectl get services
