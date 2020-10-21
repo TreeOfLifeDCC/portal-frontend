@@ -74,7 +74,9 @@
         <ng-container matColumnDef="accession">
           <mat-header-cell *matHeaderCellDef mat-sort-header> BioSample ID </mat-header-cell>
           <mat-cell *matCellDef="let element">
-            <a [routerLink]="['/dashboard/organisms/details/',element.accession]">{{element.accession}}</a> </mat-cell>
+            <a [routerLink]="['/dashboard/organisms/details/', element.accession]">
+              {{element.accession}}</a>
+          </mat-cell>
         </ng-container>
 
         <!-- Second Column -->
@@ -91,7 +93,7 @@
         <!-- Fourth Column -->
         <ng-container matColumnDef="sex">
           <mat-header-cell *matHeaderCellDef mat-sort-header> Sex </mat-header-cell>
-          <mat-cell *matCellDef="let element"> {{element.sex[0].text}} </mat-cell>
+          <mat-cell *matCellDef="let element"> {{element.sex}} </mat-cell>
         </ng-container>
 
         <ng-container matColumnDef="trackingSystem">

@@ -2,28 +2,28 @@
     <h1 class="text-center page-header">{{bioSampleId}}</h1>
     <dl class="row">
         <dt class="col-sm-3">Name:</dt>
-        <dd class="col-sm-9">{{bioSampleObj.commonName}}</dd>
+        <dd class="col-sm-9">{{bioSampleObj?.commonName}}</dd>
 
         <dt class="col-sm-3">BioSample ID:</dt>
-        <dd class="col-sm-9"><a href="http://www.ebi.ac.uk/biosamples/samples/{{bioSampleObj.accession}}"
-                target="_blank">{{bioSampleObj.accession}}</a></dd>
+        <dd class="col-sm-9"><a href="http://www.ebi.ac.uk/biosamples/samples/{{bioSampleObj?.accession}}"
+                target="_blank">{{bioSampleObj?.accession}}</a></dd>
 
         <dt class="col-sm-3">Organism:</dt>
-        <dd class="col-sm-9">{{bioSampleObj.organism}}</dd>
+        <dd class="col-sm-9">{{bioSampleObj?.organism}}</dd>
 
         <dt class="col-sm-3">Sex:</dt>
-        <dd class="col-sm-9"><a href="{{bioSampleObj.sex[0].ontologyTerms[0]}}"
-                target="_blank">{{bioSampleObj.sex[0].text}}</a></dd>
+        <dd class="col-sm-9"><a href="{{bioSampleObj?.sex[0].ontologyTerms[0]}}"
+                target="_blank">{{bioSampleObj?.sex[0].text}}</a></dd>
 
         <dt class="col-sm-3">Scientific Name:</dt>
-        <dd class="col-sm-9">{{bioSampleObj.scientificName}}</dd>
+        <dd class="col-sm-9">{{bioSampleObj?.scientificName}}</dd>
 
         <dt class="col-sm-3">Tax ID:</dt>
-        <dd class="col-sm-9">{{bioSampleObj.taxonId}}</dd>
+        <dd class="col-sm-9">{{bioSampleObj?.taxonId}}</dd>
 
         <div class="col-sm-12">
             <hr>
-            <div class="row" *ngFor="let sample of bioSampleObj.customField">
+            <div class="row" *ngFor="let sample of bioSampleObj?.customField">
                 <dt class="col-sm-3">{{sample?.name}}</dt>
                 <dd class="col-sm-9">
                     <a *ngIf="sample.ontologyTerms.lenght > 0; else simple"
@@ -48,7 +48,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr *ngFor="let rel of bioSampleObj.relationship">
+                        <tr *ngFor="let rel of bioSampleObj?.relationship">
                             <td><a href="http://www.ebi.ac.uk/biosamples/samples/{{rel.source}}"
                                     target="_blank">{{rel.source}}</a></td>
                             <td>{{rel.type}}</td>

@@ -12,7 +12,7 @@ import { DashboardService } from '../../services/dashboard.service';
   templateUrl: './details.component.html',
   styleUrls: ['./details.component.css']
 })
-export class DetailsComponent implements OnInit, AfterViewInit {
+export class DetailsComponent implements OnInit {
 
   bioSampleId;
   bioSampleObj;
@@ -27,23 +27,22 @@ export class DetailsComponent implements OnInit, AfterViewInit {
     this.getBiosamples();
   }
 
+  // tslint:disable-next-line:typedef
   getBiosamples() {
     this.dashboardService.getBiosampleByAccession(this.bioSampleId)
       .subscribe(
         data => {
-          this.bioSampleObj = data;
+          console.log(data);
+          this.bioSampleObj = data.hits.hits[0]._source;
           this.dataSource = new MatTableDataSource<Sample>(this.bioSampleObj.experiment);
+          this.dataSource.paginator = this.paginator;
+          this.dataSource.sort = this.sort;
         },
         err => console.log(err)
-      )
+      );
   }
 
   ngOnInit(): void {
-  }
-
-  ngAfterViewInit() {
-    this.dataSource.paginator = this.paginator;
-    this.dataSource.sort = this.sort;
   }
 
 }

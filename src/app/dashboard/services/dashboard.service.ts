@@ -9,16 +9,12 @@ import { Sample } from '../model/dashboard.model';
 })
 export class DashboardService {
 
-  private API_BASE_URL: string = 'http://frontendsvc:8080'
+  private API_BASE_URL = 'https://portal.darwintreeoflife.org/api';
 
   constructor(private http: HttpClient) { }
 
-  public getAllBiosample(offset, limit): Observable<any> {
-    let params = new HttpParams();
-    params = params.set('page', offset);
-    params = params.set('size', limit);
-
-    return this.http.get(`${this.API_BASE_URL}/dtol?${params.toString()}`)
+  public getAllBiosample(): Observable<any> {
+    return this.http.get(`${this.API_BASE_URL}/dtol`);
   }
 
   public createBiosample(data: any): Observable<any> {
@@ -26,7 +22,7 @@ export class DashboardService {
   }
 
   public getBiosampleByAccession(accession: string): Observable<any> {
-    return this.http.get(`${this.API_BASE_URL}/dtol/${accession}`)
+    return this.http.get(`${this.API_BASE_URL}/dtol/${accession}`);
   }
 
 }

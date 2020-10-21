@@ -37,12 +37,12 @@ export class DashboardComponent implements OnInit, AfterViewInit {
   trackingSystemFilters = [];
   bioSampleObj;
 
-  constructor(private titleService: Title, private dashboardService: DashboardService, 
-    private route: ActivatedRoute, private router: Router) { }
+  constructor(private titleService: Title, private dashboardService: DashboardService,
+              private route: ActivatedRoute, private router: Router) { }
 
   ngOnInit(): void {
-    this.getAllBiosamples(0, 10);
-    this.titleService.setTitle('Dashboard');
+    this.getAllBiosamples();
+    this.titleService.setTitle('Data portal');
   }
 
   ngAfterViewInit() {
@@ -50,25 +50,43 @@ export class DashboardComponent implements OnInit, AfterViewInit {
     this.dataSource.sort = this.sort;
   }
 
-  getAllBiosamples(offset, limit) {
-    this.dashboardService.getAllBiosample(offset, limit)
+  // tslint:disable-next-line:typedef
+  getAllBiosamples() {
+    this.dashboardService.getAllBiosample()
       .subscribe(
         data => {
-          this.loading = false;
-          this.bioSamples = data.biosamples;
-          this.bioSamples.length = data.count;
-
-          this.dataSource = new MatTableDataSource<Sample>(this.bioSamples);
-          this.getFilters(this.bioSamples);
+          const unpackedData = [];
+          for (const item of data.hits.hits) {
+            unpackedData.push(this.unpackData(item));
+          }
+          this.dataSource = new MatTableDataSource<Sample>(unpackedData);
+          this.getFilters(unpackedData);
           this.dataSource.paginator = this.paginator;
           this.dataSource.sort = this.sort;
         },
         err => console.log(err)
-      )
+      );
+  }
+
+  unpackData(data: any) {
+    const dataToReturn = {};
+    if (data.hasOwnProperty('_source')) {
+      data = data._source;
+    }
+    for (const key of Object.keys(data)) {
+      if (typeof  data[key] === 'object') {
+        if (key === 'sex') {
+          dataToReturn[key] = data.sex[0].text;
+        }
+      } else {
+        dataToReturn[key] = data[key];
+      }
+    }
+    return dataToReturn;
   }
 
   getNextBiosamples(currentSize, offset, limit) {
-    this.dashboardService.getAllBiosample(offset, limit)
+    this.dashboardService.getAllBiosample()
       .subscribe(
         data => {
           this.loading = false;
@@ -97,6 +115,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
     this.getNextBiosamples(previousSize, (pageIndex).toString(), pageSize.toString());
   }
 
+  // tslint:disable-next-line:typedef
   applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
     this.dataSource.filter = filterValue.trim().toLowerCase();
