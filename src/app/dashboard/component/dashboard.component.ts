@@ -21,21 +21,21 @@ import { DashboardService } from '../services/dashboard.service';
 export class DashboardComponent implements OnInit, AfterViewInit {
   displayedColumns = ['accession', 'organism', 'commonName', 'sex', 'trackingSystem'];
   bioSamples: Sample[];
-  loading: boolean = true;
-  dataSource = new MatTableDataSource<Sample>();
+  loading = true;
+  dataSource = new MatTableDataSource<any>();
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort, { static: true }) sort: MatSort;
 
   activeFilters = [];
   filters = {
-    organism: {},
-    common_name: {},
+    sex: {},
     trackingSystem: {}
   };
   organismFilters = [];
   commonNameFilters = [];
   trackingSystemFilters = [];
   bioSampleObj;
+  unpackedData;
 
   constructor(private titleService: Title, private dashboardService: DashboardService,
               private route: ActivatedRoute, private router: Router) { }
@@ -45,6 +45,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
     this.titleService.setTitle('Data portal');
   }
 
+  // tslint:disable-next-line:typedef
   ngAfterViewInit() {
     this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;
@@ -59,24 +60,45 @@ export class DashboardComponent implements OnInit, AfterViewInit {
           for (const item of data.hits.hits) {
             unpackedData.push(this.unpackData(item));
           }
-          this.dataSource = new MatTableDataSource<Sample>(unpackedData);
+          this.dataSource = new MatTableDataSource<any>(unpackedData);
           this.getFilters(unpackedData);
           this.dataSource.paginator = this.paginator;
           this.dataSource.sort = this.sort;
+          this.dataSource.filterPredicate = this.filterPredicate;
+          this.unpackedData = unpackedData;
         },
         err => console.log(err)
       );
   }
 
+  // tslint:disable-next-line:typedef
+  filterPredicate(data: any, filterValue: any): boolean {
+    const filters = filterValue.split('|');
+    if (filters[1] === 'Sex') {
+      if (filters[0] !== 'undefined') {
+        return data.sex === filters[0];
+      } else {
+        return data.sex !== 'male' && data.sex !== 'female';
+      }
+    } else {
+      return data.trackingSystem === filters[1];
+    }
+  }
+
+  // tslint:disable-next-line:typedef
   unpackData(data: any) {
     const dataToReturn = {};
     if (data.hasOwnProperty('_source')) {
       data = data._source;
     }
     for (const key of Object.keys(data)) {
-      if (typeof  data[key] === 'object') {
+      if (typeof data[key] === 'object') {
         if (key === 'sex') {
-          dataToReturn[key] = data.sex[0].text;
+          if (data.sex.length !== 0) {
+            dataToReturn[key] = data.sex[0].text;
+          } else {
+            dataToReturn[key] = undefined;
+          }
         }
       } else {
         dataToReturn[key] = data[key];
@@ -85,74 +107,35 @@ export class DashboardComponent implements OnInit, AfterViewInit {
     return dataToReturn;
   }
 
-  getNextBiosamples(currentSize, offset, limit) {
-    this.dashboardService.getAllBiosample()
-      .subscribe(
-        data => {
-          this.loading = false;
-          this.bioSamples.length = currentSize;
-          this.bioSamples.push(...data.biosamples);
-          this.bioSamples.length = data.count;
-          this.dataSource = new MatTableDataSource<Sample>(this.bioSamples);
-          this.dataSource._updateChangeSubscription();
-          this.dataSource.sort = this.sort;
-          this.dataSource.paginator = this.paginator;
-        },
-        err => console.log(err)
-      )
-  }
-
-  pageChanged(event) {
-    this.loading = true;
-
-    let pageIndex = event.pageIndex;
-    let pageSize = event.pageSize;
-
-    let previousIndex = event.previousPageIndex;
-
-    let previousSize = pageSize * pageIndex;
-
-    this.getNextBiosamples(previousSize, (pageIndex).toString(), pageSize.toString());
-  }
-
   // tslint:disable-next-line:typedef
   applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
     this.dataSource.filter = filterValue.trim().toLowerCase();
   }
 
+  // tslint:disable-next-line:typedef
   checkFilterIsActive(filter: string) {
     if (this.activeFilters.indexOf(filter) !== -1) {
       return 'active';
     }
   }
 
+  // tslint:disable-next-line:typedef
   onFilterClick(label: string, filter: string) {
     this.activeFilters.push(filter);
-    this.dataSource.filter = filter.trim().toLowerCase();
+    this.dataSource.filter = `${filter.trim().toLowerCase()}|${label}`;
+    // this.dataSource = new MatTableDataSource<Sample>(this.dataSource.filteredData);
     this.getFilters(this.dataSource.filteredData);
   }
 
-  queryParamFilter(label, filter) {
-    let params = new HttpParams(this.route.snapshot.queryParams)
-      .append(label, filter);
-
-    this.router.navigate([], {
-      relativeTo: this.route,
-      queryParams: {
-        params
-      },
-      queryParamsHandling: 'merge',
-      preserveFragment: true
-    });
-  }
-
+  // tslint:disable-next-line:typedef
   removeAllFilters() {
     this.activeFilters = [];
     this.dataSource.filter = undefined;
-    this.getFilters(samples);
+    this.getFilters(this.unpackedData);
   }
 
+  // tslint:disable-next-line:typedef
   removeFilter(filter: string) {
     const filterIndex = this.activeFilters.indexOf(filter);
     this.activeFilters.splice(filterIndex, 1);
@@ -161,26 +144,21 @@ export class DashboardComponent implements OnInit, AfterViewInit {
       this.getFilters(this.dataSource.filteredData);
     } else {
       this.dataSource.filter = undefined;
-      this.getFilters(samples);
+      this.getFilters(this.unpackedData);
     }
   }
 
+  // tslint:disable-next-line:typedef
   getFilters(data: any) {
     const filters = {
-      organism: {},
-      common_name: {},
+      sex: {},
       trackingSystem: {}
     };
     for (const item of data) {
-      if (item.organism in filters.organism) {
-        filters.organism[item.organism] += 1;
+      if (item.sex in filters.sex) {
+        filters.sex[item.sex] += 1;
       } else {
-        filters.organism[item.organism] = 1;
-      }
-      if (item.commonName in filters.common_name) {
-        filters.common_name[item.commonName] += 1;
-      } else {
-        filters.common_name[item.commonName] = 1;
+        filters.sex[item.sex] = 1;
       }
       if (item.trackingSystem in filters.trackingSystem) {
         filters.trackingSystem[item.trackingSystem] += 1;
@@ -189,8 +167,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
       }
     }
     this.filters = filters;
-    this.organismFilters = Object.entries(this.filters.organism);
-    this.commonNameFilters = Object.entries(this.filters.common_name);
+    this.organismFilters = Object.entries(this.filters.sex);
     this.trackingSystemFilters = Object.entries(this.filters.trackingSystem);
   }
 
