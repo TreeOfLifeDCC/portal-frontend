@@ -16,12 +16,12 @@
             <div class="row">
                 <div class="col-md-12 col-sm-6">
                     <div class="card bg-lite mb-3 filter-top">
-                        <h3 class="card-header">Organism</h3>
+                        <h3 class="card-header">Metadata submitted to BioSamples</h3>
                         <ul class="list-group">
                             <li class="list-group-item d-flex justify-content-between align-items-center"
                                 [ngClass]="checkFilterIsActive(filter[0])"
                                 (click)="onFilterClick(filter[0])"
-                                style="cursor: pointer" *ngFor="let filter of organismFilters">
+                                style="cursor: pointer" *ngFor="let filter of BiosamplesFilters">
                                 {{filter[0]}}
                                 <span class="badge badge-pill badge-info">{{filter[1]}}</span>
                             </li>
@@ -30,12 +30,33 @@
                 </div>
                 <div class="col-md-12 col-sm-6">
                     <div class="card bg-lite mb-3">
-                        <h3 class="card-header">Common Name</h3>
+                        <h3 class="card-header">Data submitted to ENA</h3>
                         <ul class="list-group ">
                             <li class="list-group-item d-flex justify-content-between align-items-center"
                                 [ngClass]="checkFilterIsActive(filter[0])"
                                 (click)="onFilterClick(filter[0])"
-                                style="cursor: pointer" *ngFor="let filter of commonNameFilters">
+                                style="cursor: pointer" *ngFor="let filter of RawDataFilters">
+                                {{filter[0]}}
+                                <span class="badge badge-pill badge-info">{{filter[1]}}</span>
+                            </li>
+                            <li class="list-group-item d-flex justify-content-between align-items-center"
+                                [ngClass]="checkFilterIsActive(filter[0])"
+                                (click)="onFilterClick(filter[0])"
+                                style="cursor: pointer" *ngFor="let filter of MappedReadsFilters">
+                                {{filter[0]}}
+                                <span class="badge badge-pill badge-info">{{filter[1]}}</span>
+                            </li>
+                            <li class="list-group-item d-flex justify-content-between align-items-center"
+                                [ngClass]="checkFilterIsActive(filter[0])"
+                                (click)="onFilterClick(filter[0])"
+                                style="cursor: pointer" *ngFor="let filter of AssembliesFilters">
+                                {{filter[0]}}
+                                <span class="badge badge-pill badge-info">{{filter[1]}}</span>
+                            </li>
+                            <li class="list-group-item d-flex justify-content-between align-items-center"
+                                [ngClass]="checkFilterIsActive(filter[0])"
+                                (click)="onFilterClick(filter[0])"
+                                style="cursor: pointer" *ngFor="let filter of AnnotationFilters">
                                 {{filter[0]}}
                                 <span class="badge badge-pill badge-info">{{filter[1]}}</span>
                             </li>
@@ -69,49 +90,49 @@
                 <!-- Second Column -->
                 <ng-container matColumnDef="common_name">
                     <mat-header-cell *matHeaderCellDef mat-sort-header> Common name </mat-header-cell>
-                    <mat-cell *matCellDef="let element"> {{element.common_name}} </mat-cell>
+                    <mat-cell *matCellDef="let element"> {{element.commonName}} </mat-cell>
                 </ng-container>
 
                 <!-- Third Column -->
                 <ng-container matColumnDef="metadata_submitted_to_biosamples">
                     <mat-header-cell *matHeaderCellDef mat-sort-header> Metadata submitted to BioSamples </mat-header-cell>
                     <mat-cell *matCellDef="let element">
-                        <span class="badge badge-pill badge-success">{{element.metadata_submitted_to_biosamples}} </span>
+                        <span class="badge badge-pill badge-success">{{element.biosamples}} </span>
                     </mat-cell>
                 </ng-container>
                 <!-- Fourth Column -->
                 <ng-container matColumnDef="raw_data_submitted_to_ena">
                     <mat-header-cell *matHeaderCellDef mat-sort-header> Raw data submitted to ENA </mat-header-cell>
                     <mat-cell *matCellDef="let element">
-                        <span class="badge badge-pill badge-success">{{element.raw_data_submitted_to_ena }}</span>
+                        <span class="badge badge-pill badge-success">{{element.raw_data }}</span>
                     </mat-cell>
                 </ng-container>
                 <!-- Fifth Column -->
                 <ng-container matColumnDef="mapped_reads_submitted_to_ena">
                     <mat-header-cell *matHeaderCellDef mat-sort-header> Mapped reads submitted to ENA </mat-header-cell>
                     <mat-cell *matCellDef="let element">
-                        <span class="badge badge-pill badge-success">{{element.mapped_reads_submitted_to_ena }} </span>
+                        <span class="badge badge-pill badge-success">{{element.mapped_reads }} </span>
                     </mat-cell>
                 </ng-container>
 
                 <ng-container matColumnDef="assemblies_submitted_to_ena">
                     <mat-header-cell *matHeaderCellDef mat-sort-header> Assemblies submitted to ENA </mat-header-cell>
                     <mat-cell *matCellDef="let element">
-                        <span class="badge badge-pill badge-success">{{element.assemblies_submitted_to_ena }} </span>
+                        <span class="badge badge-pill badge-success">{{element.assemblies }} </span>
                     </mat-cell>
                 </ng-container>
 
                 <ng-container matColumnDef="annotation_submitted_to_ena">
                     <mat-header-cell *matHeaderCellDef mat-sort-header> Annotation submitted to ENA </mat-header-cell>
                     <mat-cell *matCellDef="let element">
-                        <span class="badge badge-pill badge-success">{{element.annotation_submitted_to_ena }} </span>
+                        <span class="badge badge-pill badge-warning">{{element.annotation }} </span>
                     </mat-cell>
                 </ng-container>
 
                 <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
                 <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
             </table>
-            <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
+            <mat-paginator [pageSizeOptions]="[10, 50, 100]" showFirstLastButtons></mat-paginator>
         </div>
     </div>
 </div>

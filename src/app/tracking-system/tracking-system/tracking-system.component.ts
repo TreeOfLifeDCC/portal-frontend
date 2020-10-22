@@ -4,6 +4,7 @@ import { Sample, samples } from '../model/tracking-system.model';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import {Title} from '@angular/platform-browser';
+import {StatusesService} from "../services/statuses.service";
 
 @Component({
   selector: 'app-tracking-system',
@@ -14,23 +15,70 @@ export class TrackingSystemComponent implements OnInit, AfterViewInit {
   displayedColumns = ['organism', 'common_name', 'metadata_submitted_to_biosamples',
     'raw_data_submitted_to_ena', 'mapped_reads_submitted_to_ena', 'assemblies_submitted_to_ena',
     'annotation_submitted_to_ena'];
-  dataSource = new MatTableDataSource<Sample>(samples);
+  dataSource = new MatTableDataSource<any>();
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort, {static: true}) sort: MatSort;
   activeFilters = [];
   filters = {
-    organism: {},
-    common_name: {}
+    biosamples: {},
+    raw_data: {},
+    mapped_reads: {},
+    assemblies: {},
+    annotation: {}
   };
-  organismFilters = [];
-  commonNameFilters = [];
+  BiosamplesFilters = [];
+  RawDataFilters = [];
+  MappedReadsFilters = [];
+  AssembliesFilters = [];
+  AnnotationFilters = [];
+  unpackedData;
 
-  constructor(private titleService: Title) { }
+  constructor(private titleService: Title, private statusesService: StatusesService) { }
 
   ngOnInit(): void {
     this.titleService.setTitle('Status tracking');
-    this.dataSource.sort = this.sort;
-    this.getFilters(samples);
+    this.getAllStatuses();
+  }
+
+  // tslint:disable-next-line:typedef
+  getAllStatuses() {
+    this.statusesService.getAllStatuses()
+        .subscribe(
+            data => {
+              const unpackedData = [];
+              for (const item of data.hits.hits) {
+                unpackedData.push(this.unpackData(item));
+                this.dataSource = new MatTableDataSource<any>(unpackedData);
+                this.getFilters(unpackedData);
+                this.dataSource.paginator = this.paginator;
+                this.dataSource.sort = this.sort;
+                this.unpackedData = unpackedData;
+              }
+            },
+            err => console.log(err)
+        );
+  }
+
+  // tslint:disable-next-line:typedef
+  unpackData(data: any) {
+    const dataToReturn = {};
+    if (data.hasOwnProperty('_source')) {
+      data = data._source;
+    }
+    for (const key of Object.keys(data)) {
+      if (typeof data[key] === 'object') {
+        if (key === 'sex') {
+          if (data.sex.length !== 0) {
+            dataToReturn[key] = data.sex[0].text;
+          } else {
+            dataToReturn[key] = undefined;
+          }
+        }
+      } else {
+        dataToReturn[key] = data[key];
+      }
+    }
+    return dataToReturn;
   }
 
   // tslint:disable-next-line:typedef
@@ -57,7 +105,7 @@ export class TrackingSystemComponent implements OnInit, AfterViewInit {
   removeAllFilters() {
     this.activeFilters = [];
     this.dataSource.filter = undefined;
-    this.getFilters(samples);
+    this.getFilters(this.unpackedData);
   }
 
   // tslint:disable-next-line:typedef
@@ -69,31 +117,57 @@ export class TrackingSystemComponent implements OnInit, AfterViewInit {
       this.getFilters(this.dataSource.filteredData);
     } else {
       this.dataSource.filter = undefined;
-      this.getFilters(samples);
+      this.getFilters(this.unpackedData);
     }
   }
 
   // tslint:disable-next-line:typedef
   getFilters(data: any) {
     const filters = {
-      organism: {},
-      common_name: {}
+      biosamples: {},
+      raw_data: {},
+      mapped_reads: {},
+      assemblies: {},
+      annotation: {}
     };
     for (const item of data) {
-      if (item.organism in filters.organism) {
-        filters.organism[item.organism] += 1;
+      const biosamples = `BioSamples - ${item.biosamples}`;
+      const rawData = `Raw Data - ${item.raw_data}`;
+      const mappedReads = `Mapped Reads - ${item.mapped_reads}`;
+      const assemblies = `Assemblies - ${item.assemblies}`;
+      const annotation = `Annotation - ${item.annotation}`;
+      if (biosamples in filters.biosamples) {
+        filters.biosamples[biosamples] += 1;
       } else {
-        filters.organism[item.organism] = 1;
+        filters.biosamples[biosamples] = 1;
       }
-      if (item.common_name in filters.common_name) {
-        filters.common_name[item.common_name] += 1;
+      if (rawData in filters.raw_data) {
+        filters.raw_data[rawData] += 1;
       } else {
-        filters.common_name[item.common_name] = 1;
+        filters.raw_data[rawData] = 1;
+      }
+      if (mappedReads in filters.mapped_reads) {
+        filters.mapped_reads[mappedReads] += 1;
+      } else {
+        filters.mapped_reads[mappedReads] = 1;
+      }
+      if (assemblies in filters.assemblies) {
+        filters.assemblies[assemblies] += 1;
+      } else {
+        filters.assemblies[assemblies] = 1;
+      }
+      if (annotation in filters.annotation) {
+        filters.annotation[annotation] += 1;
+      } else {
+        filters.annotation[annotation] = 1;
       }
     }
     this.filters = filters;
-    this.organismFilters = Object.entries(this.filters.organism);
-    this.commonNameFilters = Object.entries(this.filters.common_name);
+    this.BiosamplesFilters = Object.entries(this.filters.biosamples);
+    this.RawDataFilters = Object.entries(this.filters.raw_data);
+    this.MappedReadsFilters = Object.entries(this.filters.mapped_reads);
+    this.AssembliesFilters = Object.entries(this.filters.assemblies);
+    this.AnnotationFilters = Object.entries(this.filters.annotation);
   }
 
   ngAfterViewInit() {
