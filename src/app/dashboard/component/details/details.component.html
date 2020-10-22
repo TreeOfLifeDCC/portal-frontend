@@ -12,7 +12,8 @@
         <dd class="col-sm-9">{{bioSampleObj?.organism}}</dd>
 
         <dt class="col-sm-3">Sex:</dt>
-        <dd class="col-sm-9"><a href="{{bioSampleObj?.sex[0].ontologyTerms[0]}}"
+        <dd class="col-sm-9" *ngIf="bioSampleObj?.sex.length !== 0">
+            <a href="{{bioSampleObj?.sex[0].ontologyTerms[0]}}"
                 target="_blank">{{bioSampleObj?.sex[0].text}}</a></dd>
 
         <dt class="col-sm-3">Scientific Name:</dt>
@@ -26,7 +27,7 @@
             <div class="row" *ngFor="let sample of bioSampleObj?.customField">
                 <dt class="col-sm-3">{{sample?.name}}</dt>
                 <dd class="col-sm-9">
-                    <a *ngIf="sample.ontologyTerms.lenght > 0; else simple"
+                    <a *ngIf="sample.ontologyTerms?.lenght > 0; else simple"
                         href="{{sample.ontologyTerms[0]}}">{{sample?.value}}</a>
                     <ng-template #simple>
                         {{sample?.value}}
@@ -62,15 +63,7 @@
         <div class="col-sm-12">
             <hr>
             <h1 class="col-sm-12 page-header">Related files</h1>
-            <table mat-table #table [dataSource]="dataSource" matSort class="table table-striped table-hover table-borderless table-sm">
-                <!-- First Column -->
-                <ng-container matColumnDef="sample_accession">
-                    <mat-header-cell *matHeaderCellDef mat-sort-header> Sample Accession </mat-header-cell>
-                    <mat-cell *matCellDef="let element">
-                        <a class="no-underline" target="_blank"
-                            href="https://www.ebi.ac.uk/ena/browser/view/{{element.sample_accession}}">{{element.sample_accession}}</a>
-                    </mat-cell>
-                </ng-container>
+            <table mat-table #table [dataSource]="dataSourceFiles" matSort class="table table-striped table-hover table-borderless table-sm">
 
                 <!-- Second Column -->
                 <ng-container matColumnDef="experiment_accession">
@@ -129,10 +122,45 @@
                     </mat-cell>
                 </ng-container>
 
-                <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-                <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+                <mat-header-row *matHeaderRowDef="displayedColumnsFiles"></mat-header-row>
+                <mat-row *matRowDef="let row; columns: displayedColumnsFiles;"></mat-row>
             </table>
             <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
+        </div>
+
+        <div class="col-sm-12">
+            <hr>
+            <h1 class="col-sm-12 page-header">Related assemblies</h1>
+            <table mat-table #table [dataSource]="dataSourceAssemblies"
+                   class="table table-striped table-hover table-borderless table-sm">
+                <!-- First Column -->
+                <ng-container matColumnDef="accession">
+                    <mat-header-cell *matHeaderCellDef> Accession </mat-header-cell>
+                    <mat-cell *matCellDef="let element">
+                        <a class="no-underline" target="_blank"
+                           href="https://www.ebi.ac.uk/ena/browser/view/{{element.accession}}">{{element.accession}}</a>
+                    </mat-cell>
+                </ng-container>
+
+                <!-- Second Column -->
+                <ng-container matColumnDef="assembly_name">
+                    <mat-header-cell *matHeaderCellDef> Assembly Name </mat-header-cell>
+                    <mat-cell *matCellDef="let element"> {{element.assembly_name}} </mat-cell>
+                </ng-container>
+                <!-- Third Column -->
+                <ng-container matColumnDef="description">
+                    <mat-header-cell *matHeaderCellDef> Description </mat-header-cell>
+                    <mat-cell *matCellDef="let element"> {{element.description}} </mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="version">
+                    <mat-header-cell *matHeaderCellDef> Version </mat-header-cell>
+                    <mat-cell *matCellDef="let element"> {{element.version}} </mat-cell>
+                </ng-container>
+
+                <mat-header-row *matHeaderRowDef="displayedColumnsAssemblies"></mat-header-row>
+                <mat-row *matRowDef="let row; columns: displayedColumnsAssemblies;"></mat-row>
+            </table>
         </div>
     </dl>
 </div>

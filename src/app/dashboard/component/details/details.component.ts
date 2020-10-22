@@ -16,9 +16,12 @@ export class DetailsComponent implements OnInit {
 
   bioSampleId;
   bioSampleObj;
-  dataSource;
+  dataSourceFiles;
+  dataSourceAssemblies;
 
-  displayedColumns = ['study_accession', 'sample_accession', 'experiment_accession', 'run_accession', 'tax_id', 'scientific_name', 'fastq_ftp', 'submitted_ftp'];
+  displayedColumnsFiles = ['study_accession', 'experiment_accession', 'run_accession', 'tax_id',
+      'scientific_name', 'fastq_ftp', 'submitted_ftp'];
+  displayedColumnsAssemblies = ['accession', 'assembly_name', 'description', 'version'];
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort, { static: true }) sort: MatSort;
 
@@ -34,9 +37,10 @@ export class DetailsComponent implements OnInit {
         data => {
           console.log(data);
           this.bioSampleObj = data.hits.hits[0]._source;
-          this.dataSource = new MatTableDataSource<Sample>(this.bioSampleObj.experiment);
-          this.dataSource.paginator = this.paginator;
-          this.dataSource.sort = this.sort;
+          this.dataSourceFiles = new MatTableDataSource<Sample>(this.bioSampleObj.experiment);
+          this.dataSourceAssemblies = new MatTableDataSource<any>(this.bioSampleObj.assemblies);
+          this.dataSourceFiles.paginator = this.paginator;
+          this.dataSourceFiles.sort = this.sort;
         },
         err => console.log(err)
       );

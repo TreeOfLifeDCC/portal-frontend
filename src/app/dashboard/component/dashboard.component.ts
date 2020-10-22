@@ -124,7 +124,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
   onFilterClick(label: string, filter: string) {
     this.activeFilters.push(filter);
     this.dataSource.filter = `${filter.trim().toLowerCase()}|${label}`;
-    // this.dataSource = new MatTableDataSource<Sample>(this.dataSource.filteredData);
+    // this.dataSourceFiles = new MatTableDataSource<Sample>(this.dataSourceFiles.filteredData);
     this.getFilters(this.dataSource.filteredData);
   }
 
