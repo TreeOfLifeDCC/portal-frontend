@@ -80,8 +80,10 @@ export class DashboardComponent implements OnInit, AfterViewInit {
       } else {
         return data.sex !== 'male' && data.sex !== 'female';
       }
+    } else if (filters[1] === 'Tracking Status') {
+      return data.trackingSystem.toLowerCase() === filters[0];
     } else {
-      return data.trackingSystem === filters[1];
+      return Object.values(data).join('').trim().toLowerCase().indexOf(filters[0]) !== -1;
     }
   }
 
