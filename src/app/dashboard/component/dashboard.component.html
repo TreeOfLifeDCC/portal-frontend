@@ -67,6 +67,11 @@
           </mat-cell>
         </ng-container>
 
+        <ng-container matColumnDef="scientificName">
+          <mat-header-cell *matHeaderCellDef mat-sort-header> Internal ID </mat-header-cell>
+          <mat-cell *matCellDef="let element"> {{element.scientificName}} </mat-cell>
+        </ng-container>
+
         <!-- Second Column -->
         <ng-container matColumnDef="organism">
           <mat-header-cell *matHeaderCellDef mat-sort-header> Organism </mat-header-cell>

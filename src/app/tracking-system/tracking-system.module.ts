@@ -11,11 +11,13 @@ import {MatTooltipModule} from '@angular/material/tooltip';
 import {MatPaginatorModule} from '@angular/material/paginator';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatInputModule} from '@angular/material/input';
+import { DetailsComponent } from './tracking-system/details/details.component';
+import {MatListModule} from "@angular/material/list";
 
 
 
 @NgModule({
-  declarations: [TrackingSystemComponent],
+  declarations: [TrackingSystemComponent, DetailsComponent],
   imports: [
     CommonModule,
     TrackingSystemRoutingModule,
@@ -27,7 +29,8 @@ import {MatInputModule} from '@angular/material/input';
     MatTooltipModule,
     MatPaginatorModule,
     MatFormFieldModule,
-    MatInputModule
+    MatInputModule,
+    MatListModule
   ]
 })
 export class TrackingSystemModule { }

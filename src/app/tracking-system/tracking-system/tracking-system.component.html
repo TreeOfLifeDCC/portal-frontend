@@ -88,7 +88,7 @@
                 </ng-container>
 
                 <!-- Second Column -->
-                <ng-container matColumnDef="common_name">
+                <ng-container matColumnDef="commonName">
                     <mat-header-cell *matHeaderCellDef mat-sort-header> Common name </mat-header-cell>
                     <mat-cell *matCellDef="let element"> {{element.commonName}} </mat-cell>
                 </ng-container>
@@ -97,42 +97,77 @@
                 <ng-container matColumnDef="metadata_submitted_to_biosamples">
                     <mat-header-cell *matHeaderCellDef mat-sort-header> Metadata submitted to BioSamples </mat-header-cell>
                     <mat-cell *matCellDef="let element">
-                        <span class="badge badge-pill badge-success">{{element.biosamples}} </span>
+                        <mat-list>
+                            <mat-list-item>
+                                <span class="badge badge-pill badge-success">{{element.biosamples}} </span>
+                            </mat-list-item>
+                            <mat-list-item>
+                                {{element.biosamples_date}}
+                            </mat-list-item>
+                        </mat-list>
                     </mat-cell>
                 </ng-container>
                 <!-- Fourth Column -->
                 <ng-container matColumnDef="raw_data_submitted_to_ena">
                     <mat-header-cell *matHeaderCellDef mat-sort-header> Raw data submitted to ENA </mat-header-cell>
                     <mat-cell *matCellDef="let element">
-                        <span class="badge badge-pill badge-success">{{element.raw_data }}</span>
+                        <mat-list>
+                            <mat-list-item>
+                                <span class="badge badge-pill badge-success">{{element.raw_data }}</span>
+                            </mat-list-item>
+                            <mat-list-item>
+                                {{element.ena_date}}
+                            </mat-list-item>
+                        </mat-list>
                     </mat-cell>
                 </ng-container>
                 <!-- Fifth Column -->
                 <ng-container matColumnDef="mapped_reads_submitted_to_ena">
                     <mat-header-cell *matHeaderCellDef mat-sort-header> Mapped reads submitted to ENA </mat-header-cell>
                     <mat-cell *matCellDef="let element">
-                        <span class="badge badge-pill badge-success">{{element.mapped_reads }} </span>
+                        <mat-list>
+                            <mat-list-item>
+                                <span class="badge badge-pill badge-success">{{element.mapped_reads }} </span>
+                            </mat-list-item>
+                            <mat-list-item>
+                                {{element.ena_date}}
+                            </mat-list-item>
+                        </mat-list>
                     </mat-cell>
                 </ng-container>
 
                 <ng-container matColumnDef="assemblies_submitted_to_ena">
                     <mat-header-cell *matHeaderCellDef mat-sort-header> Assemblies submitted to ENA </mat-header-cell>
                     <mat-cell *matCellDef="let element">
-                        <span class="badge badge-pill badge-success">{{element.assemblies }} </span>
+                        <mat-list>
+                            <mat-list-item>
+                                <span class="badge badge-pill badge-success">{{element.assemblies }} </span>
+                            </mat-list-item>
+                            <mat-list-item>
+                                {{element.ena_date}}
+                            </mat-list-item>
+                        </mat-list>
                     </mat-cell>
                 </ng-container>
 
                 <ng-container matColumnDef="annotation_submitted_to_ena">
                     <mat-header-cell *matHeaderCellDef mat-sort-header> Annotation submitted to ENA </mat-header-cell>
                     <mat-cell *matCellDef="let element">
-                        <span class="badge badge-pill badge-warning">{{element.annotation }} </span>
+                        <mat-list>
+                            <mat-list-item>
+                                <span class="badge badge-pill badge-warning">{{element.annotation }} </span>
+                            </mat-list-item>
+                            <mat-list-item>
+                                NA
+                            </mat-list-item>
+                        </mat-list>
                     </mat-cell>
                 </ng-container>
 
                 <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
                 <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
             </table>
-            <mat-paginator [pageSizeOptions]="[10, 50, 100]" showFirstLastButtons></mat-paginator>
+            <mat-paginator [pageSizeOptions]="[5, 10, 100]" showFirstLastButtons></mat-paginator>
         </div>
     </div>
 </div>

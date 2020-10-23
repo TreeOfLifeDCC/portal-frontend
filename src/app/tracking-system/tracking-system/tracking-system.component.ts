@@ -12,7 +12,7 @@ import {StatusesService} from "../services/statuses.service";
   styleUrls: ['./tracking-system.component.css']
 })
 export class TrackingSystemComponent implements OnInit, AfterViewInit {
-  displayedColumns = ['organism', 'common_name', 'metadata_submitted_to_biosamples',
+  displayedColumns = ['organism', 'commonName', 'metadata_submitted_to_biosamples',
     'raw_data_submitted_to_ena', 'mapped_reads_submitted_to_ena', 'assemblies_submitted_to_ena',
     'annotation_submitted_to_ena'];
   dataSource = new MatTableDataSource<any>();

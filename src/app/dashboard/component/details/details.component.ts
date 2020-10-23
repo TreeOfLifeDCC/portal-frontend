@@ -19,8 +19,9 @@ export class DetailsComponent implements OnInit {
   dataSourceFiles;
   dataSourceAssemblies;
 
-  displayedColumnsFiles = ['study_accession', 'experiment_accession', 'run_accession', 'tax_id',
-      'scientific_name', 'fastq_ftp', 'submitted_ftp'];
+  displayedColumnsFiles = ['study_accession', 'experiment_accession', 'run_accession', 'fastq_ftp', 'submitted_ftp',
+      'instrument_platform', 'instrument_model', 'library_layout', 'library_strategy', 'library_source',
+      'library_selection'];
   displayedColumnsAssemblies = ['accession', 'assembly_name', 'description', 'version'];
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort, { static: true }) sort: MatSort;
@@ -48,5 +49,11 @@ export class DetailsComponent implements OnInit {
 
   ngOnInit(): void {
   }
+
+    // tslint:disable-next-line:typedef
+    applyFilter(event: Event) {
+        const filterValue = (event.target as HTMLInputElement).value;
+        this.dataSourceFiles.filter = filterValue.trim().toLowerCase();
+    }
 
 }

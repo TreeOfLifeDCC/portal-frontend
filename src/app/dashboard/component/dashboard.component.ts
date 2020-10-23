@@ -19,7 +19,7 @@ import { DashboardService } from '../services/dashboard.service';
   styleUrls: ['./dashboard.component.css']
 })
 export class DashboardComponent implements OnInit, AfterViewInit {
-  displayedColumns = ['accession', 'organism', 'commonName', 'sex', 'trackingSystem'];
+  displayedColumns = ['accession', 'scientificName', 'organism', 'commonName', 'sex', 'trackingSystem'];
   bioSamples: Sample[];
   loading = true;
   dataSource = new MatTableDataSource<any>();
