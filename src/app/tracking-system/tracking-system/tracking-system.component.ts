@@ -97,7 +97,8 @@ export class TrackingSystemComponent implements OnInit, AfterViewInit {
   // tslint:disable-next-line:typedef
   onFilterClick(filter: string) {
     this.activeFilters.push(filter);
-    this.dataSource.filter = filter.trim().toLowerCase();
+    const filterValueFormatted = filter.split(' - ')[1];
+    this.dataSource.filter = filterValueFormatted.trim().toLowerCase();
     this.getFilters(this.dataSource.filteredData);
   }
 
