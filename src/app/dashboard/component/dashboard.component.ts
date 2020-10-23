@@ -124,10 +124,15 @@ export class DashboardComponent implements OnInit, AfterViewInit {
 
   // tslint:disable-next-line:typedef
   onFilterClick(label: string, filter: string) {
-    this.activeFilters.push(filter);
-    this.dataSource.filter = `${filter.trim().toLowerCase()}|${label}`;
-    // this.dataSourceFiles = new MatTableDataSource<Sample>(this.dataSourceFiles.filteredData);
-    this.getFilters(this.dataSource.filteredData);
+    const filterIndex = this.activeFilters.indexOf(filter);
+    if (filterIndex !== -1) {
+      this.removeFilter(filter);
+    } else {
+      this.activeFilters.push(filter);
+      this.dataSource.filter = `${filter.trim().toLowerCase()}|${label}`;
+      // this.dataSourceFiles = new MatTableDataSource<Sample>(this.dataSourceFiles.filteredData);
+      this.getFilters(this.dataSource.filteredData);
+    }
   }
 
   // tslint:disable-next-line:typedef

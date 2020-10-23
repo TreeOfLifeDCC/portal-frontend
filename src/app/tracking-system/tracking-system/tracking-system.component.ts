@@ -96,10 +96,15 @@ export class TrackingSystemComponent implements OnInit, AfterViewInit {
 
   // tslint:disable-next-line:typedef
   onFilterClick(filter: string) {
-    this.activeFilters.push(filter);
-    const filterValueFormatted = filter.split(' - ')[1];
-    this.dataSource.filter = filterValueFormatted.trim().toLowerCase();
-    this.getFilters(this.dataSource.filteredData);
+    const filterIndex = this.activeFilters.indexOf(filter);
+    if (filterIndex !== -1) {
+      this.removeFilter(filter);
+    } else {
+      this.activeFilters.push(filter);
+      const filterValueFormatted = filter.split(' - ')[1];
+      this.dataSource.filter = filterValueFormatted.trim().toLowerCase();
+      this.getFilters(this.dataSource.filteredData);
+    }
   }
 
   // tslint:disable-next-line:typedef
@@ -111,10 +116,13 @@ export class TrackingSystemComponent implements OnInit, AfterViewInit {
 
   // tslint:disable-next-line:typedef
   removeFilter(filter: string) {
+    console.log(filter);
+    console.log(this.activeFilters);
     const filterIndex = this.activeFilters.indexOf(filter);
     this.activeFilters.splice(filterIndex, 1);
     if (this.activeFilters.length !== 0) {
-      this.dataSource.filter = this.activeFilters[0].trim().toLowerCase();
+      const filterValueFormatted = filter.split(' - ')[1];
+      this.dataSource.filter = filterValueFormatted.trim().toLowerCase();
       this.getFilters(this.dataSource.filteredData);
     } else {
       this.dataSource.filter = undefined;
