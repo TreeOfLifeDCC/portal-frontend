@@ -35,3 +35,7 @@ p {
 .row {
     margin-bottom: 50px;
 }
+
+.img-left {
+    height: 50%;
+}
