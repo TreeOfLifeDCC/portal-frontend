@@ -5,6 +5,7 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import {Title} from '@angular/platform-browser';
 import {StatusesService} from "../services/statuses.service";
+import {filter} from "rxjs/operators";
 
 @Component({
   selector: 'app-tracking-system',
@@ -14,7 +15,7 @@ import {StatusesService} from "../services/statuses.service";
 export class TrackingSystemComponent implements OnInit, AfterViewInit {
   displayedColumns = ['organism', 'commonName', 'metadata_submitted_to_biosamples',
     'raw_data_submitted_to_ena', 'mapped_reads_submitted_to_ena', 'assemblies_submitted_to_ena',
-    'annotation_submitted_to_ena'];
+    'annotation_complete', 'annotation_submitted_to_ena'];
   dataSource = new MatTableDataSource<any>();
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort, {static: true}) sort: MatSort;
@@ -24,13 +25,15 @@ export class TrackingSystemComponent implements OnInit, AfterViewInit {
     raw_data: {},
     mapped_reads: {},
     assemblies: {},
-    annotation: {}
+    annotation: {},
+    annotation_complete: {}
   };
   BiosamplesFilters = [];
   RawDataFilters = [];
   MappedReadsFilters = [];
   AssembliesFilters = [];
   AnnotationFilters = [];
+  AnnotationCompleteFilters = [];
   unpackedData;
 
   constructor(private titleService: Title, private statusesService: StatusesService) { }
@@ -52,11 +55,32 @@ export class TrackingSystemComponent implements OnInit, AfterViewInit {
                 this.getFilters(unpackedData);
                 this.dataSource.paginator = this.paginator;
                 this.dataSource.sort = this.sort;
+                this.dataSource.filterPredicate = this.filterPredicate;
                 this.unpackedData = unpackedData;
               }
             },
             err => console.log(err)
         );
+  }
+
+  filterPredicate(data: any, filterValue: any): boolean {
+    const filters = filterValue.split('|');
+    if (filters[1] === 'Metadata submitted to BioSamples') {
+      return data.biosamples === filters[0].split(' - ')[1];
+    } else {
+      const ena_filters = filters[0].split(' - ');
+      if (ena_filters[0] === 'Raw Data') {
+        return data.raw_data === ena_filters[1];
+      } else if (ena_filters[0] === 'Mapped Reads') {
+        return data.mapped_reads === ena_filters[1];
+      } else if (ena_filters[0] === 'Assemblies') {
+        return data.assemblies === ena_filters[1];
+      } else if (ena_filters[0] === 'Annotation complete') {
+        return data.annotation_complete === ena_filters[1];
+      } else if (ena_filters[0] === 'Annotation') {
+        return data.annotation === ena_filters[1];
+      }
+    }
   }
 
   // tslint:disable-next-line:typedef
@@ -95,14 +119,13 @@ export class TrackingSystemComponent implements OnInit, AfterViewInit {
   }
 
   // tslint:disable-next-line:typedef
-  onFilterClick(filter: string) {
+  onFilterClick(label: string, filter: string) {
     const filterIndex = this.activeFilters.indexOf(filter);
     if (filterIndex !== -1) {
       this.removeFilter(filter);
     } else {
       this.activeFilters.push(filter);
-      const filterValueFormatted = filter.split(' - ')[1];
-      this.dataSource.filter = filterValueFormatted.trim().toLowerCase();
+      this.dataSource.filter = `${filter.trim()}|${label}`;
       this.getFilters(this.dataSource.filteredData);
     }
   }
@@ -116,8 +139,6 @@ export class TrackingSystemComponent implements OnInit, AfterViewInit {
 
   // tslint:disable-next-line:typedef
   removeFilter(filter: string) {
-    console.log(filter);
-    console.log(this.activeFilters);
     const filterIndex = this.activeFilters.indexOf(filter);
     this.activeFilters.splice(filterIndex, 1);
     if (this.activeFilters.length !== 0) {
@@ -137,7 +158,8 @@ export class TrackingSystemComponent implements OnInit, AfterViewInit {
       raw_data: {},
       mapped_reads: {},
       assemblies: {},
-      annotation: {}
+      annotation: {},
+      annotation_complete: {}
     };
     for (const item of data) {
       const biosamples = `BioSamples - ${item.biosamples}`;
@@ -145,6 +167,7 @@ export class TrackingSystemComponent implements OnInit, AfterViewInit {
       const mappedReads = `Mapped Reads - ${item.mapped_reads}`;
       const assemblies = `Assemblies - ${item.assemblies}`;
       const annotation = `Annotation - ${item.annotation}`;
+      const annotationComplete = `Annotation complete - ${item.annotation_complete}`;
       if (biosamples in filters.biosamples) {
         filters.biosamples[biosamples] += 1;
       } else {
@@ -170,6 +193,11 @@ export class TrackingSystemComponent implements OnInit, AfterViewInit {
       } else {
         filters.annotation[annotation] = 1;
       }
+      if (annotationComplete in filters.annotation_complete) {
+        filters.annotation_complete[annotationComplete] += 1;
+      } else {
+        filters.annotation_complete[annotationComplete] = 1;
+      }
     }
     this.filters = filters;
     this.BiosamplesFilters = Object.entries(this.filters.biosamples);
@@ -177,10 +205,26 @@ export class TrackingSystemComponent implements OnInit, AfterViewInit {
     this.MappedReadsFilters = Object.entries(this.filters.mapped_reads);
     this.AssembliesFilters = Object.entries(this.filters.assemblies);
     this.AnnotationFilters = Object.entries(this.filters.annotation);
+    this.AnnotationCompleteFilters = Object.entries(this.filters.annotation_complete);
   }
 
+  // tslint:disable-next-line:typedef
   ngAfterViewInit() {
     this.dataSource.paginator = this.paginator;
+  }
+
+  // tslint:disable-next-line:typedef
+  getBadgeClass(status: string) {
+    if (status === 'Done') {
+      return 'badge badge-pill badge-success';
+    } else {
+      return 'badge badge-pill badge-warning';
+    }
+  }
+
+  // tslint:disable-next-line:typedef
+  generateLink(organism) {
+    return `https://portal.darwintreeoflife.org/dashboard/organisms/details/${organism}`;
   }
 
 }

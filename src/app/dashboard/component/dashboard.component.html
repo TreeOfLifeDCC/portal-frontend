@@ -62,7 +62,7 @@
         <!-- First Column -->
         <ng-container matColumnDef="accession">
           <mat-header-cell *matHeaderCellDef mat-sort-header> BioSample ID </mat-header-cell>
-          <mat-cell *matCellDef="let element">
+          <mat-cell *matCellDef="let element" class="txt-center">
             <a [routerLink]="['/dashboard/organisms/details/', element.accession]">
               {{element.accession}}</a>
           </mat-cell>
@@ -70,30 +70,30 @@
 
         <ng-container matColumnDef="scientificName">
           <mat-header-cell *matHeaderCellDef mat-sort-header> Internal ID </mat-header-cell>
-          <mat-cell *matCellDef="let element"> {{element.scientificName}} </mat-cell>
+          <mat-cell *matCellDef="let element" class="txt-center"> {{element.scientificName}} </mat-cell>
         </ng-container>
 
         <!-- Second Column -->
         <ng-container matColumnDef="organism">
           <mat-header-cell *matHeaderCellDef mat-sort-header> Organism </mat-header-cell>
-          <mat-cell *matCellDef="let element"> {{element.organism}} </mat-cell>
+          <mat-cell *matCellDef="let element" class="txt-center"> {{element.organism}} </mat-cell>
         </ng-container>
         <!-- Third Column -->
         <ng-container matColumnDef="commonName">
           <mat-header-cell *matHeaderCellDef mat-sort-header> Common name </mat-header-cell>
-          <mat-cell *matCellDef="let element"> {{element.commonName }} </mat-cell>
+          <mat-cell *matCellDef="let element" class="txt-center"> {{element.commonName }} </mat-cell>
         </ng-container>
 
         <!-- Fourth Column -->
         <ng-container matColumnDef="sex">
           <mat-header-cell *matHeaderCellDef mat-sort-header> Sex </mat-header-cell>
-          <mat-cell *matCellDef="let element"> {{element.sex}} </mat-cell>
+          <mat-cell *matCellDef="let element" class="txt-center"> {{element.sex}} </mat-cell>
         </ng-container>
 
         <ng-container matColumnDef="trackingSystem">
           <mat-header-cell *matHeaderCellDef mat-sort-header> Tracking status </mat-header-cell>
           <mat-cell *matCellDef="let element">
-            <span class="badge badge-pill badge-success">{{element.trackingSystem}}</span>
+            <span [ngClass]="getStatusClass(element.trackingSystem)">{{element.trackingSystem}}</span>
           </mat-cell>
         </ng-container>
 

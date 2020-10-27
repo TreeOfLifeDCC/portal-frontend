@@ -16,11 +16,11 @@
             <div class="row">
                 <div class="col-md-12 col-sm-6">
                     <div class="card bg-lite mb-3 filter-top">
-                        <h3 class="card-header">Metadata submitted to BioSamples</h3>
+                        <h3 class="card-header" #lbltextMetadata>Metadata submitted to BioSamples</h3>
                         <ul class="list-group">
                             <li class="list-group-item d-flex justify-content-between align-items-center"
                                 [ngClass]="checkFilterIsActive(filter[0])"
-                                (click)="onFilterClick(filter[0])"
+                                (click)="onFilterClick(lbltextMetadata.innerText, filter[0])"
                                 style="cursor: pointer" *ngFor="let filter of BiosamplesFilters">
                                 {{filter[0]}}
                                 <span class="badge badge-pill badge-info">{{filter[1]}}</span>
@@ -30,32 +30,39 @@
                 </div>
                 <div class="col-md-12 col-sm-6">
                     <div class="card bg-lite mb-3">
-                        <h3 class="card-header">Data submitted to ENA</h3>
+                        <h3 class="card-header" #lbltextENA>Data submitted to ENA</h3>
                         <ul class="list-group ">
                             <li class="list-group-item d-flex justify-content-between align-items-center"
                                 [ngClass]="checkFilterIsActive(filter[0])"
-                                (click)="onFilterClick(filter[0])"
+                                (click)="onFilterClick(lbltextENA.innerText, filter[0])"
                                 style="cursor: pointer" *ngFor="let filter of RawDataFilters">
                                 {{filter[0]}}
                                 <span class="badge badge-pill badge-info">{{filter[1]}}</span>
                             </li>
                             <li class="list-group-item d-flex justify-content-between align-items-center"
                                 [ngClass]="checkFilterIsActive(filter[0])"
-                                (click)="onFilterClick(filter[0])"
+                                (click)="onFilterClick(lbltextENA.innerText, filter[0])"
                                 style="cursor: pointer" *ngFor="let filter of MappedReadsFilters">
                                 {{filter[0]}}
                                 <span class="badge badge-pill badge-info">{{filter[1]}}</span>
                             </li>
                             <li class="list-group-item d-flex justify-content-between align-items-center"
                                 [ngClass]="checkFilterIsActive(filter[0])"
-                                (click)="onFilterClick(filter[0])"
+                                (click)="onFilterClick(lbltextENA.innerText, filter[0])"
                                 style="cursor: pointer" *ngFor="let filter of AssembliesFilters">
                                 {{filter[0]}}
                                 <span class="badge badge-pill badge-info">{{filter[1]}}</span>
                             </li>
                             <li class="list-group-item d-flex justify-content-between align-items-center"
                                 [ngClass]="checkFilterIsActive(filter[0])"
-                                (click)="onFilterClick(filter[0])"
+                                (click)="onFilterClick(lbltextENA.innerText, filter[0])"
+                                style="cursor: pointer" *ngFor="let filter of AnnotationCompleteFilters">
+                                {{filter[0]}}
+                                <span class="badge badge-pill badge-info">{{filter[1]}}</span>
+                            </li>
+                            <li class="list-group-item d-flex justify-content-between align-items-center"
+                                [ngClass]="checkFilterIsActive(filter[0])"
+                                (click)="onFilterClick(lbltextENA.innerText, filter[0])"
                                 style="cursor: pointer" *ngFor="let filter of AnnotationFilters">
                                 {{filter[0]}}
                                 <span class="badge badge-pill badge-info">{{filter[1]}}</span>
@@ -84,7 +91,9 @@
                 <!-- First Column -->
                 <ng-container matColumnDef="organism">
                     <mat-header-cell *matHeaderCellDef mat-sort-header> Organism </mat-header-cell>
-                    <mat-cell *matCellDef="let element"> {{element.organism}} </mat-cell>
+                    <mat-cell *matCellDef="let element">
+                        <a href="{{generateLink(element.organism)}}">{{element.organism}}</a>
+                    </mat-cell>
                 </ng-container>
 
                 <!-- Second Column -->
@@ -145,6 +154,21 @@
                             </mat-list-item>
                             <mat-list-item>
                                 {{element.ena_date}}
+                            </mat-list-item>
+                        </mat-list>
+                    </mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="annotation_complete">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header> Annotation complete </mat-header-cell>
+                    <mat-cell *matCellDef="let element">
+                        <mat-list>
+                            <mat-list-item>
+                                <span [ngClass]="getBadgeClass(element.annotation_complete)">
+                                    {{ element.annotation_complete }} </span>
+                            </mat-list-item>
+                            <mat-list-item>
+                                NA
                             </mat-list-item>
                         </mat-list>
                     </mat-cell>

@@ -42,6 +42,10 @@ button {
     justify-content: center;
   }
   
+.mat-list-item {
+    font-size: 15px;
+}
+
 .mat-cell {
     text-align: center;
     justify-content:center;

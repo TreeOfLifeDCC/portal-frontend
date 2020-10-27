@@ -184,5 +184,14 @@
                 <mat-row *matRowDef="let row; columns: displayedColumnsAssemblies;"></mat-row>
             </table>
         </div>
+
+        <div class="col-sm-12" *ngIf="bioSampleObj.annotation">
+            <h1 class="col-sm-12 page-header">Annotations</h1>
+            <ul class="list-group">
+                <li class="list-group-item list-group-item-success">
+                    <a href="{{bioSampleObj.annotation}}">{{bioSampleObj.annotation}}</a>
+                </li>
+            </ul>
+        </div>
     </dl>
 </div>

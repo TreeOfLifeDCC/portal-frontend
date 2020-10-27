@@ -178,4 +178,12 @@ export class DashboardComponent implements OnInit, AfterViewInit {
     this.trackingSystemFilters = Object.entries(this.filters.trackingSystem);
   }
 
+  getStatusClass(status: string) {
+    if (status === 'annotation complete') {
+      return 'badge badge-pill badge-success';
+    } else {
+      return 'badge badge-pill badge-warning'
+    }
+  }
+
 }
