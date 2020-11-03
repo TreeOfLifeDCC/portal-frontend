@@ -14,4 +14,8 @@ export class StatusesService {
   public getAllStatuses(): Observable<any> {
     return this.http.get(`${this.API_BASE_URL}/statuses`);
   }
+
+  public getBiosampleByOrganism(organism: string): Observable<any> {
+    return this.http.get(`${this.API_BASE_URL}/dtol/organism/${organism}`);
+  }
 }

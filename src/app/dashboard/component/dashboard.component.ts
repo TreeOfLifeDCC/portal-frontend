@@ -57,7 +57,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
       .subscribe(
         data => {
           const unpackedData = [];
-          for (const item of data.hits.hits) {
+          for (const item of data.biosamples) {
             unpackedData.push(this.unpackData(item));
           }
           this.dataSource = new MatTableDataSource<any>(unpackedData);

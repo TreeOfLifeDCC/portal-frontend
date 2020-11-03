@@ -6,7 +6,8 @@ import {DetailsComponent} from './tracking-system/details/details.component';
 
 const routes: Routes = [
     { path: '', component: TrackingSystemComponent },
-    { path: ':id', component: DetailsComponent}
+    { path: ':id', component: DetailsComponent},
+    { path: 'details/:organism', component: DetailsComponent },
     ];
 
 @NgModule({

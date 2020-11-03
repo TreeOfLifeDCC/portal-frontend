@@ -92,7 +92,8 @@
                 <ng-container matColumnDef="organism">
                     <mat-header-cell *matHeaderCellDef mat-sort-header> Organism </mat-header-cell>
                     <mat-cell *matCellDef="let element">
-                        <a href="{{generateLink(element.organism)}}">{{element.organism}}</a>
+                        <a [routerLink]="['/tracking_system/details/', element.organism]">
+                            {{element.organism}}</a>
                     </mat-cell>
                 </ng-container>
 

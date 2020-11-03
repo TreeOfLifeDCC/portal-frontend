@@ -1,6 +1,5 @@
 import {AfterViewInit, Component, OnInit, ViewChild} from '@angular/core';
 import { MatSort } from '@angular/material/sort';
-import { Sample, samples } from '../model/tracking-system.model';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import {Title} from '@angular/platform-browser';
@@ -49,7 +48,7 @@ export class TrackingSystemComponent implements OnInit, AfterViewInit {
         .subscribe(
             data => {
               const unpackedData = [];
-              for (const item of data.hits.hits) {
+            for (const item of data.biosampleStatus) {
                 unpackedData.push(this.unpackData(item));
                 this.dataSource = new MatTableDataSource<any>(unpackedData);
                 this.getFilters(unpackedData);

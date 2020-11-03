@@ -36,8 +36,7 @@ export class DetailsComponent implements OnInit {
     this.dashboardService.getBiosampleByAccession(this.bioSampleId)
       .subscribe(
         data => {
-          console.log(data);
-          this.bioSampleObj = data.hits.hits[0]._source;
+          this.bioSampleObj = data;
           this.dataSourceFiles = new MatTableDataSource<Sample>(this.bioSampleObj.experiment);
           this.dataSourceAssemblies = new MatTableDataSource<any>(this.bioSampleObj.assemblies);
           this.dataSourceFiles.paginator = this.paginator;
