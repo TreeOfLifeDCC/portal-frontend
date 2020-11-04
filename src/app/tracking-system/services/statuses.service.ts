@@ -11,8 +11,8 @@ export class StatusesService {
 
   constructor(private http: HttpClient) { }
 
-  public getAllStatuses(): Observable<any> {
-    return this.http.get(`${this.API_BASE_URL}/statuses`);
+  public getAllStatuses(offset, limit): Observable<any> {
+    return this.http.get(`${this.API_BASE_URL}/statuses?offset=${offset}&limit=${limit}`);
   }
 
   public getBiosampleByOrganism(organism: string): Observable<any> {

@@ -34,14 +34,14 @@ export class DashboardComponent implements OnInit, AfterViewInit {
   organismFilters = [];
   commonNameFilters = [];
   trackingSystemFilters = [];
-  bioSampleObj;
+  bioSampleTotalCount = 0;
   unpackedData;
 
   constructor(private titleService: Title, private dashboardService: DashboardService,
               private route: ActivatedRoute, private router: Router) { }
 
   ngOnInit(): void {
-    this.getAllBiosamples();
+    this.getAllBiosamples(0,10);
     this.titleService.setTitle('Data portal');
   }
 
@@ -52,8 +52,28 @@ export class DashboardComponent implements OnInit, AfterViewInit {
   }
 
   // tslint:disable-next-line:typedef
-  getAllBiosamples() {
-    this.dashboardService.getAllBiosample()
+  getAllBiosamples(offset, limit) {
+    this.dashboardService.getAllBiosample(offset, limit)
+      .subscribe(
+        data => {
+          const unpackedData = [];
+          for (const item of data.biosamples) {
+            unpackedData.push(this.unpackData(item));
+          }
+          this.bioSampleTotalCount = data.count;
+          this.dataSource = new MatTableDataSource<any>(unpackedData);
+          this.getFilters(unpackedData);
+          // this.dataSource.paginator = this.paginator;
+          this.dataSource.sort = this.sort;
+          this.dataSource.filterPredicate = this.filterPredicate;
+          this.unpackedData = unpackedData;
+        },
+        err => console.log(err)
+      );
+  }
+
+  getNextBiosamples(currentSize, offset, limit) {
+    this.dashboardService.getAllBiosample(offset, limit)
       .subscribe(
         data => {
           const unpackedData = [];
@@ -62,13 +82,25 @@ export class DashboardComponent implements OnInit, AfterViewInit {
           }
           this.dataSource = new MatTableDataSource<any>(unpackedData);
           this.getFilters(unpackedData);
-          this.dataSource.paginator = this.paginator;
           this.dataSource.sort = this.sort;
           this.dataSource.filterPredicate = this.filterPredicate;
           this.unpackedData = unpackedData;
         },
         err => console.log(err)
-      );
+      )
+  }
+
+  pageChanged(event) {
+    this.loading = true;
+
+    let pageIndex = event.pageIndex;
+    let pageSize = event.pageSize;
+
+    let previousIndex = event.previousPageIndex;
+
+    let previousSize = pageSize * pageIndex;
+
+    this.getNextBiosamples(previousSize, (pageIndex).toString(), pageSize.toString());
   }
 
   // tslint:disable-next-line:typedef

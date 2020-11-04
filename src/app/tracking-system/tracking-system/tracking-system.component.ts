@@ -34,32 +34,60 @@ export class TrackingSystemComponent implements OnInit, AfterViewInit {
   AnnotationFilters = [];
   AnnotationCompleteFilters = [];
   unpackedData;
+  statusesCount = 0;
 
   constructor(private titleService: Title, private statusesService: StatusesService) { }
 
   ngOnInit(): void {
     this.titleService.setTitle('Status tracking');
-    this.getAllStatuses();
+    this.getAllStatuses(0,10);
   }
 
   // tslint:disable-next-line:typedef
-  getAllStatuses() {
-    this.statusesService.getAllStatuses()
+  getAllStatuses(offset, limit) {
+    this.statusesService.getAllStatuses(offset, limit)
         .subscribe(
             data => {
               const unpackedData = [];
             for (const item of data.biosampleStatus) {
                 unpackedData.push(this.unpackData(item));
-                this.dataSource = new MatTableDataSource<any>(unpackedData);
-                this.getFilters(unpackedData);
-                this.dataSource.paginator = this.paginator;
-                this.dataSource.sort = this.sort;
-                this.dataSource.filterPredicate = this.filterPredicate;
-                this.unpackedData = unpackedData;
               }
+            this.dataSource = new MatTableDataSource<any>(unpackedData);
+            this.getFilters(unpackedData);
+            // this.dataSource.paginator = this.paginator;
+            this.dataSource.sort = this.sort;
+            this.dataSource.filterPredicate = this.filterPredicate;
+            this.unpackedData = unpackedData;
+            this.statusesCount = data.count;
             },
             err => console.log(err)
         );
+  }
+
+  getNextStatuses(currentSize, offset, limit) {
+    this.statusesService.getAllStatuses(offset, limit)
+      .subscribe(
+        data => {
+          const unpackedData = [];
+          for (const item of data.biosampleStatus) {
+            unpackedData.push(this.unpackData(item));
+          }
+          this.dataSource = new MatTableDataSource<any>(unpackedData);
+          this.getFilters(unpackedData);
+          this.dataSource.sort = this.sort;
+          this.dataSource.filterPredicate = this.filterPredicate;
+          this.unpackedData = unpackedData;
+        },
+        err => console.log(err)
+      );
+  }
+
+  pageChanged(event) {
+    let pageIndex = event.pageIndex;
+    let pageSize = event.pageSize;
+    let previousIndex = event.previousPageIndex;
+    let previousSize = pageSize * pageIndex;
+    this.getNextStatuses(previousSize, (pageIndex).toString(), pageSize.toString());
   }
 
   filterPredicate(data: any, filterValue: any): boolean {

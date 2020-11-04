@@ -13,8 +13,8 @@ export class DashboardService {
 
   constructor(private http: HttpClient) { }
 
-  public getAllBiosample(): Observable<any> {
-    return this.http.get(`${this.API_BASE_URL}/dtol`);
+  public getAllBiosample(offset,limit): Observable<any> {
+    return this.http.get(`${this.API_BASE_URL}/dtol?offset=${offset}&limit=${limit}`);
   }
 
   public createBiosample(data: any): Observable<any> {
