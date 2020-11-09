@@ -19,7 +19,7 @@ import { DashboardService } from '../services/dashboard.service';
   styleUrls: ['./dashboard.component.css']
 })
 export class DashboardComponent implements OnInit, AfterViewInit {
-  displayedColumns = ['accession', 'sex', 'organismPart', 'commonName', 'trackingSystem'];
+  displayedColumns = ['accession', 'organism', 'commonName', 'sex', 'organismPart', 'trackingSystem'];
   bioSamples: Sample[];
   loading = true;
   dataSource = new MatTableDataSource<any>();
@@ -43,7 +43,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
               private route: ActivatedRoute, private router: Router) { }
 
   ngOnInit(): void {
-    this.getAllBiosamples(0,30);
+    this.getAllBiosamples(0,10);
     this.titleService.setTitle('Data portal');
   }
 
