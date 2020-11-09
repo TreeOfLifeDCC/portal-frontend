@@ -19,7 +19,7 @@ import { DashboardService } from '../services/dashboard.service';
   styleUrls: ['./dashboard.component.css']
 })
 export class DashboardComponent implements OnInit, AfterViewInit {
-  displayedColumns = ['accession', 'scientificName', 'organism', 'commonName', 'sex', 'trackingSystem'];
+  displayedColumns = ['accession', 'sex', 'organismPart', 'trackingSystem'];
   bioSamples: Sample[];
   loading = true;
   dataSource = new MatTableDataSource<any>();
@@ -29,11 +29,13 @@ export class DashboardComponent implements OnInit, AfterViewInit {
   activeFilters = [];
   filters = {
     sex: {},
-    trackingSystem: {}
+    trackingSystem: {},
+    organismPart: {}
   };
   organismFilters = [];
   commonNameFilters = [];
   trackingSystemFilters = [];
+  organismPartFilters = [];
   bioSampleTotalCount = 0;
   unpackedData;
 
@@ -114,6 +116,8 @@ export class DashboardComponent implements OnInit, AfterViewInit {
       }
     } else if (filters[1] === 'Tracking Status') {
       return data.trackingSystem.toLowerCase() === filters[0];
+    } else if (filters[1] === 'Organism Part') {
+      return data.organismPart.toLowerCase() === filters[0];
     } else {
       return Object.values(data).join('').trim().toLowerCase().indexOf(filters[0]) !== -1;
     }
@@ -191,7 +195,8 @@ export class DashboardComponent implements OnInit, AfterViewInit {
   getFilters(data: any) {
     const filters = {
       sex: {},
-      trackingSystem: {}
+      trackingSystem: {},
+      organismPart: {}
     };
     for (const item of data) {
       if (item.sex in filters.sex) {
@@ -204,10 +209,16 @@ export class DashboardComponent implements OnInit, AfterViewInit {
       } else {
         filters.trackingSystem[item.trackingSystem] = 1;
       }
+      if (item.organismPart in filters.organismPart) {
+        filters.organismPart[item.organismPart] += 1;
+      } else {
+        filters.organismPart[item.organismPart] = 1;
+      }
     }
     this.filters = filters;
     this.organismFilters = Object.entries(this.filters.sex);
     this.trackingSystemFilters = Object.entries(this.filters.trackingSystem);
+    this.organismPartFilters = Object.entries(this.filters.organismPart);
   }
 
   getStatusClass(status: string) {

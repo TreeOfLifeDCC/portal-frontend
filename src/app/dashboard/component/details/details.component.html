@@ -2,29 +2,27 @@
     <h1 class="text-center page-header">{{bioSampleId}}</h1>
     <dl class="row">
         <dt class="col-sm-3">Name:</dt>
-        <dd class="col-sm-9">{{bioSampleObj?.commonName}}</dd>
+        <dd class="col-sm-9">{{bioSampleObj?.name}}</dd>
 
         <dt class="col-sm-3">BioSample ID:</dt>
         <dd class="col-sm-9"><a href="http://www.ebi.ac.uk/biosamples/samples/{{bioSampleObj?.accession}}"
                 target="_blank">{{bioSampleObj?.accession}}</a></dd>
 
         <dt class="col-sm-3">Organism:</dt>
-        <dd class="col-sm-9">{{bioSampleObj?.organism}}</dd>
+        <dd class="col-sm-9">{{bioSampleObj?.organism[0].text}}</dd>
+
+        <dt class="col-sm-3">Organism Part:</dt>
+        <dd class="col-sm-9">{{bioSampleObj?.organismPart}}</dd>
 
         <dt class="col-sm-3">Sex:</dt>
-        <dd class="col-sm-9" *ngIf="bioSampleObj?.sex.length !== 0">
-            <a href="{{bioSampleObj?.sex[0].ontologyTerms[0]}}"
-                target="_blank">{{bioSampleObj?.sex[0].text}}</a></dd>
-
-        <dt class="col-sm-3">Internal ID:</dt>
-        <dd class="col-sm-9">{{bioSampleObj?.scientificName}}</dd>
+        <dd class="col-sm-9">{{bioSampleObj?.sex}}</dd>
 
         <dt class="col-sm-3">Tax ID:</dt>
         <dd class="col-sm-9">{{bioSampleObj?.taxonId}}</dd>
 
         <div class="col-sm-12">
             <hr>
-            <div class="row" *ngFor="let sample of bioSampleObj?.customField">
+            <div class="row" *ngFor="let sample of bioSampleObj?.customFields">
                 <dt class="col-sm-3">{{sample?.name}}</dt>
                 <dd class="col-sm-9">
                     <a *ngIf="sample.ontologyTerms?.lenght > 0; else simple"
@@ -36,7 +34,7 @@
             </div>
         </div>
         <!-- Relationship Section -->
-        <div class="col-sm-12">
+        <!-- <div class="col-sm-12">
             <hr>
             <h1 class="col-sm-12 page-header">Related Samples</h1>
             <div class="table-responsive">
@@ -58,7 +56,7 @@
                         </tr>
                 </table>
             </div>
-        </div>
+        </div> -->
         <!-- Experiment Files Section -->
         <div class="col-sm-12">
             <hr>
