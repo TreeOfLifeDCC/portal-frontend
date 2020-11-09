@@ -19,7 +19,7 @@ import { DashboardService } from '../services/dashboard.service';
   styleUrls: ['./dashboard.component.css']
 })
 export class DashboardComponent implements OnInit, AfterViewInit {
-  displayedColumns = ['accession', 'sex', 'organismPart', 'trackingSystem'];
+  displayedColumns = ['accession', 'sex', 'organismPart', 'commonName', 'trackingSystem'];
   bioSamples: Sample[];
   loading = true;
   dataSource = new MatTableDataSource<any>();
@@ -43,7 +43,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
               private route: ActivatedRoute, private router: Router) { }
 
   ngOnInit(): void {
-    this.getAllBiosamples(0,10);
+    this.getAllBiosamples(0,30);
     this.titleService.setTitle('Data portal');
   }
 
@@ -109,11 +109,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
   filterPredicate(data: any, filterValue: any): boolean {
     const filters = filterValue.split('|');
     if (filters[1] === 'Sex') {
-      if (filters[0] !== 'undefined') {
-        return data.sex === filters[0];
-      } else {
-        return data.sex !== 'male' && data.sex !== 'female';
-      }
+      return data.sex.toLowerCase() === filters[0];
     } else if (filters[1] === 'Tracking Status') {
       return data.trackingSystem.toLowerCase() === filters[0];
     } else if (filters[1] === 'Organism Part') {

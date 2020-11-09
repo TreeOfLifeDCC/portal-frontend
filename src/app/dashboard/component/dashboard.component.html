@@ -81,12 +81,6 @@
         </ng-container>
 
         <!-- Second Column -->
-        <!-- <ng-container matColumnDef="organism">
-          <mat-header-cell *matHeaderCellDef mat-sort-header> Organism </mat-header-cell>
-          <mat-cell *matCellDef="let element" class="txt-center"> {{element.organism}} </mat-cell>
-        </ng-container> -->
-
-        <!-- Third Column -->
         <ng-container matColumnDef="sex">
           <mat-header-cell *matHeaderCellDef mat-sort-header> Sex </mat-header-cell>
           <mat-cell *matCellDef="let element" class="txt-center"> {{element.sex}} </mat-cell>
@@ -95,6 +89,11 @@
         <ng-container matColumnDef="organismPart">
           <mat-header-cell *matHeaderCellDef mat-sort-header> Organism Part </mat-header-cell>
           <mat-cell *matCellDef="let element" class="txt-center"> {{element.organismPart}} </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="commonName">
+          <mat-header-cell *matHeaderCellDef mat-sort-header>Common Name </mat-header-cell>
+          <mat-cell *matCellDef="let element" class="txt-center"> {{element?.commonName}}</mat-cell>
         </ng-container>
 
         <ng-container matColumnDef="trackingSystem">
@@ -107,7 +106,7 @@
         <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
         <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
       </table>
-      <mat-paginator [pageSizeOptions]="[10, 50, 100]" showFirstLastButtons [length]="bioSampleTotalCount"  (page)="pageChanged($event)"></mat-paginator>
+      <mat-paginator [pageSizeOptions]="[30, 50, 100]" showFirstLastButtons [length]="bioSampleTotalCount"  (page)="pageChanged($event)"></mat-paginator>
     </div>
   </div>
 </div>
