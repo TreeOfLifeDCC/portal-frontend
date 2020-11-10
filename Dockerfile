@@ -1,5 +1,5 @@
 # Stage 0, "build-stage", based on Node.js, to build and compile Angular
-FROM gitlab.ebi.ac.uk/treeoflifedcc/portal-frontend/node-frontend:latest as build-stage
+FROM dockerhub.ebi.ac.uk/treeoflifedcc/portal-frontend:node-base as build-stage
 WORKDIR /app
 COPY package*.json /app/
 RUN npm install
