@@ -65,7 +65,6 @@ export class DashboardComponent implements OnInit, AfterViewInit {
           this.bioSampleTotalCount = data.count;
           this.dataSource = new MatTableDataSource<any>(unpackedData);
           this.getFilters(unpackedData);
-          // this.dataSource.paginator = this.paginator;
           this.dataSource.sort = this.sort;
           this.dataSource.filterPredicate = this.filterPredicate;
           this.unpackedData = unpackedData;
@@ -105,7 +104,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
     let pageSize = this.paginator.pageSize;
     let previousSize = pageSize * pageIndex;
 
-    this.getNextBiosamples(previousSize, (pageIndex).toString(), pageSize.toString(), event.active, event.direction);
+    this.getAllBiosamples((pageIndex).toString(), pageSize.toString(), event.active, event.direction);
 
   }
 
@@ -151,7 +150,30 @@ export class DashboardComponent implements OnInit, AfterViewInit {
   // tslint:disable-next-line:typedef
   applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
-    this.dataSource.filter = filterValue.trim().toLowerCase();
+    if (filterValue.length == 0) {
+      this.getAllBiosamples(0, 10, this.sort.active, this.sort.direction);
+    }
+    else {
+      this.dashboardService.getSearchResults(filterValue, this.sort.active, this.sort.direction)
+        .subscribe(
+          data => {
+            const unpackedData = [];
+            for (const item of data.biosamples) {
+              unpackedData.push(this.unpackData(item));
+            }
+            this.bioSampleTotalCount = data.count;
+            this.dataSource = new MatTableDataSource<any>(unpackedData);
+            this.getFilters(unpackedData);
+            this.dataSource.sort = this.sort;
+            this.dataSource.filterPredicate = this.filterPredicate;
+            this.unpackedData = unpackedData;
+          },
+          err => {
+            console.log(err);
+          }
+        )
+    }
+    // this.dataSource.filter = filterValue.trim().toLowerCase();
   }
 
   // tslint:disable-next-line:typedef

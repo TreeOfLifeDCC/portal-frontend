@@ -29,4 +29,16 @@ export class DashboardService {
     return this.http.get(`${this.API_BASE_URL}/organisms/${accession}`);
   }
 
+  public getOrganismFilters(): Observable<any> {
+    return this.http.get(`${this.API_BASE_URL}/organisms/filters`);
+  }
+
+  public getSearchResults(search: string, sortColumn?, sortOrder?): Observable<any> {
+    let requestParams = `search?filter=${search}`
+    if (sortColumn != undefined) {
+      requestParams = requestParams + `&sortColumn=${sortColumn}&sortOrder=${sortOrder}`
+    }
+    return this.http.get(`${this.API_BASE_URL}/organisms/${requestParams}`);
+  }
+
 }

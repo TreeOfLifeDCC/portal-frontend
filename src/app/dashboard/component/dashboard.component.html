@@ -68,7 +68,7 @@
       </h1>
       <mat-form-field>
         <mat-label>Search</mat-label>
-        <input matInput (keyup)="applyFilter($event)" placeholder="Ex. lutra" #input>
+        <input matInput (keyup.enter)="applyFilter($event)" placeholder="Ex. lutra" #input>
       </mat-form-field>
       <table mat-table #table [dataSource]="dataSource" matSort (matSortChange)="customSort($event)">
         <!-- First Column -->
