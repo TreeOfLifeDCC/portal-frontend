@@ -134,6 +134,9 @@ export class DashboardComponent implements OnInit, AfterViewInit {
             dataToReturn[key] = undefined;
           }
         }
+        else if(key === 'organism') {
+          dataToReturn[key] = data.organism.text;
+        }
       } else {
         dataToReturn[key] = data[key];
       }
