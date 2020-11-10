@@ -70,7 +70,7 @@
         <mat-label>Search</mat-label>
         <input matInput (keyup)="applyFilter($event)" placeholder="Ex. lutra" #input>
       </mat-form-field>
-      <table mat-table #table [dataSource]="dataSource" matSort>
+      <table mat-table #table [dataSource]="dataSource" matSort (matSortChange)="customSort($event)">
         <!-- First Column -->
         <ng-container matColumnDef="accession">
           <mat-header-cell *matHeaderCellDef mat-sort-header> BioSample ID </mat-header-cell>

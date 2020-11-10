@@ -1,6 +1,6 @@
 import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
 import { HttpParams } from '@angular/common/http';
-import { Location } from '@angular/common'; 
+import { Location } from '@angular/common';
 import { Router, ActivatedRoute } from '@angular/router';
 
 
@@ -40,10 +40,10 @@ export class DashboardComponent implements OnInit, AfterViewInit {
   unpackedData;
 
   constructor(private titleService: Title, private dashboardService: DashboardService,
-              private route: ActivatedRoute, private router: Router) { }
+    private route: ActivatedRoute, private router: Router) { }
 
   ngOnInit(): void {
-    this.getAllBiosamples(0,10);
+    this.getAllBiosamples(0, 10, this.sort.active, this.sort.direction);
     this.titleService.setTitle('Data portal');
   }
 
@@ -54,8 +54,8 @@ export class DashboardComponent implements OnInit, AfterViewInit {
   }
 
   // tslint:disable-next-line:typedef
-  getAllBiosamples(offset, limit) {
-    this.dashboardService.getAllBiosample(offset, limit)
+  getAllBiosamples(offset, limit, sortColumn?, sortOrder?) {
+    this.dashboardService.getAllBiosample(offset, limit, sortColumn, sortOrder)
       .subscribe(
         data => {
           const unpackedData = [];
@@ -74,8 +74,8 @@ export class DashboardComponent implements OnInit, AfterViewInit {
       );
   }
 
-  getNextBiosamples(currentSize, offset, limit) {
-    this.dashboardService.getAllBiosample(offset, limit)
+  getNextBiosamples(currentSize, offset, limit, sortColumn?, sortOrder?) {
+    this.dashboardService.getAllBiosample(offset, limit, sortColumn, sortOrder)
       .subscribe(
         data => {
           const unpackedData = [];
@@ -93,16 +93,20 @@ export class DashboardComponent implements OnInit, AfterViewInit {
   }
 
   pageChanged(event) {
-    this.loading = true;
-
     let pageIndex = event.pageIndex;
     let pageSize = event.pageSize;
-
-    let previousIndex = event.previousPageIndex;
-
     let previousSize = pageSize * pageIndex;
 
-    this.getNextBiosamples(previousSize, (pageIndex).toString(), pageSize.toString());
+    this.getNextBiosamples(previousSize, (pageIndex).toString(), pageSize.toString(), this.sort.active, this.sort.direction);
+  }
+
+  customSort(event) {
+    let pageIndex = this.paginator.pageIndex;
+    let pageSize = this.paginator.pageSize;
+    let previousSize = pageSize * pageIndex;
+
+    this.getNextBiosamples(previousSize, (pageIndex).toString(), pageSize.toString(), event.active, event.direction);
+
   }
 
   // tslint:disable-next-line:typedef
@@ -134,7 +138,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
             dataToReturn[key] = undefined;
           }
         }
-        else if(key === 'organism') {
+        else if (key === 'organism') {
           dataToReturn[key] = data.organism.text;
         }
       } else {

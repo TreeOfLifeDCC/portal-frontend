@@ -13,8 +13,12 @@ export class DashboardService {
 
   constructor(private http: HttpClient) { }
 
-  public getAllBiosample(offset,limit): Observable<any> {
-    return this.http.get(`${this.API_BASE_URL}/organisms?offset=${offset}&limit=${limit}`);
+  public getAllBiosample(offset, limit, sortColumn?, sortOrder?): Observable<any> {
+    let requestParams = `?offset=${offset}&limit=${limit}`
+    if (sortColumn != undefined) {
+      requestParams = requestParams + `&sortColumn=${sortColumn}&sortOrder=${sortOrder}`
+    }
+    return this.http.get(`${this.API_BASE_URL}/organisms${requestParams}`);
   }
 
   public createBiosample(data: any): Observable<any> {
