@@ -1,5 +1,5 @@
 # Stage 0, "build-stage", based on Node.js, to build and compile Angular
-FROM tiangolo/node-frontend:10 as build-stage
+FROM gitlab.ebi.ac.uk/treeoflifedcc/portal-frontend/node-frontend:latest as build-stage
 WORKDIR /app
 COPY package*.json /app/
 RUN npm install
