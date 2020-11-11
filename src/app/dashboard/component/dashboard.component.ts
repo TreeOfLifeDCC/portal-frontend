@@ -130,14 +130,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
     }
     for (const key of Object.keys(data)) {
       if (typeof data[key] === 'object') {
-        if (key === 'sex') {
-          if (data.sex.length !== 0) {
-            dataToReturn[key] = data.sex[0].text;
-          } else {
-            dataToReturn[key] = undefined;
-          }
-        }
-        else if (key === 'organism') {
+        if (key === 'organism') {
           dataToReturn[key] = data.organism.text;
         }
       } else {
