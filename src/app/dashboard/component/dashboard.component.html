@@ -19,11 +19,11 @@
             <h3 class="card-header" #lbltextSex>Sex</h3>
             <ul class="list-group">
               <li class="list-group-item d-flex justify-content-between align-items-center"
-                [ngClass]="checkFilterIsActive(filter[0])" (click)="onFilterClick(lbltextSex.innerText, filter[0])"
+                [ngClass]="checkFilterIsActive(filter.key)" (click)="onFilterClick(lbltextSex.innerText, filter.key)"
                   style="cursor: pointer"
-                *ngFor="let filter of organismFilters">
-                {{filter[0]}}
-                <span class="badge badge-pill badge-info">{{filter[1]}}</span>
+                *ngFor="let filter of sexFilters">
+                {{filter.key}}
+                <span class="badge badge-pill badge-info">{{filter.count}}</span>
             </ul>
           </div>
         </div>
@@ -32,10 +32,10 @@
             <h3 class="card-header" #lbltextOrg>Organism Part</h3>
             <ul class="list-group">
               <li class="list-group-item d-flex justify-content-between align-items-center"
-                [ngClass]="checkFilterIsActive(filter[0])" (click)="onFilterClick(lbltextOrg.innerText, filter[0])"
+                [ngClass]="checkFilterIsActive(filter.key)" (click)="onFilterClick(lbltextOrg.innerText, filter.key)"
                 style="cursor: pointer" *ngFor="let filter of organismPartFilters">
-                {{filter[0]}}
-                <span class="badge badge-pill badge-info">{{filter[1]}}</span>
+                {{filter.key}}
+                <span class="badge badge-pill badge-info">{{filter.count}}</span>
             </ul>
           </div>
         </div>
@@ -44,11 +44,11 @@
             <h3 class="card-header" #lbltextTrack>Tracking Status</h3>
             <ul class="list-group ">
               <li class="list-group-item d-flex justify-content-between align-items-center"
-                [ngClass]="checkFilterIsActive(filter[0])" (click)="onFilterClick(lbltextTrack.innerText, filter[0])"
+                [ngClass]="checkFilterIsActive(filter.key)" (click)="onFilterClick(lbltextTrack.innerText, filter.key)"
                   style="cursor: pointer"
                 *ngFor="let filter of trackingSystemFilters">
-                {{filter[0]}}
-                <span class="badge badge-pill badge-info">{{filter[1]}}</span>
+                {{filter.key}}
+                <span class="badge badge-pill badge-info">{{filter.count}}</span>
               </li>
             </ul>
           </div>
@@ -68,7 +68,7 @@
       </h1>
       <mat-form-field>
         <mat-label>Search</mat-label>
-        <input matInput (keyup)="applyFilter($event)" placeholder="Ex. lutra" #input>
+        <input matInput (keyup)="getSearchResults($event)" placeholder="Ex. lutra" #input>
       </mat-form-field>
       <table mat-table #table [dataSource]="dataSource" matSort (matSortChange)="customSort($event)">
         <!-- First Column -->
@@ -111,7 +111,7 @@
         <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
         <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
       </table>
-      <mat-paginator [pageSizeOptions]="[10, 30, 50]" showFirstLastButtons [length]="bioSampleTotalCount"  (page)="pageChanged($event)"></mat-paginator>
+      <mat-paginator [pageSizeOptions]="[20, 30, 50, 100]" showFirstLastButtons [length]="bioSampleTotalCount"  (page)="pageChanged($event)"></mat-paginator>
     </div>
   </div>
 </div>

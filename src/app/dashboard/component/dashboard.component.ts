@@ -27,12 +27,13 @@ export class DashboardComponent implements OnInit, AfterViewInit {
   @ViewChild(MatSort, { static: true }) sort: MatSort;
 
   activeFilters = [];
+  filtersMap;
   filters = {
     sex: {},
     trackingSystem: {},
     organismPart: {}
   };
-  organismFilters = [];
+  sexFilters = [];
   commonNameFilters = [];
   trackingSystemFilters = [];
   organismPartFilters = [];
@@ -43,7 +44,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
     private route: ActivatedRoute, private router: Router) { }
 
   ngOnInit(): void {
-    this.getAllBiosamples(0, 10, this.sort.active, this.sort.direction);
+    this.getAllBiosamples(0, 20, this.sort.active, this.sort.direction);
     this.titleService.setTitle('Data portal');
   }
 
@@ -64,7 +65,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
           }
           this.bioSampleTotalCount = data.count;
           this.dataSource = new MatTableDataSource<any>(unpackedData);
-          this.getFilters(unpackedData);
+          this.getFilters();
           this.dataSource.sort = this.sort;
           this.dataSource.filterPredicate = this.filterPredicate;
           this.unpackedData = unpackedData;
@@ -82,7 +83,6 @@ export class DashboardComponent implements OnInit, AfterViewInit {
             unpackedData.push(this.unpackData(item));
           }
           this.dataSource = new MatTableDataSource<any>(unpackedData);
-          this.getFilters(unpackedData);
           this.dataSource.sort = this.sort;
           this.dataSource.filterPredicate = this.filterPredicate;
           this.unpackedData = unpackedData;
@@ -96,15 +96,40 @@ export class DashboardComponent implements OnInit, AfterViewInit {
     let pageSize = event.pageSize;
     let previousSize = pageSize * pageIndex;
 
-    this.getNextBiosamples(previousSize, (pageIndex).toString(), pageSize.toString(), this.sort.active, this.sort.direction);
+    if (this.activeFilters.length !== 0) {
+      let from = pageIndex * pageSize;
+      let size = 0;
+      if ((from + pageSize) < this.bioSampleTotalCount) {
+        size = from + pageSize;
+      }
+      else {
+        size = this.bioSampleTotalCount;
+      }
+      this.getFilterResults(this.activeFilters.toString(), this.sort.active, this.sort.direction, from, size);
+    }
+    else {
+      this.getNextBiosamples(previousSize, (pageIndex).toString(), pageSize.toString(), this.sort.active, this.sort.direction);
+    }
   }
 
   customSort(event) {
     let pageIndex = this.paginator.pageIndex;
     let pageSize = this.paginator.pageSize;
-    let previousSize = pageSize * pageIndex;
 
-    this.getAllBiosamples((pageIndex).toString(), pageSize.toString(), event.active, event.direction);
+    if (this.activeFilters.length !== 0) {
+      let from = pageIndex * pageSize;
+      let size = 0;
+      if ((from + pageSize) < this.bioSampleTotalCount) {
+        size = from + pageSize;
+      }
+      else {
+        size = this.bioSampleTotalCount;
+      }
+      this.getFilterResults(this.activeFilters.toString(), this.sort.active, this.sort.direction, from, size);
+    }
+    else {
+      this.getAllBiosamples((pageIndex).toString(), pageSize.toString(), event.active, event.direction);
+    }
 
   }
 
@@ -141,10 +166,10 @@ export class DashboardComponent implements OnInit, AfterViewInit {
   }
 
   // tslint:disable-next-line:typedef
-  applyFilter(event: Event) {
+  getSearchResults(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
     if (filterValue.length == 0) {
-      this.getAllBiosamples(0, 10, this.sort.active, this.sort.direction);
+      this.getAllBiosamples(0, 20, this.sort.active, this.sort.direction);
     }
     else {
       this.dashboardService.getSearchResults(filterValue, this.sort.active, this.sort.direction)
@@ -156,7 +181,6 @@ export class DashboardComponent implements OnInit, AfterViewInit {
             }
             this.bioSampleTotalCount = data.count;
             this.dataSource = new MatTableDataSource<any>(unpackedData);
-            this.getFilters(unpackedData);
             this.dataSource.sort = this.sort;
             this.dataSource.filterPredicate = this.filterPredicate;
             this.unpackedData = unpackedData;
@@ -166,7 +190,6 @@ export class DashboardComponent implements OnInit, AfterViewInit {
           }
         )
     }
-    // this.dataSource.filter = filterValue.trim().toLowerCase();
   }
 
   // tslint:disable-next-line:typedef
@@ -184,8 +207,8 @@ export class DashboardComponent implements OnInit, AfterViewInit {
     } else {
       this.activeFilters.push(filter);
       this.dataSource.filter = `${filter.trim().toLowerCase()}|${label}`;
-      // this.dataSourceFiles = new MatTableDataSource<Sample>(this.dataSourceFiles.filteredData);
-      this.getFilters(this.dataSource.filteredData);
+      this.getFilterResults(this.activeFilters.toString(), this.sort.active, this.sort.direction, 0, 20);
+
     }
   }
 
@@ -193,7 +216,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
   removeAllFilters() {
     this.activeFilters = [];
     this.dataSource.filter = undefined;
-    this.getFilters(this.unpackedData);
+    this.getAllBiosamples(0, 20, this.sort.active, this.sort.direction);
   }
 
   // tslint:disable-next-line:typedef
@@ -202,41 +225,26 @@ export class DashboardComponent implements OnInit, AfterViewInit {
     this.activeFilters.splice(filterIndex, 1);
     if (this.activeFilters.length !== 0) {
       this.dataSource.filter = this.activeFilters[0].trim().toLowerCase();
-      this.getFilters(this.dataSource.filteredData);
+      this.getFilterResults(this.activeFilters.toString(), this.sort.active, this.sort.direction, 0, 20);
     } else {
       this.dataSource.filter = undefined;
-      this.getFilters(this.unpackedData);
+      this.getAllBiosamples(0, 20, this.sort.active, this.sort.direction);
     }
   }
 
   // tslint:disable-next-line:typedef
-  getFilters(data: any) {
-    const filters = {
-      sex: {},
-      trackingSystem: {},
-      organismPart: {}
-    };
-    for (const item of data) {
-      if (item.sex in filters.sex) {
-        filters.sex[item.sex] += 1;
-      } else {
-        filters.sex[item.sex] = 1;
-      }
-      if (item.trackingSystem in filters.trackingSystem) {
-        filters.trackingSystem[item.trackingSystem] += 1;
-      } else {
-        filters.trackingSystem[item.trackingSystem] = 1;
-      }
-      if (item.organismPart in filters.organismPart) {
-        filters.organismPart[item.organismPart] += 1;
-      } else {
-        filters.organismPart[item.organismPart] = 1;
-      }
-    }
-    this.filters = filters;
-    this.organismFilters = Object.entries(this.filters.sex);
-    this.trackingSystemFilters = Object.entries(this.filters.trackingSystem);
-    this.organismPartFilters = Object.entries(this.filters.organismPart);
+  getFilters() {
+    this.dashboardService.getOrganismFilters().subscribe(
+      data => {
+        this.filtersMap = data;
+        this.sexFilters = this.filtersMap.sex.filter(i => i !== "");
+        this.trackingSystemFilters = this.filtersMap.trackingSystem.filter(i => i !== "");
+        this.organismPartFilters = this.filtersMap.organismPart.filter(i => i !== "");
+      },
+      err => console.log(err)
+    );
+
+
   }
 
   getStatusClass(status: string) {
@@ -245,6 +253,27 @@ export class DashboardComponent implements OnInit, AfterViewInit {
     } else {
       return 'badge badge-pill badge-warning'
     }
+  }
+
+  getFilterResults(filter, sortColumn?, sortOrder?, from?, size?) {
+    this.dashboardService.getFilterResults(filter, this.sort.active, this.sort.direction, from, size)
+      .subscribe(
+        data => {
+          const unpackedData = [];
+          for (const item of data.hits.hits) {
+            unpackedData.push(this.unpackData(item));
+          }
+          this.bioSampleTotalCount = data.hits.total.value;
+          this.dataSource = new MatTableDataSource<any>(unpackedData);
+          this.getFilters();
+          this.dataSource.sort = this.sort;
+          this.dataSource.filterPredicate = this.filterPredicate;
+          this.unpackedData = unpackedData;
+        },
+        err => {
+          console.log(err);
+        }
+      )
   }
 
 }
