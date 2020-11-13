@@ -7,24 +7,20 @@ import {HomeComponent} from './home/home.component';
 
 const routes: Routes = [
   {
+    path: '',
+    component: HomeComponent,
+    pathMatch: 'full'
+  },
+  {
     path: 'about', component: AboutComponent
   },
   {
     path: 'help', component: HelpComponent
   },
   {
-    path: 'home', component: HomeComponent
-  },
-  // Main redirect
-  {
-    path: '',
-    redirectTo: 'home',
-    pathMatch: 'full'
-  },
-  {
     path: '',
     children: [
-      { path: 'dashboard', loadChildren: () => import('./dashboard/dashboard.module').then(m => m.DashboardModule) }
+      { path: 'data', loadChildren: () => import('./dashboard/dashboard.module').then(m => m.DashboardModule) }
     ]
   },
   {

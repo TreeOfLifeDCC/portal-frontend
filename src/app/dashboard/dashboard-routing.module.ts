@@ -6,10 +6,10 @@ import { DetailsComponent } from './component/details/details.component';
 import {SpecimensComponent} from './specimens/specimens.component';
 
 const routes: Routes = [
-    { path: '', redirectTo: 'organisms', pathMatch: 'full' },
-    { path : 'organisms', component: DashboardComponent },
+    // { path: '', redirectTo: 'organisms', pathMatch: 'full' },
+    { path : '', component: DashboardComponent },
     { path: 'specimens', component: SpecimensComponent},
-    { path : 'organisms/details/:id', component: DetailsComponent },
+    { path : 'details/:id', component: DetailsComponent },
 
     ];
 
