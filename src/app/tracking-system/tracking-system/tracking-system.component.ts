@@ -242,10 +242,10 @@ export class TrackingSystemComponent implements OnInit, AfterViewInit {
 
   // tslint:disable-next-line:typedef
   getBadgeClass(status: string) {
-    if (status === 'Done') {
-      return 'badge badge-pill badge-success';
-    } else {
+    if (status.toLowerCase().includes('waiting')) {
       return 'badge badge-pill badge-warning';
+    } else {
+      return 'badge badge-pill badge-success';
     }
   }
 

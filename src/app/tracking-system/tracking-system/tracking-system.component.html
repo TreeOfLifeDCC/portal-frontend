@@ -123,7 +123,7 @@
                     <mat-cell *matCellDef="let element">
                         <mat-list>
                             <mat-list-item>
-                                <span class="badge badge-pill badge-success">{{element.raw_data }}</span>
+                                <span [ngClass]="getBadgeClass(element.raw_data)">{{element.raw_data }}</span>
                             </mat-list-item>
                             <mat-list-item>
                                 {{element.ena_date}}
@@ -137,7 +137,7 @@
                     <mat-cell *matCellDef="let element">
                         <mat-list>
                             <mat-list-item>
-                                <span class="badge badge-pill badge-success">{{element.mapped_reads }} </span>
+                                <span [ngClass]="getBadgeClass(element.mapped_reads)">{{element.mapped_reads }} </span>
                             </mat-list-item>
                             <mat-list-item>
                                 {{element.ena_date}}
@@ -151,7 +151,7 @@
                     <mat-cell *matCellDef="let element">
                         <mat-list>
                             <mat-list-item>
-                                <span class="badge badge-pill badge-success">{{element.assemblies }} </span>
+                                <span [ngClass]="getBadgeClass(element.assemblies)">{{element.assemblies }} </span>
                             </mat-list-item>
                             <mat-list-item>
                                 {{element.ena_date}}
@@ -180,7 +180,7 @@
                     <mat-cell *matCellDef="let element">
                         <mat-list>
                             <mat-list-item>
-                                <span class="badge badge-pill badge-warning">{{element.annotation }} </span>
+                                <span [ngClass]="getBadgeClass(element.annotation)">{{element.annotation }} </span>
                             </mat-list-item>
                             <mat-list-item>
                                 NA
