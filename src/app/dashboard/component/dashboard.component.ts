@@ -44,6 +44,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
     private route: ActivatedRoute, private router: Router) { }
 
   ngOnInit(): void {
+    this.getFilters();
     this.getAllBiosamples(0, 20, this.sort.active, this.sort.direction);
     this.titleService.setTitle('Data portal');
   }
@@ -65,7 +66,6 @@ export class DashboardComponent implements OnInit, AfterViewInit {
           }
           this.bioSampleTotalCount = data.count;
           this.dataSource = new MatTableDataSource<any>(unpackedData);
-          this.getFilters();
           this.dataSource.sort = this.sort;
           this.dataSource.filterPredicate = this.filterPredicate;
           this.unpackedData = unpackedData;
@@ -265,7 +265,6 @@ export class DashboardComponent implements OnInit, AfterViewInit {
           }
           this.bioSampleTotalCount = data.hits.total.value;
           this.dataSource = new MatTableDataSource<any>(unpackedData);
-          this.getFilters();
           this.dataSource.sort = this.sort;
           this.dataSource.filterPredicate = this.filterPredicate;
           this.unpackedData = unpackedData;

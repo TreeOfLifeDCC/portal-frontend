@@ -20,7 +20,7 @@
             <ul class="list-group">
               <li class="list-group-item d-flex justify-content-between align-items-center"
                 [ngClass]="checkFilterIsActive(filter.key)" (click)="onFilterClick(lbltextSex.innerText, filter.key)"
-                  style="cursor: pointer"
+                  style="cursor: pointer; padding: .75rem 0.25rem;"
                 *ngFor="let filter of sexFilters">
                 {{filter.key}}
                 <span class="badge badge-pill badge-info">{{filter.count}}</span>
@@ -33,7 +33,7 @@
             <ul class="list-group">
               <li class="list-group-item d-flex justify-content-between align-items-center"
                 [ngClass]="checkFilterIsActive(filter.key)" (click)="onFilterClick(lbltextOrg.innerText, filter.key)"
-                style="cursor: pointer" *ngFor="let filter of organismPartFilters">
+                style="cursor: pointer; padding: .75rem 0.25rem;" *ngFor="let filter of organismPartFilters">
                 {{filter.key}}
                 <span class="badge badge-pill badge-info">{{filter.count}}</span>
             </ul>
@@ -45,7 +45,7 @@
             <ul class="list-group ">
               <li class="list-group-item d-flex justify-content-between align-items-center"
                 [ngClass]="checkFilterIsActive(filter.key)" (click)="onFilterClick(lbltextTrack.innerText, filter.key)"
-                  style="cursor: pointer"
+                  style="cursor: pointer; padding: .75rem 0.25rem;"
                 *ngFor="let filter of trackingSystemFilters">
                 {{filter.key}}
                 <span class="badge badge-pill badge-info">{{filter.count}}</span>
