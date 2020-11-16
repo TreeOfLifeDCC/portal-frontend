@@ -61,17 +61,6 @@ export class DashboardComponent implements OnInit, AfterViewInit {
     this.getFilters();
     this.getAllBiosamples(0, 20, this.sort.active, this.sort.direction);
     this.titleService.setTitle('Data portal');
-    // this.activatedRoute.queryParams.subscribe((params: Params) => {
-    //   const filters = {};
-    //   for (const key in params) {
-    //     if (Array.isArray(params[key])) {
-    //       filters[key] = params[key];
-    //     } else {
-    //       filters[key] = [params[key]];
-    //     }
-    //   }
-    //   this.router.navigate(['data'], { queryParams: filters });
-    // });
   }
 
   // tslint:disable-next-line:typedef
@@ -239,7 +228,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
       this.dataSource.filter = `${filter.trim().toLowerCase()}|${label}`;
       this.getFilterResults(this.activeFilters.toString(), this.sort.active, this.sort.direction, 0, 20);
     }
-    this.appendFilters(filterArray);
+    // this.appendFilters(filterArray);
   }
 
   // tslint:disable-next-line:typedef
