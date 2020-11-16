@@ -20,11 +20,14 @@ button {
     margin-left: 5px;
 }
 
-.card-header, .btn-success, .badge-success {
+.card-header,
+.btn-success,
+.badge-success {
     background-color: #8FBC45;
 }
 
-.btn-primary, .active {
+.btn-primary,
+.active {
     background-color: #4BBEFD;
 }
 
@@ -38,10 +41,32 @@ button {
 
 .txt-center {
     text-align: center;
-    justify-content:center;
+    justify-content: center;
 }
 
 .mat-header-cell {
     text-align: center;
-    justify-content:center;
+    justify-content: center;
+}
+
+i {
+    cursor: pointer;
+}
+
+.display-none {
+    display: none;
+}
+
+.display-block {
+    display: block;
+}
+
+ul.long-list {
+    max-height: 300px;
+    overflow: scroll;
+}
+
+.filter-heading {
+    font-size: unset;
+    font-weight: 400;
 }

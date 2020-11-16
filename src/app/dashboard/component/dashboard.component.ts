@@ -1,7 +1,7 @@
 import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
 import { HttpParams } from '@angular/common/http';
 import { Location } from '@angular/common';
-import { Router, ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Params, Router } from '@angular/router';
 
 
 
@@ -11,6 +11,7 @@ import { MatTableDataSource } from '@angular/material/table';
 import { Title } from '@angular/platform-browser';
 import { Sample, samples } from '../model/dashboard.model';
 import { DashboardService } from '../services/dashboard.service';
+import { filter } from 'rxjs/operators';
 
 
 @Component({
@@ -25,6 +26,15 @@ export class DashboardComponent implements OnInit, AfterViewInit {
   dataSource = new MatTableDataSource<any>();
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort, { static: true }) sort: MatSort;
+
+  isSexFilterCollapsed = true;
+  isOrgCollapsed = true;
+  isTrackCollapsed = true;
+  filterKeyName = '';
+  itemLimitSexFilter: number;
+  itemLimitOrgFilter: number;
+  itemLimitTrackFilter: number;
+  filterSize: number;
 
   activeFilters = [];
   filtersMap;
@@ -41,12 +51,27 @@ export class DashboardComponent implements OnInit, AfterViewInit {
   unpackedData;
 
   constructor(private titleService: Title, private dashboardService: DashboardService,
-    private route: ActivatedRoute, private router: Router) { }
+    private activatedRoute: ActivatedRoute, private router: Router) { }
 
   ngOnInit(): void {
+    this.filterSize = 3;
+    this.itemLimitSexFilter = this.filterSize;
+    this.itemLimitOrgFilter = this.filterSize;
+    this.itemLimitTrackFilter = this.filterSize;
     this.getFilters();
     this.getAllBiosamples(0, 20, this.sort.active, this.sort.direction);
     this.titleService.setTitle('Data portal');
+    // this.activatedRoute.queryParams.subscribe((params: Params) => {
+    //   const filters = {};
+    //   for (const key in params) {
+    //     if (Array.isArray(params[key])) {
+    //       filters[key] = params[key];
+    //     } else {
+    //       filters[key] = [params[key]];
+    //     }
+    //   }
+    //   this.router.navigate(['data'], { queryParams: filters });
+    // });
   }
 
   // tslint:disable-next-line:typedef
@@ -201,15 +226,20 @@ export class DashboardComponent implements OnInit, AfterViewInit {
 
   // tslint:disable-next-line:typedef
   onFilterClick(label: string, filter: string) {
+    let filterObj = {};
+    let filterArray = [];
     const filterIndex = this.activeFilters.indexOf(filter);
     if (filterIndex !== -1) {
       this.removeFilter(filter);
     } else {
+      filterObj = "{"+label+":"+filter+"}";
+      console.log("filter clicked" + filterObj);
       this.activeFilters.push(filter);
+      filterArray.push(filterObj);
       this.dataSource.filter = `${filter.trim().toLowerCase()}|${label}`;
       this.getFilterResults(this.activeFilters.toString(), this.sort.active, this.sort.direction, 0, 20);
-
     }
+    this.appendFilters(filterArray);
   }
 
   // tslint:disable-next-line:typedef
@@ -273,6 +303,50 @@ export class DashboardComponent implements OnInit, AfterViewInit {
           console.log(err);
         }
       )
+  }
+
+  appendFilters(activeFilters) {
+    this.activatedRoute.queryParams.subscribe(() => {
+      const filters = {};
+      for (const key in activeFilters) {
+        if (Array.isArray(activeFilters[key])) {
+          filters[key] = activeFilters[key];
+        } else {
+          filters[key] = [activeFilters[key]];
+        }
+      }
+      // console.log("Active******" + filters);
+      this.router.navigate(['data'], { queryParams: filters });
+    });
+  }
+
+  toggleCollapse(filterKey) {
+    if(filterKey == 'Sex') {
+      if (this.isSexFilterCollapsed) {
+        this.itemLimitSexFilter = 10000;
+        this.isSexFilterCollapsed = false;
+      } else {
+        this.itemLimitSexFilter = 3;
+        this.isSexFilterCollapsed = true;
+      }
+    }
+    else if (filterKey == 'Organism Part') {
+      if (this.isOrgCollapsed) {
+        this.itemLimitOrgFilter = 10000;
+        this.isOrgCollapsed = false;
+      } else {
+        this.itemLimitOrgFilter = 3;
+        this.isOrgCollapsed = true;
+      }
+    } else if (filterKey == 'Tracking Status') {
+      if (this.isTrackCollapsed) {
+        this.itemLimitTrackFilter = 10000;
+        this.isTrackCollapsed = false;
+      } else {
+        this.itemLimitTrackFilter = 3;
+        this.isTrackCollapsed = true;
+      }
+    }
   }
 
 }
