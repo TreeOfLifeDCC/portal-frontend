@@ -18,12 +18,13 @@
           <div class="card bg-lite mb-3 filter-top">
             <h3 class="card-header" #lbltextSex>Sex</h3>
             <ul class="list-group">
-              <li class="list-group-item d-flex justify-content-between align-items-center"
-                [ngClass]="checkFilterIsActive(filter.key)" (click)="onFilterClick(lbltextSex.innerText, filter.key)"
-                  style="cursor: pointer; padding: .75rem 0.25rem;"
-                *ngFor="let filter of sexFilters">
-                {{filter.key}}
-                <span class="badge badge-pill badge-info">{{filter.count}}</span>
+              <ng-container *ngFor="let filter of sexFilters">
+                <li class="list-group-item d-flex justify-content-between align-items-center"
+                  [ngClass]="checkFilterIsActive(filter.key)" (click)="onFilterClick(lbltextSex.innerText, filter.key)"
+                  style="cursor: pointer; padding: .75rem 0.25rem;" *ngIf="filter.key != ''">
+                  {{filter.key}}
+                  <span class="badge badge-pill badge-info">{{filter.count}}</span>
+              </ng-container>
             </ul>
           </div>
         </div>
@@ -31,11 +32,13 @@
           <div class="card bg-lite mb-3 filter-top">
             <h3 class="card-header" #lbltextOrg>Organism Part</h3>
             <ul class="list-group">
-              <li class="list-group-item d-flex justify-content-between align-items-center"
-                [ngClass]="checkFilterIsActive(filter.key)" (click)="onFilterClick(lbltextOrg.innerText, filter.key)"
-                style="cursor: pointer; padding: .75rem 0.25rem;" *ngFor="let filter of organismPartFilters">
-                {{filter.key}}
-                <span class="badge badge-pill badge-info">{{filter.count}}</span>
+              <ng-container *ngFor="let filter of organismPartFilters">
+                <li class="list-group-item d-flex justify-content-between align-items-center"
+                  [ngClass]="checkFilterIsActive(filter.key)" (click)="onFilterClick(lbltextOrg.innerText, filter.key)"
+                  style="cursor: pointer; padding: .75rem 0.25rem;" *ngIf="filter.key != ''">
+                  {{filter.key}}
+                  <span class="badge badge-pill badge-info">{{filter.count}}</span>
+              </ng-container>
             </ul>
           </div>
         </div>
@@ -43,13 +46,15 @@
           <div class="card bg-lite mb-3">
             <h3 class="card-header" #lbltextTrack>Tracking Status</h3>
             <ul class="list-group ">
-              <li class="list-group-item d-flex justify-content-between align-items-center"
-                [ngClass]="checkFilterIsActive(filter.key)" (click)="onFilterClick(lbltextTrack.innerText, filter.key)"
-                  style="cursor: pointer; padding: .75rem 0.25rem;"
-                *ngFor="let filter of trackingSystemFilters">
-                {{filter.key}}
-                <span class="badge badge-pill badge-info">{{filter.count}}</span>
-              </li>
+              <ng-container *ngFor="let filter of trackingSystemFilters">
+                <li class="list-group-item d-flex justify-content-between align-items-center"
+                  [ngClass]="checkFilterIsActive(filter.key)"
+                  (click)="onFilterClick(lbltextTrack.innerText, filter.key)"
+                  style="cursor: pointer; padding: .75rem 0.25rem;" *ngIf="filter.key != ''">
+                  {{filter.key}}
+                  <span class="badge badge-pill badge-info">{{filter.count}}</span>
+                </li>
+              </ng-container>
             </ul>
           </div>
         </div>
@@ -111,7 +116,8 @@
         <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
         <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
       </table>
-      <mat-paginator [pageSizeOptions]="[20, 30, 50, 100]" showFirstLastButtons [length]="bioSampleTotalCount"  (page)="pageChanged($event)"></mat-paginator>
+      <mat-paginator [pageSizeOptions]="[20, 30, 50, 100]" showFirstLastButtons [length]="bioSampleTotalCount"
+        (page)="pageChanged($event)"></mat-paginator>
     </div>
   </div>
 </div>
