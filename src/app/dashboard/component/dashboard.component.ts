@@ -1,6 +1,6 @@
 import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
-import { HttpParams } from '@angular/common/http';
-import { Location } from '@angular/common';
+import { HttpParams, JsonpInterceptor } from '@angular/common/http';
+import { JsonPipe, Location } from '@angular/common';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 
 
@@ -13,6 +13,8 @@ import { Sample, samples } from '../model/dashboard.model';
 import { DashboardService } from '../services/dashboard.service';
 import { filter } from 'rxjs/operators';
 
+import 'jquery';
+import { ArrayDataSource } from '@angular/cdk/collections';
 
 @Component({
   selector: 'app-dashboard',
@@ -35,6 +37,8 @@ export class DashboardComponent implements OnInit, AfterViewInit {
   itemLimitOrgFilter: number;
   itemLimitTrackFilter: number;
   filterSize: number;
+  urlAppendFilterArray = [];
+
 
   activeFilters = [];
   filtersMap;
@@ -207,47 +211,108 @@ export class DashboardComponent implements OnInit, AfterViewInit {
   }
 
   // tslint:disable-next-line:typedef
-  checkFilterIsActive(filter: string) {
+  checkFilterIsActive(key: string, filter: string) {
     if (this.activeFilters.indexOf(filter) !== -1) {
       return 'active';
     }
+
   }
 
   // tslint:disable-next-line:typedef
-  onFilterClick(label: string, filter: string) {
-    let filterObj = {};
-    let filterArray = [];
+  onFilterClick(event, label: string, filter: string) {
+    let filterQueryParam = { "name": label.replace(" ", "-").toLowerCase(), "value": filter };
+    let inactiveClassName = label.toLowerCase().replace(" ", "-") + '-inactive';
     const filterIndex = this.activeFilters.indexOf(filter);
+
     if (filterIndex !== -1) {
+      $('.' + inactiveClassName).removeClass('non-disp');
       this.removeFilter(filter);
     } else {
-      filterObj = "{"+label+":"+filter+"}";
-      console.log("filter clicked" + filterObj);
+      $('.' + inactiveClassName).addClass('non-disp');
+      $(event.target).removeClass('non-disp');
+      $(event.target).addClass('disp');
+
+      this.selectedFilterArray(label, filter);
       this.activeFilters.push(filter);
-      filterArray.push(filterObj);
       this.dataSource.filter = `${filter.trim().toLowerCase()}|${label}`;
       this.getFilterResults(this.activeFilters.toString(), this.sort.active, this.sort.direction, 0, 20);
+      this.updateActiveRouteParams();
     }
-    // this.appendFilters(filterArray);
+
+  }
+
+  selectedFilterArray(key: string, value: string) {
+    let jsonObj: {};
+    if (key.replace(" ", "-").toLowerCase() == 'sex') {
+      jsonObj = { "name": "sex", "value": value };
+      this.urlAppendFilterArray.push(jsonObj);
+    }
+    else if (key.replace(" ", "-").toLowerCase() == "organism-part") {
+      jsonObj = { "name": "organism-part", "value": value };
+      this.urlAppendFilterArray.push(jsonObj);
+    } else if (key.replace(" ", "-").toLowerCase() == "tracking-status") {
+      jsonObj = { "name": "tracking-status", "value": value };
+      this.urlAppendFilterArray.push(jsonObj);
+    }
+
+  }
+
+  updateActiveRouteParams() {
+    const params = {};
+    const paramArray = this.urlAppendFilterArray.map(x => Object.assign({}, x));
+    if (paramArray.length != 0) {
+      for (let i = 0; i < paramArray.length; i++) {
+        params[paramArray[i].name] = paramArray[i].value;
+      }
+      this.router.navigate(['data'], { queryParams: params });
+    }
   }
 
   // tslint:disable-next-line:typedef
   removeAllFilters() {
+    $('.sex-inactive').removeClass('non-disp');
+    $('.organism-part-inactive').removeClass('non-disp');
+    $('.tracking-status-inactive').removeClass('non-disp');
+
     this.activeFilters = [];
+    this.urlAppendFilterArray = [];
     this.dataSource.filter = undefined;
     this.getAllBiosamples(0, 20, this.sort.active, this.sort.direction);
+    this.router.navigate(['data'],{});
   }
 
   // tslint:disable-next-line:typedef
   removeFilter(filter: string) {
-    const filterIndex = this.activeFilters.indexOf(filter);
-    this.activeFilters.splice(filterIndex, 1);
-    if (this.activeFilters.length !== 0) {
-      this.dataSource.filter = this.activeFilters[0].trim().toLowerCase();
-      this.getFilterResults(this.activeFilters.toString(), this.sort.active, this.sort.direction, 0, 20);
-    } else {
-      this.dataSource.filter = undefined;
-      this.getAllBiosamples(0, 20, this.sort.active, this.sort.direction);
+    if (filter != undefined) {
+      this.updateDomForRemovedFilter(filter);
+      this.updateActiveRouteParams();
+      const filterIndex = this.activeFilters.indexOf(filter);
+      this.activeFilters.splice(filterIndex, 1);
+      if (this.activeFilters.length !== 0) {
+        this.dataSource.filter = this.activeFilters[0].trim().toLowerCase();
+        this.getFilterResults(this.activeFilters.toString(), this.sort.active, this.sort.direction, 0, 20);
+      } else {
+        this.router.navigate(['data'], {});
+        this.dataSource.filter = undefined;
+        this.getAllBiosamples(0, 20, this.sort.active, this.sort.direction);
+      }
+    }
+  }
+
+  updateDomForRemovedFilter(filter: string) {
+    if (this.urlAppendFilterArray.length != 0) {
+      let inactiveClassName: string;
+      this.urlAppendFilterArray.filter(obj => {
+        if (obj.value == filter) {
+          inactiveClassName = obj.name + '-inactive';
+          $('.' + inactiveClassName).removeClass('non-disp');
+          $('.' + inactiveClassName).removeClass('active');
+          $('.' + inactiveClassName).addClass('disp');
+
+          const filterIndex = this.urlAppendFilterArray.indexOf(obj);
+          this.urlAppendFilterArray.splice(filterIndex, 1);
+        }
+      });
     }
   }
 
@@ -294,23 +359,8 @@ export class DashboardComponent implements OnInit, AfterViewInit {
       )
   }
 
-  appendFilters(activeFilters) {
-    this.activatedRoute.queryParams.subscribe(() => {
-      const filters = {};
-      for (const key in activeFilters) {
-        if (Array.isArray(activeFilters[key])) {
-          filters[key] = activeFilters[key];
-        } else {
-          filters[key] = [activeFilters[key]];
-        }
-      }
-      // console.log("Active******" + filters);
-      this.router.navigate(['data'], { queryParams: filters });
-    });
-  }
-
   toggleCollapse(filterKey) {
-    if(filterKey == 'Sex') {
+    if (filterKey == 'Sex') {
       if (this.isSexFilterCollapsed) {
         this.itemLimitSexFilter = 10000;
         this.isSexFilterCollapsed = false;

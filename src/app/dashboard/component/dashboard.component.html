@@ -18,14 +18,15 @@
                     <div class="card bg-lite mb-3 filter-top">
                         <h3 class="card-header filter-heading">
                             <span #lbltextSex>Sex</span>
-                            <i class="material-icons float-right" *ngIf="sexFilters.length > 3 && isSexFilterCollapsed" (click)="toggleCollapse(lbltextSex.innerText)">add</i>
-                            <i class="material-icons float-right" *ngIf="sexFilters.length > 3 && !isSexFilterCollapsed" (click)="toggleCollapse(lbltextSex.innerText)">remove</i>
+                            <i class="material-icons float-right sex-inactive" *ngIf="sexFilters.length > 3 && isSexFilterCollapsed" (click)="toggleCollapse(lbltextSex.innerText)">add</i>
+                            <i class="material-icons float-right sex-inactive" *ngIf="sexFilters.length > 3 && !isSexFilterCollapsed" (click)="toggleCollapse(lbltextSex.innerText)">remove</i>
                         </h3>
-                        <ul class="list-group" [ngClass]="{'long-list': itemLimitSexFilter > filterSize}">
+                        <ul id="sexFilter" class="list-group" [ngClass]="{'long-list': itemLimitSexFilter > filterSize}">
                             <ng-container *ngFor="let filter of sexFilters; let i = index">
-                                <li class="list-group-item d-flex justify-content-between align-items-center" [ngClass]="checkFilterIsActive(filter.key)" (click)="onFilterClick(lbltextSex.innerText, filter.key)" style="cursor: pointer; padding: .75rem 0.25rem;" *ngIf="i<itemLimitSexFilter && filter.key != ''">
+                                <li class="list-group-item d-flex justify-content-between align-items-center sex-inactive" [ngClass]="checkFilterIsActive(lbltextSex.innerText,filter.key)" (click)="onFilterClick($event, lbltextSex.innerText, filter.key)" style="cursor: pointer; padding: .75rem 0.25rem;"
+                                    *ngIf="i<itemLimitSexFilter && filter.key != ''">
                                     {{filter.key}}
-                                    <span class="badge badge-pill badge-info">{{filter.count}}</span>
+                                    <span class="badge badge-pill badge-info">{{filter.count}}</span></li>
                             </ng-container>
                         </ul>
                     </div>
@@ -34,14 +35,15 @@
                     <div class="card bg-lite mb-3 filter-top">
                         <h3 class="card-header filter-heading">
                             <span #lbltextOrg>Organism Part</span>
-                            <i class="material-icons float-right" *ngIf="organismPartFilters.length > 3 && isOrgCollapsed" (click)="toggleCollapse(lbltextOrg.innerText)">add</i>
-                            <i class="material-icons float-right" *ngIf="organismPartFilters.length > 3 && !isOrgCollapsed" (click)="toggleCollapse(lbltextOrg.innerText)">remove</i>
+                            <i class="material-icons float-right organism-part-inactive" *ngIf="organismPartFilters.length > 3 && isOrgCollapsed" (click)="toggleCollapse(lbltextOrg.innerText)">add</i>
+                            <i class="material-icons float-right organism-part-inactive" *ngIf="organismPartFilters.length > 3 && !isOrgCollapsed" (click)="toggleCollapse(lbltextOrg.innerText)">remove</i>
                         </h3>
-                        <ul class="list-group" [ngClass]="{'long-list': itemLimitOrgFilter > filterSize}">
+                        <ul id="orgFilter" class="list-group" [ngClass]="{'long-list': itemLimitOrgFilter > filterSize}">
                             <ng-container *ngFor="let filter of organismPartFilters; let i = index">
-                                <li class="list-group-item d-flex justify-content-between align-items-center" [ngClass]="checkFilterIsActive(filter.key)" (click)="onFilterClick(lbltextOrg.innerText, filter.key)" style="cursor: pointer; padding: .75rem 0.25rem;" *ngIf="i<itemLimitOrgFilter && filter.key != ''">
+                                <li class="list-group-item d-flex justify-content-between align-items-center organism-part-inactive" [ngClass]="checkFilterIsActive(lbltextOrg.innerText, filter.key)" (click)="onFilterClick($event, lbltextOrg.innerText, filter.key)" style="cursor: pointer; padding: .75rem 0.25rem;"
+                                    *ngIf="i<itemLimitOrgFilter && filter.key != ''">
                                     {{filter.key}}
-                                    <span class="badge badge-pill badge-info">{{filter.count}}</span>
+                                    <span class="badge badge-pill badge-info">{{filter.count}}</span></li>
                             </ng-container>
                         </ul>
                     </div>
@@ -50,14 +52,15 @@
                     <div class="card bg-lite mb-3 filter-top">
                         <h3 class="card-header filter-heading">
                             <span #lbltextTrack>Tracking Status</span>
-                            <i class="material-icons float-right" *ngIf="trackingSystemFilters.length > 3 && isTrackCollapsed" (click)="toggleCollapse(lbltextTrack.innerText)">add</i>
-                            <i class="material-icons float-right" *ngIf="trackingSystemFilters.length > 3 && !isTrackCollapsed" (click)="toggleCollapse(lbltextTrack.innerText)">remove</i>
+                            <i class="material-icons float-right tracking-status-inactive" *ngIf="trackingSystemFilters.length > 3 && isTrackCollapsed" (click)="toggleCollapse(lbltextTrack.innerText)">add</i>
+                            <i class="material-icons float-right tracking-status-inactive" *ngIf="trackingSystemFilters.length > 3 && !isTrackCollapsed" (click)="toggleCollapse(lbltextTrack.innerText)">remove</i>
                         </h3>
-                        <ul class="list-group" [ngClass]="{'long-list': itemLimitTrackFilter > filterSize}">
+                        <ul id="trackFilter" class="list-group" [ngClass]="{'long-list': itemLimitTrackFilter > filterSize}">
                             <ng-container *ngFor="let filter of trackingSystemFilters; let i = index">
-                                <li class="list-group-item d-flex justify-content-between align-items-center" [ngClass]="checkFilterIsActive(filter.key)" (click)="onFilterClick(lbltextTrack.innerText, filter.key)" style="cursor: pointer; padding: .75rem 0.25rem;" *ngIf="i<itemLimitTrackFilter && filter.key != ''">
+                                <li class="list-group-item d-flex justify-content-between align-items-center tracking-status-inactive" [ngClass]="checkFilterIsActive(lbltextTrack.innerText, filter.key)" (click)="onFilterClick($event, lbltextTrack.innerText, filter.key)" style="cursor: pointer; padding: .75rem 0.25rem;"
+                                    *ngIf="i<itemLimitTrackFilter && filter.key != ''">
                                     {{filter.key}}
-                                    <span class="badge badge-pill badge-info">{{filter.count}}</span>
+                                    <span class="badge badge-pill badge-info">{{filter.count}}</span></li>
                             </ng-container>
                         </ul>
                     </div>

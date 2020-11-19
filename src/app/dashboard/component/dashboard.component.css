@@ -53,12 +53,12 @@ i {
     cursor: pointer;
 }
 
-.display-none {
-    display: none;
+.disp {
+    display: block !important;
 }
 
-.display-block {
-    display: block;
+.non-disp {
+    display: none !important;
 }
 
 ul.long-list {
