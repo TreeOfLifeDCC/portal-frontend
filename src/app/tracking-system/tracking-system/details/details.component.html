@@ -5,8 +5,7 @@
         <dd class="col-sm-9">{{bioSampleObj?.name}}</dd>
 
         <dt class="col-sm-3">BioSample ID:</dt>
-        <dd class="col-sm-9"><a href="http://www.ebi.ac.uk/biosamples/samples/{{bioSampleObj?.accession}}"
-                target="_blank">{{bioSampleObj?.accession}}</a></dd>
+        <dd class="col-sm-9"><a href="http://www.ebi.ac.uk/biosamples/samples/{{bioSampleObj?.accession}}" target="_blank">{{bioSampleObj?.accession}}</a></dd>
 
         <dt class="col-sm-3">Organism:</dt>
         <dd class="col-sm-9">{{bioSampleObj?.organism.text}}</dd>
@@ -25,8 +24,7 @@
             <div class="row" *ngFor="let sample of bioSampleObj?.customFields">
                 <dt class="col-sm-3">{{sample?.name}}</dt>
                 <dd class="col-sm-9">
-                    <a *ngIf="sample.ontologyTerms?.lenght > 0; else simple"
-                        href="{{sample.ontologyTerms[0]}}">{{sample?.value}}</a>
+                    <a *ngIf="sample.ontologyTerms?.lenght > 0; else simple" href="{{sample.ontologyTerms[0]}}">{{sample?.value}}</a>
                     <ng-template #simple>
                         {{sample?.value}}
                     </ng-template>
@@ -58,36 +56,32 @@
             </div>
         </div> -->
         <!-- Experiment Files Section -->
-        <div class="col-sm-12">
+        <div class="col-sm-12" *ngIf="bioSampleObj.experiment.length != 0">
             <hr>
             <h1 class="col-sm-12 page-header">Related files</h1>
             <mat-form-field>
                 <mat-label>Search</mat-label>
                 <input matInput (keyup)="applyFilter($event)" placeholder="Ex. ILLUMINA" #input>
             </mat-form-field>
-            <table mat-table #table [dataSource]="dataSourceFiles" matSort
-                class="table table-striped table-hover table-borderless table-sm">
+            <table mat-table #table [dataSource]="dataSourceFiles" matSort class="table table-striped table-hover table-borderless table-sm">
 
                 <!-- Second Column -->
                 <ng-container matColumnDef="experiment_accession">
                     <mat-header-cell *matHeaderCellDef mat-sort-header> Experiment Accession </mat-header-cell>
-                    <mat-cell *matCellDef="let element"> <a class="no-underline" target="_blank"
-                            href="https://www.ebi.ac.uk/ena/browser/view/{{element.experiment_accession}}">{{element.experiment_accession}}</a>
+                    <mat-cell *matCellDef="let element"> <a class="no-underline" target="_blank" href="https://www.ebi.ac.uk/ena/browser/view/{{element.experiment_accession}}">{{element.experiment_accession}}</a>
                     </mat-cell>
                 </ng-container>
                 <!-- Third Column -->
                 <ng-container matColumnDef="run_accession">
                     <mat-header-cell *matHeaderCellDef mat-sort-header> Run Accession </mat-header-cell>
-                    <mat-cell *matCellDef="let element"> <a class="no-underline" target="_blank"
-                            href="https://www.ebi.ac.uk/ena/browser/view/{{element.run_accession}}">{{element.run_accession}}</a>
+                    <mat-cell *matCellDef="let element"> <a class="no-underline" target="_blank" href="https://www.ebi.ac.uk/ena/browser/view/{{element.run_accession}}">{{element.run_accession}}</a>
                     </mat-cell>
                 </ng-container>
 
                 <!-- Fourth Column -->
                 <ng-container matColumnDef="study_accession">
                     <mat-header-cell *matHeaderCellDef mat-sort-header> Study Accession </mat-header-cell>
-                    <mat-cell *matCellDef="let element"> <a class="no-underline" target="_blank"
-                            href="https://www.ebi.ac.uk/ena/browser/view/{{element.study_accession}}">{{element.study_accession}}</a>
+                    <mat-cell *matCellDef="let element"> <a class="no-underline" target="_blank" href="https://www.ebi.ac.uk/ena/browser/view/{{element.study_accession}}">{{element.study_accession}}</a>
                     </mat-cell>
                 </ng-container>
 
@@ -149,17 +143,15 @@
             <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
         </div>
 
-        <div class="col-sm-12">
+        <div class="col-sm-12" *ngIf="bioSampleObj.assemblies.length != 0">
             <hr>
             <h1 class="col-sm-12 page-header">Related assemblies</h1>
-            <table mat-table #table [dataSource]="dataSourceAssemblies"
-                class="table table-striped table-hover table-borderless table-sm">
+            <table mat-table #table [dataSource]="dataSourceAssemblies" class="table table-striped table-hover table-borderless table-sm">
                 <!-- First Column -->
                 <ng-container matColumnDef="accession">
                     <mat-header-cell *matHeaderCellDef> Accession </mat-header-cell>
                     <mat-cell *matCellDef="let element">
-                        <a class="no-underline" target="_blank"
-                            href="https://www.ebi.ac.uk/ena/browser/view/{{element.accession}}">{{element.accession}}</a>
+                        <a class="no-underline" target="_blank" href="https://www.ebi.ac.uk/ena/browser/view/{{element.accession}}">{{element.accession}}</a>
                     </mat-cell>
                 </ng-container>
 
