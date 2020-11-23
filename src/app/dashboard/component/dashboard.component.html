@@ -1,129 +1,134 @@
-<div class="jumbotron jumbotron-fluid">
-    <div class="container">
-        <div class="row">
-            <div class="col-md-3">
-                <h1 class="display-2 text-center">Sequencing all 60,000</h1>
-                <h1 class="display-2 text-center">eukaryotic species of</h1>
-                <h1 class="display-2 text-center">Britain and Ireland </h1>
+<div>
+    <ngx-spinner bdColor="rgba(0,0,0,1)" [fullScreen]="true" type="ball-clip-rotate-multiple" size="large">
+        <!-- <p class="loading">Loading...</p> -->
+    </ngx-spinner>
+    <div class="jumbotron jumbotron-fluid">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-3">
+                    <h1 class="display-2 text-center">Sequencing all 60,000</h1>
+                    <h1 class="display-2 text-center">eukaryotic species of</h1>
+                    <h1 class="display-2 text-center">Britain and Ireland </h1>
+                </div>
             </div>
         </div>
     </div>
-</div>
 
-<div class="container" style="padding-top: 20px;">
-    <div class="row">
-        <div class="col-md-2">
-            <div class="row">
-                <div class="col-md-12 col-sm-6">
-                    <div class="card bg-lite mb-3 filter-top">
-                        <h3 class="card-header filter-heading">
-                            <span #lbltextSex>Sex</span>
-                            <i class="material-icons float-right sex-inactive" *ngIf="sexFilters.length > 3 && isSexFilterCollapsed" (click)="toggleCollapse(lbltextSex.innerText)">add</i>
-                            <i class="material-icons float-right sex-inactive" *ngIf="sexFilters.length > 3 && !isSexFilterCollapsed" (click)="toggleCollapse(lbltextSex.innerText)">remove</i>
-                        </h3>
-                        <ul id="sexFilter" class="list-group" [ngClass]="{'long-list': itemLimitSexFilter > filterSize}">
-                            <ng-container *ngFor="let filter of sexFilters; let i = index">
-                                <li class="list-group-item d-flex justify-content-between align-items-center sex-inactive" [ngClass]="checkFilterIsActive(lbltextSex.innerText,filter.key)" (click)="onFilterClick($event, lbltextSex.innerText, filter.key)" style="cursor: pointer; padding: .75rem 0.25rem;"
-                                    *ngIf="i<itemLimitSexFilter && filter.key != ''">
-                                    {{filter.key}}
-                                    <span class="badge badge-pill badge-info">{{filter.count}}</span></li>
-                            </ng-container>
-                        </ul>
+    <div class="container" style="padding-top: 20px;">
+        <div class="row">
+            <div class="col-md-2">
+                <div class="row">
+                    <div class="col-md-12 col-sm-6">
+                        <div class="card bg-lite mb-3 filter-top">
+                            <h3 class="card-header filter-heading">
+                                <span #lbltextSex>Sex</span>
+                                <i class="material-icons float-right sex-inactive" *ngIf="sexFilters.length > 3 && isSexFilterCollapsed" (click)="toggleCollapse(lbltextSex.innerText)">add</i>
+                                <i class="material-icons float-right sex-inactive" *ngIf="sexFilters.length > 3 && !isSexFilterCollapsed" (click)="toggleCollapse(lbltextSex.innerText)">remove</i>
+                            </h3>
+                            <ul id="sex-inactive" class="list-group" [ngClass]="{'long-list': itemLimitSexFilter > filterSize}">
+                                <ng-container *ngFor="let filter of sexFilters; let i = index">
+                                    <li class="list-group-item d-flex justify-content-between align-items-center sex-inactive" [ngClass]="checkFilterIsActive(filter.key)" (click)="onFilterClick($event, lbltextSex.innerText, filter.key)" style="cursor: pointer; padding: .75rem 0.25rem;"
+                                        *ngIf="i<itemLimitSexFilter && filter.key != ''">
+                                        {{filter.key}}
+                                        <span class="badge badge-pill badge-info">{{filter.count}}</span></li>
+                                </ng-container>
+                            </ul>
+                        </div>
                     </div>
-                </div>
-                <div class="col-md-12 col-sm-6">
-                    <div class="card bg-lite mb-3 filter-top">
-                        <h3 class="card-header filter-heading">
-                            <span #lbltextOrg>Organism Part</span>
-                            <i class="material-icons float-right organism-part-inactive" *ngIf="organismPartFilters.length > 3 && isOrgCollapsed" (click)="toggleCollapse(lbltextOrg.innerText)">add</i>
-                            <i class="material-icons float-right organism-part-inactive" *ngIf="organismPartFilters.length > 3 && !isOrgCollapsed" (click)="toggleCollapse(lbltextOrg.innerText)">remove</i>
-                        </h3>
-                        <ul id="orgFilter" class="list-group" [ngClass]="{'long-list': itemLimitOrgFilter > filterSize}">
-                            <ng-container *ngFor="let filter of organismPartFilters; let i = index">
-                                <li class="list-group-item d-flex justify-content-between align-items-center organism-part-inactive" [ngClass]="checkFilterIsActive(lbltextOrg.innerText, filter.key)" (click)="onFilterClick($event, lbltextOrg.innerText, filter.key)" style="cursor: pointer; padding: .75rem 0.25rem;"
-                                    *ngIf="i<itemLimitOrgFilter && filter.key != ''">
-                                    {{filter.key}}
-                                    <span class="badge badge-pill badge-info">{{filter.count}}</span></li>
-                            </ng-container>
-                        </ul>
+                    <div class="col-md-12 col-sm-6">
+                        <div class="card bg-lite mb-3 filter-top">
+                            <h3 class="card-header filter-heading">
+                                <span #lbltextOrg>Organism Part</span>
+                                <i class="material-icons float-right organism-part-inactive" *ngIf="organismPartFilters.length > 3 && isOrgCollapsed" (click)="toggleCollapse(lbltextOrg.innerText)">add</i>
+                                <i class="material-icons float-right organism-part-inactive" *ngIf="organismPartFilters.length > 3 && !isOrgCollapsed" (click)="toggleCollapse(lbltextOrg.innerText)">remove</i>
+                            </h3>
+                            <ul id="organism-part-inactive" class="list-group" [ngClass]="{'long-list': itemLimitOrgFilter > filterSize}">
+                                <ng-container *ngFor="let filter of organismPartFilters; let i = index">
+                                    <li class="list-group-item d-flex justify-content-between align-items-center organism-part-inactive" [ngClass]="checkFilterIsActive(filter.key)" (click)="onFilterClick($event, lbltextOrg.innerText, filter.key)" style="cursor: pointer; padding: .75rem 0.25rem;"
+                                        *ngIf="i<itemLimitOrgFilter && filter.key != ''">
+                                        {{filter.key}}
+                                        <span class="badge badge-pill badge-info">{{filter.count}}</span></li>
+                                </ng-container>
+                            </ul>
+                        </div>
                     </div>
-                </div>
-                <div class="col-md-12 col-sm-6">
-                    <div class="card bg-lite mb-3 filter-top">
-                        <h3 class="card-header filter-heading">
-                            <span #lbltextTrack>Tracking Status</span>
-                            <i class="material-icons float-right tracking-status-inactive" *ngIf="trackingSystemFilters.length > 3 && isTrackCollapsed" (click)="toggleCollapse(lbltextTrack.innerText)">add</i>
-                            <i class="material-icons float-right tracking-status-inactive" *ngIf="trackingSystemFilters.length > 3 && !isTrackCollapsed" (click)="toggleCollapse(lbltextTrack.innerText)">remove</i>
-                        </h3>
-                        <ul id="trackFilter" class="list-group" [ngClass]="{'long-list': itemLimitTrackFilter > filterSize}">
-                            <ng-container *ngFor="let filter of trackingSystemFilters; let i = index">
-                                <li class="list-group-item d-flex justify-content-between align-items-center tracking-status-inactive" [ngClass]="checkFilterIsActive(lbltextTrack.innerText, filter.key)" (click)="onFilterClick($event, lbltextTrack.innerText, filter.key)" style="cursor: pointer; padding: .75rem 0.25rem;"
-                                    *ngIf="i<itemLimitTrackFilter && filter.key != ''">
-                                    {{filter.key}}
-                                    <span class="badge badge-pill badge-info">{{filter.count}}</span></li>
-                            </ng-container>
-                        </ul>
+                    <div class="col-md-12 col-sm-6">
+                        <div class="card bg-lite mb-3 filter-top">
+                            <h3 class="card-header filter-heading">
+                                <span #lbltextTrack>Tracking Status</span>
+                                <i class="material-icons float-right tracking-status-inactive" *ngIf="trackingSystemFilters.length > 3 && isTrackCollapsed" (click)="toggleCollapse(lbltextTrack.innerText)">add</i>
+                                <i class="material-icons float-right tracking-status-inactive" *ngIf="trackingSystemFilters.length > 3 && !isTrackCollapsed" (click)="toggleCollapse(lbltextTrack.innerText)">remove</i>
+                            </h3>
+                            <ul id="tracking-status-inactive" class="list-group" [ngClass]="{'long-list': itemLimitTrackFilter > filterSize}">
+                                <ng-container *ngFor="let filter of trackingSystemFilters; let i = index">
+                                    <li class="list-group-item d-flex justify-content-between align-items-center tracking-status-inactive" [ngClass]="checkFilterIsActive(filter.key)" (click)="onFilterClick($event, lbltextTrack.innerText, filter.key)" style="cursor: pointer; padding: .75rem 0.25rem;"
+                                        *ngIf="i<itemLimitTrackFilter && filter.key != ''">
+                                        {{filter.key}}
+                                        <span class="badge badge-pill badge-info">{{filter.count}}</span></li>
+                                </ng-container>
+                            </ul>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-        <div class="col-md-10">
-            <h1 class="page-header">Organisms</h1>
-            <h1 *ngIf="activeFilters.length !== 0">Filters:
-                <button type="button" class="btn btn-success" *ngFor="let filter of activeFilters">
+            <div class="col-md-10">
+                <h1 class="page-header">Organisms</h1>
+                <h1 *ngIf="activeFilters.length !== 0">Filters:
+                    <button type="button" class="btn btn-success" *ngFor="let filter of activeFilters">
           {{filter}}
           <span class="badge badge-light" (click)="removeFilter(filter)">X</span>
         </button>
-                <button type="button" class="btn btn-primary" (click)="removeAllFilters()">
+                    <button type="button" class="btn btn-primary" (click)="removeAllFilters()">
           Remove all filters
         </button>
-            </h1>
-            <mat-form-field>
-                <mat-label>Search</mat-label>
-                <input matInput (keyup)="getSearchResults($event)" placeholder="Ex. lutra" #input>
-            </mat-form-field>
-            <table mat-table #table [dataSource]="dataSource" matSort (matSortChange)="customSort($event)">
-                <!-- First Column -->
-                <ng-container matColumnDef="accession">
-                    <mat-header-cell *matHeaderCellDef mat-sort-header> BioSample ID </mat-header-cell>
-                    <mat-cell *matCellDef="let element" class="txt-center">
-                        <a [routerLink]="['/data/details/', element.accession]">
+                </h1>
+                <mat-form-field>
+                    <mat-label>Search</mat-label>
+                    <input matInput (keyup)="getSearchResults($event)" placeholder="Ex. lutra" #input>
+                </mat-form-field>
+                <table mat-table #table [dataSource]="dataSource" matSort (matSortChange)="customSort($event)">
+                    <!-- First Column -->
+                    <ng-container matColumnDef="accession">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header> BioSample ID </mat-header-cell>
+                        <mat-cell *matCellDef="let element" class="txt-center">
+                            <a [routerLink]="['/data/details/', element.accession]">
               {{element.accession}}</a>
-                    </mat-cell>
-                </ng-container>
+                        </mat-cell>
+                    </ng-container>
 
-                <!-- Second Column -->
-                <ng-container matColumnDef="organism">
-                    <mat-header-cell *matHeaderCellDef mat-sort-header> Organism </mat-header-cell>
-                    <mat-cell *matCellDef="let element" class="txt-center"> {{element.organism}} </mat-cell>
-                </ng-container>
+                    <!-- Second Column -->
+                    <ng-container matColumnDef="organism">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header> Organism </mat-header-cell>
+                        <mat-cell *matCellDef="let element" class="txt-center"> {{element.organism}} </mat-cell>
+                    </ng-container>
 
-                <ng-container matColumnDef="commonName">
-                    <mat-header-cell *matHeaderCellDef mat-sort-header>Common Name </mat-header-cell>
-                    <mat-cell *matCellDef="let element" class="txt-center"> {{element?.commonName}}</mat-cell>
-                </ng-container>
+                    <ng-container matColumnDef="commonName">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header>Common Name </mat-header-cell>
+                        <mat-cell *matCellDef="let element" class="txt-center"> {{element?.commonName}}</mat-cell>
+                    </ng-container>
 
-                <ng-container matColumnDef="sex">
-                    <mat-header-cell *matHeaderCellDef mat-sort-header> Sex </mat-header-cell>
-                    <mat-cell *matCellDef="let element" class="txt-center"> {{element.sex}} </mat-cell>
-                </ng-container>
+                    <ng-container matColumnDef="sex">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header> Sex </mat-header-cell>
+                        <mat-cell *matCellDef="let element" class="txt-center"> {{element.sex}} </mat-cell>
+                    </ng-container>
 
-                <ng-container matColumnDef="organismPart">
-                    <mat-header-cell *matHeaderCellDef mat-sort-header> Organism Part </mat-header-cell>
-                    <mat-cell *matCellDef="let element" class="txt-center"> {{element.organismPart}} </mat-cell>
-                </ng-container>
+                    <ng-container matColumnDef="organismPart">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header> Organism Part </mat-header-cell>
+                        <mat-cell *matCellDef="let element" class="txt-center"> {{element.organismPart}} </mat-cell>
+                    </ng-container>
 
-                <ng-container matColumnDef="trackingSystem">
-                    <mat-header-cell *matHeaderCellDef mat-sort-header> Tracking status </mat-header-cell>
-                    <mat-cell *matCellDef="let element">
-                        <span [ngClass]="getStatusClass(element.trackingSystem)">{{element.trackingSystem}}</span>
-                    </mat-cell>
-                </ng-container>
+                    <ng-container matColumnDef="trackingSystem">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header> Tracking status </mat-header-cell>
+                        <mat-cell *matCellDef="let element">
+                            <span [ngClass]="getStatusClass(element.trackingSystem)">{{element.trackingSystem}}</span>
+                        </mat-cell>
+                    </ng-container>
 
-                <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-                <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
-            </table>
-            <mat-paginator [pageSizeOptions]="[20, 30, 50, 100]" showFirstLastButtons [length]="bioSampleTotalCount" (page)="pageChanged($event)"></mat-paginator>
+                    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+                    <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+                </table>
+                <mat-paginator [pageSizeOptions]="[20, 30, 50, 100]" showFirstLastButtons [length]="bioSampleTotalCount" (page)="pageChanged($event)"></mat-paginator>
+            </div>
         </div>
     </div>
 </div>

@@ -15,6 +15,7 @@ import {MatTooltipModule} from '@angular/material/tooltip';
 import {MatPaginatorModule} from '@angular/material/paginator';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatInputModule} from '@angular/material/input';
+import { NgxSpinnerModule } from "ngx-spinner";
 
 import { DashboardService } from '../dashboard/services/dashboard.service'
 
@@ -31,7 +32,8 @@ import { DashboardService } from '../dashboard/services/dashboard.service'
     MatTooltipModule,
     MatPaginatorModule,
     MatFormFieldModule,
-    MatInputModule
+    MatInputModule,
+    NgxSpinnerModule
   ],
   providers: [DashboardService]
 })

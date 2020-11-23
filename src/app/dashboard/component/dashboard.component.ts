@@ -1,20 +1,14 @@
 import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
-import { HttpParams, JsonpInterceptor } from '@angular/common/http';
-import { JsonPipe, Location } from '@angular/common';
 import { ActivatedRoute, Params, Router } from '@angular/router';
-
-
-
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { Title } from '@angular/platform-browser';
 import { Sample, samples } from '../model/dashboard.model';
 import { DashboardService } from '../services/dashboard.service';
-import { filter } from 'rxjs/operators';
+import { NgxSpinnerService } from 'ngx-spinner';
 
 import 'jquery';
-import { ArrayDataSource } from '@angular/cdk/collections';
 
 @Component({
   selector: 'app-dashboard',
@@ -55,16 +49,19 @@ export class DashboardComponent implements OnInit, AfterViewInit {
   unpackedData;
 
   constructor(private titleService: Title, private dashboardService: DashboardService,
-    private activatedRoute: ActivatedRoute, private router: Router) { }
+    private activatedRoute: ActivatedRoute, private router: Router, private spinner: NgxSpinnerService) { }
 
   ngOnInit(): void {
+    this.spinner.show();
+    this.activeFilters = [];
+    this.urlAppendFilterArray = [];
     this.filterSize = 3;
     this.itemLimitSexFilter = this.filterSize;
     this.itemLimitOrgFilter = this.filterSize;
     this.itemLimitTrackFilter = this.filterSize;
     this.getFilters();
-    this.getAllBiosamples(0, 20, this.sort.active, this.sort.direction);
     this.titleService.setTitle('Data portal');
+    this.getOrganismsQueryParamonInit();
   }
 
   // tslint:disable-next-line:typedef
@@ -73,8 +70,63 @@ export class DashboardComponent implements OnInit, AfterViewInit {
     this.dataSource.sort = this.sort;
   }
 
+  getOrganismsQueryParamonInit() {
+    const queryParamMap = this.activatedRoute.snapshot['queryParamMap'];
+    const params = queryParamMap['params'];
+    if (Object.keys(params).length != 0) {
+      for (let key in params) {
+        this.appendActiveFilters(key, params);
+      }
+      setTimeout(() => {
+        this.getActiveFiltersAndResult();
+      }, 1000);
+    }
+    else {
+      this.getAllBiosamples(0, 20, this.sort.active, this.sort.direction);
+    }
+  }
+
+  appendActiveFilters(key, params) {
+    setTimeout(() => {
+      this.urlAppendFilterArray.push({ "name": key, "value": params[key] });
+      this.activeFilters.push(params[key]);
+    }, 10);
+  }
+
+  getActiveFiltersAndResult() {
+    this.dashboardService.getFilterResults(this.activeFilters.toString(), this.sort.active, this.sort.direction, 0, 20)
+      .subscribe(
+        data => {
+          const unpackedData = [];
+          for (const item of data.hits.hits) {
+            unpackedData.push(this.unpackData(item));
+          }
+          this.bioSampleTotalCount = data.hits.total.value;
+          this.dataSource = new MatTableDataSource<any>(unpackedData);
+          this.dataSource.sort = this.sort;
+          this.dataSource.filterPredicate = this.filterPredicate;
+          this.unpackedData = unpackedData;
+          for (let i = 0; i < this.urlAppendFilterArray.length; i++) {
+            setTimeout(() => {
+              let inactiveClassName = '.' + this.urlAppendFilterArray[i].name + '-inactive';
+              let element = "li:contains('" + this.urlAppendFilterArray[i].value + "')";
+              $(inactiveClassName).addClass('non-disp');
+              $(element).removeClass('non-disp');
+              $(element).addClass('disp');
+              $(element).addClass('active');
+            }, 1);
+          }
+          this.spinner.hide();
+        },
+        err => {
+          console.log(err);
+        }
+      )
+  }
+
   // tslint:disable-next-line:typedef
   getAllBiosamples(offset, limit, sortColumn?, sortOrder?) {
+    this.spinner.show();
     this.dashboardService.getAllBiosample(offset, limit, sortColumn, sortOrder)
       .subscribe(
         data => {
@@ -87,12 +139,14 @@ export class DashboardComponent implements OnInit, AfterViewInit {
           this.dataSource.sort = this.sort;
           this.dataSource.filterPredicate = this.filterPredicate;
           this.unpackedData = unpackedData;
+          this.spinner.hide();
         },
         err => console.log(err)
       );
   }
 
   getNextBiosamples(currentSize, offset, limit, sortColumn?, sortOrder?) {
+    this.spinner.show();
     this.dashboardService.getAllBiosample(offset, limit, sortColumn, sortOrder)
       .subscribe(
         data => {
@@ -104,6 +158,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
           this.dataSource.sort = this.sort;
           this.dataSource.filterPredicate = this.filterPredicate;
           this.unpackedData = unpackedData;
+          this.spinner.hide();
         },
         err => console.log(err)
       )
@@ -185,6 +240,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
 
   // tslint:disable-next-line:typedef
   getSearchResults(event: Event) {
+    this.spinner.show();
     const filterValue = (event.target as HTMLInputElement).value;
     if (filterValue.length == 0) {
       this.getAllBiosamples(0, 20, this.sort.active, this.sort.direction);
@@ -202,6 +258,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
             this.dataSource.sort = this.sort;
             this.dataSource.filterPredicate = this.filterPredicate;
             this.unpackedData = unpackedData;
+            this.spinner.hide();
           },
           err => {
             console.log(err);
@@ -211,7 +268,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
   }
 
   // tslint:disable-next-line:typedef
-  checkFilterIsActive(key: string, filter: string) {
+  checkFilterIsActive(filter: string) {
     if (this.activeFilters.indexOf(filter) !== -1) {
       return 'active';
     }
@@ -223,7 +280,6 @@ export class DashboardComponent implements OnInit, AfterViewInit {
     let filterQueryParam = { "name": label.replace(" ", "-").toLowerCase(), "value": filter };
     let inactiveClassName = label.toLowerCase().replace(" ", "-") + '-inactive';
     const filterIndex = this.activeFilters.indexOf(filter);
-
     if (filterIndex !== -1) {
       $('.' + inactiveClassName).removeClass('non-disp');
       this.removeFilter(filter);
@@ -278,7 +334,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
     this.urlAppendFilterArray = [];
     this.dataSource.filter = undefined;
     this.getAllBiosamples(0, 20, this.sort.active, this.sort.direction);
-    this.router.navigate(['data'],{});
+    this.router.navigate(['data'], {});
   }
 
   // tslint:disable-next-line:typedef
@@ -340,6 +396,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
   }
 
   getFilterResults(filter, sortColumn?, sortOrder?, from?, size?) {
+    this.spinner.show();
     this.dashboardService.getFilterResults(filter, this.sort.active, this.sort.direction, from, size)
       .subscribe(
         data => {
@@ -352,6 +409,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
           this.dataSource.sort = this.sort;
           this.dataSource.filterPredicate = this.filterPredicate;
           this.unpackedData = unpackedData;
+          this.spinner.hide();
         },
         err => {
           console.log(err);
