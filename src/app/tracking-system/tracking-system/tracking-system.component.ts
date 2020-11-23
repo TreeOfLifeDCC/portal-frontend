@@ -40,7 +40,6 @@ export class TrackingSystemComponent implements OnInit, AfterViewInit {
   constructor(private titleService: Title, private statusesService: StatusesService, private spinner: NgxSpinnerService) { }
 
   ngOnInit(): void {
-    this.spinner.show();
     this.titleService.setTitle('Status tracking');
     this.getAllStatuses(0,10);
   }
