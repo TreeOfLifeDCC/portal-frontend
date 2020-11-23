@@ -13,6 +13,7 @@ import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatInputModule} from '@angular/material/input';
 import { DetailsComponent } from './tracking-system/details/details.component';
 import {MatListModule} from "@angular/material/list";
+import { NgxSpinnerModule } from "ngx-spinner";
 
 
 
@@ -30,7 +31,8 @@ import {MatListModule} from "@angular/material/list";
     MatPaginatorModule,
     MatFormFieldModule,
     MatInputModule,
-    MatListModule
+    MatListModule,
+    NgxSpinnerModule
   ]
 })
 export class TrackingSystemModule { }

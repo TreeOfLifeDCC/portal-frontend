@@ -5,6 +5,7 @@ import { MatTableDataSource } from '@angular/material/table';
 import {Title} from '@angular/platform-browser';
 import {StatusesService} from "../services/statuses.service";
 import {filter} from "rxjs/operators";
+import { NgxSpinnerService } from 'ngx-spinner';
 
 @Component({
   selector: 'app-tracking-system',
@@ -36,15 +37,17 @@ export class TrackingSystemComponent implements OnInit, AfterViewInit {
   unpackedData;
   statusesCount = 0;
 
-  constructor(private titleService: Title, private statusesService: StatusesService) { }
+  constructor(private titleService: Title, private statusesService: StatusesService, private spinner: NgxSpinnerService) { }
 
   ngOnInit(): void {
+    this.spinner.show();
     this.titleService.setTitle('Status tracking');
     this.getAllStatuses(0,10);
   }
 
   // tslint:disable-next-line:typedef
   getAllStatuses(offset, limit) {
+    this.spinner.show();
     this.statusesService.getAllStatuses(offset, limit)
         .subscribe(
             data => {
@@ -59,12 +62,14 @@ export class TrackingSystemComponent implements OnInit, AfterViewInit {
             this.dataSource.filterPredicate = this.filterPredicate;
             this.unpackedData = unpackedData;
             this.statusesCount = data.count;
+            this.spinner.hide();
             },
             err => console.log(err)
         );
   }
 
   getNextStatuses(currentSize, offset, limit) {
+    this.spinner.show();
     this.statusesService.getAllStatuses(offset, limit)
       .subscribe(
         data => {
@@ -77,6 +82,7 @@ export class TrackingSystemComponent implements OnInit, AfterViewInit {
           this.dataSource.sort = this.sort;
           this.dataSource.filterPredicate = this.filterPredicate;
           this.unpackedData = unpackedData;
+          this.spinner.hide();
         },
         err => console.log(err)
       );
