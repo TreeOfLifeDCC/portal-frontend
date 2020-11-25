@@ -33,12 +33,12 @@ export class DashboardService {
     return this.http.get(`${this.API_BASE_URL}/organisms/filters`);
   }
 
-  public getSearchResults(search: string, sortColumn?, sortOrder?): Observable<any> {
-    let requestParams = `?filter=${search}`
+  public getSearchResults(search: any, sortColumn?, sortOrder?, from?, size?): Observable<any> {
+    let requestURL = `${this.API_BASE_URL}/organisms/search?filter=${search}&from=${from}&size=${size}`;
     if (sortColumn != undefined) {
-      requestParams = requestParams + `&sortColumn=${sortColumn}&sortOrder=${sortOrder}`
+      requestURL = requestURL + `&sortColumn=${sortColumn}&sortOrder=${sortOrder}`
     }
-    return this.http.get(`${this.API_BASE_URL}/organisms/search/${requestParams}`);
+    return this.http.get(`${requestURL}`);
   }
 
   public getFilterResults(filter: any, sortColumn?, sortOrder?, from?, size?): Observable<any> {

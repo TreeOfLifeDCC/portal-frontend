@@ -32,6 +32,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
   itemLimitTrackFilter: number;
   filterSize: number;
   urlAppendFilterArray = [];
+  searchText = '';
 
 
   activeFilters = [];
@@ -115,11 +116,16 @@ export class DashboardComponent implements OnInit, AfterViewInit {
               $(element).addClass('disp');
               $(element).addClass('active');
             }, 1);
+
+            if (i == (this.urlAppendFilterArray.length - 1)) {
+              this.spinner.hide();
+            }
           }
-          this.spinner.hide();
+
         },
         err => {
           console.log(err);
+          this.spinner.hide();
         }
       )
   }
@@ -139,9 +145,14 @@ export class DashboardComponent implements OnInit, AfterViewInit {
           this.dataSource.sort = this.sort;
           this.dataSource.filterPredicate = this.filterPredicate;
           this.unpackedData = unpackedData;
-          this.spinner.hide();
+          setTimeout(() => {
+            this.spinner.hide();
+          }, 1000)
         },
-        err => console.log(err)
+        err => {
+          console.log(err);
+          this.spinner.hide();
+        }
       );
   }
 
@@ -160,7 +171,10 @@ export class DashboardComponent implements OnInit, AfterViewInit {
           this.unpackedData = unpackedData;
           this.spinner.hide();
         },
-        err => console.log(err)
+        err => {
+          console.log(err);
+          this.spinner.hide();
+        }
       )
   }
 
@@ -169,16 +183,20 @@ export class DashboardComponent implements OnInit, AfterViewInit {
     let pageSize = event.pageSize;
     let previousSize = pageSize * pageIndex;
 
+    let from = pageIndex * pageSize;
+    let size = 0;
+    if ((from + pageSize) < this.bioSampleTotalCount) {
+      size = from + pageSize;
+    }
+    else {
+      size = this.bioSampleTotalCount;
+    }
+
     if (this.activeFilters.length !== 0) {
-      let from = pageIndex * pageSize;
-      let size = 0;
-      if ((from + pageSize) < this.bioSampleTotalCount) {
-        size = from + pageSize;
-      }
-      else {
-        size = this.bioSampleTotalCount;
-      }
       this.getFilterResults(this.activeFilters.toString(), this.sort.active, this.sort.direction, from, size);
+    }
+    else if (this.searchText.length !== 0) {
+      this.getSearchResults(from, size);
     }
     else {
       this.getNextBiosamples(previousSize, (pageIndex).toString(), pageSize.toString(), this.sort.active, this.sort.direction);
@@ -188,17 +206,20 @@ export class DashboardComponent implements OnInit, AfterViewInit {
   customSort(event) {
     let pageIndex = this.paginator.pageIndex;
     let pageSize = this.paginator.pageSize;
+    let from = pageIndex * pageSize;
+    let size = 0;
+    if ((from + pageSize) < this.bioSampleTotalCount) {
+      size = from + pageSize;
+    }
+    else {
+      size = this.bioSampleTotalCount;
+    }
 
     if (this.activeFilters.length !== 0) {
-      let from = pageIndex * pageSize;
-      let size = 0;
-      if ((from + pageSize) < this.bioSampleTotalCount) {
-        size = from + pageSize;
-      }
-      else {
-        size = this.bioSampleTotalCount;
-      }
       this.getFilterResults(this.activeFilters.toString(), this.sort.active, this.sort.direction, from, size);
+    }
+    else if (this.searchText.length !== 0) {
+      this.getSearchResults(from, size);
     }
     else {
       this.getAllBiosamples((pageIndex).toString(), pageSize.toString(), event.active, event.direction);
@@ -236,35 +257,6 @@ export class DashboardComponent implements OnInit, AfterViewInit {
       }
     }
     return dataToReturn;
-  }
-
-  // tslint:disable-next-line:typedef
-  getSearchResults(event: Event) {
-    this.spinner.show();
-    const filterValue = (event.target as HTMLInputElement).value;
-    if (filterValue.length == 0) {
-      this.getAllBiosamples(0, 20, this.sort.active, this.sort.direction);
-    }
-    else {
-      this.dashboardService.getSearchResults(filterValue, this.sort.active, this.sort.direction)
-        .subscribe(
-          data => {
-            const unpackedData = [];
-            for (const item of data.biosamples) {
-              unpackedData.push(this.unpackData(item));
-            }
-            this.bioSampleTotalCount = data.count;
-            this.dataSource = new MatTableDataSource<any>(unpackedData);
-            this.dataSource.sort = this.sort;
-            this.dataSource.filterPredicate = this.filterPredicate;
-            this.unpackedData = unpackedData;
-            this.spinner.hide();
-          },
-          err => {
-            console.log(err);
-          }
-        )
-    }
   }
 
   // tslint:disable-next-line:typedef
@@ -413,8 +405,38 @@ export class DashboardComponent implements OnInit, AfterViewInit {
         },
         err => {
           console.log(err);
+          this.spinner.hide();
         }
       )
+  }
+
+  // tslint:disable-next-line:typedef
+  getSearchResults(from?, size?) {
+    this.spinner.show();
+    if (this.searchText.length == 0) {
+      this.getAllBiosamples(0, 20, this.sort.active, this.sort.direction);
+    }
+    else {
+      this.dashboardService.getSearchResults(this.searchText, this.sort.active, this.sort.direction, from, size)
+        .subscribe(
+          data => {
+            const unpackedData = [];
+            for (const item of data.hits.hits) {
+              unpackedData.push(this.unpackData(item));
+            }
+            this.bioSampleTotalCount = data.hits.total.value;
+            this.dataSource = new MatTableDataSource<any>(unpackedData);
+            this.dataSource.sort = this.sort;
+            this.dataSource.filterPredicate = this.filterPredicate;
+            this.unpackedData = unpackedData;
+            this.spinner.hide();
+          },
+          err => {
+            console.log(err);
+            this.spinner.hide();
+          }
+        )
+    }
   }
 
   toggleCollapse(filterKey) {
