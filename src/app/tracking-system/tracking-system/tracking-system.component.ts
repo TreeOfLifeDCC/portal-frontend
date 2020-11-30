@@ -1,11 +1,13 @@
-import {AfterViewInit, Component, OnInit, ViewChild} from '@angular/core';
-import { MatSort } from '@angular/material/sort';
+import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
+import { ActivatedRoute, Params, Router } from '@angular/router';
 import { MatPaginator } from '@angular/material/paginator';
+import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
-import {Title} from '@angular/platform-browser';
-import {StatusesService} from "../services/statuses.service";
-import {filter} from "rxjs/operators";
+import { Title } from '@angular/platform-browser';
+import { StatusesService } from "../services/statuses.service";
 import { NgxSpinnerService } from 'ngx-spinner';
+
+import 'jquery';
 
 @Component({
   selector: 'app-tracking-system',
@@ -16,60 +18,141 @@ export class TrackingSystemComponent implements OnInit, AfterViewInit {
   displayedColumns = ['organism', 'commonName', 'metadata_submitted_to_biosamples',
     'raw_data_submitted_to_ena', 'mapped_reads_submitted_to_ena', 'assemblies_submitted_to_ena',
     'annotation_complete', 'annotation_submitted_to_ena'];
+  loading = true;
   dataSource = new MatTableDataSource<any>();
   @ViewChild(MatPaginator) paginator: MatPaginator;
-  @ViewChild(MatSort, {static: true}) sort: MatSort;
+  @ViewChild(MatSort, { static: true }) sort: MatSort;
+
+  filtersMap;
+  isBiosampleFilterCollapsed = true;
+  isEnaFilterCollapsed = true;
+  filterKeyName = '';
+  itemLimitBiosampleFilter: number;
+  itemLimitEnaFilter: number;
+  filterSize: number;
+  urlAppendFilterArray = [];
+  searchText = '';
+
+
   activeFilters = [];
-  filters = {
-    biosamples: {},
-    raw_data: {},
-    mapped_reads: {},
-    assemblies: {},
-    annotation: {},
-    annotation_complete: {}
-  };
   BiosamplesFilters = [];
   RawDataFilters = [];
   MappedReadsFilters = [];
   AssembliesFilters = [];
   AnnotationFilters = [];
   AnnotationCompleteFilters = [];
+  statusesTotalCount = 0;
   unpackedData;
-  statusesCount = 0;
 
-  constructor(private titleService: Title, private statusesService: StatusesService, private spinner: NgxSpinnerService) { }
+  constructor(private titleService: Title, private statusesService: StatusesService,
+    private activatedRoute: ActivatedRoute, private router: Router, private spinner: NgxSpinnerService) { }
 
   ngOnInit(): void {
+    this.spinner.show();
+    this.activeFilters = [];
+    this.urlAppendFilterArray = [];
+    this.filterSize = 3;
+    this.itemLimitBiosampleFilter = this.filterSize;
+    this.itemLimitEnaFilter = this.filterSize;
+    this.getFilters();
     this.titleService.setTitle('Status tracking');
-    this.getAllStatuses(0,10);
+    this.getStatusesQueryParamonInit();
   }
 
   // tslint:disable-next-line:typedef
-  getAllStatuses(offset, limit) {
-    this.spinner.show();
-    this.statusesService.getAllStatuses(offset, limit)
-        .subscribe(
-            data => {
-              const unpackedData = [];
-            for (const item of data.biosampleStatus) {
-                unpackedData.push(this.unpackData(item));
-              }
-            this.dataSource = new MatTableDataSource<any>(unpackedData);
-            this.getFilters(unpackedData);
-            // this.dataSource.paginator = this.paginator;
-            this.dataSource.sort = this.sort;
-            this.dataSource.filterPredicate = this.filterPredicate;
-            this.unpackedData = unpackedData;
-            this.statusesCount = data.count;
-            this.spinner.hide();
-            },
-            err => console.log(err)
-        );
+  ngAfterViewInit() {
+    this.dataSource.paginator = this.paginator;
+    this.dataSource.sort = this.sort;
   }
 
-  getNextStatuses(currentSize, offset, limit) {
+  getStatusesQueryParamonInit() {
+    const queryParamMap = this.activatedRoute.snapshot['queryParamMap'];
+    const params = queryParamMap['params'];
+    if (Object.keys(params).length != 0) {
+      for (let key in params) {
+        this.appendActiveFilters(key, params);
+      }
+      setTimeout(() => {
+        this.getActiveFiltersAndResult();
+      }, 1000);
+    }
+    else {
+      this.getAllStatuses(0, 20, this.sort.active, this.sort.direction);
+    }
+  }
+
+  appendActiveFilters(key, params) {
+    setTimeout(() => {
+      this.urlAppendFilterArray.push({ "name": key, "value": params[key] });
+      this.activeFilters.push(params[key]);
+    }, 10);
+  }
+
+  getActiveFiltersAndResult() {
+    this.statusesService.getFilterResults(this.activeFilters.toString(), this.sort.active, this.sort.direction, 0, 20)
+      .subscribe(
+        data => {
+          const unpackedData = [];
+          for (const item of data.hits.hits) {
+            unpackedData.push(this.unpackData(item));
+          }
+          this.statusesTotalCount = data.hits.total.value;
+          this.dataSource = new MatTableDataSource<any>(unpackedData);
+          this.dataSource.sort = this.sort;
+          this.dataSource.filterPredicate = this.filterPredicate;
+          this.unpackedData = unpackedData;
+          for (let i = 0; i < this.urlAppendFilterArray.length; i++) {
+            setTimeout(() => {
+              let inactiveClassName = '.' + this.urlAppendFilterArray[i].name + '-inactive';
+              let element = "li:contains('" + this.urlAppendFilterArray[i].value + "')";
+              $(inactiveClassName).addClass('non-disp');
+              $(element).removeClass('non-disp');
+              $(element).addClass('disp');
+              $(element).addClass('active');
+            }, 1);
+
+            if (i == (this.urlAppendFilterArray.length - 1)) {
+              this.spinner.hide();
+            }
+          }
+
+        },
+        err => {
+          console.log(err);
+          this.spinner.hide();
+        }
+      )
+  }
+
+  // tslint:disable-next-line:typedef
+  getAllStatuses(offset, limit, sortColumn?, sortOrder?) {
     this.spinner.show();
-    this.statusesService.getAllStatuses(offset, limit)
+    this.statusesService.getAllStatuses(offset, limit, sortColumn, sortOrder)
+      .subscribe(
+        data => {
+          const unpackedData = [];
+          for (const item of data.biosampleStatus) {
+            unpackedData.push(this.unpackData(item));
+          }
+          this.statusesTotalCount = data.count;
+          this.dataSource = new MatTableDataSource<any>(unpackedData);
+          this.dataSource.sort = this.sort;
+          this.dataSource.filterPredicate = this.filterPredicate;
+          this.unpackedData = unpackedData;
+          setTimeout(() => {
+            this.spinner.hide();
+          }, 1000)
+        },
+        err => {
+          console.log(err);
+          this.spinner.hide();
+        }
+      );
+  }
+
+  getNextStatuses(currentSize, offset, limit, sortColumn?, sortOrder?) {
+    this.spinner.show();
+    this.statusesService.getAllStatuses(offset, limit, sortColumn, sortOrder)
       .subscribe(
         data => {
           const unpackedData = [];
@@ -77,28 +160,72 @@ export class TrackingSystemComponent implements OnInit, AfterViewInit {
             unpackedData.push(this.unpackData(item));
           }
           this.dataSource = new MatTableDataSource<any>(unpackedData);
-          this.getFilters(unpackedData);
           this.dataSource.sort = this.sort;
           this.dataSource.filterPredicate = this.filterPredicate;
           this.unpackedData = unpackedData;
           this.spinner.hide();
         },
-        err => console.log(err)
-      );
+        err => {
+          console.log(err);
+          this.spinner.hide();
+        }
+      )
   }
 
   pageChanged(event) {
     let pageIndex = event.pageIndex;
     let pageSize = event.pageSize;
-    let previousIndex = event.previousPageIndex;
     let previousSize = pageSize * pageIndex;
-    this.getNextStatuses(previousSize, (pageIndex).toString(), pageSize.toString());
+
+    let from = pageIndex * pageSize;
+    let size = 0;
+    if ((from + pageSize) < this.statusesTotalCount) {
+      size = from + pageSize;
+    }
+    else {
+      size = this.statusesTotalCount;
+    }
+
+    if (this.activeFilters.length !== 0) {
+      this.getFilterResults(this.activeFilters.toString(), this.sort.active, this.sort.direction, from, size);
+    }
+    else if (this.searchText.length !== 0) {
+      this.getSearchResults(from, size);
+    }
+    else {
+      this.getNextStatuses(previousSize, (pageIndex).toString(), pageSize.toString(), this.sort.active, this.sort.direction);
+    }
   }
 
+  customSort(event) {
+    let pageIndex = this.paginator.pageIndex;
+    let pageSize = this.paginator.pageSize;
+    let from = pageIndex * pageSize;
+    let size = 0;
+    if ((from + pageSize) < this.statusesTotalCount) {
+      size = from + pageSize;
+    }
+    else {
+      size = this.statusesTotalCount;
+    }
+
+    if (this.activeFilters.length !== 0) {
+      this.getFilterResults(this.activeFilters.toString(), this.sort.active, this.sort.direction, from, size);
+    }
+    else if (this.searchText.length !== 0) {
+      this.getSearchResults(from, size);
+    }
+    else {
+      this.getAllStatuses((pageIndex).toString(), pageSize.toString(), event.active, event.direction);
+    }
+
+  }
+
+  // tslint:disable-next-line:typedef
   filterPredicate(data: any, filterValue: any): boolean {
     const filters = filterValue.split('|');
     if (filters[1] === 'Metadata submitted to BioSamples') {
-      return data.biosamples === filters[0].split(' - ')[1];
+      return data.biosampleStatus === filters[0].split(' - ')[1];
     } else {
       const ena_filters = filters[0].split(' - ');
       if (ena_filters[0] === 'Raw Data') {
@@ -123,12 +250,8 @@ export class TrackingSystemComponent implements OnInit, AfterViewInit {
     }
     for (const key of Object.keys(data)) {
       if (typeof data[key] === 'object') {
-        if (key === 'sex') {
-          if (data.sex.length !== 0) {
-            dataToReturn[key] = data.sex[0].text;
-          } else {
-            dataToReturn[key] = undefined;
-          }
+        if (key === 'organism') {
+          dataToReturn[key] = data.organism.text;
         }
       } else {
         dataToReturn[key] = data[key];
@@ -138,115 +261,139 @@ export class TrackingSystemComponent implements OnInit, AfterViewInit {
   }
 
   // tslint:disable-next-line:typedef
-  applyFilter(event: Event) {
-    const filterValue = (event.target as HTMLInputElement).value;
-    this.dataSource.filter = filterValue.trim().toLowerCase();
-  }
-
-  // tslint:disable-next-line:typedef
   checkFilterIsActive(filter: string) {
     if (this.activeFilters.indexOf(filter) !== -1) {
       return 'active';
     }
+
   }
 
   // tslint:disable-next-line:typedef
-  onFilterClick(label: string, filter: string) {
+  onFilterClick(event, label: string, filter: string) {
+    let inactiveClassName = label.toLowerCase().replace(" ", "-") + '-inactive';
     const filterIndex = this.activeFilters.indexOf(filter);
     if (filterIndex !== -1) {
+      $('.' + inactiveClassName).removeClass('non-disp');
       this.removeFilter(filter);
     } else {
+      $('.' + inactiveClassName).addClass('non-disp');
+      $(event.target).removeClass('non-disp');
+      $(event.target).addClass('disp');
+
+      this.selectedFilterArray(label, filter);
       this.activeFilters.push(filter);
-      this.dataSource.filter = `${filter.trim()}|${label}`;
-      this.getFilters(this.dataSource.filteredData);
+      this.dataSource.filter = `${filter.trim().toLowerCase()}|${label}`;
+      this.getFilterResults(this.activeFilters.toString(), this.sort.active, this.sort.direction, 0, 20);
+      this.updateActiveRouteParams();
+    }
+
+  }
+
+  selectedFilterArray(key: string, value: string) {
+    let jsonObj: {};
+    if (key.toLowerCase() == 'biosamples') {
+      jsonObj = { "name": "biosamples", "value": value };
+      this.urlAppendFilterArray.push(jsonObj);
+    } else if (key.toLowerCase() == "raw-data") {
+      jsonObj = { "name": "raw_data", "value": value };
+      this.urlAppendFilterArray.push(jsonObj);
+    } else if (key.toLowerCase() == "mapped-reads") {
+      jsonObj = { "name": "mapped_reads", "value": value };
+      this.urlAppendFilterArray.push(jsonObj);
+    } else if (key.toLowerCase() == "assemblies") {
+      jsonObj = { "name": "assemblies", "value": value };
+      this.urlAppendFilterArray.push(jsonObj);
+    } else if (key.toLowerCase() == "annotation-complete") {
+      jsonObj = { "name": "annotation_complete", "value": value };
+      this.urlAppendFilterArray.push(jsonObj);
+    } else if (key.toLowerCase() == "annotation") {
+      jsonObj = { "name": "annotation", "value": value };
+      this.urlAppendFilterArray.push(jsonObj);
+    }
+
+  }
+
+  updateActiveRouteParams() {
+    const params = {};
+    const paramArray = this.urlAppendFilterArray.map(x => Object.assign({}, x));
+    if (paramArray.length != 0) {
+      for (let i = 0; i < paramArray.length; i++) {
+        params[paramArray[i].name] = paramArray[i].value;
+      }
+      this.router.navigate(['tracking_system'], { queryParams: params });
     }
   }
 
   // tslint:disable-next-line:typedef
   removeAllFilters() {
+    $('.biosamples-inactive').removeClass('non-disp');
+    $('.raw-data-inactive').removeClass('non-disp');
+    $('.mapped-reads-inactive').removeClass('non-disp');
+    $('.assemblies-inactive').removeClass('non-disp');
+    $('.annotation-complete-inactive').removeClass('non-disp');
+    $('.annotation-inactive').removeClass('non-disp');
+
     this.activeFilters = [];
+    this.urlAppendFilterArray = [];
     this.dataSource.filter = undefined;
-    this.getFilters(this.unpackedData);
+    this.getAllStatuses(0, 20, this.sort.active, this.sort.direction);
+    this.router.navigate(['tracking_system'], {});
   }
 
   // tslint:disable-next-line:typedef
   removeFilter(filter: string) {
-    const filterIndex = this.activeFilters.indexOf(filter);
-    this.activeFilters.splice(filterIndex, 1);
-    if (this.activeFilters.length !== 0) {
-      const filterValueFormatted = filter.split(' - ')[1];
-      this.dataSource.filter = filterValueFormatted.trim().toLowerCase();
-      this.getFilters(this.dataSource.filteredData);
-    } else {
-      this.dataSource.filter = undefined;
-      this.getFilters(this.unpackedData);
+    if (filter != undefined) {
+      this.updateDomForRemovedFilter(filter);
+      this.updateActiveRouteParams();
+      const filterIndex = this.activeFilters.indexOf(filter);
+      this.activeFilters.splice(filterIndex, 1);
+      if (this.activeFilters.length !== 0) {
+        this.dataSource.filter = this.activeFilters[0].trim().toLowerCase();
+        this.getFilterResults(this.activeFilters.toString(), this.sort.active, this.sort.direction, 0, 20);
+      } else {
+        this.router.navigate(['tracking_system'], {});
+        this.dataSource.filter = undefined;
+        this.getAllStatuses(0, 20, this.sort.active, this.sort.direction);
+      }
+    }
+  }
+
+  updateDomForRemovedFilter(filter: string) {
+    if (this.urlAppendFilterArray.length != 0) {
+      let inactiveClassName: string;
+      this.urlAppendFilterArray.filter(obj => {
+        if (obj.value == filter) {
+          inactiveClassName = obj.name + '-inactive';
+          $('.' + inactiveClassName).removeClass('non-disp');
+          $('.' + inactiveClassName).removeClass('active');
+          $('.' + inactiveClassName).addClass('disp');
+
+          const filterIndex = this.urlAppendFilterArray.indexOf(obj);
+          this.urlAppendFilterArray.splice(filterIndex, 1);
+        }
+      });
     }
   }
 
   // tslint:disable-next-line:typedef
-  getFilters(data: any) {
-    const filters = {
-      biosamples: {},
-      raw_data: {},
-      mapped_reads: {},
-      assemblies: {},
-      annotation: {},
-      annotation_complete: {}
-    };
-    for (const item of data) {
-      const biosamples = `BioSamples - ${item.biosamples}`;
-      const rawData = `Raw Data - ${item.raw_data}`;
-      const mappedReads = `Mapped Reads - ${item.mapped_reads}`;
-      const assemblies = `Assemblies - ${item.assemblies}`;
-      const annotation = `Annotation - ${item.annotation}`;
-      const annotationComplete = `Annotation complete - ${item.annotation_complete}`;
-      if (biosamples in filters.biosamples) {
-        filters.biosamples[biosamples] += 1;
-      } else {
-        filters.biosamples[biosamples] = 1;
-      }
-      if (rawData in filters.raw_data) {
-        filters.raw_data[rawData] += 1;
-      } else {
-        filters.raw_data[rawData] = 1;
-      }
-      if (mappedReads in filters.mapped_reads) {
-        filters.mapped_reads[mappedReads] += 1;
-      } else {
-        filters.mapped_reads[mappedReads] = 1;
-      }
-      if (assemblies in filters.assemblies) {
-        filters.assemblies[assemblies] += 1;
-      } else {
-        filters.assemblies[assemblies] = 1;
-      }
-      if (annotation in filters.annotation) {
-        filters.annotation[annotation] += 1;
-      } else {
-        filters.annotation[annotation] = 1;
-      }
-      if (annotationComplete in filters.annotation_complete) {
-        filters.annotation_complete[annotationComplete] += 1;
-      } else {
-        filters.annotation_complete[annotationComplete] = 1;
-      }
-    }
-    this.filters = filters;
-    this.BiosamplesFilters = Object.entries(this.filters.biosamples);
-    this.RawDataFilters = Object.entries(this.filters.raw_data);
-    this.MappedReadsFilters = Object.entries(this.filters.mapped_reads);
-    this.AssembliesFilters = Object.entries(this.filters.assemblies);
-    this.AnnotationFilters = Object.entries(this.filters.annotation);
-    this.AnnotationCompleteFilters = Object.entries(this.filters.annotation_complete);
+  getFilters() {
+    this.statusesService.getStatusesFilters().subscribe(
+      data => {
+        this.filtersMap = data;
+        this.BiosamplesFilters = this.filtersMap.biosamples.filter(i => i !== "");
+        this.RawDataFilters = this.filtersMap.raw_data.filter(i => i !== "");
+        this.MappedReadsFilters = this.filtersMap.mapped_reads.filter(i => i !== "");
+        this.AssembliesFilters = this.filtersMap.assemblies.filter(i => i !== "");
+        this.AnnotationCompleteFilters = this.filtersMap.annotation_complete.filter(i => i !== "");
+        this.AnnotationFilters = this.filtersMap.annotation.filter(i => i !== "");
+      },
+      err => console.log(err)
+    );
+
+
   }
 
-  // tslint:disable-next-line:typedef
-  ngAfterViewInit() {
-    this.dataSource.paginator = this.paginator;
-  }
-
-  // tslint:disable-next-line:typedef
-  getBadgeClass(status: string) {
+  getStatusClass(status: string) {
     if (status.toLowerCase().includes('waiting')) {
       return 'badge badge-pill badge-warning';
     } else {
@@ -254,9 +401,77 @@ export class TrackingSystemComponent implements OnInit, AfterViewInit {
     }
   }
 
+  getFilterResults(filter, sortColumn?, sortOrder?, from?, size?) {
+    this.spinner.show();
+    this.statusesService.getFilterResults(filter, this.sort.active, this.sort.direction, from, size)
+      .subscribe(
+        data => {
+          const unpackedData = [];
+          for (const item of data.hits.hits) {
+            unpackedData.push(this.unpackData(item));
+          }
+          this.statusesTotalCount = data.hits.total.value;
+          this.dataSource = new MatTableDataSource<any>(unpackedData);
+          this.dataSource.sort = this.sort;
+          this.dataSource.filterPredicate = this.filterPredicate;
+          this.unpackedData = unpackedData;
+          this.spinner.hide();
+        },
+        err => {
+          console.log(err);
+          this.spinner.hide();
+        }
+      )
+  }
+
   // tslint:disable-next-line:typedef
-  generateLink(organism) {
-    return `https://portal.darwintreeoflife.org/dashboard/organisms/details/${organism}`;
+  getSearchResults(from?, size?) {
+    this.spinner.show();
+    if (this.searchText.length == 0) {
+      this.getAllStatuses(0, 20, this.sort.active, this.sort.direction);
+    }
+    else {
+      this.statusesService.getSearchResults(this.searchText, this.sort.active, this.sort.direction, from, size)
+        .subscribe(
+          data => {
+            const unpackedData = [];
+            for (const item of data.hits.hits) {
+              unpackedData.push(this.unpackData(item));
+            }
+            this.statusesTotalCount = data.hits.total.value;
+            this.dataSource = new MatTableDataSource<any>(unpackedData);
+            this.dataSource.sort = this.sort;
+            this.dataSource.filterPredicate = this.filterPredicate;
+            this.unpackedData = unpackedData;
+            this.spinner.hide();
+          },
+          err => {
+            console.log(err);
+            this.spinner.hide();
+          }
+        )
+    }
+  }
+
+  toggleCollapse(filterKey) {
+    if (filterKey == 'Metadata submitted to BioSamples') {
+      if (this.isBiosampleFilterCollapsed) {
+        this.itemLimitBiosampleFilter = 10000;
+        this.isBiosampleFilterCollapsed = false;
+      } else {
+        this.itemLimitBiosampleFilter = 3;
+        this.isBiosampleFilterCollapsed = true;
+      }
+    }
+    else if (filterKey == 'Data submitted to ENA') {
+      if (this.isEnaFilterCollapsed) {
+        this.itemLimitEnaFilter = 10000;
+        this.isEnaFilterCollapsed = false;
+      } else {
+        this.itemLimitEnaFilter = 3;
+        this.isEnaFilterCollapsed = true;
+      }
+    }
   }
 
 }

@@ -7,15 +7,40 @@ import {Observable} from "rxjs";
 })
 export class StatusesService {
 
-  private API_BASE_URL = 'https://portal.darwintreeoflife.org/api';
+  private API_BASE_URL = 'http://localhost:8080';
 
   constructor(private http: HttpClient) { }
 
-  public getAllStatuses(offset, limit): Observable<any> {
-    return this.http.get(`${this.API_BASE_URL}/statuses?offset=${offset}&limit=${limit}`);
+  public getAllStatuses(offset, limit, sortColumn?, sortOrder?): Observable<any> {
+    let requestParams = `?offset=${offset}&limit=${limit}`
+    if (sortColumn != undefined) {
+      requestParams = requestParams + `&sortColumn=${sortColumn}&sortOrder=${sortOrder}`
+    }
+    return this.http.get(`${this.API_BASE_URL}/statuses${requestParams}`);
   }
 
   public getBiosampleByOrganism(organism: string): Observable<any> {
-    return this.http.get(`${this.API_BASE_URL}/organisms/detail/${organism}`);
+    return this.http.get(`${this.API_BASE_URL}/statuses/detail/${organism}`);
   }
+
+  public getStatusesFilters(): Observable<any> {
+    return this.http.get(`${this.API_BASE_URL}/statuses/filters`);
+  }
+
+  public getSearchResults(search: any, sortColumn?, sortOrder?, from?, size?): Observable<any> {
+    let requestURL = `${this.API_BASE_URL}/statuses/search?filter=${search}&from=${from}&size=${size}`;
+    if (sortColumn != undefined) {
+      requestURL = requestURL + `&sortColumn=${sortColumn}&sortOrder=${sortOrder}`
+    }
+    return this.http.get(`${requestURL}`);
+  }
+
+  public getFilterResults(filter: any, sortColumn?, sortOrder?, from?, size?): Observable<any> {
+    let requestURL = `${this.API_BASE_URL}/statuses/filter/results?from=${from}&size=${size}`;
+    if (sortColumn != undefined) {
+      requestURL = requestURL + `&sortColumn=${sortColumn}&sortOrder=${sortOrder}`;
+    }
+    return this.http.post(`${requestURL}`, filter);
+  }
+
 }

@@ -20,11 +20,14 @@ button {
     margin-left: 5px;
 }
 
-.card-header, .btn-success, .badge-success {
+.card-header,
+.btn-success,
+.badge-success {
     background-color: #8FBC45;
 }
 
-.btn-primary, .active {
+.btn-primary,
+.active {
     background-color: #4BBEFD;
 }
 
@@ -32,25 +35,38 @@ button {
     color: #4BBEFD;
 }
 
-.display-4 {
-    margin-top: 15px;
-    font-family: "Comic Sans MS", cursive, sans-serif;
+.display-2 {
+    color: ghostwhite;
+}
+
+.txt-center {
+    text-align: center;
+    justify-content: center;
 }
 
 .mat-header-cell {
-    flex-direction: column;
-    justify-content: center;
-  }
-  
-.mat-list-item {
-    font-size: 15px;
-}
-
-.mat-cell {
     text-align: center;
-    justify-content:center;
+    justify-content: center;
 }
 
-.display-2 {
-    color: ghostwhite;
+i {
+    cursor: pointer;
+}
+
+.disp {
+    display: block !important;
+}
+
+.non-disp {
+    display: none !important;
+}
+
+ul.long-list {
+    max-height: 300px;
+    overflow: scroll;
+}
+
+.filter-heading {
+    font-size: unset;
+    font-weight: 400;
 }

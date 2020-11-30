@@ -19,60 +19,76 @@
                 <div class="row">
                     <div class="col-md-12 col-sm-6">
                         <div class="card bg-lite mb-3 filter-top">
-                            <h3 class="card-header" #lbltextMetadata>Metadata submitted to BioSamples</h3>
+                            <h3 class="card-header filter-heading">
+                                <span #lbltextBiosamples>Metadata submitted to BioSamples</span>
+                                <!-- <i class="material-icons float-right biosamples-inactive" *ngIf="BiosamplesFilters.length > 3 && isBiosampleFilterCollapsed" (click)="toggleCollapse(lbltextBiosamples.innerText)">add</i>
+                                <i class="material-icons float-right biosamples-inactive" *ngIf="BiosamplesFilters.length > 3 && !isBiosampleFilterCollapsed" (click)="toggleCollapse(lbltextBiosamples.innerText)">remove</i> -->
+                            </h3>
                             <ul class="list-group">
-                                <li class="list-group-item d-flex justify-content-between align-items-center" [ngClass]="checkFilterIsActive(filter[0])" (click)="onFilterClick(lbltextMetadata.innerText, filter[0])" style="cursor: pointer" *ngFor="let filter of BiosamplesFilters">
-                                    {{filter[0]}}
-                                    <span class="badge badge-pill badge-info">{{filter[1]}}</span>
-                                </li>
+                                <ng-container *ngFor="let filter of BiosamplesFilters; let i = index">
+                                    <li class="list-group-item d-flex justify-content-between align-items-center biosamples-inactive" [ngClass]="checkFilterIsActive(filter.key)" (click)="onFilterClick($event, 'biosamples', filter.key)" style="cursor: pointer" *ngIf="filter.key != ''">
+                                        {{filter.key}}
+                                        <span class="badge badge-pill badge-info">{{filter.count}}</span></li>
+                                </ng-container>
                             </ul>
                         </div>
                     </div>
                     <div class="col-md-12 col-sm-6">
-                        <div class="card bg-lite mb-3">
-                            <h3 class="card-header" #lbltextENA>Data submitted to ENA</h3>
-                            <ul class="list-group ">
-                                <li class="list-group-item d-flex justify-content-between align-items-center" [ngClass]="checkFilterIsActive(filter[0])" (click)="onFilterClick(lbltextENA.innerText, filter[0])" style="cursor: pointer" *ngFor="let filter of RawDataFilters">
-                                    {{filter[0]}}
-                                    <span class="badge badge-pill badge-info">{{filter[1]}}</span>
-                                </li>
-                                <li class="list-group-item d-flex justify-content-between align-items-center" [ngClass]="checkFilterIsActive(filter[0])" (click)="onFilterClick(lbltextENA.innerText, filter[0])" style="cursor: pointer" *ngFor="let filter of MappedReadsFilters">
-                                    {{filter[0]}}
-                                    <span class="badge badge-pill badge-info">{{filter[1]}}</span>
-                                </li>
-                                <li class="list-group-item d-flex justify-content-between align-items-center" [ngClass]="checkFilterIsActive(filter[0])" (click)="onFilterClick(lbltextENA.innerText, filter[0])" style="cursor: pointer" *ngFor="let filter of AssembliesFilters">
-                                    {{filter[0]}}
-                                    <span class="badge badge-pill badge-info">{{filter[1]}}</span>
-                                </li>
-                                <li class="list-group-item d-flex justify-content-between align-items-center" [ngClass]="checkFilterIsActive(filter[0])" (click)="onFilterClick(lbltextENA.innerText, filter[0])" style="cursor: pointer" *ngFor="let filter of AnnotationCompleteFilters">
-                                    {{filter[0]}}
-                                    <span class="badge badge-pill badge-info">{{filter[1]}}</span>
-                                </li>
-                                <li class="list-group-item d-flex justify-content-between align-items-center" [ngClass]="checkFilterIsActive(filter[0])" (click)="onFilterClick(lbltextENA.innerText, filter[0])" style="cursor: pointer" *ngFor="let filter of AnnotationFilters">
-                                    {{filter[0]}}
-                                    <span class="badge badge-pill badge-info">{{filter[1]}}</span>
-                                </li>
+                        <div class="card bg-lite mb-3 filter-top">
+                            <h3 class="card-header filter-heading">
+                                <span #lbltextENA>Data submitted to ENA</span>
+                            </h3>
+                            <ul class="list-group">
+                                <ng-container *ngFor="let filter of RawDataFilters; let i = index">
+                                    <li class="list-group-item d-flex justify-content-between align-items-center raw-data-inactive" [ngClass]="checkFilterIsActive(filter.key)" (click)="onFilterClick($event, 'raw-data' , filter.key)" style="cursor: pointer" *ngIf="filter.key != ''">
+                                        {{filter.key}}
+                                        <span class="badge badge-pill badge-info">{{filter.count}}</span></li>
+                                </ng-container>
+
+                                <ng-container *ngFor="let filter of MappedReadsFilters; let i = index">
+                                    <li class="list-group-item d-flex justify-content-between align-items-center mapped-reads-inactive" [ngClass]="checkFilterIsActive(filter.key)" (click)="onFilterClick($event, 'mapped-reads' , filter.key)" style="cursor: pointer" *ngIf="filter.key != ''">
+                                        {{filter.key}}
+                                        <span class="badge badge-pill badge-info">{{filter.count}}</span></li>
+                                </ng-container>
+
+                                <ng-container *ngFor="let filter of AssembliesFilters; let i = index">
+                                    <li class="list-group-item d-flex justify-content-between align-items-center assemblies-inactive" [ngClass]="checkFilterIsActive(filter.key)" (click)="onFilterClick($event, 'assemblies' , filter.key)" style="cursor: pointer" *ngIf="filter.key != ''">
+                                        {{filter.key}}
+                                        <span class="badge badge-pill badge-info">{{filter.count}}</span></li>
+                                </ng-container>
+
+                                <ng-container *ngFor="let filter of AnnotationCompleteFilters; let i = index">
+                                    <li class="list-group-item d-flex justify-content-between align-items-center annotation-complete-inactive" [ngClass]="checkFilterIsActive(filter.key)" (click)="onFilterClick($event, 'annotation-complete' , filter.key)" style="cursor: pointer" *ngIf="filter.key != ''">
+                                        {{filter.key}}
+                                        <span class="badge badge-pill badge-info">{{filter.count}}</span></li>
+                                </ng-container>
+
+                                <ng-container *ngFor="let filter of AnnotationFilters; let i = index">
+                                    <li class="list-group-item d-flex justify-content-between align-items-center annotation-inactive" [ngClass]="checkFilterIsActive(filter.key)" (click)="onFilterClick($event, 'annotation' , filter.key)" style="cursor: pointer" *ngIf="filter.key != ''">
+                                        {{filter.key}}
+                                        <span class="badge badge-pill badge-info">{{filter.count}}</span></li>
+                                </ng-container>
                             </ul>
                         </div>
                     </div>
                 </div>
             </div>
             <div class="col-md-10">
-                <h1 class="page-header">Status tracking</h1>
+                <h1 class="page-header">Statuses</h1>
                 <h1 *ngIf="activeFilters.length !== 0">Filters:
                     <button type="button" class="btn btn-success" *ngFor="let filter of activeFilters">
-                    {{filter}}
-                    <span class="badge badge-light" (click)="removeFilter(filter)">X</span>
-                </button>
+          {{filter}}
+          <span class="badge badge-light" (click)="removeFilter(filter)">X</span>
+        </button>
                     <button type="button" class="btn btn-primary" (click)="removeAllFilters()">
-                    Remove all filters
-                </button>
+          Remove all filters
+        </button>
                 </h1>
                 <mat-form-field>
                     <mat-label>Search</mat-label>
-                    <input matInput (keyup)="applyFilter($event)" placeholder="Ex. lutra" #input>
+                    <input #searchInput matInput [(ngModel)]='searchText' (keyup)="getSearchResults()" placeholder="Ex. lutra" #input>
                 </mat-form-field>
-                <table mat-table #table [dataSource]="dataSource" matSort>
+                <table mat-table #table [dataSource]="dataSource" matSort (matSortChange)="customSort($event)">
                     <!-- First Column -->
                     <ng-container matColumnDef="organism">
                         <mat-header-cell *matHeaderCellDef mat-sort-header> Organism </mat-header-cell>
@@ -108,7 +124,7 @@
                         <mat-cell *matCellDef="let element">
                             <mat-list>
                                 <mat-list-item>
-                                    <span [ngClass]="getBadgeClass(element.raw_data)">{{element.raw_data }}</span>
+                                    <span [ngClass]="getStatusClass(element.raw_data)">{{element.raw_data }}</span>
                                 </mat-list-item>
                                 <mat-list-item>
                                     {{element.ena_date}}
@@ -122,7 +138,7 @@
                         <mat-cell *matCellDef="let element">
                             <mat-list>
                                 <mat-list-item>
-                                    <span [ngClass]="getBadgeClass(element.mapped_reads)">{{element.mapped_reads }} </span>
+                                    <span [ngClass]="getStatusClass(element.mapped_reads)">{{element.mapped_reads }} </span>
                                 </mat-list-item>
                                 <mat-list-item>
                                     {{element.ena_date}}
@@ -136,7 +152,7 @@
                         <mat-cell *matCellDef="let element">
                             <mat-list>
                                 <mat-list-item>
-                                    <span [ngClass]="getBadgeClass(element.assemblies)">{{element.assemblies }} </span>
+                                    <span [ngClass]="getStatusClass(element.assemblies)">{{element.assemblies }} </span>
                                 </mat-list-item>
                                 <mat-list-item>
                                     {{element.ena_date}}
@@ -150,7 +166,7 @@
                         <mat-cell *matCellDef="let element">
                             <mat-list>
                                 <mat-list-item>
-                                    <span [ngClass]="getBadgeClass(element.annotation_complete)">
+                                    <span [ngClass]="getStatusClass(element.annotation_complete)">
                                     {{ element.annotation_complete }} </span>
                                 </mat-list-item>
                                 <mat-list-item>
@@ -165,7 +181,7 @@
                         <mat-cell *matCellDef="let element">
                             <mat-list>
                                 <mat-list-item>
-                                    <span [ngClass]="getBadgeClass(element.annotation)">{{element.annotation }} </span>
+                                    <span [ngClass]="getStatusClass(element.annotation)">{{element.annotation }} </span>
                                 </mat-list-item>
                                 <mat-list-item>
                                     NA
@@ -177,7 +193,7 @@
                     <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
                     <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
                 </table>
-                <mat-paginator [pageSizeOptions]="[10, 50, 100]" showFirstLastButtons [length]="statusesCount" (page)="pageChanged($event)"></mat-paginator>
+                <mat-paginator [pageSizeOptions]="[20, 30, 50, 100]" showFirstLastButtons [length]="statusesTotalCount" (page)="pageChanged($event)"></mat-paginator>
             </div>
         </div>
     </div>
