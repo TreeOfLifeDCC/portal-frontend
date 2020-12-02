@@ -412,6 +412,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
 
   // tslint:disable-next-line:typedef
   getSearchResults(from?, size?) {
+    this.removeAllFilters();
     this.spinner.show();
     if (this.searchText.length == 0) {
       this.getAllBiosamples(0, 20, this.sort.active, this.sort.direction);
