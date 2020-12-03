@@ -426,7 +426,9 @@ export class TrackingSystemComponent implements OnInit, AfterViewInit {
 
   // tslint:disable-next-line:typedef
   getSearchResults(from?, size?) {
-    this.removeAllFilters();
+    $('.sex-inactive').removeClass('non-disp');
+    $('.organism-part-inactive').removeClass('non-disp');
+    $('.tracking-status-inactive').removeClass('non-disp');
     this.spinner.show();
     if (this.searchText.length == 0) {
       this.getAllStatuses(0, 20, this.sort.active, this.sort.direction);

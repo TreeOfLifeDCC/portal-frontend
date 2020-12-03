@@ -21,8 +21,6 @@
                         <div class="card bg-lite mb-3 filter-top">
                             <h3 class="card-header filter-heading">
                                 <span #lbltextBiosamples>Metadata submitted to BioSamples</span>
-                                <!-- <i class="material-icons float-right biosamples-inactive" *ngIf="BiosamplesFilters.length > 3 && isBiosampleFilterCollapsed" (click)="toggleCollapse(lbltextBiosamples.innerText)">add</i>
-                                <i class="material-icons float-right biosamples-inactive" *ngIf="BiosamplesFilters.length > 3 && !isBiosampleFilterCollapsed" (click)="toggleCollapse(lbltextBiosamples.innerText)">remove</i> -->
                             </h3>
                             <ul class="list-group">
                                 <ng-container *ngFor="let filter of BiosamplesFilters; let i = index">
@@ -86,7 +84,7 @@
                 </h1>
                 <mat-form-field>
                     <mat-label>Search</mat-label>
-                    <input #searchInput matInput [(ngModel)]='searchText' (keyup)="getSearchResults()" placeholder="Ex. lutra" #input>
+                    <input #searchInput matInput [(ngModel)]='searchText' (keyup.enter)="getSearchResults()" placeholder="Ex. lutra" #input>
                 </mat-form-field>
                 <table mat-table #table [dataSource]="dataSource" matSort (matSortChange)="customSort($event)">
                     <!-- First Column -->
