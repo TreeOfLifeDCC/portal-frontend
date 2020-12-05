@@ -7,7 +7,7 @@ import {Observable} from "rxjs";
 })
 export class StatusesService {
 
-  private API_BASE_URL = 'https://portal.darwintreeoflife.org/api';
+  private API_BASE_URL = 'http://localhost:8080';
 
   constructor(private http: HttpClient) { }
 
@@ -41,6 +41,14 @@ export class StatusesService {
       requestURL = requestURL + `&sortColumn=${sortColumn}&sortOrder=${sortOrder}`;
     }
     return this.http.post(`${requestURL}`, filter);
+  }
+
+  public findBioSampleByOrganismName(name: any, sortColumn?, sortOrder?, from?, size?): Observable<any> {
+    let requestURL = `${this.API_BASE_URL}/statuses/organism?name=${name}&from=${from}&size=${size}`;
+    if (sortColumn != undefined) {
+      requestURL = requestURL + `&sortColumn=${sortColumn}&sortOrder=${sortOrder}`
+    }
+    return this.http.get(`${requestURL}`);
   }
 
 }

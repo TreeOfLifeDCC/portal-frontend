@@ -18,8 +18,10 @@ export class TrackingSystemComponent implements OnInit, AfterViewInit {
   displayedColumns = ['organism', 'commonName', 'metadata_submitted_to_biosamples',
     'raw_data_submitted_to_ena', 'mapped_reads_submitted_to_ena', 'assemblies_submitted_to_ena',
     'annotation_complete', 'annotation_submitted_to_ena'];
+  orgDisplayedColumns = ['accession', 'organism', 'commonName', 'sex', 'organismPart', 'trackingSystem'];
   loading = true;
   dataSource = new MatTableDataSource<any>();
+  orgDataSource = new MatTableDataSource<any>();
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort, { static: true }) sort: MatSort;
 
@@ -42,13 +44,17 @@ export class TrackingSystemComponent implements OnInit, AfterViewInit {
   AnnotationFilters = [];
   AnnotationCompleteFilters = [];
   statusesTotalCount = 0;
+  orgTotalCount = 0;
   unpackedData;
+  showOrganismTable: boolean;
+  orgName = '';
 
   constructor(private titleService: Title, private statusesService: StatusesService,
     private activatedRoute: ActivatedRoute, private router: Router, private spinner: NgxSpinnerService) { }
 
   ngOnInit(): void {
     this.spinner.show();
+    this.showOrganismTable = false;
     this.activeFilters = [];
     this.urlAppendFilterArray = [];
     this.filterSize = 3;
@@ -197,6 +203,23 @@ export class TrackingSystemComponent implements OnInit, AfterViewInit {
     }
   }
 
+  orgPageChanged(event) {
+    let pageIndex = event.pageIndex;
+    let pageSize = event.pageSize;
+    let previousSize = pageSize * pageIndex;
+
+    let from = pageIndex * pageSize;
+    let size = 0;
+    if ((from + pageSize) < this.statusesTotalCount) {
+      size = from + pageSize;
+    }
+    else {
+      size = this.statusesTotalCount;
+    }
+
+    this.findBioSampleByOrganismName(this.orgName, from, size);
+  }
+
   customSort(event) {
     let pageIndex = this.paginator.pageIndex;
     let pageSize = this.paginator.pageSize;
@@ -207,6 +230,30 @@ export class TrackingSystemComponent implements OnInit, AfterViewInit {
     }
     else {
       size = this.statusesTotalCount;
+    }
+
+    if (this.activeFilters.length !== 0) {
+      this.getFilterResults(this.activeFilters.toString(), this.sort.active, this.sort.direction, from, size);
+    }
+    else if (this.searchText.length !== 0) {
+      this.getSearchResults(from, size);
+    }
+    else {
+      this.getAllStatuses((pageIndex).toString(), pageSize.toString(), event.active, event.direction);
+    }
+
+  }
+
+  orgSort(event) {
+    let pageIndex = this.paginator.pageIndex;
+    let pageSize = this.paginator.pageSize;
+    let from = pageIndex * pageSize;
+    let size = 0;
+    if ((from + pageSize) < this.statusesTotalCount) {
+      size = from + pageSize;
+    }
+    else {
+      size = this.orgTotalCount;
     }
 
     if (this.activeFilters.length !== 0) {
@@ -475,6 +522,46 @@ export class TrackingSystemComponent implements OnInit, AfterViewInit {
         this.isEnaFilterCollapsed = true;
       }
     }
+  }
+
+  findBioSampleByOrganismName(name, from?, size?) {
+    this.spinner.show();
+    this.orgName = name;
+    this.statusesService.findBioSampleByOrganismName(this.orgName, this.sort.active, this.sort.direction, from, size)
+      .subscribe(
+        data => {
+          const unpackedData = [];
+          for (const item of data.hits.hits) {
+            unpackedData.push(this.unpackData(item));
+          }
+          this.orgTotalCount = data.hits.total.value;
+          if (this.orgTotalCount == 1) {
+            this.spinner.hide();
+            this.router.navigate(['/data/details/' + data.hits.hits[0]._source.accession], {});
+          }
+          else {
+            this.orgDataSource = new MatTableDataSource<any>(unpackedData);
+            this.orgDataSource.sort = this.sort;
+            this.showOrganismTable = true;
+            this.spinner.hide();
+            $("#org-table").show();
+            $("#overlay").css({ "display": "block" });
+            $(window).scrollTop(200);
+          }
+        },
+        err => {
+          this.spinner.hide();
+          console.log(err);
+        }
+      )
+  }
+
+  toggleOrganismTable() {
+    $("#org-table").hide();
+    $("#overlay").css({ "display": "none" });
+    this.showOrganismTable = false;
+    this.orgDataSource = new MatTableDataSource<any>();
+    this.orgDataSource.sort = this.sort;
   }
 
 }

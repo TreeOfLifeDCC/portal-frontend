@@ -1,3 +1,4 @@
+<div id="overlay"></div>
 <div>
     <ngx-spinner bdColor="rgba(0,0,0,1)" [fullScreen]="true" type="ball-clip-rotate-multiple" size="large">
     </ngx-spinner>
@@ -14,8 +15,8 @@
     </div>
 
     <div class="container" style="padding-top: 20px;">
-        <div class="row">
-            <div class="col-md-2">
+        <div class="row main-table">
+            <div class="col-md-2 status-table">
                 <div class="row">
                     <div class="col-md-12 col-sm-6">
                         <div class="card bg-lite mb-3 filter-top">
@@ -71,7 +72,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-md-10">
+            <div class="col-md-10 status-table">
                 <h1 class="page-header">Statuses</h1>
                 <h1 *ngIf="activeFilters.length !== 0">Filters:
                     <button type="button" class="btn btn-success" *ngFor="let filter of activeFilters">
@@ -89,22 +90,22 @@
                 <table mat-table #table [dataSource]="dataSource" matSort (matSortChange)="customSort($event)">
                     <!-- First Column -->
                     <ng-container matColumnDef="organism">
-                        <mat-header-cell *matHeaderCellDef mat-sort-header> Organism </mat-header-cell>
+                        <mat-header-cell *matHeaderCellDef> Organism </mat-header-cell>
                         <mat-cell *matCellDef="let element">
-                            <a [routerLink]="['/tracking_system/details/', element.organism]">
+                            <a href="javascript:void(0);" (click)="findBioSampleByOrganismName(element.organism, 0, 5)">
                             {{element.organism}}</a>
                         </mat-cell>
                     </ng-container>
 
                     <!-- Second Column -->
                     <ng-container matColumnDef="commonName">
-                        <mat-header-cell *matHeaderCellDef mat-sort-header> Common name </mat-header-cell>
+                        <mat-header-cell *matHeaderCellDef> Common name </mat-header-cell>
                         <mat-cell *matCellDef="let element"> {{element.commonName}} </mat-cell>
                     </ng-container>
 
                     <!-- Third Column -->
                     <ng-container matColumnDef="metadata_submitted_to_biosamples">
-                        <mat-header-cell *matHeaderCellDef mat-sort-header> Metadata submitted to BioSamples </mat-header-cell>
+                        <mat-header-cell *matHeaderCellDef> Metadata submitted to BioSamples </mat-header-cell>
                         <mat-cell *matCellDef="let element">
                             <mat-list>
                                 <mat-list-item>
@@ -118,7 +119,7 @@
                     </ng-container>
                     <!-- Fourth Column -->
                     <ng-container matColumnDef="raw_data_submitted_to_ena">
-                        <mat-header-cell *matHeaderCellDef mat-sort-header> Raw data submitted to ENA </mat-header-cell>
+                        <mat-header-cell *matHeaderCellDef> Raw data submitted to ENA </mat-header-cell>
                         <mat-cell *matCellDef="let element">
                             <mat-list>
                                 <mat-list-item>
@@ -132,7 +133,7 @@
                     </ng-container>
                     <!-- Fifth Column -->
                     <ng-container matColumnDef="mapped_reads_submitted_to_ena">
-                        <mat-header-cell *matHeaderCellDef mat-sort-header> Mapped reads submitted to ENA </mat-header-cell>
+                        <mat-header-cell *matHeaderCellDef> Mapped reads submitted to ENA </mat-header-cell>
                         <mat-cell *matCellDef="let element">
                             <mat-list>
                                 <mat-list-item>
@@ -146,7 +147,7 @@
                     </ng-container>
 
                     <ng-container matColumnDef="assemblies_submitted_to_ena">
-                        <mat-header-cell *matHeaderCellDef mat-sort-header> Assemblies submitted to ENA </mat-header-cell>
+                        <mat-header-cell *matHeaderCellDef> Assemblies submitted to ENA </mat-header-cell>
                         <mat-cell *matCellDef="let element">
                             <mat-list>
                                 <mat-list-item>
@@ -160,7 +161,7 @@
                     </ng-container>
 
                     <ng-container matColumnDef="annotation_complete">
-                        <mat-header-cell *matHeaderCellDef mat-sort-header> Annotation complete </mat-header-cell>
+                        <mat-header-cell *matHeaderCellDef> Annotation complete </mat-header-cell>
                         <mat-cell *matCellDef="let element">
                             <mat-list>
                                 <mat-list-item>
@@ -175,7 +176,7 @@
                     </ng-container>
 
                     <ng-container matColumnDef="annotation_submitted_to_ena">
-                        <mat-header-cell *matHeaderCellDef mat-sort-header> Annotation submitted to ENA </mat-header-cell>
+                        <mat-header-cell *matHeaderCellDef> Annotation submitted to ENA </mat-header-cell>
                         <mat-cell *matCellDef="let element">
                             <mat-list>
                                 <mat-list-item>
@@ -192,6 +193,53 @@
                     <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
                 </table>
                 <mat-paginator [pageSizeOptions]="[20, 30, 50, 100]" showFirstLastButtons [length]="statusesTotalCount" (page)="pageChanged($event)"></mat-paginator>
+            </div>
+            <div id="org-table" class="col-md-10 org-table" *ngIf="showOrganismTable">
+                <h1 class="text-center card-header zero-margin">Organisms
+                    <i class="material-icons float-right" (click)="toggleOrganismTable()">remove</i>
+                </h1>
+                <table mat-table #table [dataSource]="orgDataSource" class="round-border">
+                    <!-- First Column -->
+                    <ng-container matColumnDef="accession">
+                        <mat-header-cell *matHeaderCellDef> BioSample ID </mat-header-cell>
+                        <mat-cell *matCellDef="let element" class="txt-center">
+                            <a [routerLink]="['/data/details/', element.accession]">
+              {{element.accession}}</a>
+                        </mat-cell>
+                    </ng-container>
+
+                    <!-- Second Column -->
+                    <ng-container matColumnDef="organism">
+                        <mat-header-cell *matHeaderCellDef> Organism </mat-header-cell>
+                        <mat-cell *matCellDef="let element" class="txt-center"> {{element.organism}} </mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="commonName">
+                        <mat-header-cell *matHeaderCellDef>Common Name </mat-header-cell>
+                        <mat-cell *matCellDef="let element" class="txt-center"> {{element?.commonName}}</mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="sex">
+                        <mat-header-cell *matHeaderCellDef> Sex </mat-header-cell>
+                        <mat-cell *matCellDef="let element" class="txt-center"> {{element.sex}} </mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="organismPart">
+                        <mat-header-cell *matHeaderCellDef> Organism Part </mat-header-cell>
+                        <mat-cell *matCellDef="let element" class="txt-center"> {{element.organismPart}} </mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="trackingSystem">
+                        <mat-header-cell *matHeaderCellDef> Tracking status </mat-header-cell>
+                        <mat-cell *matCellDef="let element">
+                            <span [ngClass]="getStatusClass(element.trackingSystem)">{{element.trackingSystem}}</span>
+                        </mat-cell>
+                    </ng-container>
+
+                    <mat-header-row *matHeaderRowDef="orgDisplayedColumns"></mat-header-row>
+                    <mat-row *matRowDef="let row; columns: orgDisplayedColumns;"></mat-row>
+                </table>
+                <mat-paginator [pageSizeOptions]="[5, 10]" showFirstLastButtons [length]="orgTotalCount" (page)="orgPageChanged($event)"></mat-paginator>
             </div>
         </div>
     </div>
