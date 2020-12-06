@@ -1,8 +1,8 @@
 <div class="container" style="padding-top: 65px;">
     <h1 class="text-center page-header">{{bioSampleId}}</h1>
     <dl class="row">
-        <dt class="col-sm-3">Name:</dt>
-        <dd class="col-sm-9">{{bioSampleObj?.name}}</dd>
+        <dt class="col-sm-3" *ngIf="bioSampleObj?.commonName">Name:</dt>
+        <dd class="col-sm-9" *ngIf="bioSampleObj?.commonName">{{bioSampleObj?.commonName}}</dd>
 
         <dt class="col-sm-3">BioSample ID:</dt>
         <dd class="col-sm-9"><a href="http://www.ebi.ac.uk/biosamples/samples/{{bioSampleObj?.accession}}" target="_blank">{{bioSampleObj?.accession}}</a></dd>
@@ -13,12 +13,79 @@
         <dt class="col-sm-3">Organism Part:</dt>
         <dd class="col-sm-9">{{bioSampleObj?.organismPart}}</dd>
 
-        <dt class="col-sm-3">Sex:</dt>
-        <dd class="col-sm-9">{{bioSampleObj?.sex}}</dd>
+        <dt class="col-sm-3" *ngIf="bioSampleObj?.sex">Sex:</dt>
+        <dd class="col-sm-9" *ngIf="bioSampleObj?.sex">{{bioSampleObj?.sex}}</dd>
 
         <dt class="col-sm-3">Tax ID:</dt>
         <dd class="col-sm-9">{{bioSampleObj?.taxonId}}</dd>
 
+        <dt class="col-sm-3" *ngIf="bioSampleObj?.specimenId">Specimen ID:</dt>
+        <dd class="col-sm-9" *ngIf="bioSampleObj?.specimenId">{{bioSampleObj?.specimenId}}</dd>
+
+        <dt class="col-sm-3" *ngIf="bioSampleObj?.cultureOrStrainId">Culture ID:</dt>
+        <dd class="col-sm-9" *ngIf="bioSampleObj?.cultureOrStrainId">{{bioSampleObj?.cultureOrStrainId}}</dd>
+
+        <dt class="col-sm-3" *ngIf="bioSampleObj?.lifestage">Lifestage:</dt>
+        <dd class="col-sm-9" *ngIf="bioSampleObj?.lifestage">{{bioSampleObj?.lifestage}}</dd>
+
+        <dt class="col-sm-3" *ngIf="bioSampleObj?.relationship">Relationship:</dt>
+        <dd class="col-sm-9" *ngIf="bioSampleObj?.relationship">{{bioSampleObj?.relationship}}</dd>
+
+        <dt class="col-sm-3" *ngIf="bioSampleObj?.gal">Gal:</dt>
+        <dd class="col-sm-9" *ngIf="bioSampleObj?.gal">{{bioSampleObj?.gal}}</dd>
+
+        <dt class="col-sm-3" *ngIf="bioSampleObj?.galSampleId">Gal Sample ID:</dt>
+        <dd class="col-sm-9" *ngIf="bioSampleObj?.galSampleId">{{bioSampleObj?.galSampleId}}</dd>
+
+        <dt class="col-sm-3" *ngIf="bioSampleObj?.relationship">Relationship:</dt>
+        <dd class="col-sm-9" *ngIf="bioSampleObj?.relationship">{{bioSampleObj?.relationship}}</dd>
+
+        <dt class="col-sm-3" *ngIf="bioSampleObj?.collectedBy">Collected By:</dt>
+        <dd class="col-sm-9" *ngIf="bioSampleObj?.collectedBy">{{bioSampleObj?.collectedBy}}</dd>
+
+        <dt class="col-sm-3" *ngIf="bioSampleObj?.collectingInstitution">Collecting Institution:</dt>
+        <dd class="col-sm-9" *ngIf="bioSampleObj?.collectingInstitution">{{bioSampleObj?.collectingInstitution}}</dd>
+
+        <dt class="col-sm-3" *ngIf="bioSampleObj?.collectionDate">Collection Date:</dt>
+        <dd class="col-sm-9" *ngIf="bioSampleObj?.collectionDate">{{bioSampleObj?.collectionDate}}</dd>
+
+        <dt class="col-sm-3" *ngIf="bioSampleObj?.geographicLocationCountryAndOrSea">Geographic Location (Country and/or Sea):</dt>
+        <dd class="col-sm-9" *ngIf="bioSampleObj?.geographicLocationCountryAndOrSea">{{bioSampleObj?.geographicLocationCountryAndOrSea}}</dd>
+
+        <dt class="col-sm-3" *ngIf="bioSampleObj?.geographicLocationRegionAndLocality">Geographic Location (Region and Locality):</dt>
+        <dd class="col-sm-9" *ngIf="bioSampleObj?.geographicLocationRegionAndLocality">{{bioSampleObj?.geographicLocationRegionAndLocality}}</dd>
+
+        <dt class="col-sm-3" *ngIf="bioSampleObj?.geographicLocationLatitude.text">Geographic Location (Latitude):</dt>
+        <dd class="col-sm-9" *ngIf="bioSampleObj?.geographicLocationLatitude.text">{{bioSampleObj?.geographicLocationLatitude.text}}</dd>
+
+        <dt class="col-sm-3" *ngIf="bioSampleObj?.geographicLocationLongitude.text">Geographic Location (Longitude):</dt>
+        <dd class="col-sm-9" *ngIf="bioSampleObj?.geographicLocationLongitude.text">{{bioSampleObj?.geographicLocationLongitude.text}}</dd>
+
+        <dt class="col-sm-3" *ngIf="bioSampleObj?.geographicLocationDepth.text">Geographic Location (Depth):</dt>
+        <dd class="col-sm-9" *ngIf="bioSampleObj?.geographicLocationDepth.text">{{bioSampleObj?.geographicLocationDepth.text}}</dd>
+
+        <dt class="col-sm-3" *ngIf="bioSampleObj?.geographicLocationElevation.text">Geographic Location Elevation:</dt>
+        <dd class="col-sm-9" *ngIf="bioSampleObj?.geographicLocationElevation.text">{{bioSampleObj?.geographicLocationElevation.text}}</dd>
+
+        <dt class="col-sm-3" *ngIf="bioSampleObj?.habitat">Habitat:</dt>
+        <dd class="col-sm-9" *ngIf="bioSampleObj?.habitat">{{bioSampleObj?.habitat}}</dd>
+
+        <dt class="col-sm-3" *ngIf="bioSampleObj?.identifiedBy">Identified By:</dt>
+        <dd class="col-sm-9" *ngIf="bioSampleObj?.identifiedBy">{{bioSampleObj?.identifiedBy}}</dd>
+
+        <dt class="col-sm-3" *ngIf="bioSampleObj?.identifierAffiliation">Identifier Affiliation:</dt>
+        <dd class="col-sm-9" *ngIf="bioSampleObj?.identifierAffiliation">{{bioSampleObj?.identifierAffiliation}}</dd>
+
+        <dt class="col-sm-3" *ngIf="bioSampleObj?.specimenVoucher">Specimen Voucher:</dt>
+        <dd class="col-sm-9" *ngIf="bioSampleObj?.specimenVoucher">{{bioSampleObj?.specimenVoucher}}</dd>
+
+        <dt class="col-sm-3" *ngIf="bioSampleObj?.projectName">Project Name:</dt>
+        <dd class="col-sm-9" *ngIf="bioSampleObj?.projectName">{{bioSampleObj?.projectName}}</dd>
+
+        <dt class="col-sm-3" *ngIf="bioSampleObj?.sampleDerivedFrom">Sample Derived From:</dt>
+        <dd class="col-sm-9" *ngIf="bioSampleObj?.sampleDerivedFrom"><a href="http://www.ebi.ac.uk/biosamples/samples/{{bioSampleObj?.sampleDerivedFrom}}" target="_blank">{{bioSampleObj?.sampleDerivedFrom}}</a></dd>
+
+        <!-- Custom Fields Section -->
         <div class="col-sm-12">
             <hr>
             <div class="row" *ngFor="let sample of bioSampleObj?.customFields">
@@ -31,32 +98,8 @@
                 </dd>
             </div>
         </div>
-        <!-- Relationship Section -->
-        <!-- <div class="col-sm-12">
-            <hr>
-            <h1 class="col-sm-12 page-header">Related Samples</h1>
-            <div class="table-responsive">
-                <table class="table table-striped table-hover table-borderless table-sm">
-                    <thead>
-                        <tr>
-                            <th>BioSample ID</th>
-                            <th>Relationship</th>
-                            <th>BioSample ID</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr *ngFor="let rel of bioSampleObj?.relationship">
-                            <td><a href="http://www.ebi.ac.uk/biosamples/samples/{{rel.source}}"
-                                    target="_blank">{{rel.source}}</a></td>
-                            <td>{{rel.type}}</td>
-                            <td><a href="http://www.ebi.ac.uk/biosamples/samples/{{rel.target}}"
-                                    target="_blank">{{rel.target}}</a></td>
-                        </tr>
-                </table>
-            </div>
-        </div> -->
         <!-- Experiment Files Section -->
-        <div class="col-sm-12" *ngIf="bioSampleObj.experiment.length != 0">
+        <div class="col-sm-12" *ngIf="bioSampleObj?.experiment.length">
             <hr>
             <h1 class="col-sm-12 page-header">Related files</h1>
             <mat-form-field>
@@ -143,7 +186,8 @@
             <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
         </div>
 
-        <div class="col-sm-12" *ngIf="bioSampleObj.assemblies.length != 0">
+        <!-- Assemblies Section -->
+        <div class="col-sm-12" *ngIf="bioSampleObj?.assemblies.length">
             <hr>
             <h1 class="col-sm-12 page-header">Related assemblies</h1>
             <table mat-table #table [dataSource]="dataSourceAssemblies" class="table table-striped table-hover table-borderless table-sm">

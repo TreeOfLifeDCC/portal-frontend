@@ -28,6 +28,9 @@ export class DetailsComponent implements OnInit {
 
   constructor(private route: ActivatedRoute, private dashboardService: DashboardService) {
     this.route.params.subscribe(param => this.bioSampleId = param.id);
+  }
+
+  ngOnInit(): void {
     this.getBiosamples();
   }
 
@@ -44,9 +47,6 @@ export class DetailsComponent implements OnInit {
         },
         err => console.log(err)
       );
-  }
-
-  ngOnInit(): void {
   }
 
     // tslint:disable-next-line:typedef
