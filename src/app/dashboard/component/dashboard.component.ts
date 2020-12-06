@@ -412,9 +412,9 @@ export class DashboardComponent implements OnInit, AfterViewInit {
 
   // tslint:disable-next-line:typedef
   getSearchResults(from?, size?) {
-    $('.sex-inactive').removeClass('non-disp');
-    $('.organism-part-inactive').removeClass('non-disp');
-    $('.tracking-status-inactive').removeClass('non-disp');
+    $('.sex-inactive').removeClass('non-disp active');
+    $('.organism-part-inactive').removeClass('non-disp active');
+    $('.tracking-status-inactive').removeClass('non-disp active');
     this.spinner.show();
     if (this.searchText.length == 0) {
       this.getAllBiosamples(0, 20, this.sort.active, this.sort.direction);
@@ -432,6 +432,8 @@ export class DashboardComponent implements OnInit, AfterViewInit {
             this.dataSource.sort = this.sort;
             this.dataSource.filterPredicate = this.filterPredicate;
             this.unpackedData = unpackedData;
+            let element = "li:contains('" + this.searchText + "')";
+            $(element).addClass('active');
             this.spinner.hide();
           },
           err => {

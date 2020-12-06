@@ -473,9 +473,13 @@ export class TrackingSystemComponent implements OnInit, AfterViewInit {
 
   // tslint:disable-next-line:typedef
   getSearchResults(from?, size?) {
-    $('.sex-inactive').removeClass('non-disp');
-    $('.organism-part-inactive').removeClass('non-disp');
-    $('.tracking-status-inactive').removeClass('non-disp');
+    $('.biosamples-inactive').removeClass('non-disp active');
+    $('.raw-data-inactive').removeClass('non-disp active');
+    $('.mapped-reads-inactive').removeClass('non-disp active');
+    $('.assemblies-inactive').removeClass('non-disp active');
+    $('.annotation-complete-inactive').removeClass('non-disp active');
+    $('.annotation-inactive').removeClass('non-disp active');
+
     this.spinner.show();
     if (this.searchText.length == 0) {
       this.getAllStatuses(0, 20, this.sort.active, this.sort.direction);
@@ -493,6 +497,8 @@ export class TrackingSystemComponent implements OnInit, AfterViewInit {
             this.dataSource.sort = this.sort;
             this.dataSource.filterPredicate = this.filterPredicate;
             this.unpackedData = unpackedData;
+            let element = "li:contains('" + this.searchText + "')";
+            $(element).addClass('active');
             this.spinner.hide();
           },
           err => {
