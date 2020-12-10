@@ -16,7 +16,7 @@ import 'jquery';
   styleUrls: ['./dashboard.component.css']
 })
 export class DashboardComponent implements OnInit, AfterViewInit {
-  displayedColumns = ['accession', 'organism', 'commonName', 'sex', 'organismPart', 'trackingSystem'];
+  displayedColumns = ['accession', 'organism', 'commonName', 'sex', 'trackingSystem'];
   bioSamples: Sample[];
   loading = true;
   dataSource = new MatTableDataSource<any>();
@@ -39,13 +39,11 @@ export class DashboardComponent implements OnInit, AfterViewInit {
   filtersMap;
   filters = {
     sex: {},
-    trackingSystem: {},
-    organismPart: {}
+    trackingSystem: {}
   };
   sexFilters = [];
   commonNameFilters = [];
   trackingSystemFilters = [];
-  organismPartFilters = [];
   bioSampleTotalCount = 0;
   unpackedData;
 
@@ -137,7 +135,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
       .subscribe(
         data => {
           const unpackedData = [];
-          for (const item of data.biosamples) {
+          for (const item of data.rootSamples) {
             unpackedData.push(this.unpackData(item));
           }
           this.bioSampleTotalCount = data.count;
@@ -162,7 +160,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
       .subscribe(
         data => {
           const unpackedData = [];
-          for (const item of data.biosamples) {
+          for (const item of data.rootSamples) {
             unpackedData.push(this.unpackData(item));
           }
           this.dataSource = new MatTableDataSource<any>(unpackedData);
@@ -234,8 +232,6 @@ export class DashboardComponent implements OnInit, AfterViewInit {
       return data.sex.toLowerCase() === filters[0];
     } else if (filters[1] === 'Tracking Status') {
       return data.trackingSystem.toLowerCase() === filters[0];
-    } else if (filters[1] === 'Organism Part') {
-      return data.organismPart.toLowerCase() === filters[0];
     } else {
       return Object.values(data).join('').trim().toLowerCase().indexOf(filters[0]) !== -1;
     }
@@ -248,13 +244,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
       data = data._source;
     }
     for (const key of Object.keys(data)) {
-      if (typeof data[key] === 'object') {
-        if (key === 'organism') {
-          dataToReturn[key] = data.organism.text;
-        }
-      } else {
-        dataToReturn[key] = data[key];
-      }
+      dataToReturn[key] = data[key];
     }
     return dataToReturn;
   }
@@ -295,10 +285,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
       jsonObj = { "name": "sex", "value": value };
       this.urlAppendFilterArray.push(jsonObj);
     }
-    else if (key.replace(" ", "-").toLowerCase() == "organism-part") {
-      jsonObj = { "name": "organism-part", "value": value };
-      this.urlAppendFilterArray.push(jsonObj);
-    } else if (key.replace(" ", "-").toLowerCase() == "tracking-status") {
+    else if (key.replace(" ", "-").toLowerCase() == "tracking-status") {
       jsonObj = { "name": "tracking-status", "value": value };
       this.urlAppendFilterArray.push(jsonObj);
     }
@@ -319,7 +306,6 @@ export class DashboardComponent implements OnInit, AfterViewInit {
   // tslint:disable-next-line:typedef
   removeAllFilters() {
     $('.sex-inactive').removeClass('non-disp');
-    $('.organism-part-inactive').removeClass('non-disp');
     $('.tracking-status-inactive').removeClass('non-disp');
 
     this.activeFilters = [];
@@ -371,7 +357,6 @@ export class DashboardComponent implements OnInit, AfterViewInit {
         this.filtersMap = data;
         this.sexFilters = this.filtersMap.sex.filter(i => i !== "");
         this.trackingSystemFilters = this.filtersMap.trackingSystem.filter(i => i !== "");
-        this.organismPartFilters = this.filtersMap.organismPart.filter(i => i !== "");
       },
       err => console.log(err)
     );
@@ -413,9 +398,8 @@ export class DashboardComponent implements OnInit, AfterViewInit {
   // tslint:disable-next-line:typedef
   getSearchResults(from?, size?) {
     $('.sex-inactive').removeClass('non-disp active');
-    $('.organism-part-inactive').removeClass('non-disp active');
     $('.tracking-status-inactive').removeClass('non-disp active');
-    this.spinner.show();
+    // this.spinner.show();
     if (this.searchText.length == 0) {
       this.getAllBiosamples(0, 20, this.sort.active, this.sort.direction);
     }

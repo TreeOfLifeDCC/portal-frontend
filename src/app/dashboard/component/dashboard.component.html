@@ -37,23 +37,6 @@
                     <div class="col-md-12 col-sm-6">
                         <div class="card bg-lite mb-3 filter-top">
                             <h3 class="card-header filter-heading">
-                                <span #lbltextOrg>Organism Part</span>
-                                <i class="material-icons float-right organism-part-inactive" *ngIf="organismPartFilters.length > 3 && isOrgCollapsed" (click)="toggleCollapse(lbltextOrg.innerText)">add</i>
-                                <i class="material-icons float-right organism-part-inactive" *ngIf="organismPartFilters.length > 3 && !isOrgCollapsed" (click)="toggleCollapse(lbltextOrg.innerText)">remove</i>
-                            </h3>
-                            <ul id="organism-part-inactive" class="list-group" [ngClass]="{'long-list': itemLimitOrgFilter > filterSize}">
-                                <ng-container *ngFor="let filter of organismPartFilters; let i = index">
-                                    <li class="list-group-item d-flex justify-content-between align-items-center organism-part-inactive" [ngClass]="checkFilterIsActive(filter.key)" (click)="onFilterClick($event, lbltextOrg.innerText, filter.key)" style="cursor: pointer; padding: .75rem 0.25rem;"
-                                        *ngIf="i<itemLimitOrgFilter && filter.key != ''">
-                                        {{filter.key}}
-                                        <span class="badge badge-pill badge-info">{{filter.count}}</span></li>
-                                </ng-container>
-                            </ul>
-                        </div>
-                    </div>
-                    <div class="col-md-12 col-sm-6">
-                        <div class="card bg-lite mb-3 filter-top">
-                            <h3 class="card-header filter-heading">
                                 <span #lbltextTrack>Tracking Status</span>
                                 <i class="material-icons float-right tracking-status-inactive" *ngIf="trackingSystemFilters.length > 3 && isTrackCollapsed" (click)="toggleCollapse(lbltextTrack.innerText)">add</i>
                                 <i class="material-icons float-right tracking-status-inactive" *ngIf="trackingSystemFilters.length > 3 && !isTrackCollapsed" (click)="toggleCollapse(lbltextTrack.innerText)">remove</i>
@@ -83,14 +66,14 @@
                 </h1>
                 <mat-form-field>
                     <mat-label>Search</mat-label>
-                    <input #searchInput matInput [(ngModel)]='searchText' (keyup.enter)="getSearchResults()" placeholder="Ex. lutra" #input>
+                    <input #searchInput matInput [(ngModel)]='searchText' (keyup)="getSearchResults()" placeholder="Ex. lutra" #input>
                 </mat-form-field>
                 <table mat-table #table [dataSource]="dataSource" matSort (matSortChange)="customSort($event)">
                     <!-- First Column -->
                     <ng-container matColumnDef="accession">
                         <mat-header-cell *matHeaderCellDef mat-sort-header> BioSample ID </mat-header-cell>
                         <mat-cell *matCellDef="let element" class="txt-center">
-                            <a [routerLink]="['/data/details/', element.accession]">
+                            <a [routerLink]="['/data/root/details/', element.accession]">
               {{element.accession}}</a>
                         </mat-cell>
                     </ng-container>
@@ -109,11 +92,6 @@
                     <ng-container matColumnDef="sex">
                         <mat-header-cell *matHeaderCellDef mat-sort-header> Sex </mat-header-cell>
                         <mat-cell *matCellDef="let element" class="txt-center"> {{element.sex}} </mat-cell>
-                    </ng-container>
-
-                    <ng-container matColumnDef="organismPart">
-                        <mat-header-cell *matHeaderCellDef mat-sort-header> Organism Part </mat-header-cell>
-                        <mat-cell *matCellDef="let element" class="txt-center"> {{element.organismPart}} </mat-cell>
                     </ng-container>
 
                     <ng-container matColumnDef="trackingSystem">

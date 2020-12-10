@@ -17,10 +17,11 @@ import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatInputModule} from '@angular/material/input';
 import { NgxSpinnerModule } from "ngx-spinner";
 
-import { DashboardService } from '../dashboard/services/dashboard.service'
+import { DashboardService } from '../dashboard/services/dashboard.service';
+import { OrganismDetailsComponent } from './component/organism-details/organism-details.component'
 
 @NgModule({
-  declarations: [DashboardComponent, SpecimensComponent, DetailsComponent],
+  declarations: [DashboardComponent, SpecimensComponent, DetailsComponent, OrganismDetailsComponent],
   imports: [
     CommonModule,
     DashboardRoutingModule,

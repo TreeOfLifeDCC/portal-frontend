@@ -3,15 +3,15 @@ import { Routes, RouterModule } from '@angular/router';
 
 import { DashboardComponent } from './component/dashboard.component';
 import { DetailsComponent } from './component/details/details.component';
-import {SpecimensComponent} from './specimens/specimens.component';
+import { OrganismDetailsComponent } from './component/organism-details/organism-details.component';
+import { SpecimensComponent } from './specimens/specimens.component';
 
 const routes: Routes = [
-    // { path: '', redirectTo: 'organisms', pathMatch: 'full' },
-    { path : '', component: DashboardComponent },
-    { path: 'specimens', component: SpecimensComponent},
-    { path : 'details/:id', component: DetailsComponent },
-
-    ];
+  { path: '', component: DashboardComponent },
+  { path: 'specimens', component: SpecimensComponent },
+  { path: 'organism/details/:id', component: DetailsComponent },
+  { path: 'root/details/:id', component: OrganismDetailsComponent },
+];
 
 @NgModule({
   imports: [RouterModule.forChild(routes)],
