@@ -480,7 +480,7 @@ export class TrackingSystemComponent implements OnInit, AfterViewInit {
     $('.annotation-complete-inactive').removeClass('non-disp active');
     $('.annotation-inactive').removeClass('non-disp active');
 
-    this.spinner.show();
+    // this.spinner.show();
     if (this.searchText.length == 0) {
       this.getAllStatuses(0, 20, this.sort.active, this.sort.direction);
     }

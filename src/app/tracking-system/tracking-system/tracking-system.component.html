@@ -85,14 +85,14 @@
                 </h1>
                 <mat-form-field>
                     <mat-label>Search</mat-label>
-                    <input #searchInput matInput [(ngModel)]='searchText' (keyup.enter)="getSearchResults()" placeholder="Ex. lutra" #input>
+                    <input #searchInput matInput [(ngModel)]='searchText' (keyup)="getSearchResults()" placeholder="Ex. lutra" #input>
                 </mat-form-field>
                 <table mat-table #table [dataSource]="dataSource" matSort (matSortChange)="customSort($event)">
                     <!-- First Column -->
                     <ng-container matColumnDef="organism">
                         <mat-header-cell *matHeaderCellDef> Organism </mat-header-cell>
                         <mat-cell *matCellDef="let element">
-                            <a href="javascript:void(0);" (click)="findBioSampleByOrganismName(element.organism, 0, 5)">
+                            <a [routerLink]="['/data/root/details/', element.organism]">
                             {{element.organism}}</a>
                         </mat-cell>
                     </ng-container>
