@@ -60,7 +60,6 @@ export class TrackingSystemComponent implements OnInit, AfterViewInit {
     this.filterSize = 3;
     this.itemLimitBiosampleFilter = this.filterSize;
     this.itemLimitEnaFilter = this.filterSize;
-    this.getFilters();
     this.titleService.setTitle('Status tracking');
     this.getStatusesQueryParamonInit();
   }
@@ -107,6 +106,7 @@ export class TrackingSystemComponent implements OnInit, AfterViewInit {
           this.dataSource.sort = this.sort;
           this.dataSource.filterPredicate = this.filterPredicate;
           this.unpackedData = unpackedData;
+          this.parseFilterAggregation(data);
           for (let i = 0; i < this.urlAppendFilterArray.length; i++) {
             setTimeout(() => {
               let inactiveClassName = '.' + this.urlAppendFilterArray[i].name + '-inactive';
@@ -132,6 +132,7 @@ export class TrackingSystemComponent implements OnInit, AfterViewInit {
 
   // tslint:disable-next-line:typedef
   getAllStatuses(offset, limit, sortColumn?, sortOrder?) {
+    this.getFilters();
     this.spinner.show();
     this.statusesService.getAllStatuses(offset, limit, sortColumn, sortOrder)
       .subscribe(
@@ -462,6 +463,7 @@ export class TrackingSystemComponent implements OnInit, AfterViewInit {
           this.dataSource.sort = this.sort;
           this.dataSource.filterPredicate = this.filterPredicate;
           this.unpackedData = unpackedData;
+          this.parseFilterAggregation(data);
           this.spinner.hide();
         },
         err => {
@@ -568,6 +570,52 @@ export class TrackingSystemComponent implements OnInit, AfterViewInit {
     this.showOrganismTable = false;
     this.orgDataSource = new MatTableDataSource<any>();
     this.orgDataSource.sort = this.sort;
+  }
+
+  parseFilterAggregation(data: any) {
+    this.filtersMap = data;
+    this.BiosamplesFilters = this.filtersMap.aggregations.biosamples.buckets.filter(i => {
+      if(i !== "") {
+        let obj = i;
+        obj.key = "Biosamples - "+obj.key;
+        return obj;
+      }
+    });
+    this.RawDataFilters = this.filtersMap.aggregations.raw_data.buckets.filter(i => {
+      if(i !== "") {
+        let obj = i;
+        obj.key = "Raw data - "+obj.key;
+        return obj;
+      }
+    });
+    this.MappedReadsFilters = this.filtersMap.aggregations.mapped_reads.buckets.filter(i => {
+      if(i !== "") {
+        let obj = i;
+        obj.key = "Mapped reads - "+obj.key;
+        return obj;
+      }
+    });
+    this.AssembliesFilters = this.filtersMap.aggregations.assemblies.buckets.filter(i => {
+      if(i !== "") {
+        let obj = i;
+        obj.key = "Assemblies - "+obj.key;
+        return obj;
+      }
+    });
+    this.AnnotationCompleteFilters = this.filtersMap.aggregations.annotation_complete.buckets.filter(i => {
+      if(i !== "") {
+        let obj = i;
+        obj.key = "Annotation complete - "+obj.key;
+        return obj;
+      }
+    });
+    this.AnnotationFilters = this.filtersMap.aggregations.annotation.buckets.filter(i => {
+      if(i !== "") {
+        let obj = i;
+        obj.key = "Annotation - "+obj.key;
+        return obj;
+      }
+    });
   }
 
 }

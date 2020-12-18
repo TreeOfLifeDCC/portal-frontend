@@ -27,7 +27,7 @@
                                 <ng-container *ngFor="let filter of BiosamplesFilters; let i = index">
                                     <li class="list-group-item d-flex justify-content-between align-items-center biosamples-inactive" [ngClass]="checkFilterIsActive(filter.key)" (click)="onFilterClick($event, 'biosamples', filter.key)" style="cursor: pointer" *ngIf="filter.key != ''">
                                         {{filter.key}}
-                                        <span class="badge badge-pill badge-info">{{filter.count}}</span></li>
+                                        <span class="badge badge-pill badge-info">{{filter.doc_count}}</span></li>
                                 </ng-container>
                             </ul>
                         </div>
@@ -41,31 +41,31 @@
                                 <ng-container *ngFor="let filter of RawDataFilters; let i = index">
                                     <li class="list-group-item d-flex justify-content-between align-items-center raw-data-inactive" [ngClass]="checkFilterIsActive(filter.key)" (click)="onFilterClick($event, 'raw-data' , filter.key)" style="cursor: pointer" *ngIf="filter.key != ''">
                                         {{filter.key}}
-                                        <span class="badge badge-pill badge-info">{{filter.count}}</span></li>
+                                        <span class="badge badge-pill badge-info">{{filter.doc_count}}</span></li>
                                 </ng-container>
 
                                 <ng-container *ngFor="let filter of MappedReadsFilters; let i = index">
                                     <li class="list-group-item d-flex justify-content-between align-items-center mapped-reads-inactive" [ngClass]="checkFilterIsActive(filter.key)" (click)="onFilterClick($event, 'mapped-reads' , filter.key)" style="cursor: pointer" *ngIf="filter.key != ''">
                                         {{filter.key}}
-                                        <span class="badge badge-pill badge-info">{{filter.count}}</span></li>
+                                        <span class="badge badge-pill badge-info">{{filter.doc_count}}</span></li>
                                 </ng-container>
 
                                 <ng-container *ngFor="let filter of AssembliesFilters; let i = index">
                                     <li class="list-group-item d-flex justify-content-between align-items-center assemblies-inactive" [ngClass]="checkFilterIsActive(filter.key)" (click)="onFilterClick($event, 'assemblies' , filter.key)" style="cursor: pointer" *ngIf="filter.key != ''">
                                         {{filter.key}}
-                                        <span class="badge badge-pill badge-info">{{filter.count}}</span></li>
+                                        <span class="badge badge-pill badge-info">{{filter.doc_count}}</span></li>
                                 </ng-container>
 
                                 <ng-container *ngFor="let filter of AnnotationCompleteFilters; let i = index">
                                     <li class="list-group-item d-flex justify-content-between align-items-center annotation-complete-inactive" [ngClass]="checkFilterIsActive(filter.key)" (click)="onFilterClick($event, 'annotation-complete' , filter.key)" style="cursor: pointer" *ngIf="filter.key != ''">
                                         {{filter.key}}
-                                        <span class="badge badge-pill badge-info">{{filter.count}}</span></li>
+                                        <span class="badge badge-pill badge-info">{{filter.doc_count}}</span></li>
                                 </ng-container>
 
                                 <ng-container *ngFor="let filter of AnnotationFilters; let i = index">
                                     <li class="list-group-item d-flex justify-content-between align-items-center annotation-inactive" [ngClass]="checkFilterIsActive(filter.key)" (click)="onFilterClick($event, 'annotation' , filter.key)" style="cursor: pointer" *ngIf="filter.key != ''">
                                         {{filter.key}}
-                                        <span class="badge badge-pill badge-info">{{filter.count}}</span></li>
+                                        <span class="badge badge-pill badge-info">{{filter.doc_count}}</span></li>
                                 </ng-container>
                             </ul>
                         </div>

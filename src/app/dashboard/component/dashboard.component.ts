@@ -58,7 +58,6 @@ export class DashboardComponent implements OnInit, AfterViewInit {
     this.itemLimitSexFilter = this.filterSize;
     this.itemLimitOrgFilter = this.filterSize;
     this.itemLimitTrackFilter = this.filterSize;
-    this.getFilters();
     this.titleService.setTitle('Data portal');
     this.getOrganismsQueryParamonInit();
   }
@@ -105,6 +104,11 @@ export class DashboardComponent implements OnInit, AfterViewInit {
           this.dataSource.sort = this.sort;
           this.dataSource.filterPredicate = this.filterPredicate;
           this.unpackedData = unpackedData;
+          this.filtersMap = data;
+          let sexFilterMap = this.filtersMap.aggregations.sex.buckets;
+          let trackingSystemMap = this.filtersMap.aggregations.trackingSystem.buckets;
+          this.sexFilters = sexFilterMap.filter(i => i !== "");
+          this.trackingSystemFilters = trackingSystemMap.filter(i => i !== "");
           for (let i = 0; i < this.urlAppendFilterArray.length; i++) {
             setTimeout(() => {
               let inactiveClassName = '.' + this.urlAppendFilterArray[i].name + '-inactive';
@@ -131,6 +135,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
   // tslint:disable-next-line:typedef
   getAllBiosamples(offset, limit, sortColumn?, sortOrder?) {
     this.spinner.show();
+    this.getFilters();
     this.dashboardService.getAllBiosample(offset, limit, sortColumn, sortOrder)
       .subscribe(
         data => {
@@ -266,15 +271,14 @@ export class DashboardComponent implements OnInit, AfterViewInit {
       $('.' + inactiveClassName).removeClass('non-disp');
       this.removeFilter(filter);
     } else {
-      $('.' + inactiveClassName).addClass('non-disp');
-      $(event.target).removeClass('non-disp');
-      $(event.target).addClass('disp');
-
       this.selectedFilterArray(label, filter);
       this.activeFilters.push(filter);
       this.dataSource.filter = `${filter.trim().toLowerCase()}|${label}`;
       this.getFilterResults(this.activeFilters.toString(), this.sort.active, this.sort.direction, 0, 20);
       this.updateActiveRouteParams();
+      $('.' + inactiveClassName).addClass('non-disp');
+      $(event.target).removeClass('non-disp');
+      $(event.target).addClass('disp');
     }
 
   }
@@ -311,6 +315,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
     this.activeFilters = [];
     this.urlAppendFilterArray = [];
     this.dataSource.filter = undefined;
+    this.getFilters();
     this.getAllBiosamples(0, 20, this.sort.active, this.sort.direction);
     this.router.navigate(['data'], {});
   }
@@ -328,6 +333,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
       } else {
         this.router.navigate(['data'], {});
         this.dataSource.filter = undefined;
+        this.getFilters();
         this.getAllBiosamples(0, 20, this.sort.active, this.sort.direction);
       }
     }
@@ -386,6 +392,11 @@ export class DashboardComponent implements OnInit, AfterViewInit {
           this.dataSource.sort = this.sort;
           this.dataSource.filterPredicate = this.filterPredicate;
           this.unpackedData = unpackedData;
+          this.filtersMap = data;
+          let sexFilterMap = this.filtersMap.aggregations.sex.buckets;
+          let trackingSystemMap = this.filtersMap.aggregations.trackingSystem.buckets;
+          this.sexFilters = sexFilterMap.filter(i => i !== "");
+          this.trackingSystemFilters = trackingSystemMap.filter(i => i !== "");
           this.spinner.hide();
         },
         err => {

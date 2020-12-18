@@ -26,10 +26,10 @@
                             </h3>
                             <ul id="sex-inactive" class="list-group" [ngClass]="{'long-list': itemLimitSexFilter > filterSize}">
                                 <ng-container *ngFor="let filter of sexFilters; let i = index">
-                                    <li class="list-group-item d-flex justify-content-between align-items-center sex-inactive" [ngClass]="checkFilterIsActive(filter.key)" (click)="onFilterClick($event, lbltextSex.innerText, filter.key)" style="cursor: pointer; padding: .75rem 0.25rem;"
+                                    <li id="{{i}}" class="list-group-item d-flex justify-content-between align-items-center sex-inactive" [ngClass]="checkFilterIsActive(filter.key)" (click)="onFilterClick($event, lbltextSex.innerText, filter.key)" style="cursor: pointer; padding: .75rem 0.25rem;"
                                         *ngIf="i<itemLimitSexFilter && filter.key != ''">
                                         {{filter.key}}
-                                        <span class="badge badge-pill badge-info">{{filter.count}}</span></li>
+                                        <span class="badge badge-pill badge-info">{{filter.doc_count}}</span></li>
                                 </ng-container>
                             </ul>
                         </div>
@@ -43,10 +43,10 @@
                             </h3>
                             <ul id="tracking-status-inactive" class="list-group" [ngClass]="{'long-list': itemLimitTrackFilter > filterSize}">
                                 <ng-container *ngFor="let filter of trackingSystemFilters; let i = index">
-                                    <li class="list-group-item d-flex justify-content-between align-items-center tracking-status-inactive" [ngClass]="checkFilterIsActive(filter.key)" (click)="onFilterClick($event, lbltextTrack.innerText, filter.key)" style="cursor: pointer; padding: .75rem 0.25rem;"
+                                    <li id="i" class="list-group-item d-flex justify-content-between align-items-center tracking-status-inactive" [ngClass]="checkFilterIsActive(filter.key)" (click)="onFilterClick($event, lbltextTrack.innerText, filter.key)" style="cursor: pointer; padding: .75rem 0.25rem;"
                                         *ngIf="i<itemLimitTrackFilter && filter.key != ''">
                                         {{filter.key}}
-                                        <span class="badge badge-pill badge-info">{{filter.count}}</span></li>
+                                        <span class="badge badge-pill badge-info">{{filter.doc_count}}</span></li>
                                 </ng-container>
                             </ul>
                         </div>
