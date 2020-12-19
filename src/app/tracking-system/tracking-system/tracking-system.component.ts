@@ -487,6 +487,7 @@ export class TrackingSystemComponent implements OnInit, AfterViewInit {
       this.getAllStatuses(0, 20, this.sort.active, this.sort.direction);
     }
     else {
+      this.activeFilters = [];
       this.statusesService.getSearchResults(this.searchText, this.sort.active, this.sort.direction, from, size)
         .subscribe(
           data => {
@@ -499,8 +500,7 @@ export class TrackingSystemComponent implements OnInit, AfterViewInit {
             this.dataSource.sort = this.sort;
             this.dataSource.filterPredicate = this.filterPredicate;
             this.unpackedData = unpackedData;
-            let element = "li:contains('" + this.searchText + "')";
-            $(element).addClass('active');
+            this.parseFilterAggregation(data);
             this.spinner.hide();
           },
           err => {

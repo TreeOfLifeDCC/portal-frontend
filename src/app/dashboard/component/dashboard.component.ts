@@ -415,6 +415,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
       this.getAllBiosamples(0, 20, this.sort.active, this.sort.direction);
     }
     else {
+      this.activeFilters = [];
       this.dashboardService.getSearchResults(this.searchText, this.sort.active, this.sort.direction, from, size)
         .subscribe(
           data => {
@@ -427,8 +428,11 @@ export class DashboardComponent implements OnInit, AfterViewInit {
             this.dataSource.sort = this.sort;
             this.dataSource.filterPredicate = this.filterPredicate;
             this.unpackedData = unpackedData;
-            let element = "li:contains('" + this.searchText + "')";
-            $(element).addClass('active');
+            this.filtersMap = data;
+            let sexFilterMap = this.filtersMap.aggregations.sex.buckets;
+            let trackingSystemMap = this.filtersMap.aggregations.trackingSystem.buckets;
+            this.sexFilters = sexFilterMap.filter(i => i !== "");
+            this.trackingSystemFilters = trackingSystemMap.filter(i => i !== "");
             this.spinner.hide();
           },
           err => {
