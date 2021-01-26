@@ -29,3 +29,8 @@
 .non-disp {
     display: none !important;
 }
+
+.txt-center {
+    text-align: center;
+    justify-content: center;
+}
