@@ -69,7 +69,7 @@ export class OrganismDetailsComponent implements OnInit, AfterViewInit {
           for (const item of data.records) {
             unpackedData.push(this.unpackData(item));
           }
-          if(unpackedData.length > 0) {
+          if (unpackedData.length > 0) {
             this.getFilters(data.organism);
           }
           setTimeout(() => {
@@ -146,6 +146,9 @@ export class OrganismDetailsComponent implements OnInit, AfterViewInit {
       sex: {},
       trackingSystem: {}
     };
+    this.sexFilters = [];
+    this.trackingSystemFilters = [];
+
     this.filters = filters;
     this.sexFilters = [];
     this.trackingSystemFilters = [];
@@ -164,10 +167,15 @@ export class OrganismDetailsComponent implements OnInit, AfterViewInit {
     this.filters = filters;
     const sexFilterObj = Object.entries(this.filters.sex);
     const trackFilterObj = Object.entries(this.filters.trackingSystem);
-
-    this.sexFilters = [{"key":sexFilterObj[0][0],doc_count:sexFilterObj[0][1]}];
-    this.trackingSystemFilters = [{"key":trackFilterObj[0][0],doc_count:trackFilterObj[0][1]}];
-    console.log(this.sexFilters, this.trackingSystemFilters);
+    let j = 0;
+    for (let i = 0; i < sexFilterObj.length; i++) {
+      let jsonObj = { "key": sexFilterObj[i][j], doc_count: sexFilterObj[i][j + 1] };
+      this.sexFilters.push(jsonObj);
+    }
+    for (let i = 0; i < trackFilterObj.length; i++) {
+      let jsonObj = { "key": trackFilterObj[i][j], doc_count: trackFilterObj[i][j + 1] };
+      this.trackingSystemFilters.push(jsonObj);
+    }
   }
 
   removeAllFilters() {
