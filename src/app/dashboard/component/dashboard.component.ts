@@ -16,7 +16,7 @@ import 'jquery';
   styleUrls: ['./dashboard.component.css']
 })
 export class DashboardComponent implements OnInit, AfterViewInit {
-  displayedColumns = ['accession', 'organism', 'commonName', 'sex', 'trackingSystem'];
+  displayedColumns = ['organism', 'commonName', 'trackingSystem'];
   bioSamples: Sample[];
   loading = true;
   dataSource = new MatTableDataSource<any>();
@@ -24,7 +24,6 @@ export class DashboardComponent implements OnInit, AfterViewInit {
   @ViewChild(MatSort, { static: true }) sort: MatSort;
 
   isSexFilterCollapsed = true;
-  isOrgCollapsed = true;
   isTrackCollapsed = true;
   filterKeyName = '';
   itemLimitSexFilter: number;
@@ -42,7 +41,6 @@ export class DashboardComponent implements OnInit, AfterViewInit {
     trackingSystem: {}
   };
   sexFilters = [];
-  commonNameFilters = [];
   trackingSystemFilters = [];
   bioSampleTotalCount = 0;
   unpackedData;
@@ -105,9 +103,9 @@ export class DashboardComponent implements OnInit, AfterViewInit {
           this.dataSource.filterPredicate = this.filterPredicate;
           this.unpackedData = unpackedData;
           this.filtersMap = data;
-          let sexFilterMap = this.filtersMap.aggregations.sex.buckets;
+          // let sexFilterMap = this.filtersMap.aggregations.sex.buckets;
           let trackingSystemMap = this.filtersMap.aggregations.trackingSystem.buckets;
-          this.sexFilters = sexFilterMap.filter(i => i !== "");
+          // this.sexFilters = sexFilterMap.filter(i => i !== "");
           this.trackingSystemFilters = trackingSystemMap.filter(i => i !== "");
           for (let i = 0; i < this.urlAppendFilterArray.length; i++) {
             setTimeout(() => {
@@ -207,6 +205,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
   }
 
   customSort(event) {
+    this.paginator.pageIndex = 0;
     let pageIndex = this.paginator.pageIndex;
     let pageSize = this.paginator.pageSize;
     let from = pageIndex * pageSize;
@@ -264,6 +263,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
 
   // tslint:disable-next-line:typedef
   onFilterClick(event, label: string, filter: string) {
+    this.searchText = "";
     let filterQueryParam = { "name": label.replace(" ", "-").toLowerCase(), "value": filter };
     let inactiveClassName = label.toLowerCase().replace(" ", "-") + '-inactive';
     const filterIndex = this.activeFilters.indexOf(filter);
@@ -361,7 +361,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
     this.dashboardService.getOrganismFilters().subscribe(
       data => {
         this.filtersMap = data;
-        this.sexFilters = this.filtersMap.sex.filter(i => i !== "");
+        // this.sexFilters = this.filtersMap.sex.filter(i => i !== "");
         this.trackingSystemFilters = this.filtersMap.trackingSystem.filter(i => i !== "");
       },
       err => console.log(err)
@@ -393,9 +393,9 @@ export class DashboardComponent implements OnInit, AfterViewInit {
           this.dataSource.filterPredicate = this.filterPredicate;
           this.unpackedData = unpackedData;
           this.filtersMap = data;
-          let sexFilterMap = this.filtersMap.aggregations.sex.buckets;
+          // let sexFilterMap = this.filtersMap.aggregations.sex.buckets;
           let trackingSystemMap = this.filtersMap.aggregations.trackingSystem.buckets;
-          this.sexFilters = sexFilterMap.filter(i => i !== "");
+          // this.sexFilters = sexFilterMap.filter(i => i !== "");
           this.trackingSystemFilters = trackingSystemMap.filter(i => i !== "");
           this.spinner.hide();
         },
@@ -408,6 +408,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
 
   // tslint:disable-next-line:typedef
   getSearchResults(from?, size?) {
+    this.router.navigate(['data'], {});
     $('.sex-inactive').removeClass('non-disp active');
     $('.tracking-status-inactive').removeClass('non-disp active');
     // this.spinner.show();
@@ -416,7 +417,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
     }
     else {
       this.activeFilters = [];
-      this.dashboardService.getSearchResults(this.searchText, this.sort.active, this.sort.direction, from, size)
+      this.dashboardService.getRootSearchResults(this.searchText, this.sort.active, this.sort.direction, from, size)
         .subscribe(
           data => {
             const unpackedData = [];
@@ -429,9 +430,9 @@ export class DashboardComponent implements OnInit, AfterViewInit {
             this.dataSource.filterPredicate = this.filterPredicate;
             this.unpackedData = unpackedData;
             this.filtersMap = data;
-            let sexFilterMap = this.filtersMap.aggregations.sex.buckets;
+            // let sexFilterMap = this.filtersMap.aggregations.sex.buckets;
             let trackingSystemMap = this.filtersMap.aggregations.trackingSystem.buckets;
-            this.sexFilters = sexFilterMap.filter(i => i !== "");
+            // this.sexFilters = sexFilterMap.filter(i => i !== "");
             this.trackingSystemFilters = trackingSystemMap.filter(i => i !== "");
             this.spinner.hide();
           },
@@ -453,15 +454,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
         this.isSexFilterCollapsed = true;
       }
     }
-    else if (filterKey == 'Organism Part') {
-      if (this.isOrgCollapsed) {
-        this.itemLimitOrgFilter = 10000;
-        this.isOrgCollapsed = false;
-      } else {
-        this.itemLimitOrgFilter = 3;
-        this.isOrgCollapsed = true;
-      }
-    } else if (filterKey == 'Tracking Status') {
+    else if (filterKey == 'Tracking Status') {
       if (this.isTrackCollapsed) {
         this.itemLimitTrackFilter = 10000;
         this.isTrackCollapsed = false;

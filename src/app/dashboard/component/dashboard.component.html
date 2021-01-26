@@ -17,7 +17,7 @@
         <div class="row">
             <div class="col-md-2">
                 <div class="row">
-                    <div class="col-md-12 col-sm-6">
+                    <!-- <div class="col-md-12 col-sm-6">
                         <div class="card bg-lite mb-3 filter-top">
                             <h3 class="card-header filter-heading">
                                 <span #lbltextSex>Sex</span>
@@ -33,7 +33,7 @@
                                 </ng-container>
                             </ul>
                         </div>
-                    </div>
+                    </div> -->
                     <div class="col-md-12 col-sm-6">
                         <div class="card bg-lite mb-3 filter-top">
                             <h3 class="card-header filter-heading">
@@ -69,19 +69,12 @@
                     <input #searchInput matInput [(ngModel)]='searchText' (keyup)="getSearchResults()" placeholder="Ex. lutra" #input>
                 </mat-form-field>
                 <table mat-table #table [dataSource]="dataSource" matSort (matSortChange)="customSort($event)">
-                    <!-- First Column -->
-                    <ng-container matColumnDef="accession">
-                        <mat-header-cell *matHeaderCellDef mat-sort-header> BioSample ID </mat-header-cell>
-                        <mat-cell *matCellDef="let element" class="txt-center">
-                            <a [routerLink]="['/data/root/details/', element.accession]">
-              {{element.accession}}</a>
-                        </mat-cell>
-                    </ng-container>
-
-                    <!-- Second Column -->
                     <ng-container matColumnDef="organism">
                         <mat-header-cell *matHeaderCellDef mat-sort-header> Organism </mat-header-cell>
-                        <mat-cell *matCellDef="let element" class="txt-center"> {{element.organism}} </mat-cell>
+                        <mat-cell *matCellDef="let element" class="txt-center"> 
+                            <a [routerLink]="['/data/root/details/', element.organism]">
+                            {{element.organism}} </a>
+                        </mat-cell>
                     </ng-container>
 
                     <ng-container matColumnDef="commonName">
@@ -89,10 +82,10 @@
                         <mat-cell *matCellDef="let element" class="txt-center"> {{element?.commonName}}</mat-cell>
                     </ng-container>
 
-                    <ng-container matColumnDef="sex">
+                    <!-- <ng-container matColumnDef="sex">
                         <mat-header-cell *matHeaderCellDef mat-sort-header> Sex </mat-header-cell>
                         <mat-cell *matCellDef="let element" class="txt-center"> {{element.sex}} </mat-cell>
-                    </ng-container>
+                    </ng-container> -->
 
                     <ng-container matColumnDef="trackingSystem">
                         <mat-header-cell *matHeaderCellDef mat-sort-header> Tracking status </mat-header-cell>

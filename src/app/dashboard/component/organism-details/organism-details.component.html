@@ -1,11 +1,8 @@
 <div class="container" style="padding-top: 65px;">
-    <h1 class="text-center page-header">{{bioSampleObj?.accession}}</h1>
+    <h1 class="text-center page-header">{{bioSampleObj?.organism}}</h1>
     <dl class="row">
         <dt class="col-sm-3" *ngIf="bioSampleObj?.commonName">Name:</dt>
         <dd class="col-sm-9" *ngIf="bioSampleObj?.commonName">{{bioSampleObj?.commonName}}</dd>
-
-        <dt class="col-sm-3">BioSample ID:</dt>
-        <dd class="col-sm-9"><a href="http://www.ebi.ac.uk/biosamples/samples/{{bioSampleObj?.accession}}" target="_blank">{{bioSampleObj?.accession}}</a></dd>
 
         <dt class="col-sm-3">Organism:</dt>
         <dd class="col-sm-9">{{bioSampleObj?.organism}}</dd>
@@ -14,72 +11,134 @@
         <dd class="col-sm-9" *ngIf="bioSampleObj?.sex">{{bioSampleObj?.sex}}</dd>
 
         <dt class="col-sm-3" *ngIf="bioSampleObj?.trackingSystem">Tracking Status:</dt>
-        <dd class="col-sm-9" *ngIf="bioSampleObj?.trackingSystem"><span [ngClass]="getStatusClass(bioSampleObj?.trackingSystem)">{{bioSampleObj?.trackingSystem}}</span></dd>
+        <dd class="col-sm-9" *ngIf="bioSampleObj?.trackingSystem"><span
+                [ngClass]="getStatusClass(bioSampleObj?.trackingSystem)">{{bioSampleObj?.trackingSystem}}</span></dd>
 
-        <!-- Custom Fields Section -->
-        <div class="col-sm-12">
-            <hr>
-            <div class="row" *ngFor="let sample of bioSampleObj?.customFields">
-                <dt class="col-sm-3">{{sample?.name}}</dt>
-                <dd class="col-sm-9">
-                    <a *ngIf="sample.ontologyTerms?.lenght > 0; else simple" href="{{sample.ontologyTerms[0]}}">{{sample?.value}}</a>
-                    <ng-template #simple>
-                        {{sample?.value}}
-                    </ng-template>
-                </dd>
-            </div>
-        </div>
-        <!-- Experiment Files Section -->
         <div class="col-sm-12" *ngIf="bioSampleObj?.records.length">
             <hr>
-            <h1 class="col-sm-12 page-header">Related samples</h1>
+            <!-- <h1 class="col-sm-12 page-header">Related Organisms</h1> -->
             <mat-form-field>
                 <mat-label>Search</mat-label>
-                <input matInput (keyup)="applyFilter($event)" placeholder="Ex. ILLUMINA" #input>
+                <input matInput [(ngModel)]='searchText' (keyup)="getSearchResults()" placeholder="Ex. ILLUMINA" #input>
             </mat-form-field>
-            <table mat-table #table [dataSource]="dataSourceRecords" matSort class="table table-striped table-hover table-borderless table-sm">
+            <div class="row">
+                <div class="col-sm-2">
+                    <div class="row">
+                        <div class="col-md-12 col-sm-6">
+                            <div class="card bg-lite mb-3 filter-top">
+                                <h3 class="card-header filter-heading">
+                                    <span #lbltextSex>Sex</span>
+                                    <i class="material-icons float-right sex-inactive"
+                                        *ngIf="sexFilters.length > 3 && isSexFilterCollapsed"
+                                        (click)="toggleCollapse(lbltextSex.innerText)">add</i>
+                                    <i class="material-icons float-right sex-inactive"
+                                        *ngIf="sexFilters.length > 3 && !isSexFilterCollapsed"
+                                        (click)="toggleCollapse(lbltextSex.innerText)">remove</i>
+                                </h3>
+                                <ul id="sex-inactive" class="list-group"
+                                    [ngClass]="{'long-list': itemLimitSexFilter > filterSize}">
+                                    <ng-container *ngFor="let filter of sexFilters; let i = index">
+                                        <li id="{{i}}"
+                                            class="list-group-item d-flex justify-content-between align-items-center sex-inactive"
+                                            [ngClass]="checkFilterIsActive(filter.key)"
+                                            (click)="onFilterClick($event, lbltextSex.innerText, filter.key)"
+                                            style="cursor: pointer; padding: .75rem 0.25rem;"
+                                            *ngIf="i<itemLimitSexFilter && filter.key != ''">
+                                            {{filter.key}}
+                                            <span class="badge badge-pill badge-info">{{filter.doc_count}}</span>
+                                        </li>
+                                    </ng-container>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="col-md-12 col-sm-6">
+                            <div class="card bg-lite mb-3 filter-top">
+                                <h3 class="card-header filter-heading">
+                                    <span #lbltextTrack>Tracking Status</span>
+                                    <i class="material-icons float-right tracking-status-inactive"
+                                        *ngIf="trackingSystemFilters.length > 3 && isTrackCollapsed"
+                                        (click)="toggleCollapse(lbltextTrack.innerText)">add</i>
+                                    <i class="material-icons float-right tracking-status-inactive"
+                                        *ngIf="trackingSystemFilters.length > 3 && !isTrackCollapsed"
+                                        (click)="toggleCollapse(lbltextTrack.innerText)">remove</i>
+                                </h3>
+                                <ul id="tracking-status-inactive" class="list-group"
+                                    [ngClass]="{'long-list': itemLimitTrackFilter > filterSize}">
+                                    <ng-container *ngFor="let filter of trackingSystemFilters; let i = index">
+                                        <li id="i"
+                                            class="list-group-item d-flex justify-content-between align-items-center tracking-status-inactive"
+                                            [ngClass]="checkFilterIsActive(filter.key)"
+                                            (click)="onFilterClick($event, lbltextTrack.innerText, filter.key)"
+                                            style="cursor: pointer; padding: .75rem 0.25rem;"
+                                            *ngIf="i<itemLimitTrackFilter && filter.key != ''">
+                                            {{filter.key}}
+                                            <span class="badge badge-pill badge-info">{{filter.doc_count}}</span>
+                                        </li>
+                                    </ng-container>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-10">
+                    <div class="row">
+                        <h1 *ngIf="activeFilters.length !== 0">Filters:
+                            <button type="button" class="btn btn-success" *ngFor="let filter of activeFilters">
+                                {{filter}}
+                                <span class="badge badge-light" (click)="removeFilter(filter)">X</span>
+                            </button>
+                            <button type="button" class="btn btn-primary" (click)="removeAllFilters()">
+                                Remove all filters
+                            </button>
+                        </h1>
+                        <table mat-table [dataSource]="dataSourceRecords" matSort style="width: 100%;">
+                            <ng-container matColumnDef="accession">
+                                <mat-header-cell *matHeaderCellDef mat-sort-header> BioSample ID </mat-header-cell>
+                                <mat-cell *matCellDef="let element" class="txt-center">
+                                    <a [routerLink]="['/data/organism/details/', element.accession]">
+                                        {{element.accession}}</a>
+                                </mat-cell>
+                            </ng-container>
 
-                <!-- First Column -->
-                <ng-container matColumnDef="accession">
-                    <mat-header-cell *matHeaderCellDef mat-sort-header> BioSample ID </mat-header-cell>
-                    <mat-cell *matCellDef="let element" class="txt-center">
-                        <a [routerLink]="['/data/organism/details/', element.accession]">
-              {{element.accession}}</a>
-                    </mat-cell>
-                </ng-container>
+                            <ng-container matColumnDef="organism">
+                                <mat-header-cell *matHeaderCellDef mat-sort-header> Organism </mat-header-cell>
+                                <mat-cell *matCellDef="let element" class="txt-center">
+                                    {{element.organism}}
+                                </mat-cell>
+                            </ng-container>
 
-                <!-- Second Column -->
-                <ng-container matColumnDef="organism">
-                    <mat-header-cell *matHeaderCellDef mat-sort-header> Organism </mat-header-cell>
-                    <mat-cell *matCellDef="let element" class="txt-center"> {{element.organism}} </mat-cell>
-                </ng-container>
+                            <ng-container matColumnDef="commonName">
+                                <mat-header-cell *matHeaderCellDef mat-sort-header>Common Name </mat-header-cell>
+                                <mat-cell *matCellDef="let element" class="txt-center"> {{element?.commonName}}
+                                </mat-cell>
+                            </ng-container>
 
-                <ng-container matColumnDef="commonName">
-                    <mat-header-cell *matHeaderCellDef mat-sort-header>Common Name </mat-header-cell>
-                    <mat-cell *matCellDef="let element" class="txt-center"> {{element?.commonName}}</mat-cell>
-                </ng-container>
+                            <ng-container matColumnDef="sex">
+                                <mat-header-cell *matHeaderCellDef mat-sort-header> Sex </mat-header-cell>
+                                <mat-cell *matCellDef="let element" class="txt-center"> {{element.sex}} </mat-cell>
+                            </ng-container>
 
-                <ng-container matColumnDef="sex">
-                    <mat-header-cell *matHeaderCellDef mat-sort-header> Sex </mat-header-cell>
-                    <mat-cell *matCellDef="let element" class="txt-center"> {{element.sex}} </mat-cell>
-                </ng-container>
+                            <ng-container matColumnDef="organismPart">
+                                <mat-header-cell *matHeaderCellDef mat-sort-header> Organism part </mat-header-cell>
+                                <mat-cell *matCellDef="let element" class="txt-center"> {{element.organismPart}} </mat-cell>
+                            </ng-container>
 
-                <ng-container matColumnDef="organismPart">
-                    <mat-header-cell *matHeaderCellDef mat-sort-header> Organism part </mat-header-cell>
-                    <mat-cell *matCellDef="let element" class="txt-center"> {{element.organismPart}} </mat-cell>
-                </ng-container>
+                            <ng-container matColumnDef="trackingSystem">
+                                <mat-header-cell *matHeaderCellDef mat-sort-header> Tracking status </mat-header-cell>
+                                <mat-cell *matCellDef="let element">
+                                    <span
+                                        [ngClass]="getStatusClass(element.trackingSystem)">{{element.trackingSystem}}</span>
+                                </mat-cell>
+                            </ng-container>
 
-                <ng-container matColumnDef="trackingSystem">
-                    <mat-header-cell *matHeaderCellDef mat-sort-header> Tracking status </mat-header-cell>
-                    <mat-cell *matCellDef="let element">
-                        <span [ngClass]="getStatusClass(element.trackingSystem)">{{element.trackingSystem}}</span>
-                    </mat-cell>
-                </ng-container>
-
-                <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-                <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
-            </table>
-            <mat-paginator [pageSizeOptions]="[5, 10, 20, 30]" showFirstLastButtons [length]="bioSampleTotalCount"></mat-paginator>
+                            <mat-header-row *matHeaderRowDef="specDisplayedColumns"></mat-header-row>
+                            <mat-row *matRowDef="let row; columns: specDisplayedColumns;"></mat-row>
+                        </table>
+                        <mat-paginator style="width: 100%;" [pageSizeOptions]="[20, 30, 50]"
+                            showFirstLastButtons [length]="bioSampleTotalCount"></mat-paginator>
+                    </div>
+                </div>
+            </div>
         </div>
     </dl>
 </div>

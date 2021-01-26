@@ -18,42 +18,60 @@ export class DashboardService {
     if (sortColumn != undefined) {
       requestParams = requestParams + `&sortColumn=${sortColumn}&sortOrder=${sortOrder}`
     }
-    return this.http.get(`${this.API_BASE_URL}/root_samples${requestParams}`);
+    return this.http.get(`${this.API_BASE_URL}/root_organisms${requestParams}`);
   }
 
-  public createBiosample(data: any): Observable<any> {
-    return this.http.post(`${this.API_BASE_URL}/root_samples/sample`, data);
+  public getDistinctOrganisms(size, sortColumn?, sortOrder?, afterKey?): Observable<any> {
+    let requestParams = `?size=${size}`
+    if (sortColumn != undefined) {
+      requestParams = requestParams + `&sortColumn=${sortColumn}&sortOrder=${sortOrder}`
+    }
+    if (afterKey != undefined) {
+      requestParams = requestParams + `&afterKey=${afterKey}`
+    }
+    return this.http.get(`${this.API_BASE_URL}/root_organisms${requestParams}`);
   }
 
   public getBiosampleByAccession(accession: string): Observable<any> {
     return this.http.get(`${this.API_BASE_URL}/organisms/${accession}`);
   }
 
-  public getRootsampleByAccession(accession: string): Observable<any> {
-    return this.http.get(`${this.API_BASE_URL}/root_samples/${accession}`);
+  public getRootOrganismByOrganism(organism: string): Observable<any> {
+    return this.http.get(`${this.API_BASE_URL}/root_organisms/${organism}`);
   }
 
-  public getRootsampleByOrganism(organism: string): Observable<any> {
-    return this.http.get(`${this.API_BASE_URL}/root_samples/organism/${organism}`);
+  public getRootOrganismByAccession(accession: string): Observable<any> {
+    return this.http.get(`${this.API_BASE_URL}/root_organisms/accession/${accession}`);
   }
 
   public getOrganismFilters(): Observable<any> {
-    return this.http.get(`${this.API_BASE_URL}/root_samples/filters`);
+    return this.http.get(`${this.API_BASE_URL}/root_organisms/root/filters`);
   }
 
-  public getSearchResults(search: any, sortColumn?, sortOrder?, from?, size?): Observable<any> {
-    let requestURL = `${this.API_BASE_URL}/root_samples/search?filter=${search}&from=${from}&size=${size}`;
-    if (sortColumn != undefined) {
-      requestURL = requestURL + `&sortColumn=${sortColumn}&sortOrder=${sortOrder}`
-    }
+  public getRootOrganismFilters(organism): Observable<any> {
+    return this.http.get(`${this.API_BASE_URL}/root_organisms/filters?organism=${organism}`);
+  }
+
+  public getSearchResults(search: any, from?, size?): Observable<any> {
+    let requestURL = `${this.API_BASE_URL}/root_organisms/search?filter=${search}&from=${from}&size=${size}`;
     return this.http.get(`${requestURL}`);
   }
 
-  public getFilterResults(filter: any, sortColumn?, sortOrder?, from?, size?): Observable<any> {
-    let requestURL = `${this.API_BASE_URL}/root_samples/filter/results?from=${from}&size=${size}`;
+  public getRootSearchResults(search: any,sortColumn?, sortOrder?, from?, size?): Observable<any> {
+    let requestParams = `?filter=${search}&from=${from}&size=${size}`
     if (sortColumn != undefined) {
-      requestURL = requestURL + `&sortColumn=${sortColumn}&sortOrder=${sortOrder}`;
+      requestParams = requestParams + `&sortColumn=${sortColumn}&sortOrder=${sortOrder}`
     }
+    let requestURL = `${this.API_BASE_URL}/root_organisms/search${requestParams}`;
+    return this.http.get(`${requestURL}`);
+  }
+
+  public getFilterResults(filter: any,sortColumn?, sortOrder?, from?, size?): Observable<any> {
+    let requestParams = `?from=${from}&size=${size}`
+    if (sortColumn != undefined) {
+      requestParams = requestParams + `&sortColumn=${sortColumn}&sortOrder=${sortOrder}`
+    }
+    let requestURL = `${this.API_BASE_URL}/root_organisms/root/filter/results${requestParams}`;
     return this.http.post(`${requestURL}`,filter);
   }
 
