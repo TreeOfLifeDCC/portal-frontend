@@ -249,7 +249,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
     }
     for (const key of Object.keys(data)) {
       if (key === 'commonName' && data[key] == null) {
-        dataToReturn[key] = "---"
+        dataToReturn[key] = "-"
       }
       else {
         dataToReturn[key] = data[key];

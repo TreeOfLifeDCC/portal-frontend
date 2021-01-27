@@ -89,7 +89,7 @@
 
                     <ng-container matColumnDef="trackingSystem">
                         <mat-header-cell *matHeaderCellDef mat-sort-header> Tracking status </mat-header-cell>
-                        <mat-cell *matCellDef="let element">
+                        <mat-cell *matCellDef="let element" class="txt-center">
                             <span [ngClass]="getStatusClass(element.trackingSystem)">{{element.trackingSystem}}</span>
                         </mat-cell>
                     </ng-container>

@@ -111,7 +111,7 @@ export class OrganismDetailsComponent implements OnInit, AfterViewInit {
       }
       else {
         if (key === 'commonName' && data[key] == null) {
-          dataToReturn[key] = "---"
+          dataToReturn[key] = "-"
         }
         else {
           dataToReturn[key] = data[key];
