@@ -79,7 +79,7 @@ export class TrackingSystemComponent implements OnInit, AfterViewInit {
       }
       setTimeout(() => {
         this.getActiveFiltersAndResult();
-      }, 1000);
+      }, 80);
     }
     else {
       this.getAllStatuses(0, 20, this.sort.active, this.sort.direction);
@@ -148,7 +148,7 @@ export class TrackingSystemComponent implements OnInit, AfterViewInit {
           this.unpackedData = unpackedData;
           setTimeout(() => {
             this.spinner.hide();
-          }, 1000)
+          }, 100)
         },
         err => {
           console.log(err);

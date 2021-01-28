@@ -47,7 +47,6 @@ export class OrganismDetailsComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit(): void {
-    this.spinner.show();
     this.activeFilters = [];
     this.filterSize = 3;
     this.itemLimitSexFilter = this.filterSize;
@@ -78,7 +77,7 @@ export class OrganismDetailsComponent implements OnInit, AfterViewInit {
             this.specBioSampleTotalCount = unpackedData.length;
             this.dataSourceRecords.sort = this.sort;
             this.dataSourceRecords.paginator = this.paginator;
-          }, 500)
+          }, 50)
         },
         err => console.log(err)
       );
