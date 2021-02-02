@@ -223,6 +223,7 @@ export class TrackingSystemComponent implements OnInit, AfterViewInit {
   }
 
   customSort(event) {
+    this.paginator.pageIndex = 0;
     let pageIndex = this.paginator.pageIndex;
     let pageSize = this.paginator.pageSize;
     let from = pageIndex * pageSize;

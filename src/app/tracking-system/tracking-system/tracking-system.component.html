@@ -90,7 +90,7 @@
                 <table mat-table #table [dataSource]="dataSource" matSort (matSortChange)="customSort($event)">
                     <!-- First Column -->
                     <ng-container matColumnDef="organism">
-                        <mat-header-cell *matHeaderCellDef> Organism </mat-header-cell>
+                        <mat-header-cell *matHeaderCellDef mat-sort-header> Organism </mat-header-cell>
                         <mat-cell *matCellDef="let element">
                             <a [routerLink]="['/data/root/details/', element.organism]">
                             {{element.organism}}</a>
@@ -99,13 +99,13 @@
 
                     <!-- Second Column -->
                     <ng-container matColumnDef="commonName">
-                        <mat-header-cell *matHeaderCellDef> Common name </mat-header-cell>
+                        <mat-header-cell *matHeaderCellDef mat-sort-header> Common name </mat-header-cell>
                         <mat-cell *matCellDef="let element"> {{element.commonName}} </mat-cell>
                     </ng-container>
 
                     <!-- Third Column -->
                     <ng-container matColumnDef="metadata_submitted_to_biosamples">
-                        <mat-header-cell *matHeaderCellDef> Metadata submitted to BioSamples </mat-header-cell>
+                        <mat-header-cell *matHeaderCellDef mat-sort-header> Metadata submitted to BioSamples </mat-header-cell>
                         <mat-cell *matCellDef="let element">
                             <mat-list>
                                 <mat-list-item>
@@ -119,7 +119,7 @@
                     </ng-container>
                     <!-- Fourth Column -->
                     <ng-container matColumnDef="raw_data_submitted_to_ena">
-                        <mat-header-cell *matHeaderCellDef> Raw data submitted to ENA </mat-header-cell>
+                        <mat-header-cell *matHeaderCellDef mat-sort-header> Raw data submitted to ENA </mat-header-cell>
                         <mat-cell *matCellDef="let element">
                             <mat-list>
                                 <mat-list-item>
@@ -133,7 +133,7 @@
                     </ng-container>
                     <!-- Fifth Column -->
                     <ng-container matColumnDef="mapped_reads_submitted_to_ena">
-                        <mat-header-cell *matHeaderCellDef> Mapped reads submitted to ENA </mat-header-cell>
+                        <mat-header-cell *matHeaderCellDef mat-sort-header> Mapped reads submitted to ENA </mat-header-cell>
                         <mat-cell *matCellDef="let element">
                             <mat-list>
                                 <mat-list-item>
@@ -147,7 +147,7 @@
                     </ng-container>
 
                     <ng-container matColumnDef="assemblies_submitted_to_ena">
-                        <mat-header-cell *matHeaderCellDef> Assemblies submitted to ENA </mat-header-cell>
+                        <mat-header-cell *matHeaderCellDef mat-sort-header> Assemblies submitted to ENA </mat-header-cell>
                         <mat-cell *matCellDef="let element">
                             <mat-list>
                                 <mat-list-item>
@@ -161,7 +161,7 @@
                     </ng-container>
 
                     <ng-container matColumnDef="annotation_complete">
-                        <mat-header-cell *matHeaderCellDef> Annotation complete </mat-header-cell>
+                        <mat-header-cell *matHeaderCellDef mat-sort-header> Annotation complete </mat-header-cell>
                         <mat-cell *matCellDef="let element">
                             <mat-list>
                                 <mat-list-item>
@@ -176,7 +176,7 @@
                     </ng-container>
 
                     <ng-container matColumnDef="annotation_submitted_to_ena">
-                        <mat-header-cell *matHeaderCellDef> Annotation submitted to ENA </mat-header-cell>
+                        <mat-header-cell *matHeaderCellDef mat-sort-header> Annotation submitted to ENA </mat-header-cell>
                         <mat-cell *matCellDef="let element">
                             <mat-list>
                                 <mat-list-item>
