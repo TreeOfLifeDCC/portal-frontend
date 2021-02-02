@@ -54,6 +54,7 @@ export class TrackingSystemComponent implements OnInit, AfterViewInit {
 
   ngOnInit(): void {
     this.spinner.show();
+    this.searchText = '';
     this.showOrganismTable = false;
     this.activeFilters = [];
     this.urlAppendFilterArray = [];
@@ -318,6 +319,7 @@ export class TrackingSystemComponent implements OnInit, AfterViewInit {
 
   // tslint:disable-next-line:typedef
   onFilterClick(event, label: string, filter: string) {
+    this.searchText = '';
     let inactiveClassName = label.toLowerCase().replace(" ", "-") + '-inactive';
     const filterIndex = this.activeFilters.indexOf(filter);
     if (filterIndex !== -1) {
@@ -442,10 +444,12 @@ export class TrackingSystemComponent implements OnInit, AfterViewInit {
   }
 
   getStatusClass(status: string) {
-    if (status.toLowerCase().includes('waiting')) {
-      return 'badge badge-pill badge-warning';
-    } else {
-      return 'badge badge-pill badge-success';
+    if (status != undefined) {
+      if (status.toLowerCase().includes('waiting')) {
+        return 'badge badge-pill badge-warning';
+      } else {
+        return 'badge badge-pill badge-success';
+      }
     }
   }
 
@@ -575,44 +579,44 @@ export class TrackingSystemComponent implements OnInit, AfterViewInit {
   parseFilterAggregation(data: any) {
     this.filtersMap = data;
     this.BiosamplesFilters = this.filtersMap.aggregations.biosamples.buckets.filter(i => {
-      if(i !== "") {
+      if (i !== "") {
         let obj = i;
-        obj.key = "Biosamples - "+obj.key;
+        obj.key = "Biosamples - " + obj.key;
         return obj;
       }
     });
     this.RawDataFilters = this.filtersMap.aggregations.raw_data.buckets.filter(i => {
-      if(i !== "") {
+      if (i !== "") {
         let obj = i;
-        obj.key = "Raw data - "+obj.key;
+        obj.key = "Raw data - " + obj.key;
         return obj;
       }
     });
     this.MappedReadsFilters = this.filtersMap.aggregations.mapped_reads.buckets.filter(i => {
-      if(i !== "") {
+      if (i !== "") {
         let obj = i;
-        obj.key = "Mapped reads - "+obj.key;
+        obj.key = "Mapped reads - " + obj.key;
         return obj;
       }
     });
     this.AssembliesFilters = this.filtersMap.aggregations.assemblies.buckets.filter(i => {
-      if(i !== "") {
+      if (i !== "") {
         let obj = i;
-        obj.key = "Assemblies - "+obj.key;
+        obj.key = "Assemblies - " + obj.key;
         return obj;
       }
     });
     this.AnnotationCompleteFilters = this.filtersMap.aggregations.annotation_complete.buckets.filter(i => {
-      if(i !== "") {
+      if (i !== "") {
         let obj = i;
-        obj.key = "Annotation complete - "+obj.key;
+        obj.key = "Annotation complete - " + obj.key;
         return obj;
       }
     });
     this.AnnotationFilters = this.filtersMap.aggregations.annotation.buckets.filter(i => {
-      if(i !== "") {
+      if (i !== "") {
         let obj = i;
-        obj.key = "Annotation - "+obj.key;
+        obj.key = "Annotation - " + obj.key;
         return obj;
       }
     });
