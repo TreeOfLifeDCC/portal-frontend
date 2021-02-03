@@ -104,11 +104,16 @@
             <h1 class="col-sm-12 page-header">Related files</h1>
             <mat-form-field>
                 <mat-label>Search</mat-label>
-                <input matInput (keyup)="applyFilter($event)" placeholder="Ex. ILLUMINA" #input>
+                <input matInput (keyup)="filesSearch($event)" placeholder="Ex. ILLUMINA" #input>
             </mat-form-field>
-            <table mat-table #table [dataSource]="dataSourceFiles" matSort class="table table-striped table-hover table-borderless table-sm">
+            <table mat-table [dataSource]="dataSourceFiles" matSort>
 
-                <!-- Second Column -->
+                <ng-container matColumnDef="study_accession">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header> Study Accession </mat-header-cell>
+                    <mat-cell *matCellDef="let element"> <a class="no-underline" target="_blank" href="https://www.ebi.ac.uk/ena/browser/view/{{element.study_accession}}">{{element.study_accession}}</a>
+                    </mat-cell>
+                </ng-container>
+
                 <ng-container matColumnDef="experiment_accession">
                     <mat-header-cell *matHeaderCellDef mat-sort-header> Experiment Accession </mat-header-cell>
                     <mat-cell *matCellDef="let element"> <a class="no-underline" target="_blank" href="https://www.ebi.ac.uk/ena/browser/view/{{element.experiment_accession}}">{{element.experiment_accession}}</a>
@@ -121,19 +126,12 @@
                     </mat-cell>
                 </ng-container>
 
-                <!-- Fourth Column -->
-                <ng-container matColumnDef="study_accession">
-                    <mat-header-cell *matHeaderCellDef mat-sort-header> Study Accession </mat-header-cell>
-                    <mat-cell *matCellDef="let element"> <a class="no-underline" target="_blank" href="https://www.ebi.ac.uk/ena/browser/view/{{element.study_accession}}">{{element.study_accession}}</a>
-                    </mat-cell>
-                </ng-container>
-
                 <ng-container matColumnDef="fastq_ftp">
                     <mat-header-cell *matHeaderCellDef mat-sort-header> Raw Data </mat-header-cell>
-                    <mat-cell *matCellDef="let element">
+                    <mat-cell *matCellDef="let el">
                         <ul class="list-group ">
-                            <li *ngFor="let fastq of element.fastq_ftp">
-                                <a href="ftp://{{fastq}}">{{element.run_accession}}</a>
+                            <li *ngFor="let fastq of el.fastq_ftp">
+                                <a href="ftp://{{fastq}}">{{el.run_accession}}</a>
                             </li>
                         </ul>
                     </mat-cell>
@@ -141,10 +139,10 @@
 
                 <ng-container matColumnDef="submitted_ftp">
                     <mat-header-cell *matHeaderCellDef mat-sort-header> Mapped Reads </mat-header-cell>
-                    <mat-cell *matCellDef="let element">
+                    <mat-cell *matCellDef="let ele">
                         <ul class="list-group ">
-                            <li *ngFor="let submitted_ftp of element.submitted_ftp">
-                                <a href="ftp://{{submitted_ftp}}">{{element.study_accession}}</a>
+                            <li *ngFor="let submitted_ftp of ele.submitted_ftp">
+                                <a href="ftp://{{submitted_ftp}}">{{ele.study_accession}}</a>
                             </li>
                         </ul>
                     </mat-cell>
@@ -183,17 +181,21 @@
                 <mat-header-row *matHeaderRowDef="displayedColumnsFiles"></mat-header-row>
                 <mat-row *matRowDef="let row; columns: displayedColumnsFiles;"></mat-row>
             </table>
-            <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
+            <mat-paginator #experimentsTable [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons [length]="dataSourceFilesCount"></mat-paginator>
         </div>
 
         <!-- Assemblies Section -->
         <div class="col-sm-12" *ngIf="bioSampleObj?.assemblies.length">
             <hr>
             <h1 class="col-sm-12 page-header">Related assemblies</h1>
-            <table mat-table #table [dataSource]="dataSourceAssemblies" class="table table-striped table-hover table-borderless table-sm">
+            <mat-form-field>
+                <mat-label>Search</mat-label>
+                <input matInput (keyup)="assembliesSearch($event)" placeholder="Ex. ILLUMINA" #input>
+            </mat-form-field>
+            <table mat-table [dataSource]="dataSourceAssemblies" matSort style="width: 100%;">
                 <!-- First Column -->
                 <ng-container matColumnDef="accession">
-                    <mat-header-cell *matHeaderCellDef> Accession </mat-header-cell>
+                    <mat-header-cell *matHeaderCellDef mat-sort-header> Accession </mat-header-cell>
                     <mat-cell *matCellDef="let element">
                         <a class="no-underline" target="_blank" href="https://www.ebi.ac.uk/ena/browser/view/{{element.accession}}">{{element.accession}}</a>
                     </mat-cell>
@@ -201,23 +203,24 @@
 
                 <!-- Second Column -->
                 <ng-container matColumnDef="assembly_name">
-                    <mat-header-cell *matHeaderCellDef> Assembly Name </mat-header-cell>
+                    <mat-header-cell *matHeaderCellDef mat-sort-header> Assembly Name </mat-header-cell>
                     <mat-cell *matCellDef="let element"> {{element.assembly_name}} </mat-cell>
                 </ng-container>
                 <!-- Third Column -->
                 <ng-container matColumnDef="description">
-                    <mat-header-cell *matHeaderCellDef> Description </mat-header-cell>
+                    <mat-header-cell *matHeaderCellDef mat-sort-header> Description </mat-header-cell>
                     <mat-cell *matCellDef="let element"> {{element.description}} </mat-cell>
                 </ng-container>
 
                 <ng-container matColumnDef="version">
-                    <mat-header-cell *matHeaderCellDef> Version </mat-header-cell>
+                    <mat-header-cell *matHeaderCellDef mat-sort-header> Version </mat-header-cell>
                     <mat-cell *matCellDef="let element"> {{element.version}} </mat-cell>
                 </ng-container>
 
                 <mat-header-row *matHeaderRowDef="displayedColumnsAssemblies"></mat-header-row>
                 <mat-row *matRowDef="let row; columns: displayedColumnsAssemblies;"></mat-row>
             </table>
+            <mat-paginator #assembliesTable [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons [length]="dataSourceAssembliesCount" style="width: 100%;"></mat-paginator>
         </div>
 
         <div class="col-sm-12" *ngIf="bioSampleObj?.annotation">
