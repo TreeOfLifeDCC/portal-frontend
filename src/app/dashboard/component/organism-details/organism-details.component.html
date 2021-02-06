@@ -51,6 +51,35 @@
                                 </ul>
                             </div>
                         </div>
+
+                        <div class="col-md-12 col-sm-6">
+                            <div class="card bg-lite mb-3 filter-top">
+                                <h3 class="card-header filter-heading">
+                                    <span #lbltextOrgPart>Organism Part</span>
+                                    <i class="material-icons float-right org-part-inactive"
+                                        *ngIf="organismPartFilters.length > 3 && isOrganismPartCollapsed"
+                                        (click)="toggleCollapse(lbltextOrgPart.innerText)">add</i>
+                                    <i class="material-icons float-right org-part-inactive"
+                                        *ngIf="organismPartFilters.length > 3 && !isOrganismPartCollapsed"
+                                        (click)="toggleCollapse(lbltextOrgPart.innerText)">remove</i>
+                                </h3>
+                                <ul id="org-part-inactive" class="list-group"
+                                    [ngClass]="{'long-list': itemLimitOrgFilter > filterSize}">
+                                    <ng-container *ngFor="let filter of organismPartFilters; let i = index">
+                                        <li id="{{i}}"
+                                            class="list-group-item d-flex justify-content-between align-items-center org-part-inactive"
+                                            [ngClass]="checkFilterIsActive(filter.key)"
+                                            (click)="onFilterClick($event, lbltextOrgPart.innerText, filter.key)"
+                                            style="cursor: pointer; padding: .75rem 0.25rem;"
+                                            *ngIf="i<itemLimitOrgFilter && filter.key != ''">
+                                            {{filter.key}}
+                                            <span class="badge badge-pill badge-info">{{filter.doc_count}}</span>
+                                        </li>
+                                    </ng-container>
+                                </ul>
+                            </div>
+                        </div>
+
                         <div class="col-md-12 col-sm-6">
                             <div class="card bg-lite mb-3 filter-top">
                                 <h3 class="card-header filter-heading">
@@ -120,11 +149,13 @@
 
                             <ng-container matColumnDef="organismPart">
                                 <mat-header-cell *matHeaderCellDef mat-sort-header> Organism part </mat-header-cell>
-                                <mat-cell *matCellDef="let element" class="txt-center"> {{element.organismPart}} </mat-cell>
+                                <mat-cell *matCellDef="let element" class="txt-center"> {{element.organismPart}}
+                                </mat-cell>
                             </ng-container>
 
                             <ng-container matColumnDef="trackingSystem">
-                                <mat-header-cell *matHeaderCellDef mat-sort-header> Tracking status </mat-header-cell>
+                                <mat-header-cell *matHeaderCellDef mat-sort-header> Tracking status
+                                </mat-header-cell>
                                 <mat-cell *matCellDef="let element">
                                     <span
                                         [ngClass]="getStatusClass(element.trackingSystem)">{{element.trackingSystem}}</span>
@@ -134,8 +165,8 @@
                             <mat-header-row *matHeaderRowDef="specDisplayedColumns"></mat-header-row>
                             <mat-row *matRowDef="let row; columns: specDisplayedColumns;"></mat-row>
                         </table>
-                        <mat-paginator style="width: 100%;" [pageSizeOptions]="[20, 30, 50]"
-                            showFirstLastButtons [length]="bioSampleTotalCount"></mat-paginator>
+                        <mat-paginator style="width: 100%;" [pageSizeOptions]="[20, 30, 50]" showFirstLastButtons
+                            [length]="bioSampleTotalCount"></mat-paginator>
                     </div>
                 </div>
             </div>

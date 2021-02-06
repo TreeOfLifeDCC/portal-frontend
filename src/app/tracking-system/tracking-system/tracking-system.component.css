@@ -109,3 +109,8 @@ ul.long-list {
 .zero-margin {
     margin: 0px !important;
 }
+
+.inactiveFilter {
+    pointer-events: none;
+    cursor: default;
+ }

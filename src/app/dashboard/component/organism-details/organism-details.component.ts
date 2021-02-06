@@ -25,6 +25,7 @@ export class OrganismDetailsComponent implements OnInit, AfterViewInit {
 
   isSexFilterCollapsed = true;
   isTrackCollapsed = true;
+  isOrganismPartCollapsed = true;
   itemLimitSexFilter: number;
   itemLimitOrgFilter: number;
   itemLimitTrackFilter: number;
@@ -34,13 +35,20 @@ export class OrganismDetailsComponent implements OnInit, AfterViewInit {
   filtersMap;
   filters = {
     sex: {},
-    trackingSystem: {}
+    trackingSystem: {},
+    organismPart: {}
   };
   sexFilters = [];
   trackingSystemFilters = [];
+  organismPartFilters = [];
   unpackedData;
   organismName;
   relatedRecords;
+  filterJson = {
+    sex: "",
+    organismPart: "",
+    trackingSystem: ""
+  };
 
   constructor(private route: ActivatedRoute, private dashboardService: DashboardService, private spinner: NgxSpinnerService, private router: Router) {
     this.route.params.subscribe(param => this.bioSampleId = param.id);
@@ -88,17 +96,6 @@ export class OrganismDetailsComponent implements OnInit, AfterViewInit {
     this.dataSourceRecords.filter = filterValue.trim().toLowerCase();
   }
 
-  filterPredicate(data: any, filterValue: any): boolean {
-    const filters = filterValue.split('|');
-    if (filters[1] === 'Sex') {
-      return data.sex.toLowerCase() === filters[0];
-    } else if (filters[1] === 'Tracking Status') {
-      return data.trackingSystem.toLowerCase() === filters[0];
-    } else {
-      return Object.values(data).join('').trim().toLowerCase().indexOf(filters[0]) !== -1;
-    }
-  }
-
   unpackData(data: any) {
     const dataToReturn = {};
     if (data.hasOwnProperty('_source')) {
@@ -122,55 +119,83 @@ export class OrganismDetailsComponent implements OnInit, AfterViewInit {
 
   checkFilterIsActive(filter: string) {
     if (this.activeFilters.indexOf(filter) !== -1) {
-      return 'active';
+      return 'active inactiveFilter';
     }
 
   }
 
   onFilterClick(event, label: string, filter: string) {
+    this.searchText = '';
     let inactiveClassName = label.toLowerCase().replace(" ", "-") + '-inactive';
+    this.createFilterJson(label.toLowerCase().replace(" ", ""), filter);
     const filterIndex = this.activeFilters.indexOf(filter);
+
     if (filterIndex !== -1) {
       $('.' + inactiveClassName).removeClass('non-disp');
       this.removeFilter(filter);
     } else {
       this.activeFilters.push(filter);
-      this.dataSourceRecords.filter = filter.trim().toLowerCase();
+      this.dataSourceRecords.filter = this.filterJson;
       this.getFiltersForSelectedFilter(this.dataSourceRecords.filteredData);
       $('.' + inactiveClassName).addClass('non-disp');
       $(event.target).removeClass('non-disp');
       $(event.target).addClass('disp');
       $(event.target).addClass('active');
     }
+  }
 
+  createFilterJson(key, value) {
+    if (key === 'sex') {
+      this.filterJson['sex'] = value;
+    }
+    else if (key === 'organismpart') {
+      this.filterJson['organismPart'] = value;
+    }
+    else if (key === 'trackingstatus') {
+      this.filterJson['trackingSystem'] = value;
+    }
+    this.dataSourceRecords.filterPredicate = ((data, filter) => {
+      const a = !filter.sex || data.sex === filter.sex;
+      const b = !filter.organismPart || data.organismPart === filter.organismPart;
+      const c = !filter.trackingSystem || data.trackingSystem === filter.trackingSystem;
+      return a && b && c;
+    }) as (PeriodicElement, string) => boolean;
   }
 
   getFiltersForSelectedFilter(data: any) {
     const filters = {
       sex: {},
-      trackingSystem: {}
+      trackingSystem: {},
+      organismPart: {}
     };
     this.sexFilters = [];
     this.trackingSystemFilters = [];
+    this.organismPartFilters = [];
 
     this.filters = filters;
-    this.sexFilters = [];
-    this.trackingSystemFilters = [];
     for (const item of data) {
       if (item.sex in filters.sex) {
         filters.sex[item.sex] += 1;
       } else {
         filters.sex[item.sex] = 1;
       }
+
       if (item.trackingSystem in filters.trackingSystem) {
         filters.trackingSystem[item.trackingSystem] += 1;
       } else {
         filters.trackingSystem[item.trackingSystem] = 1;
       }
+
+      if (item.organismPart in filters.organismPart) {
+        filters.organismPart[item.organismPart] += 1;
+      } else {
+        filters.organismPart[item.organismPart] = 1;
+      }
     }
     this.filters = filters;
     const sexFilterObj = Object.entries(this.filters.sex);
     const trackFilterObj = Object.entries(this.filters.trackingSystem);
+    const orgFilterObj = Object.entries(this.filters.organismPart);
     let j = 0;
     for (let i = 0; i < sexFilterObj.length; i++) {
       let jsonObj = { "key": sexFilterObj[i][j], doc_count: sexFilterObj[i][j + 1] };
@@ -180,27 +205,51 @@ export class OrganismDetailsComponent implements OnInit, AfterViewInit {
       let jsonObj = { "key": trackFilterObj[i][j], doc_count: trackFilterObj[i][j + 1] };
       this.trackingSystemFilters.push(jsonObj);
     }
+    for (let i = 0; i < orgFilterObj.length; i++) {
+      let jsonObj = { "key": orgFilterObj[i][j], doc_count: orgFilterObj[i][j + 1] };
+      this.organismPartFilters.push(jsonObj);
+    }
   }
 
   removeAllFilters() {
     $('.sex-inactive').removeClass('non-disp');
     $('.tracking-status-inactive').removeClass('non-disp');
+    $('.org-part-inactive').removeClass('non-disp');
     this.activeFilters = [];
-    this.dataSourceRecords.filter = undefined;
+    this.filterJson['sex'] = '';
+    this.filterJson['organismPart'] = '';
+    this.filterJson['trackingSystem'] = '';
+    this.dataSourceRecords.filter = this.filterJson;
     this.getBiosampleByOrganism();
   }
 
   removeFilter(filter: string) {
     if (filter != undefined) {
       const filterIndex = this.activeFilters.indexOf(filter);
-      this.activeFilters.splice(filterIndex, 1);
       if (this.activeFilters.length !== 0) {
-        this.dataSourceRecords.filter = this.activeFilters[0].trim().toLowerCase();
+        this.spliceFilterArray(filter);
+        this.activeFilters.splice(filterIndex, 1);
+        this.dataSourceRecords.filter = this.filterJson;
         this.getFiltersForSelectedFilter(this.dataSourceRecords.filteredData);
       } else {
-        this.dataSourceRecords.filter = undefined;
+        this.filterJson['sex'] = '';
+        this.filterJson['organismPart'] = '';
+        this.filterJson['trackingSystem'] = '';
+        this.dataSourceRecords.filter = this.filterJson;
         this.getBiosampleByOrganism();
       }
+    }
+  }
+
+  spliceFilterArray(filter: string) {
+    if (this.filterJson['sex'] === filter) {
+      this.filterJson['sex'] = '';
+    }
+    else if (this.filterJson['organismPart'] === filter) {
+      this.filterJson['organismPart'] = '';
+    }
+    else if (this.filterJson['trackingSystem'] === filter) {
+      this.filterJson['trackingSystem'] = '';
     }
   }
 
@@ -211,6 +260,7 @@ export class OrganismDetailsComponent implements OnInit, AfterViewInit {
         this.filtersMap = data;
         this.sexFilters = this.filtersMap.sex.filter(i => i !== "");
         this.trackingSystemFilters = this.filtersMap.trackingSystem.filter(i => i !== "");
+        this.organismPartFilters = this.filtersMap.organismPart.filter(i => i !== "");
       },
       err => console.log(err)
     );
@@ -229,12 +279,22 @@ export class OrganismDetailsComponent implements OnInit, AfterViewInit {
   getSearchResults(from?, size?) {
     $('.sex-inactive').removeClass('non-disp active');
     $('.tracking-status-inactive').removeClass('non-disp active');
+    $('.org-part-inactive').removeClass('non-disp active');
     if (this.searchText.length == 0) {
       this.getBiosampleByOrganism();
     }
     else {
       this.activeFilters = [];
-      this.dataSourceRecords.filter = this.searchText.trim().toLowerCase();
+      this.dataSourceRecords.filter = this.searchText.trim();
+      this.dataSourceRecords.filterPredicate = ((data, filter) => {
+        const a = !filter || data.sex.toLowerCase().includes(filter.toLowerCase());
+        const b = !filter || data.organismPart.toLowerCase().includes(filter.toLowerCase());
+        const c = !filter || data.trackingSystem.toLowerCase().includes(filter.toLowerCase());
+        const d = !filter || data.accession.toLowerCase().includes(filter.toLowerCase());
+        const e = !filter || data.commonName.toLowerCase().includes(filter.toLowerCase());
+        return a || b || c || d || e;
+      }) as (PeriodicElement, string) => boolean;
+      this.getFiltersForSelectedFilter(this.dataSourceRecords.filteredData);
     }
   }
 
@@ -255,6 +315,15 @@ export class OrganismDetailsComponent implements OnInit, AfterViewInit {
       } else {
         this.itemLimitTrackFilter = 3;
         this.isTrackCollapsed = true;
+      }
+    }
+    else if (filterKey == 'Organism Part') {
+      if (this.isOrganismPartCollapsed) {
+        this.itemLimitOrgFilter = 10000;
+        this.isOrganismPartCollapsed = false;
+      } else {
+        this.itemLimitOrgFilter = 3;
+        this.isOrganismPartCollapsed = true;
       }
     }
   }

@@ -39,3 +39,8 @@
     text-align: center;
     justify-content: center;
 }
+
+.inactiveFilter {
+    pointer-events: none;
+    cursor: default;
+ }

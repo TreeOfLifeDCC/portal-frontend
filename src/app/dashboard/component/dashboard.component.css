@@ -70,3 +70,8 @@ ul.long-list {
     font-size: unset;
     font-weight: 400;
 }
+
+.inactiveFilter {
+    pointer-events: none;
+    cursor: default;
+ }
