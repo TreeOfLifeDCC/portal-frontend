@@ -61,6 +61,9 @@ export class OrganismDetailsComponent implements OnInit, AfterViewInit {
     this.itemLimitOrgFilter = this.filterSize;
     this.itemLimitTrackFilter = this.filterSize;
     this.relatedRecords = [];
+    this.filterJson['sex'] = '';
+    this.filterJson['organismPart'] = '';
+    this.filterJson['trackingSystem'] = '';
     this.getBiosampleByOrganism();
   }
 
