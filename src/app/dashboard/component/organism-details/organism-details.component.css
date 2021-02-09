@@ -44,3 +44,7 @@
     pointer-events: none;
     cursor: default;
  }
+
+ .assemblies-font {
+    font-size: 13.5px;
+ }

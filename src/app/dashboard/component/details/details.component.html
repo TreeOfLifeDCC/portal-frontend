@@ -5,10 +5,11 @@
         <dd class="col-sm-9" *ngIf="bioSampleObj?.commonName">{{bioSampleObj?.commonName}}</dd>
 
         <dt class="col-sm-3">BioSample ID:</dt>
-        <dd class="col-sm-9"><a href="http://www.ebi.ac.uk/biosamples/samples/{{bioSampleObj?.accession}}" target="_blank">{{bioSampleObj?.accession}}</a></dd>
+        <dd class="col-sm-9"><a href="http://www.ebi.ac.uk/biosamples/samples/{{bioSampleObj?.accession}}"
+                target="_blank">{{bioSampleObj?.accession}}</a></dd>
 
         <dt class="col-sm-3">Organism:</dt>
-        <dd class="col-sm-9">{{bioSampleObj?.organism.text}}</dd>
+        <dd class="col-sm-9">{{bioSampleObj?.organism}}</dd>
 
         <dt class="col-sm-3">Organism Part:</dt>
         <dd class="col-sm-9">{{bioSampleObj?.organismPart}}</dd>
@@ -49,23 +50,32 @@
         <dt class="col-sm-3" *ngIf="bioSampleObj?.collectionDate">Collection Date:</dt>
         <dd class="col-sm-9" *ngIf="bioSampleObj?.collectionDate">{{bioSampleObj?.collectionDate}}</dd>
 
-        <dt class="col-sm-3" *ngIf="bioSampleObj?.geographicLocationCountryAndOrSea">Geographic Location (Country and/or Sea):</dt>
-        <dd class="col-sm-9" *ngIf="bioSampleObj?.geographicLocationCountryAndOrSea">{{bioSampleObj?.geographicLocationCountryAndOrSea}}</dd>
+        <dt class="col-sm-3" *ngIf="bioSampleObj?.geographicLocationCountryAndOrSea">Geographic Location (Country and/or
+            Sea):</dt>
+        <dd class="col-sm-9" *ngIf="bioSampleObj?.geographicLocationCountryAndOrSea">
+            {{bioSampleObj?.geographicLocationCountryAndOrSea}}</dd>
 
-        <dt class="col-sm-3" *ngIf="bioSampleObj?.geographicLocationRegionAndLocality">Geographic Location (Region and Locality):</dt>
-        <dd class="col-sm-9" *ngIf="bioSampleObj?.geographicLocationRegionAndLocality">{{bioSampleObj?.geographicLocationRegionAndLocality}}</dd>
+        <dt class="col-sm-3" *ngIf="bioSampleObj?.geographicLocationRegionAndLocality">Geographic Location (Region and
+            Locality):</dt>
+        <dd class="col-sm-9" *ngIf="bioSampleObj?.geographicLocationRegionAndLocality">
+            {{bioSampleObj?.geographicLocationRegionAndLocality}}</dd>
 
         <dt class="col-sm-3" *ngIf="bioSampleObj?.geographicLocationLatitude.text">Geographic Location (Latitude):</dt>
-        <dd class="col-sm-9" *ngIf="bioSampleObj?.geographicLocationLatitude.text">{{bioSampleObj?.geographicLocationLatitude.text}}</dd>
+        <dd class="col-sm-9" *ngIf="bioSampleObj?.geographicLocationLatitude.text">
+            {{bioSampleObj?.geographicLocationLatitude.text}}</dd>
 
-        <dt class="col-sm-3" *ngIf="bioSampleObj?.geographicLocationLongitude.text">Geographic Location (Longitude):</dt>
-        <dd class="col-sm-9" *ngIf="bioSampleObj?.geographicLocationLongitude.text">{{bioSampleObj?.geographicLocationLongitude.text}}</dd>
+        <dt class="col-sm-3" *ngIf="bioSampleObj?.geographicLocationLongitude.text">Geographic Location (Longitude):
+        </dt>
+        <dd class="col-sm-9" *ngIf="bioSampleObj?.geographicLocationLongitude.text">
+            {{bioSampleObj?.geographicLocationLongitude.text}}</dd>
 
         <dt class="col-sm-3" *ngIf="bioSampleObj?.geographicLocationDepth.text">Geographic Location (Depth):</dt>
-        <dd class="col-sm-9" *ngIf="bioSampleObj?.geographicLocationDepth.text">{{bioSampleObj?.geographicLocationDepth.text}}</dd>
+        <dd class="col-sm-9" *ngIf="bioSampleObj?.geographicLocationDepth.text">
+            {{bioSampleObj?.geographicLocationDepth.text}}</dd>
 
         <dt class="col-sm-3" *ngIf="bioSampleObj?.geographicLocationElevation.text">Geographic Location Elevation:</dt>
-        <dd class="col-sm-9" *ngIf="bioSampleObj?.geographicLocationElevation.text">{{bioSampleObj?.geographicLocationElevation.text}}</dd>
+        <dd class="col-sm-9" *ngIf="bioSampleObj?.geographicLocationElevation.text">
+            {{bioSampleObj?.geographicLocationElevation.text}}</dd>
 
         <dt class="col-sm-3" *ngIf="bioSampleObj?.habitat">Habitat:</dt>
         <dd class="col-sm-9" *ngIf="bioSampleObj?.habitat">{{bioSampleObj?.habitat}}</dd>
@@ -83,7 +93,9 @@
         <dd class="col-sm-9" *ngIf="bioSampleObj?.projectName">{{bioSampleObj?.projectName}}</dd>
 
         <dt class="col-sm-3" *ngIf="bioSampleObj?.sampleDerivedFrom">Sample Derived From:</dt>
-        <dd class="col-sm-9" *ngIf="bioSampleObj?.sampleDerivedFrom"><a href="http://www.ebi.ac.uk/biosamples/samples/{{bioSampleObj?.sampleDerivedFrom}}" target="_blank">{{bioSampleObj?.sampleDerivedFrom}}</a></dd>
+        <dd class="col-sm-9" *ngIf="bioSampleObj?.sampleDerivedFrom"><a
+                href="http://www.ebi.ac.uk/biosamples/samples/{{bioSampleObj?.sampleDerivedFrom}}"
+                target="_blank">{{bioSampleObj?.sampleDerivedFrom}}</a></dd>
 
         <!-- Custom Fields Section -->
         <div class="col-sm-12">
@@ -91,136 +103,133 @@
             <div class="row" *ngFor="let sample of bioSampleObj?.customFields">
                 <dt class="col-sm-3">{{sample?.name}}</dt>
                 <dd class="col-sm-9">
-                    <a *ngIf="sample.ontologyTerms?.lenght > 0; else simple" href="{{sample.ontologyTerms[0]}}">{{sample?.value}}</a>
+                    <a *ngIf="sample.ontologyTerms?.lenght > 0; else simple"
+                        href="{{sample.ontologyTerms[0]}}">{{sample?.value}}</a>
                     <ng-template #simple>
                         {{sample?.value}}
                     </ng-template>
                 </dd>
             </div>
         </div>
-        <!-- Experiment Files Section -->
-        <div class="col-sm-12" *ngIf="bioSampleObj?.experiment.length">
+
+        <div class="col-sm-12" *ngIf="bioSampleObj?.specimens.length">
             <hr>
-            <h1 class="col-sm-12 page-header">Related files</h1>
             <mat-form-field>
                 <mat-label>Search</mat-label>
-                <input matInput (keyup)="filesSearch($event)" placeholder="Ex. ILLUMINA" #input>
+                <input matInput [(ngModel)]='searchText' (keyup)="getSearchResults()" placeholder="Ex. ILLUMINA" #input>
             </mat-form-field>
-            <table mat-table [dataSource]="dataSourceFiles" matSort>
+            <div class="row">
+                <div class="col-sm-2">
+                    <div class="row">
+                        <div class="col-md-12 col-sm-6">
+                            <div class="card bg-lite mb-3 filter-top">
+                                <h3 class="card-header filter-heading">
+                                    <span #lbltextSex>Sex</span>
+                                    <i class="material-icons float-right sex-inactive"
+                                        *ngIf="sexFilters.length > 3 && isSexFilterCollapsed"
+                                        (click)="toggleCollapse(lbltextSex.innerText)">add</i>
+                                    <i class="material-icons float-right sex-inactive"
+                                        *ngIf="sexFilters.length > 3 && !isSexFilterCollapsed"
+                                        (click)="toggleCollapse(lbltextSex.innerText)">remove</i>
+                                </h3>
+                                <ul id="sex-inactive" class="list-group"
+                                    [ngClass]="{'long-list': itemLimitSexFilter > filterSize}">
+                                    <ng-container *ngFor="let filter of sexFilters; let i = index">
+                                        <li id="{{i}}"
+                                            class="list-group-item d-flex justify-content-between align-items-center sex-inactive"
+                                            [ngClass]="checkFilterIsActive(filter.key)"
+                                            (click)="onFilterClick($event, lbltextSex.innerText, filter.key)"
+                                            style="cursor: pointer; padding: .75rem 0.25rem;"
+                                            *ngIf="i<itemLimitSexFilter && filter.key != ''">
+                                            {{filter.key}}
+                                            <span class="badge badge-pill badge-info">{{filter.doc_count}}</span>
+                                        </li>
+                                    </ng-container>
+                                </ul>
+                            </div>
+                        </div>
 
-                <ng-container matColumnDef="study_accession">
-                    <mat-header-cell *matHeaderCellDef mat-sort-header> Study Accession </mat-header-cell>
-                    <mat-cell *matCellDef="let element"> <a class="no-underline" target="_blank" href="https://www.ebi.ac.uk/ena/browser/view/{{element.study_accession}}">{{element.study_accession}}</a>
-                    </mat-cell>
-                </ng-container>
+                        <div class="col-md-12 col-sm-6">
+                            <div class="card bg-lite mb-3 filter-top">
+                                <h3 class="card-header filter-heading">
+                                    <span #lbltextOrgPart>Organism Part</span>
+                                    <i class="material-icons float-right org-part-inactive"
+                                        *ngIf="organismPartFilters.length > 3 && isOrganismPartCollapsed"
+                                        (click)="toggleCollapse(lbltextOrgPart.innerText)">add</i>
+                                    <i class="material-icons float-right org-part-inactive"
+                                        *ngIf="organismPartFilters.length > 3 && !isOrganismPartCollapsed"
+                                        (click)="toggleCollapse(lbltextOrgPart.innerText)">remove</i>
+                                </h3>
+                                <ul id="org-part-inactive" class="list-group"
+                                    [ngClass]="{'long-list': itemLimitOrgFilter > filterSize}">
+                                    <ng-container *ngFor="let filter of organismPartFilters; let i = index">
+                                        <li id="{{i}}"
+                                            class="list-group-item d-flex justify-content-between align-items-center org-part-inactive"
+                                            [ngClass]="checkFilterIsActive(filter.key)"
+                                            (click)="onFilterClick($event, lbltextOrgPart.innerText, filter.key)"
+                                            style="cursor: pointer; padding: .75rem 0.25rem;"
+                                            *ngIf="i<itemLimitOrgFilter && filter.key != ''">
+                                            {{filter.key}}
+                                            <span class="badge badge-pill badge-info">{{filter.doc_count}}</span>
+                                        </li>
+                                    </ng-container>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-10">
+                    <div class="row">
+                        <h1 *ngIf="activeFilters.length !== 0">Filters:
+                            <button type="button" class="btn btn-success" *ngFor="let filter of activeFilters">
+                                {{filter}}
+                                <span class="badge badge-light" (click)="removeFilter(filter)">X</span>
+                            </button>
+                            <button type="button" class="btn btn-primary" (click)="removeAllFilters()">
+                                Remove all filters
+                            </button>
+                        </h1>
+                        <table mat-table [dataSource]="dataSourceRecords" matSort style="width: 100%;">
+                            <ng-container matColumnDef="accession">
+                                <mat-header-cell *matHeaderCellDef mat-sort-header> BioSample ID </mat-header-cell>
+                                <mat-cell *matCellDef="let element" class="txt-center">
+                                    <a [routerLink]="['/data/specimens/details/', element.accession]">
+                                        {{element.accession}}</a>
+                                </mat-cell>
+                            </ng-container>
 
-                <ng-container matColumnDef="experiment_accession">
-                    <mat-header-cell *matHeaderCellDef mat-sort-header> Experiment Accession </mat-header-cell>
-                    <mat-cell *matCellDef="let element"> <a class="no-underline" target="_blank" href="https://www.ebi.ac.uk/ena/browser/view/{{element.experiment_accession}}">{{element.experiment_accession}}</a>
-                    </mat-cell>
-                </ng-container>
-                <!-- Third Column -->
-                <ng-container matColumnDef="run_accession">
-                    <mat-header-cell *matHeaderCellDef mat-sort-header> Run Accession </mat-header-cell>
-                    <mat-cell *matCellDef="let element"> <a class="no-underline" target="_blank" href="https://www.ebi.ac.uk/ena/browser/view/{{element.run_accession}}">{{element.run_accession}}</a>
-                    </mat-cell>
-                </ng-container>
+                            <ng-container matColumnDef="organism">
+                                <mat-header-cell *matHeaderCellDef mat-sort-header> Organism </mat-header-cell>
+                                <mat-cell *matCellDef="let element" class="txt-center">
+                                    {{element.organism}}
+                                </mat-cell>
+                            </ng-container>
 
-                <ng-container matColumnDef="fastq_ftp">
-                    <mat-header-cell *matHeaderCellDef mat-sort-header> Raw Data </mat-header-cell>
-                    <mat-cell *matCellDef="let el">
-                        <ul class="list-group ">
-                            <li *ngFor="let fastq of el.fastq_ftp">
-                                <a href="ftp://{{fastq}}">{{el.run_accession}}</a>
-                            </li>
-                        </ul>
-                    </mat-cell>
-                </ng-container>
+                            <ng-container matColumnDef="commonName">
+                                <mat-header-cell *matHeaderCellDef mat-sort-header>Common Name </mat-header-cell>
+                                <mat-cell *matCellDef="let element" class="txt-center"> {{element?.commonName}}
+                                </mat-cell>
+                            </ng-container>
 
-                <ng-container matColumnDef="submitted_ftp">
-                    <mat-header-cell *matHeaderCellDef mat-sort-header> Mapped Reads </mat-header-cell>
-                    <mat-cell *matCellDef="let ele">
-                        <ul class="list-group ">
-                            <li *ngFor="let submitted_ftp of ele.submitted_ftp">
-                                <a href="ftp://{{submitted_ftp}}">{{ele.study_accession}}</a>
-                            </li>
-                        </ul>
-                    </mat-cell>
-                </ng-container>
+                            <ng-container matColumnDef="sex">
+                                <mat-header-cell *matHeaderCellDef mat-sort-header> Sex </mat-header-cell>
+                                <mat-cell *matCellDef="let element" class="txt-center"> {{element.sex}} </mat-cell>
+                            </ng-container>
 
-                <ng-container matColumnDef="instrument_platform">
-                    <mat-header-cell *matHeaderCellDef mat-sort-header> Instrument Platform </mat-header-cell>
-                    <mat-cell *matCellDef="let element"> {{element.instrument_platform}} </mat-cell>
-                </ng-container>
+                            <ng-container matColumnDef="organismPart">
+                                <mat-header-cell *matHeaderCellDef mat-sort-header> Organism part </mat-header-cell>
+                                <mat-cell *matCellDef="let element" class="txt-center"> {{element.organismPart}}
+                                </mat-cell>
+                            </ng-container>
 
-                <ng-container matColumnDef="instrument_model">
-                    <mat-header-cell *matHeaderCellDef mat-sort-header> Instrument Model </mat-header-cell>
-                    <mat-cell *matCellDef="let element"> {{element.instrument_model}} </mat-cell>
-                </ng-container>
-
-                <ng-container matColumnDef="library_layout">
-                    <mat-header-cell *matHeaderCellDef mat-sort-header> Library Layout </mat-header-cell>
-                    <mat-cell *matCellDef="let element"> {{element.library_layout}} </mat-cell>
-                </ng-container>
-
-                <ng-container matColumnDef="library_strategy">
-                    <mat-header-cell *matHeaderCellDef mat-sort-header> Library Strategy </mat-header-cell>
-                    <mat-cell *matCellDef="let element"> {{element.library_strategy}} </mat-cell>
-                </ng-container>
-
-                <ng-container matColumnDef="library_source">
-                    <mat-header-cell *matHeaderCellDef mat-sort-header> Library Source </mat-header-cell>
-                    <mat-cell *matCellDef="let element"> {{element.library_source}} </mat-cell>
-                </ng-container>
-
-                <ng-container matColumnDef="library_selection">
-                    <mat-header-cell *matHeaderCellDef mat-sort-header> Library Selection </mat-header-cell>
-                    <mat-cell *matCellDef="let element"> {{element.library_selection}} </mat-cell>
-                </ng-container>
-
-                <mat-header-row *matHeaderRowDef="displayedColumnsFiles"></mat-header-row>
-                <mat-row *matRowDef="let row; columns: displayedColumnsFiles;"></mat-row>
-            </table>
-            <mat-paginator #experimentsTable [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons [length]="dataSourceFilesCount"></mat-paginator>
-        </div>
-
-        <!-- Assemblies Section -->
-        <div class="col-sm-12" *ngIf="bioSampleObj?.assemblies.length">
-            <hr>
-            <h1 class="col-sm-12 page-header">Related assemblies</h1>
-            <mat-form-field>
-                <mat-label>Search</mat-label>
-                <input matInput (keyup)="assembliesSearch($event)" placeholder="Ex. ILLUMINA" #input>
-            </mat-form-field>
-            <table mat-table [dataSource]="dataSourceAssemblies" matSort style="width: 100%;">
-                <!-- First Column -->
-                <ng-container matColumnDef="accession">
-                    <mat-header-cell *matHeaderCellDef mat-sort-header> Accession </mat-header-cell>
-                    <mat-cell *matCellDef="let element">
-                        <a class="no-underline" target="_blank" href="https://www.ebi.ac.uk/ena/browser/view/{{element.accession}}">{{element.accession}}</a>
-                    </mat-cell>
-                </ng-container>
-
-                <!-- Second Column -->
-                <ng-container matColumnDef="assembly_name">
-                    <mat-header-cell *matHeaderCellDef mat-sort-header> Assembly Name </mat-header-cell>
-                    <mat-cell *matCellDef="let element"> {{element.assembly_name}} </mat-cell>
-                </ng-container>
-                <!-- Third Column -->
-                <ng-container matColumnDef="description">
-                    <mat-header-cell *matHeaderCellDef mat-sort-header> Description </mat-header-cell>
-                    <mat-cell *matCellDef="let element"> {{element.description}} </mat-cell>
-                </ng-container>
-
-                <ng-container matColumnDef="version">
-                    <mat-header-cell *matHeaderCellDef mat-sort-header> Version </mat-header-cell>
-                    <mat-cell *matCellDef="let element"> {{element.version}} </mat-cell>
-                </ng-container>
-
-                <mat-header-row *matHeaderRowDef="displayedColumnsAssemblies"></mat-header-row>
-                <mat-row *matRowDef="let row; columns: displayedColumnsAssemblies;"></mat-row>
-            </table>
-            <mat-paginator #assembliesTable [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons [length]="dataSourceAssembliesCount" style="width: 100%;"></mat-paginator>
+                            <mat-header-row *matHeaderRowDef="specDisplayedColumns"></mat-header-row>
+                            <mat-row *matRowDef="let row; columns: specDisplayedColumns;"></mat-row>
+                        </table>
+                        <mat-paginator style="width: 100%;" [pageSizeOptions]="[20, 30, 50]" showFirstLastButtons
+                            [length]="bioSampleTotalCount"></mat-paginator>
+                    </div>
+                </div>
+            </div>
         </div>
 
         <div class="col-sm-12" *ngIf="bioSampleObj?.annotation">

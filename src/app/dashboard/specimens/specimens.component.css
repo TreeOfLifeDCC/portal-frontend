@@ -1,14 +1,22 @@
-.jumbotron {
-    background: url("../../../assets/DTL_website_banner_2020_FINAL_WEB.jpg") no-repeat center center;
-    background-size: cover;
-    height: 31%;
-}
-
-.display-4 {
-    margin-top: 15px;
-    font-family: "Comic Sans MS", cursive, sans-serif;
+.text-center {
+    text-align: center!important;
 }
 
 .page-header {
     color: #4BBEFD;
+}
+
+.mat-form-field {
+    font-size: 14px;
+    width: 100%;
+}
+
+.mat-header-cell {
+    text-align: center;
+    justify-content: center;
+}
+
+.mat-cell {
+    text-align: center;
+    justify-content: center;
 }

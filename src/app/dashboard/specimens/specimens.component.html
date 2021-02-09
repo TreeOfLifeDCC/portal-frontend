@@ -1,15 +1,124 @@
-<div class="jumbotron jumbotron-fluid">
-    <div class="container">
-        <h1 class="display-4">Sequencing the genomes of </h1>
-        <h1 class="display-4">all 60,000 eukaryotic species </h1>
-        <h1 class="display-4">of Britain and Ireland</h1>
-    </div>
-</div>
+<div class="container" style="padding-top: 65px;">
+    <h1 class="text-center page-header">{{bioSampleId}}</h1>
+    <dl class="row">
+        <dt class="col-sm-3" *ngIf="bioSampleObj?.commonName">Name:</dt>
+        <dd class="col-sm-9" *ngIf="bioSampleObj?.commonName">{{bioSampleObj?.commonName}}</dd>
 
-<div class="container" style="padding-top: 20px;">
-    <div class="row">
-        <div class="col-md-2">
-            <h1 class="page-header">Specimens</h1>
+        <dt class="col-sm-3">BioSample ID:</dt>
+        <dd class="col-sm-9"><a href="http://www.ebi.ac.uk/biosamples/samples/{{bioSampleObj?.accession}}"
+                target="_blank">{{bioSampleObj?.accession}}</a></dd>
+
+        <dt class="col-sm-3">Organism:</dt>
+        <dd class="col-sm-9">{{bioSampleObj?.organism}}</dd>
+
+        <dt class="col-sm-3">Organism Part:</dt>
+        <dd class="col-sm-9">{{bioSampleObj?.organismPart}}</dd>
+
+        <dt class="col-sm-3" *ngIf="bioSampleObj?.sex">Sex:</dt>
+        <dd class="col-sm-9" *ngIf="bioSampleObj?.sex">{{bioSampleObj?.sex}}</dd>
+
+        <dt class="col-sm-3">Tax ID:</dt>
+        <dd class="col-sm-9">{{bioSampleObj?.taxonId}}</dd>
+
+        <dt class="col-sm-3" *ngIf="bioSampleObj?.specimenId">Specimen ID:</dt>
+        <dd class="col-sm-9" *ngIf="bioSampleObj?.specimenId">{{bioSampleObj?.specimenId}}</dd>
+
+        <dt class="col-sm-3" *ngIf="bioSampleObj?.cultureOrStrainId">Culture ID:</dt>
+        <dd class="col-sm-9" *ngIf="bioSampleObj?.cultureOrStrainId">{{bioSampleObj?.cultureOrStrainId}}</dd>
+
+        <dt class="col-sm-3" *ngIf="bioSampleObj?.lifestage">Lifestage:</dt>
+        <dd class="col-sm-9" *ngIf="bioSampleObj?.lifestage">{{bioSampleObj?.lifestage}}</dd>
+
+        <dt class="col-sm-3" *ngIf="bioSampleObj?.relationship">Relationship:</dt>
+        <dd class="col-sm-9" *ngIf="bioSampleObj?.relationship">{{bioSampleObj?.relationship}}</dd>
+
+        <dt class="col-sm-3" *ngIf="bioSampleObj?.gal">Gal:</dt>
+        <dd class="col-sm-9" *ngIf="bioSampleObj?.gal">{{bioSampleObj?.gal}}</dd>
+
+        <dt class="col-sm-3" *ngIf="bioSampleObj?.galSampleId">Gal Sample ID:</dt>
+        <dd class="col-sm-9" *ngIf="bioSampleObj?.galSampleId">{{bioSampleObj?.galSampleId}}</dd>
+
+        <dt class="col-sm-3" *ngIf="bioSampleObj?.relationship">Relationship:</dt>
+        <dd class="col-sm-9" *ngIf="bioSampleObj?.relationship">{{bioSampleObj?.relationship}}</dd>
+
+        <dt class="col-sm-3" *ngIf="bioSampleObj?.collectedBy">Collected By:</dt>
+        <dd class="col-sm-9" *ngIf="bioSampleObj?.collectedBy">{{bioSampleObj?.collectedBy}}</dd>
+
+        <dt class="col-sm-3" *ngIf="bioSampleObj?.collectingInstitution">Collecting Institution:</dt>
+        <dd class="col-sm-9" *ngIf="bioSampleObj?.collectingInstitution">{{bioSampleObj?.collectingInstitution}}</dd>
+
+        <dt class="col-sm-3" *ngIf="bioSampleObj?.collectionDate">Collection Date:</dt>
+        <dd class="col-sm-9" *ngIf="bioSampleObj?.collectionDate">{{bioSampleObj?.collectionDate}}</dd>
+
+        <dt class="col-sm-3" *ngIf="bioSampleObj?.geographicLocationCountryAndOrSea">Geographic Location (Country and/or
+            Sea):</dt>
+        <dd class="col-sm-9" *ngIf="bioSampleObj?.geographicLocationCountryAndOrSea">
+            {{bioSampleObj?.geographicLocationCountryAndOrSea}}</dd>
+
+        <dt class="col-sm-3" *ngIf="bioSampleObj?.geographicLocationRegionAndLocality">Geographic Location (Region and
+            Locality):</dt>
+        <dd class="col-sm-9" *ngIf="bioSampleObj?.geographicLocationRegionAndLocality">
+            {{bioSampleObj?.geographicLocationRegionAndLocality}}</dd>
+
+        <dt class="col-sm-3" *ngIf="bioSampleObj?.geographicLocationLatitude.text">Geographic Location (Latitude):</dt>
+        <dd class="col-sm-9" *ngIf="bioSampleObj?.geographicLocationLatitude.text">
+            {{bioSampleObj?.geographicLocationLatitude.text}}</dd>
+
+        <dt class="col-sm-3" *ngIf="bioSampleObj?.geographicLocationLongitude.text">Geographic Location (Longitude):
+        </dt>
+        <dd class="col-sm-9" *ngIf="bioSampleObj?.geographicLocationLongitude.text">
+            {{bioSampleObj?.geographicLocationLongitude.text}}</dd>
+
+        <dt class="col-sm-3" *ngIf="bioSampleObj?.geographicLocationDepth.text">Geographic Location (Depth):</dt>
+        <dd class="col-sm-9" *ngIf="bioSampleObj?.geographicLocationDepth.text">
+            {{bioSampleObj?.geographicLocationDepth.text}}</dd>
+
+        <dt class="col-sm-3" *ngIf="bioSampleObj?.geographicLocationElevation.text">Geographic Location Elevation:</dt>
+        <dd class="col-sm-9" *ngIf="bioSampleObj?.geographicLocationElevation.text">
+            {{bioSampleObj?.geographicLocationElevation.text}}</dd>
+
+        <dt class="col-sm-3" *ngIf="bioSampleObj?.habitat">Habitat:</dt>
+        <dd class="col-sm-9" *ngIf="bioSampleObj?.habitat">{{bioSampleObj?.habitat}}</dd>
+
+        <dt class="col-sm-3" *ngIf="bioSampleObj?.identifiedBy">Identified By:</dt>
+        <dd class="col-sm-9" *ngIf="bioSampleObj?.identifiedBy">{{bioSampleObj?.identifiedBy}}</dd>
+
+        <dt class="col-sm-3" *ngIf="bioSampleObj?.identifierAffiliation">Identifier Affiliation:</dt>
+        <dd class="col-sm-9" *ngIf="bioSampleObj?.identifierAffiliation">{{bioSampleObj?.identifierAffiliation}}</dd>
+
+        <dt class="col-sm-3" *ngIf="bioSampleObj?.specimenVoucher">Specimen Voucher:</dt>
+        <dd class="col-sm-9" *ngIf="bioSampleObj?.specimenVoucher">{{bioSampleObj?.specimenVoucher}}</dd>
+
+        <dt class="col-sm-3" *ngIf="bioSampleObj?.projectName">Project Name:</dt>
+        <dd class="col-sm-9" *ngIf="bioSampleObj?.projectName">{{bioSampleObj?.projectName}}</dd>
+
+        <dt class="col-sm-3" *ngIf="bioSampleObj?.sampleDerivedFrom">Sample Derived From:</dt>
+        <dd class="col-sm-9" *ngIf="bioSampleObj?.sampleDerivedFrom"><a
+                href="http://www.ebi.ac.uk/biosamples/samples/{{bioSampleObj?.sampleDerivedFrom}}"
+                target="_blank">{{bioSampleObj?.sampleDerivedFrom}}</a></dd>
+
+        <!-- Custom Fields Section -->
+        <div class="col-sm-12">
+            <hr>
+            <div class="row" *ngFor="let sample of bioSampleObj?.customFields">
+                <dt class="col-sm-3">{{sample?.name}}</dt>
+                <dd class="col-sm-9">
+                    <a *ngIf="sample.ontologyTerms?.lenght > 0; else simple"
+                        href="{{sample.ontologyTerms[0]}}">{{sample?.value}}</a>
+                    <ng-template #simple>
+                        {{sample?.value}}
+                    </ng-template>
+                </dd>
+            </div>
         </div>
-    </div>
+
+        <div class="col-sm-12" *ngIf="bioSampleObj?.annotation">
+            <h1 class="col-sm-12 page-header">Annotations</h1>
+            <ul class="list-group">
+                <li class="list-group-item list-group-item-success">
+                    <a href="{{bioSampleObj?.annotation}}">{{bioSampleObj?.annotation}}</a>
+                </li>
+            </ul>
+        </div>
+    </dl>
 </div>

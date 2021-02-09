@@ -36,6 +36,10 @@ export class DashboardService {
     return this.http.get(`${this.API_BASE_URL}/organisms/${accession}`);
   }
 
+  public getSpecimenByAccession(accession: string): Observable<any> {
+    return this.http.get(`${this.API_BASE_URL}/organisms/specimen/${accession}`);
+  }
+
   public getRootOrganismByOrganism(organism: string): Observable<any> {
     return this.http.get(`${this.API_BASE_URL}/root_organisms/${organism}`);
   }
@@ -50,6 +54,10 @@ export class DashboardService {
 
   public getRootOrganismFilters(organism): Observable<any> {
     return this.http.get(`${this.API_BASE_URL}/root_organisms/filters?organism=${organism}`);
+  }
+
+  public getSpecimenFilters(accession): Observable<any> {
+    return this.http.get(`${this.API_BASE_URL}/organisms/filters?accession=${accession}`);
   }
 
   public getSearchResults(search: any, from?, size?): Observable<any> {

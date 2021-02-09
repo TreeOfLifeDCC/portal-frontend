@@ -50,6 +50,17 @@ export class OrganismDetailsComponent implements OnInit, AfterViewInit {
     trackingSystem: ""
   };
 
+  dataSourceFiles;
+  dataSourceFilesCount;
+  dataSourceAssemblies;
+  dataSourceAssembliesCount;
+  displayedColumnsFiles = ['study_accession', 'experiment_accession', 'run_accession', 'fastq_ftp', 'submitted_ftp',
+    'instrument_platform', 'instrument_model', 'library_layout', 'library_strategy', 'library_source',
+    'library_selection'];
+  displayedColumnsAssemblies = ['accession', 'assembly_name', 'description', 'version'];
+  @ViewChild('experimentsTable') exPaginator: MatPaginator;
+  @ViewChild('assembliesTable') asPaginator: MatPaginator;
+
   constructor(private route: ActivatedRoute, private dashboardService: DashboardService, private spinner: NgxSpinnerService, private router: Router) {
     this.route.params.subscribe(param => this.bioSampleId = param.id);
   }
@@ -85,13 +96,46 @@ export class OrganismDetailsComponent implements OnInit, AfterViewInit {
           setTimeout(() => {
             this.organismName = data.organism;
             this.dataSourceRecords = new MatTableDataSource<any>(unpackedData);
-            this.specBioSampleTotalCount = unpackedData.length;
-            this.dataSourceRecords.sort = this.sort;
+            this.specBioSampleTotalCount = unpackedData?.length;
             this.dataSourceRecords.paginator = this.paginator;
+
+            if (data.experiment != null) {
+              this.dataSourceFiles = new MatTableDataSource<Sample>(data.experiment);
+              this.dataSourceFilesCount = data.experiment?.length;
+            }
+            else {
+              this.dataSourceFiles = new MatTableDataSource<Sample>();
+              this.dataSourceFilesCount = 0;
+            }
+            if (data.experiment != null) {
+              this.dataSourceAssemblies = new MatTableDataSource<any>(data.assemblies);
+              this.dataSourceAssembliesCount = data.assemblies?.length;
+            }
+            else {
+              this.dataSourceAssemblies = new MatTableDataSource<Sample>();
+              this.dataSourceAssembliesCount = 0;
+            }
+
+            this.dataSourceFiles.paginator = this.exPaginator;
+            this.dataSourceAssemblies.paginator = this.asPaginator;
+
+            this.dataSourceRecords.sort = this.sort;
+            this.dataSourceFiles.sort = this.sort;
+            this.dataSourceAssemblies.sort = this.sort;
           }, 50)
         },
         err => console.log(err)
       );
+  }
+
+  filesSearch(event: Event) {
+    const filterValue = (event.target as HTMLInputElement).value;
+    this.dataSourceFiles.filter = filterValue.trim().toLowerCase();
+  }
+
+  assembliesSearch(event: Event) {
+    const filterValue = (event.target as HTMLInputElement).value;
+    this.dataSourceAssemblies.filter = filterValue.trim().toLowerCase();
   }
 
   applyFilter(event: Event) {
@@ -177,22 +221,27 @@ export class OrganismDetailsComponent implements OnInit, AfterViewInit {
 
     this.filters = filters;
     for (const item of data) {
-      if (item.sex in filters.sex) {
-        filters.sex[item.sex] += 1;
-      } else {
-        filters.sex[item.sex] = 1;
+      if (item.sex != null) {
+        if (item.sex in filters.sex) {
+          filters.sex[item.sex] += 1;
+        } else {
+          filters.sex[item.sex] = 1;
+        }
+      }
+      if (item.trackingSystem != null) {
+        if (item.trackingSystem in filters.trackingSystem) {
+          filters.trackingSystem[item.trackingSystem] += 1;
+        } else {
+          filters.trackingSystem[item.trackingSystem] = 1;
+        }
       }
 
-      if (item.trackingSystem in filters.trackingSystem) {
-        filters.trackingSystem[item.trackingSystem] += 1;
-      } else {
-        filters.trackingSystem[item.trackingSystem] = 1;
-      }
-
-      if (item.organismPart in filters.organismPart) {
-        filters.organismPart[item.organismPart] += 1;
-      } else {
-        filters.organismPart[item.organismPart] = 1;
+      if (item.organismPart != null) {
+        if (item.organismPart in filters.organismPart) {
+          filters.organismPart[item.organismPart] += 1;
+        } else {
+          filters.organismPart[item.organismPart] = 1;
+        }
       }
     }
     this.filters = filters;

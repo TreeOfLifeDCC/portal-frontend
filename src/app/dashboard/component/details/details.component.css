@@ -2,6 +2,17 @@
     text-align: center!important;
 }
 
+.card-header,z
+.btn-success,
+.badge-success {
+    background-color: #8FBC45;
+}
+
+.btn-primary,
+.active {
+    background-color: #4BBEFD;
+}
+
 .page-header {
     color: #4BBEFD;
 }
@@ -11,12 +22,25 @@
     width: 100%;
 }
 
+.disp {
+    display: block !important;
+}
+
+.non-disp {
+    display: none !important;
+}
+
+.txt-center {
+    text-align: center;
+    justify-content: center;
+}
+
 .mat-header-cell {
     text-align: center;
     justify-content: center;
 }
 
-.mat-cell {
-    text-align: center;
-    justify-content: center;
-}
+.inactiveFilter {
+    pointer-events: none;
+    cursor: default;
+ }

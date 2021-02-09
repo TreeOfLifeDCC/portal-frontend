@@ -24,7 +24,7 @@
             <div class="row">
                 <div class="col-sm-2">
                     <div class="row">
-                        <div class="col-md-12 col-sm-6">
+                        <div class="col-md-12 col-sm-6" *ngIf = "sexFilters.length">
                             <div class="card bg-lite mb-3 filter-top">
                                 <h3 class="card-header filter-heading">
                                     <span #lbltextSex>Sex</span>
@@ -52,7 +52,7 @@
                             </div>
                         </div>
 
-                        <div class="col-md-12 col-sm-6">
+                        <div class="col-md-12 col-sm-6" *ngIf = "organismPartFilters.length">
                             <div class="card bg-lite mb-3 filter-top">
                                 <h3 class="card-header filter-heading">
                                     <span #lbltextOrgPart>Organism Part</span>
@@ -80,7 +80,7 @@
                             </div>
                         </div>
 
-                        <div class="col-md-12 col-sm-6">
+                        <div class="col-md-12 col-sm-6" *ngIf = "trackingSystemFilters.length">
                             <div class="card bg-lite mb-3 filter-top">
                                 <h3 class="card-header filter-heading">
                                     <span #lbltextTrack>Tracking Status</span>
@@ -165,11 +165,132 @@
                             <mat-header-row *matHeaderRowDef="specDisplayedColumns"></mat-header-row>
                             <mat-row *matRowDef="let row; columns: specDisplayedColumns;"></mat-row>
                         </table>
-                        <mat-paginator style="width: 100%;" [pageSizeOptions]="[20, 30, 50]" showFirstLastButtons
+                        <mat-paginator style="width: 100%;" [pageSizeOptions]="[10, 20, 30]" showFirstLastButtons
                             [length]="bioSampleTotalCount"></mat-paginator>
                     </div>
                 </div>
             </div>
+        </div>
+
+        <!-- Experiment Files Section -->
+        <div class="col-sm-12" *ngIf="dataSourceFilesCount != 0">
+            <hr>
+            <h1 class="col-sm-12 page-header">Related files</h1>
+            <mat-form-field>
+                <mat-label>Search</mat-label>
+                <input matInput (keyup)="filesSearch($event)" placeholder="Ex. ILLUMINA" #input>
+            </mat-form-field>
+            <table mat-table [dataSource]="dataSourceFiles">
+
+                <ng-container matColumnDef="study_accession">
+                    <mat-header-cell *matHeaderCellDef> Study Accession </mat-header-cell>
+                    <mat-cell *matCellDef="let element" class="txt-center assemblies-font"> <a class="no-underline" target="_blank" href="https://www.ebi.ac.uk/ena/browser/view/{{element.study_accession}}">{{element.study_accession}}</a>
+                    </mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="experiment_accession">
+                    <mat-header-cell *matHeaderCellDef> Experiment Accession </mat-header-cell>
+                    <mat-cell *matCellDef="let element" class="txt-center assemblies-font"> <a class="no-underline" target="_blank" href="https://www.ebi.ac.uk/ena/browser/view/{{element.experiment_accession}}">{{element.experiment_accession}}</a>
+                    </mat-cell>
+                </ng-container>
+                <!-- Third Column -->
+                <ng-container matColumnDef="run_accession">
+                    <mat-header-cell *matHeaderCellDef> Run Accession </mat-header-cell>
+                    <mat-cell *matCellDef="let element" class="txt-center assemblies-font"> <a class="no-underline" target="_blank" href="https://www.ebi.ac.uk/ena/browser/view/{{element.run_accession}}">{{element.run_accession}}</a>
+                    </mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="fastq_ftp">
+                    <mat-header-cell *matHeaderCellDef> Raw Data </mat-header-cell>
+                    <mat-cell *matCellDef="let el" class="txt-center assemblies-font">
+                        <ul class="list-group ">
+                            <li *ngFor="let fastq of el.fastq_ftp">
+                                <a href="ftp://{{fastq}}">{{el.run_accession}}</a>
+                            </li>
+                        </ul>
+                    </mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="submitted_ftp">
+                    <mat-header-cell *matHeaderCellDef> Mapped Reads </mat-header-cell>
+                    <mat-cell *matCellDef="let ele" class="txt-center assemblies-font">
+                        <ul class="list-group ">
+                            <li *ngFor="let submitted_ftp of ele.submitted_ftp">
+                                <a href="ftp://{{submitted_ftp}}">{{ele.study_accession}}</a>
+                            </li>
+                        </ul>
+                    </mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="instrument_platform">
+                    <mat-header-cell *matHeaderCellDef> Instrument Platform </mat-header-cell>
+                    <mat-cell *matCellDef="let element" class="txt-center assemblies-font"> {{element.instrument_platform}} </mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="instrument_model">
+                    <mat-header-cell *matHeaderCellDef> Instrument Model </mat-header-cell>
+                    <mat-cell *matCellDef="let element" class="txt-center assemblies-font"> {{element.instrument_model}} </mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="library_layout">
+                    <mat-header-cell *matHeaderCellDef> Library Layout </mat-header-cell>
+                    <mat-cell *matCellDef="let element" class="txt-center assemblies-font"> {{element.library_layout}} </mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="library_strategy">
+                    <mat-header-cell *matHeaderCellDef> Library Strategy </mat-header-cell>
+                    <mat-cell *matCellDef="let element" class="txt-center assemblies-font"> {{element.library_strategy}} </mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="library_source">
+                    <mat-header-cell *matHeaderCellDef> Library Source </mat-header-cell>
+                    <mat-cell *matCellDef="let element" class="txt-center assemblies-font"> {{element.library_source}} </mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="library_selection">
+                    <mat-header-cell *matHeaderCellDef> Library Selection </mat-header-cell>
+                    <mat-cell *matCellDef="let element" class="txt-center assemblies-font"> {{element.library_selection}} </mat-cell>
+                </ng-container>
+
+                <mat-header-row *matHeaderRowDef="displayedColumnsFiles"></mat-header-row>
+                <mat-row *matRowDef="let row; columns: displayedColumnsFiles;"></mat-row>
+            </table>
+            <mat-paginator #experimentsTable [pageSizeOptions]="[10, 20, 30]" showFirstLastButtons [length]="dataSourceFilesCount"></mat-paginator>
+        </div>
+
+        <!-- Assemblies Section -->
+        <div class="col-sm-12" *ngIf="dataSourceAssembliesCount != 0">
+            <hr>
+            <h1 class="col-sm-12 page-header">Related assemblies</h1>
+            <mat-form-field>
+                <mat-label>Search</mat-label>
+                <input matInput (keyup)="assembliesSearch($event)" placeholder="Ex. ILLUMINA" #input>
+            </mat-form-field>
+            <table mat-table [dataSource]="dataSourceAssemblies" matSort style="width: 100%;">
+                <ng-container matColumnDef="accession">
+                    <mat-header-cell *matHeaderCellDef> Accession </mat-header-cell>
+                    <mat-cell *matCellDef="let element" class="txt-center">
+                        <a class="no-underline" target="_blank" href="https://www.ebi.ac.uk/ena/browser/view/{{element.accession}}">{{element.accession}}</a>
+                    </mat-cell>
+                </ng-container>
+                <ng-container matColumnDef="assembly_name">
+                    <mat-header-cell *matHeaderCellDef> Assembly Name </mat-header-cell>
+                    <mat-cell *matCellDef="let element" class="txt-center"> {{element.assembly_name}} </mat-cell>
+                </ng-container>
+                <ng-container matColumnDef="description">
+                    <mat-header-cell *matHeaderCellDef> Description </mat-header-cell>
+                    <mat-cell *matCellDef="let element" class="txt-center"> {{element.description}} </mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="version">
+                    <mat-header-cell *matHeaderCellDef> Version </mat-header-cell>
+                    <mat-cell *matCellDef="let element" class="txt-center"> {{element.version}} </mat-cell>
+                </ng-container>
+
+                <mat-header-row *matHeaderRowDef="displayedColumnsAssemblies"></mat-header-row>
+                <mat-row *matRowDef="let row; columns: displayedColumnsAssemblies;"></mat-row>
+            </table>
+            <mat-paginator #assembliesTable [pageSizeOptions]="[10, 20, 30]" showFirstLastButtons [length]="dataSourceAssembliesCount" style="width: 100%;"></mat-paginator>
         </div>
     </dl>
 </div>
