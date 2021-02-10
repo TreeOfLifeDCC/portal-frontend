@@ -107,7 +107,7 @@ export class OrganismDetailsComponent implements OnInit, AfterViewInit {
               this.dataSourceFiles = new MatTableDataSource<Sample>();
               this.dataSourceFilesCount = 0;
             }
-            if (data.experiment != null) {
+            if (data.assemblies != null) {
               this.dataSourceAssemblies = new MatTableDataSource<any>(data.assemblies);
               this.dataSourceAssembliesCount = data.assemblies?.length;
             }
