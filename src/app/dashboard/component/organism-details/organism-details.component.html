@@ -172,6 +172,41 @@
             </div>
         </div>
 
+        <!-- Assemblies Section -->
+        <div class="col-sm-12" *ngIf="dataSourceAssembliesCount != 0">
+            <hr>
+            <h1 class="col-sm-12 page-header">Related assemblies</h1>
+            <mat-form-field>
+                <mat-label>Search</mat-label>
+                <input matInput (keyup)="assembliesSearch($event)" placeholder="Ex. ILLUMINA" #input>
+            </mat-form-field>
+            <table mat-table [dataSource]="dataSourceAssemblies" matSort style="width: 100%;">
+                <ng-container matColumnDef="accession">
+                    <mat-header-cell *matHeaderCellDef> Accession </mat-header-cell>
+                    <mat-cell *matCellDef="let element" class="txt-center">
+                        <a class="no-underline" target="_blank" href="https://www.ebi.ac.uk/ena/browser/view/{{element.accession}}">{{element.accession}}</a>
+                    </mat-cell>
+                </ng-container>
+                <ng-container matColumnDef="assembly_name">
+                    <mat-header-cell *matHeaderCellDef> Assembly Name </mat-header-cell>
+                    <mat-cell *matCellDef="let element" class="txt-center"> {{element.assembly_name}} </mat-cell>
+                </ng-container>
+                <ng-container matColumnDef="description">
+                    <mat-header-cell *matHeaderCellDef> Description </mat-header-cell>
+                    <mat-cell *matCellDef="let element" class="txt-center"> {{element.description}} </mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="version">
+                    <mat-header-cell *matHeaderCellDef> Version </mat-header-cell>
+                    <mat-cell *matCellDef="let element" class="txt-center"> {{element.version}} </mat-cell>
+                </ng-container>
+
+                <mat-header-row *matHeaderRowDef="displayedColumnsAssemblies"></mat-header-row>
+                <mat-row *matRowDef="let row; columns: displayedColumnsAssemblies;"></mat-row>
+            </table>
+            <mat-paginator #assembliesTable [pageSizeOptions]="[10, 20, 30]" showFirstLastButtons [length]="dataSourceAssembliesCount" style="width: 100%;"></mat-paginator>
+        </div>
+        
         <!-- Experiment Files Section -->
         <div class="col-sm-12" *ngIf="dataSourceFilesCount != 0">
             <hr>
@@ -258,39 +293,5 @@
             <mat-paginator #experimentsTable [pageSizeOptions]="[10, 20, 30]" showFirstLastButtons [length]="dataSourceFilesCount"></mat-paginator>
         </div>
 
-        <!-- Assemblies Section -->
-        <div class="col-sm-12" *ngIf="dataSourceAssembliesCount != 0">
-            <hr>
-            <h1 class="col-sm-12 page-header">Related assemblies</h1>
-            <mat-form-field>
-                <mat-label>Search</mat-label>
-                <input matInput (keyup)="assembliesSearch($event)" placeholder="Ex. ILLUMINA" #input>
-            </mat-form-field>
-            <table mat-table [dataSource]="dataSourceAssemblies" matSort style="width: 100%;">
-                <ng-container matColumnDef="accession">
-                    <mat-header-cell *matHeaderCellDef> Accession </mat-header-cell>
-                    <mat-cell *matCellDef="let element" class="txt-center">
-                        <a class="no-underline" target="_blank" href="https://www.ebi.ac.uk/ena/browser/view/{{element.accession}}">{{element.accession}}</a>
-                    </mat-cell>
-                </ng-container>
-                <ng-container matColumnDef="assembly_name">
-                    <mat-header-cell *matHeaderCellDef> Assembly Name </mat-header-cell>
-                    <mat-cell *matCellDef="let element" class="txt-center"> {{element.assembly_name}} </mat-cell>
-                </ng-container>
-                <ng-container matColumnDef="description">
-                    <mat-header-cell *matHeaderCellDef> Description </mat-header-cell>
-                    <mat-cell *matCellDef="let element" class="txt-center"> {{element.description}} </mat-cell>
-                </ng-container>
-
-                <ng-container matColumnDef="version">
-                    <mat-header-cell *matHeaderCellDef> Version </mat-header-cell>
-                    <mat-cell *matCellDef="let element" class="txt-center"> {{element.version}} </mat-cell>
-                </ng-container>
-
-                <mat-header-row *matHeaderRowDef="displayedColumnsAssemblies"></mat-header-row>
-                <mat-row *matRowDef="let row; columns: displayedColumnsAssemblies;"></mat-row>
-            </table>
-            <mat-paginator #assembliesTable [pageSizeOptions]="[10, 20, 30]" showFirstLastButtons [length]="dataSourceAssembliesCount" style="width: 100%;"></mat-paginator>
-        </div>
     </dl>
 </div>
