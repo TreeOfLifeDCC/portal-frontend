@@ -261,7 +261,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
   // tslint:disable-next-line:typedef
   checkFilterIsActive(filter: string) {
     if (this.activeFilters.indexOf(filter) !== -1) {
-      return 'active inactiveFilter';
+      return 'active';
     }
 
   }

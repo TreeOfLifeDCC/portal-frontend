@@ -119,7 +119,7 @@ export class DetailsComponent implements OnInit {
 
   checkFilterIsActive(filter: string) {
     if (this.activeFilters.indexOf(filter) !== -1) {
-      return 'active inactiveFilter';
+      return 'active';
     }
 
   }

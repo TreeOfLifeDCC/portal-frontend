@@ -166,7 +166,7 @@ export class OrganismDetailsComponent implements OnInit, AfterViewInit {
 
   checkFilterIsActive(filter: string) {
     if (this.activeFilters.indexOf(filter) !== -1) {
-      return 'active inactiveFilter';
+      return 'active';
     }
 
   }
