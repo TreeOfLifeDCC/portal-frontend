@@ -580,42 +580,42 @@ export class TrackingSystemComponent implements OnInit, AfterViewInit {
   parseFilterAggregation(data: any) {
     this.filtersMap = data;
     this.BiosamplesFilters = this.filtersMap.aggregations.biosamples.buckets.filter(i => {
-      if (i !== "") {
+      if (i !== "" && i.key === "done") {
         let obj = i;
         obj.key = "Biosamples - " + obj.key;
         return obj;
       }
     });
     this.RawDataFilters = this.filtersMap.aggregations.raw_data.buckets.filter(i => {
-      if (i !== "") {
+      if (i !== "" && i.key === "done") {
         let obj = i;
         obj.key = "Raw data - " + obj.key;
         return obj;
       }
     });
     this.MappedReadsFilters = this.filtersMap.aggregations.mapped_reads.buckets.filter(i => {
-      if (i !== "") {
+      if (i !== "" && i.key === "done") {
         let obj = i;
         obj.key = "Mapped reads - " + obj.key;
         return obj;
       }
     });
     this.AssembliesFilters = this.filtersMap.aggregations.assemblies.buckets.filter(i => {
-      if (i !== "") {
+      if (i !== "" && i.key === "done") {
         let obj = i;
         obj.key = "Assemblies - " + obj.key;
         return obj;
       }
     });
     this.AnnotationCompleteFilters = this.filtersMap.aggregations.annotation_complete.buckets.filter(i => {
-      if (i !== "") {
+      if (i !== "" && i.key === "done") {
         let obj = i;
         obj.key = "Annotation complete - " + obj.key;
         return obj;
       }
     });
     this.AnnotationFilters = this.filtersMap.aggregations.annotation.buckets.filter(i => {
-      if (i !== "") {
+      if (i !== "" && i.key === "done") {
         let obj = i;
         obj.key = "Annotation - " + obj.key;
         return obj;
