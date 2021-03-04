@@ -63,7 +63,7 @@
 
                                 <ng-container *ngFor="let filter of AnnotationCompleteFilters; let i = index">
                                     <li class="list-group-item d-flex justify-content-between align-items-center annotation-complete-inactive" [ngClass]="checkFilterIsActive(filter.key)" (click)="onFilterClick($event, 'annotation-complete' , filter.key)" style="cursor: pointer" *ngIf="filter.key === 'Annotation complete - done'">
-                                        <span>Annotation Complete - Submitted</span>
+                                        <span>Annotation Complete - Done</span>
                                         <span class="badge badge-pill badge-info">{{filter.doc_count}}</span></li>
                                 </ng-container>
 
