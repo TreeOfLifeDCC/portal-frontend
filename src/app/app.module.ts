@@ -12,6 +12,7 @@ import { HeaderComponent } from './shared/header/header.component';
 import { AboutComponent } from './about/about.component';
 import { HelpComponent } from './help/help.component';
 import { HomeComponent } from './home/home.component';
+import { ApiComponent } from './api/api.component';
 
 
 @NgModule({
@@ -20,7 +21,8 @@ import { HomeComponent } from './home/home.component';
     HeaderComponent,
     AboutComponent,
     HelpComponent,
-    HomeComponent
+    HomeComponent,
+    ApiComponent
   ],
   imports: [
     BrowserModule,
