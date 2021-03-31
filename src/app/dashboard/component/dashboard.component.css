@@ -75,3 +75,75 @@ ul.long-list {
     pointer-events: none;
     cursor: default;
  }
+
+
+ /* Remove default bullets */
+ul, #myUL {
+    list-style-type: none;
+  }
+  
+  /* Remove margins and padding from the parent ul */
+  #myUL {
+    margin: 0;
+    padding: 0;
+  }
+  
+  /* Style the caret/arrow */
+  .caret {
+    cursor: pointer;
+    user-select: none; /* Prevent text selection */
+  }
+  
+  /* Create the caret/arrow with a unicode, and style it */
+  .caret::before {
+    /* content: "\25B6"; */
+    color: black;
+    display: inline-block;
+    margin-right: 6px;
+  }
+  
+  /* Rotate the caret/arrow icon when clicked on (using JavaScript) */
+  .fas {
+    padding-right: 1px;
+  }
+  
+  /* Hide the nested list */
+  .nested {
+    display: none;
+  }
+  
+  /* Show the nested list when the user clicks on the caret/arrow (with JavaScript) */
+  .active {
+    display: block;
+    background-color: white;
+  }
+
+  #myUL li .caret {
+    padding: 0px 0px;
+    margin-right: 0px;
+    background:#fff;
+    /* font-size: smaller; */
+  }
+
+  .nested li .caret {
+    padding: 0px 0px;
+    margin-right: 0px;
+    background:#fff
+  }
+  .badge-success {
+      float: right;
+  }
+
+  hr {
+    margin-top: 2px !important;
+    margin-bottom: 2px !important;
+  }
+
+  .modal-heading {
+    width: 100%;
+    text-align: center;
+  }
+  
+  .active-filter {
+    background-color: #4BBEFD;
+  }

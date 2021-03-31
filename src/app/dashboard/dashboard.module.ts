@@ -19,9 +19,11 @@ import { NgxSpinnerModule } from "ngx-spinner";
 
 import { DashboardService } from '../dashboard/services/dashboard.service';
 import { OrganismDetailsComponent } from './component/organism-details/organism-details.component'
+import { TaxanomyComponent } from '../taxanomy/taxanomy.component';
+import { TaxanomyService } from '../taxanomy/taxanomy.service';
 
 @NgModule({
-  declarations: [DashboardComponent, SpecimensComponent, DetailsComponent, OrganismDetailsComponent],
+  declarations: [DashboardComponent, SpecimensComponent, DetailsComponent, OrganismDetailsComponent, TaxanomyComponent],
   imports: [
     CommonModule,
     DashboardRoutingModule,
@@ -36,6 +38,6 @@ import { OrganismDetailsComponent } from './component/organism-details/organism-
     MatInputModule,
     NgxSpinnerModule
   ],
-  providers: [DashboardService]
+  providers: [DashboardService, TaxanomyService]
 })
 export class DashboardModule { }
