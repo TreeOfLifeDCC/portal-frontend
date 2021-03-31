@@ -538,6 +538,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
       varietas: [],
       forma: []
     };
+    $('#myUL, #root-list, #Eukaryota-superkingdom').toggleClass("active");
   }
 
   toggleTaxanomy(rank, taxonomy) {
