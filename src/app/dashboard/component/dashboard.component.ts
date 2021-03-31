@@ -560,7 +560,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
               setTimeout(() => {
                 $('.' + taxonomy + '-' + childRank).toggleClass("active");
                 // $('#' + taxonomy + '-' + rank).toggleClass("caret-down");
-              }, 50);
+              }, 250);
             },
             err => {
               console.log(err);
