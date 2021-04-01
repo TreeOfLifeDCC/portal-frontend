@@ -74,14 +74,10 @@ export class DashboardService {
     return this.http.get(`${requestURL}`);
   }
 
-  public getFilterResults(filter: any,sortColumn?, sortOrder?, from?, size?, taxonomyFilter?): Observable<any> {
+  public getFilterResults(filter: any,sortColumn?, sortOrder?, from?, size?): Observable<any> {
     let requestParams = `?from=${from}&size=${size}`
     if (sortColumn != undefined) {
       requestParams = requestParams + `&sortColumn=${sortColumn}&sortOrder=${sortOrder}`
-    }
-    if(taxonomyFilter != undefined) {
-      let taxa = encodeURIComponent(JSON.stringify(taxonomyFilter[0]));
-      requestParams = requestParams + `&taxonomyFilter=${taxa}`
     }
     let requestURL = `${this.API_BASE_URL}/root_organisms/root/filter/results${requestParams}`;
     return this.http.post(`${requestURL}`,filter);

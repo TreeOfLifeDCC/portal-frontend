@@ -8,10 +8,6 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CookieLawModule } from 'angular2-cookie-law';
 import { HttpClientModule } from '@angular/common/http';
 
-import { MatTreeModule } from '@angular/material/tree';
-import { MatIconModule } from '@angular/material/icon';
-import { MatButtonModule } from '@angular/material/button';
-
 import { HeaderComponent } from './shared/header/header.component';
 import { AboutComponent } from './about/about.component';
 import { HelpComponent } from './help/help.component';
@@ -35,10 +31,7 @@ import { ApiComponent } from './api/api.component';
     FormsModule,
     ReactiveFormsModule,
     CookieLawModule,
-    HttpClientModule,
-    MatTreeModule,
-    MatIconModule,
-    MatButtonModule
+    HttpClientModule
   ],
   providers: [],
   bootstrap: [AppComponent]
