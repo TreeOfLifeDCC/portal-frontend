@@ -10,6 +10,8 @@ import { Sample } from '../model/dashboard.model';
 export class DashboardService {
 
   private API_BASE_URL = 'https://portal.darwintreeoflife.org/api';
+  // private API_BASE_URL = 'http://45.86.170.227:30985';
+  // private API_BASE_URL = 'http://localhost:8080';
 
   constructor(private http: HttpClient) { }
 
@@ -74,10 +76,14 @@ export class DashboardService {
     return this.http.get(`${requestURL}`);
   }
 
-  public getFilterResults(filter: any,sortColumn?, sortOrder?, from?, size?): Observable<any> {
+  public getFilterResults(filter: any,sortColumn?, sortOrder?, from?, size?, taxonomyFilter?): Observable<any> {
     let requestParams = `?from=${from}&size=${size}`
     if (sortColumn != undefined) {
       requestParams = requestParams + `&sortColumn=${sortColumn}&sortOrder=${sortOrder}`
+    }
+    if(taxonomyFilter != undefined) {
+      let taxa = encodeURIComponent(JSON.stringify(taxonomyFilter[0]));
+      requestParams = requestParams + `&taxonomyFilter=${taxa}`
     }
     let requestURL = `${this.API_BASE_URL}/root_organisms/root/filter/results${requestParams}`;
     return this.http.post(`${requestURL}`,filter);
