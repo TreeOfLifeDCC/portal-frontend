@@ -637,7 +637,6 @@ export class DashboardComponent implements OnInit, AfterViewInit {
 
   toggleTaxanomy(rank, taxonomy) {
     $('#' + rank).toggleClass("active");
-    // $('#' + taxonomy).toggleClass("caret-down");
   }
 
   showTaxonomyModal(event: any, rank: string, taxonomy: string, childRank: string) {
@@ -683,7 +682,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
     this.currentTaxonomy = taxa;
     this.createTaxaTree(rank, taxa);
     if (this.showElement) {
-      this.taxanomyService.getChildTaxonomyRank(this.activeFilters, rank, taxonomy, childRank, this.currentTaxonomyTree).subscribe(
+      this.taxanomyService.getChildTaxonomyRank(this.activeFilters, rank, taxonomy, childRank, this.currentTaxonomyTree, 'data').subscribe(
         data => {
           this.parseAndPushTaxaData(rank, data);
           setTimeout(() => {
@@ -730,7 +729,6 @@ export class DashboardComponent implements OnInit, AfterViewInit {
       }
       else if ($(event.target).hasClass('fa-minus-circle')) {
         this.spinner.show();
-        // TODO check removeRankFromTaxaTree to remove this
         $(event.target).removeClass('fa-minus-circle');
         $(event.target).addClass('fa-plus-circle');
         this.removeRankFromTaxaTree(taxa);

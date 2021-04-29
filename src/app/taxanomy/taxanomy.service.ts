@@ -17,8 +17,8 @@ export class TaxanomyService {
     return this.http.get(`${this.API_BASE_URL}/taxonomy/filters?taxonomy=${taxonomy}`);
   }
 
-  public getChildTaxonomyRank(filter, rank: String, taxonomy: String, childRank: String, taxaTree: any): Observable<any> {
-    let requestURL = `${this.API_BASE_URL}/taxonomy/${rank}/child?taxonomy=${taxonomy}&childRank=${childRank}&filter=${filter}`;
+  public getChildTaxonomyRank(filter, rank: String, taxonomy: String, childRank: String, taxaTree: any, type): Observable<any> {
+    let requestURL = `${this.API_BASE_URL}/taxonomy/${rank}/child?taxonomy=${taxonomy}&childRank=${childRank}&filter=${filter}&type=${type}`;
     return this.http.post(requestURL, taxaTree);
   }
   

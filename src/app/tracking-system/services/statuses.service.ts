@@ -9,6 +9,7 @@ export class StatusesService {
 
   private API_BASE_URL = 'https://portal.darwintreeoflife.org/api';
   // private API_BASE_URL = 'http://45.86.170.227:30985';
+  // private API_BASE_URL = 'http://localhost:8080';
 
   constructor(private http: HttpClient) { }
 
@@ -36,10 +37,14 @@ export class StatusesService {
     return this.http.get(`${requestURL}`);
   }
 
-  public getFilterResults(filter: any, sortColumn?, sortOrder?, from?, size?): Observable<any> {
+  public getFilterResults(filter: any, sortColumn?, sortOrder?, from?, size?, taxonomyFilter?): Observable<any> {
     let requestURL = `${this.API_BASE_URL}/statuses/filter/results?from=${from}&size=${size}`;
     if (sortColumn != undefined) {
       requestURL = requestURL + `&sortColumn=${sortColumn}&sortOrder=${sortOrder}`;
+    }
+    if(taxonomyFilter != undefined) {
+      let taxa = encodeURIComponent(JSON.stringify(taxonomyFilter[0]));
+      requestURL = requestURL + `&taxonomyFilter=${taxa}`
     }
     return this.http.post(`${requestURL}`, filter);
   }

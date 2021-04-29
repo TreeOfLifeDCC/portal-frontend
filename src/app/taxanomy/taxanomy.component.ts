@@ -66,7 +66,7 @@ export class TaxanomyComponent implements OnInit {
   }
 
   getChildTaxonomyRank(rank: string, taxonomy: string, childRank: string) {
-    this.taxanomyService.getChildTaxonomyRank('',rank, taxonomy, childRank, '').subscribe(
+    this.taxanomyService.getChildTaxonomyRank('',rank, taxonomy, childRank, '', 'data').subscribe(
       data => {
         this.selectedTaxonomy.push(taxonomy);
         this.parseAndPushTaxaData(rank, data);
