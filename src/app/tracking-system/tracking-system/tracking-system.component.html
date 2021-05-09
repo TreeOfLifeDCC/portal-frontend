@@ -247,7 +247,7 @@
                     <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
                     <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
                 </table>
-                <mat-paginator [pageSizeOptions]="[20, 30, 50, 100]" showFirstLastButtons [length]="statusesTotalCount"
+                <mat-paginator [pageSizeOptions]="[15, 30, 50, 100]" showFirstLastButtons [length]="statusesTotalCount"
                     (page)="pageChanged($event)"></mat-paginator>
             </div>
             <!-- <div id="org-table" class="col-md-10 org-table" *ngIf="showOrganismTable">

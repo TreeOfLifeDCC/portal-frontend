@@ -109,7 +109,7 @@ export class TrackingSystemComponent implements OnInit, AfterViewInit {
       }, 80);
     }
     else {
-      this.getAllStatuses(0, 20, this.sort.active, this.sort.direction);
+      this.getAllStatuses(0, 15, this.sort.active, this.sort.direction);
     }
   }
 
@@ -128,7 +128,7 @@ export class TrackingSystemComponent implements OnInit, AfterViewInit {
     else {
       taxonomy = [this.currentTaxonomyTree];
     }
-    this.statusesService.getFilterResults(this.activeFilters.toString(), this.sort.active, this.sort.direction, 0, 20, taxonomy)
+    this.statusesService.getFilterResults(this.activeFilters.toString(), this.sort.active, this.sort.direction, 0, 15, taxonomy)
       .subscribe(
         data => {
           const unpackedData = [];
@@ -383,7 +383,7 @@ export class TrackingSystemComponent implements OnInit, AfterViewInit {
       this.selectedFilterArray(label, filter);
       this.activeFilters.push(filter);
       this.dataSource.filter = `${filter.trim().toLowerCase()}|${label}`;
-      this.getFilterResults(this.activeFilters.toString(), this.sort.active, this.sort.direction, 0, 20, taxonomy);
+      this.getFilterResults(this.activeFilters.toString(), this.sort.active, this.sort.direction, 0, 15, taxonomy);
       this.updateActiveRouteParams();
       if (this.currentTaxonomyTree.length > 1) {
         setTimeout(() => {
@@ -446,7 +446,7 @@ export class TrackingSystemComponent implements OnInit, AfterViewInit {
     this.activeFilters = [];
     this.urlAppendFilterArray = [];
     this.dataSource.filter = undefined;
-    this.getAllStatuses(0, 20, this.sort.active, this.sort.direction);
+    this.getAllStatuses(0, 15, this.sort.active, this.sort.direction);
     this.getChildTaxonomyRank('superkingdom', 'Eukaryota', 'kingdom');
     this.router.navigate(['tracking_system'], {});
     this.spinner.show();
@@ -464,7 +464,7 @@ export class TrackingSystemComponent implements OnInit, AfterViewInit {
       this.activeFilters.splice(filterIndex, 1);
       if (this.activeFilters.length !== 0) {
         this.dataSource.filter = this.activeFilters[0].trim().toLowerCase();
-        this.getFilterResults(this.activeFilters.toString(), this.sort.active, this.sort.direction, 0, 20, [this.currentTaxonomyTree]);
+        this.getFilterResults(this.activeFilters.toString(), this.sort.active, this.sort.direction, 0, 15, [this.currentTaxonomyTree]);
         if (this.currentTaxonomyTree.length > 1) {
           setTimeout(() => {
             $('#' + this.modalTaxa + '-kingdom').addClass('active-filter')
@@ -477,7 +477,7 @@ export class TrackingSystemComponent implements OnInit, AfterViewInit {
           this.dataSource.filter = undefined;
           this.router.navigate(['tracking_system'], {});
         }
-        this.getFilterResults(this.activeFilters.toString(), this.sort.active, this.sort.direction, 0, 20, [this.currentTaxonomyTree]);
+        this.getFilterResults(this.activeFilters.toString(), this.sort.active, this.sort.direction, 0, 15, [this.currentTaxonomyTree]);
         setTimeout(() => {
           $('#' + this.modalTaxa + '-kingdom').addClass('active-filter')
         }, 250);
@@ -490,7 +490,7 @@ export class TrackingSystemComponent implements OnInit, AfterViewInit {
 
         this.router.navigate(['tracking_system'], {});
         this.dataSource.filter = undefined;
-        this.getAllStatuses(0, 20, this.sort.active, this.sort.direction);
+        this.getAllStatuses(0, 15, this.sort.active, this.sort.direction);
       }
     }
   }
@@ -581,7 +581,7 @@ export class TrackingSystemComponent implements OnInit, AfterViewInit {
 
     // this.spinner.show();
     if (this.searchText.length == 0) {
-      this.getAllStatuses(0, 20, this.sort.active, this.sort.direction);
+      this.getAllStatuses(0, 15, this.sort.active, this.sort.direction);
     }
     else {
       this.activeFilters = [];
@@ -1004,13 +1004,13 @@ export class TrackingSystemComponent implements OnInit, AfterViewInit {
     setTimeout(() => {
       if (this.activeFilters.length !== 0 || this.currentTaxonomyTree.length != 0) {
         let taxa = [this.currentTaxonomyTree];
-        this.getFilterResults(this.activeFilters.toString(), this.sort.active, this.sort.direction, 0, 20, taxa);
+        this.getFilterResults(this.activeFilters.toString(), this.sort.active, this.sort.direction, 0, 15, taxa);
       }
       else {
         this.router.navigate(['data'], {});
         this.dataSource.filter = undefined;
         this.getFilters();
-        this.getAllStatuses(0, 20, this.sort.active, this.sort.direction);
+        this.getAllStatuses(0, 15, this.sort.active, this.sort.direction);
         this.getChildTaxonomyRank('superkingdom', 'Eukaryota', 'kingdom');
       }
       this.spinner.hide();

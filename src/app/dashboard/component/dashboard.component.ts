@@ -104,7 +104,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
       }, 50);
     }
     else {
-      this.getAllBiosamples(0, 20, this.sort.active, this.sort.direction);
+      this.getAllBiosamples(0, 15, this.sort.active, this.sort.direction);
     }
   }
 
@@ -123,7 +123,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
     else {
       taxonomy = [this.currentTaxonomyTree];
     }
-    this.dashboardService.getFilterResults(this.activeFilters.toString(), this.sort.active, this.sort.direction, 0, 20, taxonomy)
+    this.dashboardService.getFilterResults(this.activeFilters.toString(), this.sort.active, this.sort.direction, 0, 15, taxonomy)
       .subscribe(
         data => {
           const unpackedData = [];
@@ -326,7 +326,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
       this.selectedFilterArray(label, filter);
       this.activeFilters.push(filter);
       this.dataSource.filter = `${filter.trim().toLowerCase()}|${label}`;
-      this.getFilterResults(this.activeFilters.toString(), this.sort.active, this.sort.direction, 0, 20, taxonomy);
+      this.getFilterResults(this.activeFilters.toString(), this.sort.active, this.sort.direction, 0, 15, taxonomy);
       this.updateActiveRouteParams();
       $('.' + inactiveClassName).addClass('non-disp');
       $(event.target).removeClass('non-disp');
@@ -375,7 +375,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
     this.urlAppendFilterArray = [];
     this.dataSource.filter = undefined;
     this.getFilters();
-    this.getAllBiosamples(0, 20, this.sort.active, this.sort.direction);
+    this.getAllBiosamples(0, 15, this.sort.active, this.sort.direction);
     this.getChildTaxonomyRank('superkingdom', 'Eukaryota', 'kingdom');
     this.modalTaxa = "";
     this.router.navigate(['data'], {});
@@ -394,7 +394,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
       this.activeFilters.splice(filterIndex, 1);
       if (this.activeFilters.length !== 0) {
         this.dataSource.filter = this.activeFilters[0].trim().toLowerCase();
-        this.getFilterResults(this.activeFilters.toString(), this.sort.active, this.sort.direction, 0, 20, [this.currentTaxonomyTree]);
+        this.getFilterResults(this.activeFilters.toString(), this.sort.active, this.sort.direction, 0, 15, [this.currentTaxonomyTree]);
         if (this.currentTaxonomyTree.length > 1) {
           setTimeout(() => {
             $('#' + this.modalTaxa + '-kingdom').addClass('active-filter')
@@ -407,7 +407,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
           this.dataSource.filter = undefined;
           this.router.navigate(['data'], {});
         }
-        this.getFilterResults(this.activeFilters.toString(), this.sort.active, this.sort.direction, 0, 20, [this.currentTaxonomyTree]);
+        this.getFilterResults(this.activeFilters.toString(), this.sort.active, this.sort.direction, 0, 15, [this.currentTaxonomyTree]);
         setTimeout(() => {
           $('#' + this.modalTaxa + '-kingdom').addClass('active-filter')
         }, 250);
@@ -420,7 +420,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
         this.urlAppendFilterArray = [];
         this.dataSource.filter = undefined;
         this.getFilters();
-        this.getAllBiosamples(0, 20, this.sort.active, this.sort.direction);
+        this.getAllBiosamples(0, 15, this.sort.active, this.sort.direction);
         this.getChildTaxonomyRank('superkingdom', 'Eukaryota', 'kingdom');
         this.modalTaxa = "";
         this.router.navigate(['data'], {});
@@ -506,7 +506,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
     $('.tracking-status-inactive').removeClass('non-disp active-filter');
     // this.spinner.show();
     if (this.searchText.length == 0) {
-      this.getAllBiosamples(0, 20, this.sort.active, this.sort.direction);
+      this.getAllBiosamples(0, 15, this.sort.active, this.sort.direction);
     }
     else {
       this.activeFilters = [];
@@ -845,13 +845,13 @@ export class DashboardComponent implements OnInit, AfterViewInit {
     setTimeout(() => {
       if (this.activeFilters.length !== 0 || this.currentTaxonomyTree.length != 0) {
         let taxa = [this.currentTaxonomyTree];
-        this.getFilterResults(this.activeFilters.toString(), this.sort.active, this.sort.direction, 0, 20, taxa);
+        this.getFilterResults(this.activeFilters.toString(), this.sort.active, this.sort.direction, 0, 15, taxa);
       }
       else {
         this.router.navigate(['data'], {});
         this.dataSource.filter = undefined;
         this.getFilters();
-        this.getAllBiosamples(0, 20, this.sort.active, this.sort.direction);
+        this.getAllBiosamples(0, 15, this.sort.active, this.sort.direction);
         this.getChildTaxonomyRank('superkingdom', 'Eukaryota', 'kingdom');
       }
       this.spinner.hide();
