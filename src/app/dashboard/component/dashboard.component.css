@@ -189,3 +189,7 @@ ul[class*="Other-"] {
 .mat-row {
     min-height: 30px;
 }
+
+.list-group-item {
+    padding: 0.25rem;
+}

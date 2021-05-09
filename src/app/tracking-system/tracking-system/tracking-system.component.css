@@ -245,3 +245,7 @@ ul[class*="other-"] {
 .mat-list-base .mat-list-option {
     height: unset;
 }
+
+.list-group-item {
+    padding: 0.25rem;
+}
