@@ -48,3 +48,7 @@
  .assemblies-font {
     font-size: 13.5px;
  }
+
+ .mat-header-row, .mat-row {
+    min-height: 30px;
+}

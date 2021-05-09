@@ -168,3 +168,7 @@ ul, #myUL {
   ul[class*="Other-"] {
     padding: 0;
   }
+
+  .mat-header-row, .mat-row {
+    min-height: 30px;
+  }

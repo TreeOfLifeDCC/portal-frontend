@@ -307,7 +307,7 @@ export class OrganismDetailsComponent implements OnInit, AfterViewInit {
 
   // tslint:disable-next-line:typedef
   getFilters(organism) {
-    this.dashboardService.getRootOrganismFilters(organism).subscribe(
+    this.dashboardService.getDetailTableOrganismFilters(organism).subscribe(
       data => {
         this.filtersMap = data;
         this.sexFilters = this.filtersMap.sex.filter(i => i !== "");

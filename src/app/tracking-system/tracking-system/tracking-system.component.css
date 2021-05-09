@@ -206,3 +206,11 @@ ul, #myUL {
   ul[class*="other-"] {
     padding: 0;
   }
+
+  .mat-header-row, .mat-row {
+    min-height: 30px !important;
+  }
+
+  .mat-list-base {
+    padding: 0px !important;
+  }

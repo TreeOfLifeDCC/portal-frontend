@@ -162,7 +162,7 @@
                                 <mat-list-item>
                                     <span class="badge badge-pill badge-success">{{element.biosamples}} </span>
                                 </mat-list-item>
-                                <mat-list-item>
+                                <mat-list-item *ngIf="element.biosamples_date">
                                     {{element.biosamples_date}}
                                 </mat-list-item>
                             </mat-list>
@@ -176,7 +176,7 @@
                                 <mat-list-item>
                                     <span [ngClass]="getStatusClass(element.raw_data)">{{element.raw_data }}</span>
                                 </mat-list-item>
-                                <mat-list-item>
+                                <mat-list-item *ngIf="element.ena_date">
                                     {{element.ena_date}}
                                 </mat-list-item>
                             </mat-list>
@@ -192,7 +192,7 @@
                                     <span [ngClass]="getStatusClass(element.mapped_reads)">{{element.mapped_reads }}
                                     </span>
                                 </mat-list-item>
-                                <mat-list-item>
+                                <mat-list-item *ngIf="element.ena_date">
                                     {{element.ena_date}}
                                 </mat-list-item>
                             </mat-list>
@@ -207,7 +207,7 @@
                                 <mat-list-item>
                                     <span [ngClass]="getStatusClass(element.assemblies)">{{element.assemblies }} </span>
                                 </mat-list-item>
-                                <mat-list-item>
+                                <mat-list-item *ngIf="element.ena_date">
                                     {{element.ena_date}}
                                 </mat-list-item>
                             </mat-list>
@@ -222,7 +222,7 @@
                                     <span [ngClass]="getStatusClass(element.annotation_complete)">
                                         {{ element.annotation_complete }} </span>
                                 </mat-list-item>
-                                <mat-list-item>
+                                <mat-list-item *ngIf="element.annotation_date">
                                     {{element.annotation_date}}
                                 </mat-list-item>
                             </mat-list>
@@ -237,7 +237,7 @@
                                 <mat-list-item>
                                     <span [ngClass]="getStatusClass(element.annotation)">{{element.annotation }} </span>
                                 </mat-list-item>
-                                <mat-list-item>
+                                <mat-list-item *ngIf="element.annotation_date">
                                     {{element.annotation_date}}
                                 </mat-list-item>
                             </mat-list>
