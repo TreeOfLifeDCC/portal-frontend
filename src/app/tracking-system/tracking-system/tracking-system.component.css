@@ -41,7 +41,7 @@ button {
 
 .txt-center {
     text-align: center;
-    justify-content: center;
+    /* justify-content: center; */
 }
 
 .mat-header-cell {

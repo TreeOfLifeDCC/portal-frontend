@@ -32,23 +32,24 @@
 
 .txt-center {
     text-align: center;
-    justify-content: center;
+    /* justify-content: center; */
 }
 
 .mat-header-cell {
     text-align: center;
-    justify-content: center;
+    /* justify-content: center; */
 }
 
 .inactiveFilter {
     pointer-events: none;
     cursor: default;
- }
+}
 
- .assemblies-font {
+.assemblies-font {
     font-size: 13.5px;
- }
+}
 
- .mat-header-row, .mat-row {
+.mat-header-row,
+.mat-row {
     min-height: 30px;
 }
