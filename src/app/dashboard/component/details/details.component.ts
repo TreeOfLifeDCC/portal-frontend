@@ -244,7 +244,7 @@ export class DetailsComponent implements OnInit {
   }
 
   getStatusClass(status: string) {
-    if (status === 'annotation complete') {
+    if (status === 'Annotation Complete') {
       return 'badge badge-pill badge-success';
     } else {
       return 'badge badge-pill badge-warning'

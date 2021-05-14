@@ -3,8 +3,10 @@
 }
 
 .jumbotron {
-    background: url("../../../assets/DTL_website_banner_2020_FINAL_WEB.jpg") center center no-repeat;
+    background: url("../../../assets/dtol banner thin.jpg") center center no-repeat;
     background-size: cover;
+    padding-top: 20px !important;
+    padding-bottom: 20px !important;
 }
 
 table {
