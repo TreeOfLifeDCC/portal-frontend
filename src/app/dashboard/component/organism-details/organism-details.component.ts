@@ -54,12 +54,18 @@ export class OrganismDetailsComponent implements OnInit, AfterViewInit {
   dataSourceFilesCount;
   dataSourceAssemblies;
   dataSourceAssembliesCount;
+  dataSourceAnnotation;
+  dataSourceAnnotationCount;
+
   displayedColumnsFiles = ['study_accession', 'experiment_accession', 'run_accession', 'fastq_ftp', 'submitted_ftp',
     'instrument_platform', 'instrument_model', 'library_layout', 'library_strategy', 'library_source',
     'library_selection'];
   displayedColumnsAssemblies = ['accession', 'assembly_name', 'description', 'version'];
+  displayedColumnsAnnotation = ['accession', 'annotation', 'proteins', 'transcripts', 'softmasked_genome', 'other_data', 'view_in_browser'];
+  
   @ViewChild('experimentsTable') exPaginator: MatPaginator;
   @ViewChild('assembliesTable') asPaginator: MatPaginator;
+  @ViewChild('annotationTable') anPaginator: MatPaginator;
 
   constructor(private route: ActivatedRoute, private dashboardService: DashboardService, private spinner: NgxSpinnerService, private router: Router) {
     this.route.params.subscribe(param => this.bioSampleId = param.id);
@@ -115,13 +121,23 @@ export class OrganismDetailsComponent implements OnInit, AfterViewInit {
               this.dataSourceAssemblies = new MatTableDataSource<Sample>();
               this.dataSourceAssembliesCount = 0;
             }
+            if (data.annotation != null) {
+              this.dataSourceAnnotation = new MatTableDataSource<any>(data.annotation);
+              this.dataSourceAnnotationCount = data.annotation?.length;
+            }
+            else {
+              this.dataSourceAnnotation = new MatTableDataSource<Sample>();
+              this.dataSourceAnnotationCount = 0;
+            }
 
             this.dataSourceFiles.paginator = this.exPaginator;
             this.dataSourceAssemblies.paginator = this.asPaginator;
+            this.dataSourceAnnotation.paginator = this.anPaginator;
 
             this.dataSourceRecords.sort = this.sort;
             this.dataSourceFiles.sort = this.sort;
             this.dataSourceAssemblies.sort = this.sort;
+            this.dataSourceAnnotation.sort = this.sort;
           }, 50)
         },
         err => console.log(err)
@@ -136,6 +152,11 @@ export class OrganismDetailsComponent implements OnInit, AfterViewInit {
   assembliesSearch(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
     this.dataSourceAssemblies.filter = filterValue.trim().toLowerCase();
+  }
+
+  annotationSearch(event: Event) {
+    const filterValue = (event.target as HTMLInputElement).value;
+    this.dataSourceAnnotation.filter = filterValue.trim().toLowerCase();
   }
 
   applyFilter(event: Event) {
