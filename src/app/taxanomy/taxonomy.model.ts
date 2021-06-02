@@ -9,6 +9,11 @@ export interface TaxonomyDTO {
 export interface TaxonomyChildDTO {
     key: string;
     doc_count: string;
+    commonName: CommonNameDTO;
+}
+
+export interface CommonNameDTO {
+    buckets: TaxonomyChildDTO[];
 }
 export interface Taxonomy {
     cellularorganism: TaxonomyDTO[];
