@@ -6,9 +6,9 @@
         <div class="container">
             <div class="row">
                 <div class="col-md-3">
-<!--                    <h1 class="display-2 text-center">Sequencing all 70,000</h1>-->
-<!--                    <h1 class="display-2 text-center">eukaryotic species of</h1>-->
-<!--                    <h1 class="display-2 text-center">Britain and Ireland </h1>-->
+                    <!--                    <h1 class="display-2 text-center">Sequencing all 70,000</h1>-->
+                    <!--                    <h1 class="display-2 text-center">eukaryotic species of</h1>-->
+                    <!--                    <h1 class="display-2 text-center">Britain and Ireland </h1>-->
                 </div>
             </div>
         </div>
@@ -85,7 +85,8 @@
                                 <li *ngIf="!isFilterSelected" class="rank-heading"> KINGDOM </li>
                                 <ng-container *ngIf="!isFilterSelected">
                                     <ng-container *ngFor="let super of childTaxanomy.superkingdom">
-                                        <li *ngFor="let superchild of super.childData" class="list-group-item d-flex justify-content-between align-items-center kingdom" style="cursor: pointer; padding: .75rem 0.25rem;" id="{{superchild.key}}-kingdom" (click)="showTaxonomyModal($event, super.rank, superchild.key, 'subkingdom')">
+                                        <li *ngFor="let superchild of super.childData" class="list-group-item d-flex justify-content-between align-items-center kingdom" style="cursor: pointer; padding: .75rem 0.25rem;" id="{{superchild.key}}-kingdom" (click)="showTaxonomyModal($event, super.rank, superchild.key, 'subkingdom')"
+                                            (dblclick)="filterTaxonomy(super.rank, superchild.key, 'subkingdom',superchild.doc_count)">
                                             {{superchild.key}}
                                             <span class="badge badge-pill badge-info">{{superchild.doc_count}}</span>
                                         </li>

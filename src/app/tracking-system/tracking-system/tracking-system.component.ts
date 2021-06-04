@@ -719,7 +719,7 @@ export class TrackingSystemComponent implements OnInit, AfterViewInit {
   // Ontology aware filter
   initTaxonomyObject() {
     this.childTaxanomy = {
-      cellularorganism: [{ parent: 'Root', rank: 'superkingdom', expanded: false, childData: [{ key: 'Eukaryota', doc_count: '1', commonName: {buckets:[]} }] }],
+      cellularorganism: [{ parent: 'Root', rank: 'superkingdom', expanded: false, childData: [{ key: 'Eukaryota', doc_count: '1', commonName: { buckets: [] } }] }],
       superkingdom: [],
       kingdom: [],
       subkingdom: [],
@@ -798,41 +798,46 @@ export class TrackingSystemComponent implements OnInit, AfterViewInit {
   }
 
   showTaxonomyModal(event: any, rank: string, taxonomy: string, childRank: string) {
-    $('#myUL').css('display', 'none');
-    this.modalTaxa = taxonomy;
-    if ($(event.target).hasClass('active-filter')) {
-      let taxa = { 'rank': 'superkingdom', 'taxonomy': 'Eukaryota', 'childRank': 'kingdom' };
-      this.currentTaxonomyTree = [];
-      this.currentTaxonomyTree = [taxa];
-      this.currentTaxonomy = taxa;
-      this.selectedFilterValue = '';
-      $(event.target).removeClass('active-filter');
-      this.getActiveFiltersAndResult();
-      setTimeout(() => {
-        this.isFilterSelected = false;
-        $('#myUL').css('display', 'block');
-      }, 250);
-    }
-    else {
-      this.spinner.show();
-      this.resetTaxaTree();
-      this.getChildTaxonomyRank('superkingdom', 'Eukaryota', 'kingdom');
-      $('.kingdom, .subkingdom').removeClass('active-filter');
-      setTimeout(() => {
-        this.getChildTaxonomyRank(rank, taxonomy, childRank);
-        $(event.target).addClass('active-filter');
+    this.isDoubleClick = false;
+    setTimeout(() => {
+      if (!this.isDoubleClick) {
+        $('#myUL').css('display', 'none');
         this.modalTaxa = taxonomy;
-      }, 150);
+        if ($(event.target).hasClass('active-filter')) {
+          let taxa = { 'rank': 'superkingdom', 'taxonomy': 'Eukaryota', 'childRank': 'kingdom' };
+          this.currentTaxonomyTree = [];
+          this.currentTaxonomyTree = [taxa];
+          this.currentTaxonomy = taxa;
+          this.selectedFilterValue = '';
+          $(event.target).removeClass('active-filter');
+          this.getActiveFiltersAndResult();
+          setTimeout(() => {
+            this.isFilterSelected = false;
+            $('#myUL').css('display', 'block');
+          }, 250);
+        }
+        else {
+          this.spinner.show();
+          this.resetTaxaTree();
+          this.getChildTaxonomyRank('superkingdom', 'Eukaryota', 'kingdom');
+          $('.kingdom, .subkingdom').removeClass('active-filter');
+          setTimeout(() => {
+            this.getChildTaxonomyRank(rank, taxonomy, childRank);
+            $(event.target).addClass('active-filter');
+            this.modalTaxa = taxonomy;
+          }, 150);
 
-      setTimeout(() => {
-        $('#myUL').css('display', 'block');
-        $('.subkingdom').addClass('active');
-        $('#taxonomyModal').modal({ backdrop: 'static', keyboard: false });
-        $('#taxonomyModal').modal('show');
-        $(".modal-backdrop").show();
-        this.spinner.hide();
-      }, 400);
-    }
+          setTimeout(() => {
+            $('#myUL').css('display', 'block');
+            $('.subkingdom').addClass('active');
+            $('#taxonomyModal').modal({ backdrop: 'static', keyboard: false });
+            $('#taxonomyModal').modal('show');
+            $(".modal-backdrop").show();
+            this.spinner.hide();
+          }, 400);
+        }
+      }
+    }, 250);
   }
 
   getChildTaxonomyRank(rank: string, taxonomy: string, childRank: string) {
