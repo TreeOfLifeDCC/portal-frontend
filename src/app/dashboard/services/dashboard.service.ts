@@ -9,9 +9,9 @@ import { Sample } from '../model/dashboard.model';
 })
 export class DashboardService {
 
-  // private API_BASE_URL = 'https://portal.darwintreeoflife.org/api';
+  private API_BASE_URL = 'https://portal.darwintreeoflife.org/api';
   // private API_BASE_URL = 'http://45.86.170.227:30985';
-  private API_BASE_URL = 'http://localhost:8080';
+  // private API_BASE_URL = 'http://localhost:8080';
 
   constructor(private http: HttpClient) { }
 
