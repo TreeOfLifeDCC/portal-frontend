@@ -21,7 +21,7 @@ import 'bootstrap';
   styleUrls: ['./dashboard.component.css']
 })
 export class DashboardComponent implements OnInit, AfterViewInit {
-  displayedColumns = ['organism', 'commonName', 'trackingSystem'];
+  displayedColumns = ['organism', 'commonName', 'trackingSystem', 'goatInfo'];
   bioSamples: Sample[];
   loading = true;
   dataSource = new MatTableDataSource<any>();
@@ -291,6 +291,10 @@ export class DashboardComponent implements OnInit, AfterViewInit {
       data = data._source;
     }
     for (const key of Object.keys(data)) {
+      if(key === 'tax_id') {
+        dataToReturn['goatInfo'] = "https://goat.genomehubs.org/records?record_id="+data[key]+"&result=taxon"
+        dataToReturn[key] = data[key];
+      }
       if (key === 'commonName' && data[key] == null) {
         dataToReturn[key] = "-"
       }

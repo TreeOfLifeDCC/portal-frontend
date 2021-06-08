@@ -101,6 +101,13 @@
                         </mat-cell>
                     </ng-container>
 
+                    <ng-container matColumnDef="goatInfo">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header>Goat Info </mat-header-cell>
+                        <mat-cell *matCellDef="let element" class="txt-center">
+                            <a class="no-underline" target="_blank" href="{{element?.goatInfo}}">{{element.organism}}</a>
+                        </mat-cell>
+                    </ng-container>
+
                     <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
                     <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
                 </table>
