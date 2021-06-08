@@ -199,3 +199,8 @@ ul[class*="Other-"] {
 .goat-padding {
     padding-left: 35px;
 }
+
+.goat-color {
+    color: #fff;
+    background-color: #4BBEFD;
+}

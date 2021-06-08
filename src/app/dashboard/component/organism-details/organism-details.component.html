@@ -7,6 +7,11 @@
         <dt class="col-sm-3">Organism:</dt>
         <dd class="col-sm-9">{{bioSampleObj?.organism}}</dd>
 
+        <dt class="col-sm-3">GoaT info:</dt>
+        <dd class="col-sm-9">
+            <a class="no-underline badge badge-pill goat-color" target="_blank" href="https://goat.genomehubs.org/records?record_id={{bioSampleObj?.taxId}}&result=taxon">GoaT info</a>
+        </dd>
+
         <dt class="col-sm-3" *ngIf="bioSampleObj?.sex">Sex:</dt>
         <dd class="col-sm-9" *ngIf="bioSampleObj?.sex">{{bioSampleObj?.sex}}</dd>
 

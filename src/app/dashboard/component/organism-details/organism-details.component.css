@@ -53,3 +53,8 @@
 .mat-row {
     min-height: 30px;
 }
+
+.goat-color {
+    color: #fff;
+    background-color: #4BBEFD;
+}
