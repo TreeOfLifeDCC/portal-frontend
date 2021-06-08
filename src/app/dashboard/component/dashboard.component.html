@@ -104,7 +104,9 @@
                     <ng-container matColumnDef="goatInfo">
                         <mat-header-cell *matHeaderCellDef mat-sort-header style=" padding-right: 0px; ">Genomes on a Tree reference</mat-header-cell>
                         <mat-cell *matCellDef="let element" class="text-center" style=" padding-right: 0px; ">
-                            <a class="no-underline badge badge-pill badge-success" target="_blank" href="{{element?.goatInfo}}">GoaT info</a>
+                            <span class="goat-padding">
+                                <a class="no-underline badge badge-pill badge-primary" target="_blank" href="{{element?.goatInfo}}">GoaT info</a>
+                            </span>
                         </mat-cell>
                     </ng-container>
 

@@ -195,3 +195,7 @@ ul[class*="Other-"] {
 .list-group-item {
     padding: 0.25rem;
 }
+
+.goat-padding {
+    padding-left: 35px;
+}
