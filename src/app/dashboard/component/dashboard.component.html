@@ -102,9 +102,9 @@
                     </ng-container>
 
                     <ng-container matColumnDef="goatInfo">
-                        <mat-header-cell *matHeaderCellDef mat-sort-header>Goat Info </mat-header-cell>
-                        <mat-cell *matCellDef="let element">
-                            <a class="no-underline" target="_blank" href="{{element?.goatInfo}}">{{element.organism}}</a>
+                        <mat-header-cell *matHeaderCellDef mat-sort-header style=" padding-right: 0px; ">Genomes on a Tree reference</mat-header-cell>
+                        <mat-cell *matCellDef="let element" class="text-center" style=" padding-right: 0px; ">
+                            <a class="no-underline badge badge-pill badge-success" target="_blank" href="{{element?.goatInfo}}">GoaT info</a>
                         </mat-cell>
                     </ng-container>
 
