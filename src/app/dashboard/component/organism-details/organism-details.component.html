@@ -11,7 +11,7 @@
         <dd class="col-sm-9" *ngIf="bioSampleObj?.sex">{{bioSampleObj?.sex}}</dd>
 
         <dt class="col-sm-3" *ngIf="bioSampleObj?.trackingSystem">Tracking Status:</dt>
-        <dd class="col-sm-9" *ngIf="bioSampleObj?.trackingSystem"><span [ngClass]="getStatusClass(bioSampleObj?.trackingSystem)">{{bioSampleObj?.trackingSystem}}</span></dd>
+        <dd class="col-sm-9" *ngIf="bioSampleObj?.trackingSystem"><span [ngClass]="getStatusClass(bioSampleObj?.trackingSystem.status)">{{bioSampleObj?.trackingSystem.status}}</span></dd>
 
         <!-- Annotation Section -->
         <div class="col-sm-12" *ngIf="dataSourceAnnotationCount != 0">

@@ -83,7 +83,7 @@
                 <table mat-table #table [dataSource]="dataSource" matSort (matSortChange)="customSort($event)">
                     <ng-container matColumnDef="organism">
                         <mat-header-cell *matHeaderCellDef mat-sort-header> Organism </mat-header-cell>
-                        <mat-cell *matCellDef="let element" class="txt-center">
+                        <mat-cell *matCellDef="let element">
                             <a [routerLink]="['/data/root/details/', element.organism]">
                                 {{element.organism}} </a>
                         </mat-cell>
@@ -91,19 +91,19 @@
 
                     <ng-container matColumnDef="commonName">
                         <mat-header-cell *matHeaderCellDef mat-sort-header>Common Name </mat-header-cell>
-                        <mat-cell *matCellDef="let element" class="txt-center"> {{element?.commonName}}</mat-cell>
+                        <mat-cell *matCellDef="let element"> {{element?.commonName}}</mat-cell>
                     </ng-container>
 
                     <ng-container matColumnDef="trackingSystem">
                         <mat-header-cell *matHeaderCellDef mat-sort-header> Tracking status </mat-header-cell>
-                        <mat-cell *matCellDef="let element" class="txt-center">
+                        <mat-cell *matCellDef="let element">
                             <span [ngClass]="getStatusClass(element.trackingSystem.status)">{{element.trackingSystem.status}}</span>
                         </mat-cell>
                     </ng-container>
 
                     <ng-container matColumnDef="goatInfo">
                         <mat-header-cell *matHeaderCellDef mat-sort-header>Goat Info </mat-header-cell>
-                        <mat-cell *matCellDef="let element" class="txt-center">
+                        <mat-cell *matCellDef="let element">
                             <a class="no-underline" target="_blank" href="{{element?.goatInfo}}">{{element.organism}}</a>
                         </mat-cell>
                     </ng-container>
