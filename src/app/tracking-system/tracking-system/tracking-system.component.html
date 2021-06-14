@@ -98,6 +98,10 @@
                 </div>
             </div>
             <div class="col-md-10 status-table">
+                <div class="alert alert-danger alert-dismissible fade show">
+                    <strong>Error!</strong> A problem has been occurred we are fixing it. Sorry for any inconvinience caused.
+                    <button type="button" class="close" data-dismiss="alert">&times;</button>
+                </div>
                 <h1 class="page-header">Statuses</h1>
                 <h1 *ngIf="activeFilters.length !== 0">Filters:
                     <button type="button" class="btn btn-success" *ngFor="let filter of activeFilters">
