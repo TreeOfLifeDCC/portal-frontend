@@ -853,13 +853,13 @@ export class TrackingSystemComponent implements OnInit, AfterViewInit {
             let childData = data[rank].childData;
             if (childData.length == 1 && childData[0].key.toLowerCase() === 'other') {
               if (this.taxonomies[childRankIndex + 1] != undefined) {
-                let taxa = { 'rank': data[rank].rank, 'taxonomy': 'other', 'childRank': this.taxonomies[childRankIndex + 1] };
+                let taxa = { 'rank': data[rank].rank, 'taxonomy': 'Other', 'childRank': this.taxonomies[childRankIndex + 1] };
                 this.getChildTaxonomyRank(taxa.rank, taxa.taxonomy, taxa.childRank);
               }
             }
             else {
               this.currentTaxaOnExpand = this.currentTaxonomy;
-              if ((childData.length > 1 && childData.filter(function (e) { return e.key.toLowerCase() === 'other'; }).length > 0) || (childData.length == 1 && this.currentTaxaOnExpand.taxonomy === 'other')) {
+              if ((childData.length > 1 && childData.filter(function (e) { return e.key.toLowerCase() === 'other'; }).length > 0) || (childData.length == 1 && this.currentTaxaOnExpand.taxonomy.toLowerCase() === 'other')) {
                 let childClass = 'other-' + this.currentTaxaOnExpand.childRank;
                 $('ul.' + childClass).css('padding-inline-start', '40px');
               }
