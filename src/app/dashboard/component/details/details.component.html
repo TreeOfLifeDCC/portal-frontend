@@ -5,8 +5,7 @@
         <dd class="col-sm-9" *ngIf="bioSampleObj?.commonName">{{bioSampleObj?.commonName}}</dd>
 
         <dt class="col-sm-3">BioSample ID:</dt>
-        <dd class="col-sm-9"><a href="http://www.ebi.ac.uk/biosamples/samples/{{bioSampleObj?.accession}}"
-                target="_blank">{{bioSampleObj?.accession}}</a></dd>
+        <dd class="col-sm-9"><a href="http://www.ebi.ac.uk/biosamples/samples/{{bioSampleObj?.accession}}" target="_blank">{{bioSampleObj?.accession}}</a></dd>
 
         <dt class="col-sm-3">Organism:</dt>
         <dd class="col-sm-9">{{bioSampleObj?.organism}}</dd>
@@ -93,9 +92,7 @@
         <dd class="col-sm-9" *ngIf="bioSampleObj?.projectName">{{bioSampleObj?.projectName}}</dd>
 
         <dt class="col-sm-3" *ngIf="bioSampleObj?.sampleDerivedFrom">Sample Derived From:</dt>
-        <dd class="col-sm-9" *ngIf="bioSampleObj?.sampleDerivedFrom"><a
-                href="http://www.ebi.ac.uk/biosamples/samples/{{bioSampleObj?.sampleDerivedFrom}}"
-                target="_blank">{{bioSampleObj?.sampleDerivedFrom}}</a></dd>
+        <dd class="col-sm-9" *ngIf="bioSampleObj?.sampleDerivedFrom"><a href="http://www.ebi.ac.uk/biosamples/samples/{{bioSampleObj?.sampleDerivedFrom}}" target="_blank">{{bioSampleObj?.sampleDerivedFrom}}</a></dd>
 
         <!-- Custom Fields Section -->
         <div class="col-sm-12">
@@ -103,8 +100,7 @@
             <div class="row" *ngFor="let sample of bioSampleObj?.customFields">
                 <dt class="col-sm-3">{{sample?.name}}</dt>
                 <dd class="col-sm-9">
-                    <a *ngIf="sample.ontologyTerms?.lenght > 0; else simple"
-                        href="{{sample.ontologyTerms[0]}}">{{sample?.value}}</a>
+                    <a *ngIf="sample.ontologyTerms?.length > 0; else simple" href="{{sample.ontologyTerms[0]}}">{{sample?.value}}</a>
                     <ng-template #simple>
                         {{sample?.value}}
                     </ng-template>
@@ -112,7 +108,7 @@
             </div>
         </div>
 
-        <div class="col-sm-12" *ngIf="bioSampleObj?.specimens.length">
+        <div class="col-sm-12" *ngIf="bioSampleObj?.specimens?.length">
             <hr>
             <h1 class="col-sm-12 page-header">Related Specimens</h1>
             <mat-form-field>
@@ -126,21 +122,12 @@
                             <div class="card bg-lite mb-3 filter-top">
                                 <h3 class="card-header filter-heading">
                                     <span #lbltextSex>Sex</span>
-                                    <i class="material-icons float-right sex-inactive"
-                                        *ngIf="sexFilters.length > 3 && isSexFilterCollapsed"
-                                        (click)="toggleCollapse(lbltextSex.innerText)">add</i>
-                                    <i class="material-icons float-right sex-inactive"
-                                        *ngIf="sexFilters.length > 3 && !isSexFilterCollapsed"
-                                        (click)="toggleCollapse(lbltextSex.innerText)">remove</i>
+                                    <i class="material-icons float-right sex-inactive" *ngIf="sexFilters.length > 3 && isSexFilterCollapsed" (click)="toggleCollapse(lbltextSex.innerText)">add</i>
+                                    <i class="material-icons float-right sex-inactive" *ngIf="sexFilters.length > 3 && !isSexFilterCollapsed" (click)="toggleCollapse(lbltextSex.innerText)">remove</i>
                                 </h3>
-                                <ul id="sex-inactive" class="list-group"
-                                    [ngClass]="{'long-list': itemLimitSexFilter > filterSize}">
+                                <ul id="sex-inactive" class="list-group" [ngClass]="{'long-list': itemLimitSexFilter > filterSize}">
                                     <ng-container *ngFor="let filter of sexFilters; let i = index">
-                                        <li id="{{i}}"
-                                            class="list-group-item d-flex justify-content-between align-items-center sex-inactive"
-                                            [ngClass]="checkFilterIsActive(filter.key)"
-                                            (click)="onFilterClick($event, lbltextSex.innerText, filter.key)"
-                                            style="cursor: pointer; padding: .75rem 0.25rem;"
+                                        <li id="{{i}}" class="list-group-item d-flex justify-content-between align-items-center sex-inactive" [ngClass]="checkFilterIsActive(filter.key)" (click)="onFilterClick($event, lbltextSex.innerText, filter.key)" style="cursor: pointer; padding: .75rem 0.25rem;"
                                             *ngIf="i<itemLimitSexFilter && filter.key != ''">
                                             {{filter.key}}
                                             <span class="badge badge-pill badge-info">{{filter.doc_count}}</span>
@@ -154,21 +141,12 @@
                             <div class="card bg-lite mb-3 filter-top">
                                 <h3 class="card-header filter-heading">
                                     <span #lbltextOrgPart>Organism Part</span>
-                                    <i class="material-icons float-right org-part-inactive"
-                                        *ngIf="organismPartFilters.length > 3 && isOrganismPartCollapsed"
-                                        (click)="toggleCollapse(lbltextOrgPart.innerText)">add</i>
-                                    <i class="material-icons float-right org-part-inactive"
-                                        *ngIf="organismPartFilters.length > 3 && !isOrganismPartCollapsed"
-                                        (click)="toggleCollapse(lbltextOrgPart.innerText)">remove</i>
+                                    <i class="material-icons float-right org-part-inactive" *ngIf="organismPartFilters.length > 3 && isOrganismPartCollapsed" (click)="toggleCollapse(lbltextOrgPart.innerText)">add</i>
+                                    <i class="material-icons float-right org-part-inactive" *ngIf="organismPartFilters.length > 3 && !isOrganismPartCollapsed" (click)="toggleCollapse(lbltextOrgPart.innerText)">remove</i>
                                 </h3>
-                                <ul id="org-part-inactive" class="list-group"
-                                    [ngClass]="{'long-list': itemLimitOrgFilter > filterSize}">
+                                <ul id="org-part-inactive" class="list-group" [ngClass]="{'long-list': itemLimitOrgFilter > filterSize}">
                                     <ng-container *ngFor="let filter of organismPartFilters; let i = index">
-                                        <li id="{{i}}"
-                                            class="list-group-item d-flex justify-content-between align-items-center org-part-inactive"
-                                            [ngClass]="checkFilterIsActive(filter.key)"
-                                            (click)="onFilterClick($event, lbltextOrgPart.innerText, filter.key)"
-                                            style="cursor: pointer; padding: .75rem 0.25rem;"
+                                        <li id="{{i}}" class="list-group-item d-flex justify-content-between align-items-center org-part-inactive" [ngClass]="checkFilterIsActive(filter.key)" (click)="onFilterClick($event, lbltextOrgPart.innerText, filter.key)" style="cursor: pointer; padding: .75rem 0.25rem;"
                                             *ngIf="i<itemLimitOrgFilter && filter.key != ''">
                                             {{filter.key}}
                                             <span class="badge badge-pill badge-info">{{filter.doc_count}}</span>
@@ -226,8 +204,7 @@
                             <mat-header-row *matHeaderRowDef="specDisplayedColumns"></mat-header-row>
                             <mat-row *matRowDef="let row; columns: specDisplayedColumns;"></mat-row>
                         </table>
-                        <mat-paginator style="width: 100%;" [pageSizeOptions]="[20, 30, 50]" showFirstLastButtons
-                            [length]="bioSampleTotalCount"></mat-paginator>
+                        <mat-paginator style="width: 100%;" [pageSizeOptions]="[20, 30, 50]" showFirstLastButtons [length]="bioSampleTotalCount"></mat-paginator>
                     </div>
                 </div>
             </div>
