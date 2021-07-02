@@ -69,7 +69,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
   ngOnInit(): void {
     this.activeFilters = [];
     this.urlAppendFilterArray = [];
-    this.filterSize = 3;
+    this.filterSize = 4;
     this.itemLimitSexFilter = this.filterSize;
     this.itemLimitOrgFilter = this.filterSize;
     this.itemLimitTrackFilter = this.filterSize;
