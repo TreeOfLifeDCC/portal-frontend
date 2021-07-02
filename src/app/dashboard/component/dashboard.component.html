@@ -21,8 +21,8 @@
                         <div class="card bg-lite mb-3 filter-top">
                             <h3 class="card-header filter-heading">
                                 <span #lbltextTrack>Tracking Status</span>
-                                <i class="material-icons float-right tracking-status-inactive" *ngIf="trackingSystemFilters.length > 3 && isTrackCollapsed" (click)="toggleCollapse(lbltextTrack.innerText)">add</i>
-                                <i class="material-icons float-right tracking-status-inactive" *ngIf="trackingSystemFilters.length > 3 && !isTrackCollapsed" (click)="toggleCollapse(lbltextTrack.innerText)">remove</i>
+                                <i class="material-icons float-right tracking-status-inactive" *ngIf="trackingSystemFilters.length > 4 && isTrackCollapsed" (click)="toggleCollapse(lbltextTrack.innerText)">add</i>
+                                <i class="material-icons float-right tracking-status-inactive" *ngIf="trackingSystemFilters.length > 4 && !isTrackCollapsed" (click)="toggleCollapse(lbltextTrack.innerText)">remove</i>
                             </h3>
                             <ul id="tracking-status-inactive" class="list-group" [ngClass]="{'long-list': itemLimitTrackFilter > filterSize}">
                                 <ng-container *ngFor="let filter of trackingSystemFilters; let i = index">
