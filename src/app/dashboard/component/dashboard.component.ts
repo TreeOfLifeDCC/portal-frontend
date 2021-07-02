@@ -218,13 +218,13 @@ export class DashboardComponent implements OnInit, AfterViewInit {
     let previousSize = pageSize * pageIndex;
 
     let from = pageIndex * pageSize;
-    let size = 0;
-    if ((from + pageSize) < this.bioSampleTotalCount) {
-      size = from + pageSize;
-    }
-    else {
-      size = this.bioSampleTotalCount;
-    }
+    let size = pageSize;
+    // if ((from + pageSize) < this.bioSampleTotalCount) {
+    //   size = from + pageSize;
+    // }
+    // else {
+    //   size = this.bioSampleTotalCount;
+    // }
 
     if (this.activeFilters.length !== 0 || this.currentTaxonomyTree.length !== 0) {
       this.getFilterResults(this.activeFilters.toString(), this.sort.active, this.sort.direction, from, size, taxonomy);
@@ -236,7 +236,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
       this.getSearchResults(from, size);
     }
     else {
-      this.getNextBiosamples(previousSize, (pageIndex).toString(), pageSize.toString(), this.sort.active, this.sort.direction);
+      this.getNextBiosamples(previousSize, from, size, this.sort.active, this.sort.direction);
       setTimeout(() => {
         $('#' + this.modalTaxa + '-kingdom').addClass('active-filter');
       }, 250);
@@ -647,6 +647,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
   }
 
   showTaxonomyModal(event: any, rank: string, taxonomy: string, childRank: string) {
+    this.paginator.pageIndex = 0;
     this.searchText = "";
     this.isDoubleClick = false;
     setTimeout(() => {
@@ -756,6 +757,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
   }
 
   filterTaxonomy(rank: string, taxonomy: string, childRank: string, commonName) {
+    this.paginator.pageIndex = 0;
     this.isDoubleClick = true;
     let taxa = { 'rank': rank, 'taxonomy': taxonomy, 'childRank': childRank, 'commonName': commonName };
     this.selectedFilterValue = taxa;

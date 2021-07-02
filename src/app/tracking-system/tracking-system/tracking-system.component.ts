@@ -221,13 +221,13 @@ export class TrackingSystemComponent implements OnInit, AfterViewInit {
     let previousSize = pageSize * pageIndex;
 
     let from = pageIndex * pageSize;
-    let size = 0;
-    if ((from + pageSize) < this.statusesTotalCount) {
-      size = from + pageSize;
-    }
-    else {
-      size = this.statusesTotalCount;
-    }
+    let size = pageSize;
+    // if ((from + pageSize) < this.statusesTotalCount) {
+    //   size = from + pageSize;
+    // }
+    // else {
+    //   size = this.statusesTotalCount;
+    // }
 
     if (this.activeFilters.length !== 0 || this.currentTaxonomyTree.length !== 0) {
       this.getFilterResults(this.activeFilters.toString(), this.sort.active, this.sort.direction, from, size, taxonomy);
@@ -239,7 +239,7 @@ export class TrackingSystemComponent implements OnInit, AfterViewInit {
       this.getSearchResults(from, size);
     }
     else {
-      this.getNextStatuses(previousSize, (pageIndex).toString(), pageSize.toString(), this.sort.active, this.sort.direction);
+      this.getNextStatuses(previousSize, from, size, this.sort.active, this.sort.direction);
       setTimeout(() => {
         $('#' + this.modalTaxa + '-kingdom').addClass('active-filter');
       }, 250);
@@ -368,6 +368,7 @@ export class TrackingSystemComponent implements OnInit, AfterViewInit {
 
   // tslint:disable-next-line:typedef
   onFilterClick(event, label: string, filter: string) {
+    this.paginator.pageIndex = 0;
     let taxonomy = [this.currentTaxonomyTree];
     this.searchText = '';
     let inactiveClassName = label.toLowerCase().replace(" ", "-") + '-inactive';
@@ -431,6 +432,7 @@ export class TrackingSystemComponent implements OnInit, AfterViewInit {
 
   // tslint:disable-next-line:typedef
   removeAllFilters() {
+    this.paginator.pageIndex = 0;
     this.isFilterSelected = false;
     $('#' + this.modalTaxa + '-kingdom').removeClass('active-filter');
     this.resetTaxaTree();
@@ -457,6 +459,7 @@ export class TrackingSystemComponent implements OnInit, AfterViewInit {
 
   // tslint:disable-next-line:typedef
   removeFilter(filter: string) {
+    this.paginator.pageIndex = 0;
     if (filter != undefined) {
       this.updateDomForRemovedFilter(filter);
       this.updateActiveRouteParams();
@@ -798,6 +801,7 @@ export class TrackingSystemComponent implements OnInit, AfterViewInit {
   }
 
   showTaxonomyModal(event: any, rank: string, taxonomy: string, childRank: string) {
+    this.paginator.pageIndex = 0;
     this.isDoubleClick = false;
     setTimeout(() => {
       if (!this.isDoubleClick) {
@@ -905,6 +909,7 @@ export class TrackingSystemComponent implements OnInit, AfterViewInit {
   }
 
   filterTaxonomy(rank: string, taxonomy: string, childRank: string, count) {
+    this.paginator.pageIndex = 0;
     this.isDoubleClick = true;
     let taxa = { 'rank': rank, 'taxonomy': taxonomy, 'childRank': childRank };
     this.selectedFilterValue = taxa;
