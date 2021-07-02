@@ -550,7 +550,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
         this.itemLimitSexFilter = 10000;
         this.isSexFilterCollapsed = false;
       } else {
-        this.itemLimitSexFilter = 3;
+        this.itemLimitSexFilter = 4;
         this.isSexFilterCollapsed = true;
       }
     }
@@ -559,7 +559,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
         this.itemLimitTrackFilter = 10000;
         this.isTrackCollapsed = false;
       } else {
-        this.itemLimitTrackFilter = 3;
+        this.itemLimitTrackFilter = 4;
         this.isTrackCollapsed = true;
       }
     }
