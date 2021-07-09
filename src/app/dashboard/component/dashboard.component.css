@@ -187,6 +187,10 @@ ul[class*="Other-"] {
     padding: 0;
 }
 
+ul[class*="other-"] {
+    padding: 0;
+}
+
 .mat-header-row,
 .mat-row {
     min-height: 30px;

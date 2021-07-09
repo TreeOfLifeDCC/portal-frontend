@@ -141,7 +141,7 @@ export class TrackingSystemComponent implements OnInit, AfterViewInit {
           this.dataSource.filterPredicate = this.filterPredicate;
           this.unpackedData = unpackedData;
           this.parseFilterAggregation(data);
-          this.childTaxanomy['superkingdom'] = [{ 'parent': 'Eukaryota', 'rank': 'kingdom', 'expanded': false, 'childData': data.aggregations.filters.kingdomRank.buckets }];
+          this.childTaxanomy['superkingdom'] = [{ 'parent': 'Eukaryota', 'rank': 'kingdom', 'expanded': false, 'childData': data.aggregations.kingdomRank.scientificName.buckets }];
           for (let i = 0; i < this.urlAppendFilterArray.length; i++) {
             setTimeout(() => {
               let inactiveClassName = '.' + this.urlAppendFilterArray[i].name + '-inactive';
@@ -558,9 +558,9 @@ export class TrackingSystemComponent implements OnInit, AfterViewInit {
           this.dataSource.filterPredicate = this.filterPredicate;
           this.unpackedData = unpackedData;
           this.parseFilterAggregation(data);
-          this.childTaxanomy['superkingdom'] = [{ 'parent': 'Eukaryota', 'rank': 'kingdom', 'expanded': false, 'childData': data.aggregations.filters.kingdomRank.buckets }];
+          this.childTaxanomy['superkingdom'] = [{ 'parent': 'Eukaryota', 'rank': 'kingdom', 'expanded': false, 'childData': data.aggregations.kingdomRank.scientificName.buckets }];
           if (data.aggregations.filters != undefined) {
-            this.selectedTaxonomy.push(data.aggregations.filters.childRank.buckets[0]);
+            this.selectedTaxonomy.push(data.aggregations.childRank.scientificName.buckets[0]);
           }
           this.spinner.hide();
         },
@@ -585,6 +585,7 @@ export class TrackingSystemComponent implements OnInit, AfterViewInit {
     // this.spinner.show();
     if (this.searchText.length == 0) {
       this.getAllStatuses(0, 15, this.sort.active, this.sort.direction);
+      this.getChildTaxonomyRank('superkingdom', 'Eukaryota', 'kingdom');
     }
     else {
       this.activeFilters = [];
@@ -600,7 +601,11 @@ export class TrackingSystemComponent implements OnInit, AfterViewInit {
             this.dataSource.sort = this.sort;
             this.dataSource.filterPredicate = this.filterPredicate;
             this.unpackedData = unpackedData;
+            this.childTaxanomy['superkingdom'] = [{ 'parent': 'Eukaryota', 'rank': 'kingdom', 'expanded': false, 'childData': data.aggregations.kingdomRank.scientificName.buckets }];
             this.parseFilterAggregation(data);
+            if (data.aggregations.filters != undefined) {
+              this.selectedTaxonomy.push(data.aggregations.childRank.scientificName.buckets[0]);
+            }
             this.spinner.hide();
           },
           err => {
@@ -675,42 +680,42 @@ export class TrackingSystemComponent implements OnInit, AfterViewInit {
   parseFilterAggregation(data: any) {
     this.filtersMap = data;
     this.BiosamplesFilters = this.filtersMap.aggregations.biosamples.buckets.filter(i => {
-      if (i !== "" && i.key === "done") {
+      if (i !== "" && i.key.toLowerCase() === "done") {
         let obj = i;
         obj.key = "Biosamples - " + obj.key;
         return obj;
       }
     });
     this.RawDataFilters = this.filtersMap.aggregations.raw_data.buckets.filter(i => {
-      if (i !== "" && i.key === "done") {
+      if (i !== "" && i.key.toLowerCase() === "done") {
         let obj = i;
         obj.key = "Raw data - " + obj.key;
         return obj;
       }
     });
     this.MappedReadsFilters = this.filtersMap.aggregations.mapped_reads.buckets.filter(i => {
-      if (i !== "" && i.key === "done") {
+      if (i !== "" && i.key.toLowerCase() === "done") {
         let obj = i;
         obj.key = "Mapped reads - " + obj.key;
         return obj;
       }
     });
     this.AssembliesFilters = this.filtersMap.aggregations.assemblies.buckets.filter(i => {
-      if (i !== "" && i.key === "done") {
+      if (i !== "" && i.key.toLowerCase() === "done") {
         let obj = i;
         obj.key = "Assemblies - " + obj.key;
         return obj;
       }
     });
     this.AnnotationCompleteFilters = this.filtersMap.aggregations.annotation_complete.buckets.filter(i => {
-      if (i !== "" && i.key === "done") {
+      if (i !== "" && i.key.toLowerCase() === "done") {
         let obj = i;
         obj.key = "Annotation complete - " + obj.key;
         return obj;
       }
     });
     this.AnnotationFilters = this.filtersMap.aggregations.annotation.buckets.filter(i => {
-      if (i !== "" && i.key === "done") {
+      if (i !== "" && i.key.toLowerCase() === "done") {
         let obj = i;
         obj.key = "Annotation - " + obj.key;
         return obj;
@@ -838,7 +843,7 @@ export class TrackingSystemComponent implements OnInit, AfterViewInit {
             $('#taxonomyModal').modal('show');
             $(".modal-backdrop").show();
             this.spinner.hide();
-          }, 400);
+          }, 900);
         }
       }
     }, 250);
@@ -868,7 +873,9 @@ export class TrackingSystemComponent implements OnInit, AfterViewInit {
                 $('ul.' + childClass).css('padding-inline-start', '40px');
               }
             }
-            $('.' + taxonomy + '-' + childRank).addClass("active");
+            setTimeout(() => {
+              $('.' + taxonomy + '-' + childRank).addClass("active");
+            }, 120);
           }, 100);
         },
         err => {
@@ -908,10 +915,10 @@ export class TrackingSystemComponent implements OnInit, AfterViewInit {
     }, 250);
   }
 
-  filterTaxonomy(rank: string, taxonomy: string, childRank: string, count) {
+  filterTaxonomy(rank: string, taxonomy: string, childRank: string, commonName) {
     this.paginator.pageIndex = 0;
     this.isDoubleClick = true;
-    let taxa = { 'rank': rank, 'taxonomy': taxonomy, 'childRank': childRank };
+    let taxa = { 'rank': rank, 'taxonomy': taxonomy, 'childRank': childRank, 'commonName': commonName };
     this.selectedFilterValue = taxa;
     this.createTaxaTree(rank, taxa);
     this.selectedTaxonomy.push(taxa);
