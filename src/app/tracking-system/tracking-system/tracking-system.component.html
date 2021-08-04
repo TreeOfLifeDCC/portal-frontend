@@ -104,7 +104,7 @@
                     <button type="button" class="close" data-dismiss="alert">&times;</button>
                 </div> -->
                 <h1 class="page-header">Statuses</h1>
-                <button type="button" style="float: right;" class="btn btn-primary" mat-raised-button (click)="exporter.exportTable('csv')">Download</button>
+                <button type="button" style="float: right;" class="btn btn-primary" mat-raised-button (click)="exporter.exportTable('csv')">Download table metadata</button>
                 <h1 *ngIf="activeFilters.length !== 0">Filters:
                     <button type="button" class="btn btn-success" *ngFor="let filter of activeFilters">
                         {{filter}}
