@@ -16,6 +16,7 @@ import {MatPaginatorModule} from '@angular/material/paginator';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatInputModule} from '@angular/material/input';
 import { NgxSpinnerModule } from "ngx-spinner";
+import { MatTableExporterModule } from 'mat-table-exporter';
 
 import { DashboardService } from '../dashboard/services/dashboard.service';
 import { OrganismDetailsComponent } from './component/organism-details/organism-details.component'
@@ -36,7 +37,8 @@ import { TaxanomyService } from '../taxanomy/taxanomy.service';
     MatPaginatorModule,
     MatFormFieldModule,
     MatInputModule,
-    NgxSpinnerModule
+    NgxSpinnerModule,
+    MatTableExporterModule
   ],
   providers: [DashboardService, TaxanomyService]
 })

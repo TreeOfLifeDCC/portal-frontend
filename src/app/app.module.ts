@@ -11,6 +11,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { MatTreeModule } from '@angular/material/tree';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
+import { MatTableExporterModule } from 'mat-table-exporter';
 
 import { HeaderComponent } from './shared/header/header.component';
 import { AboutComponent } from './about/about.component';
@@ -38,7 +39,8 @@ import { ApiComponent } from './api/api.component';
     HttpClientModule,
     MatTreeModule,
     MatIconModule,
-    MatButtonModule
+    MatButtonModule,
+    MatTableExporterModule
   ],
   providers: [],
   bootstrap: [AppComponent]
