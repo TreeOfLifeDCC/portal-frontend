@@ -111,6 +111,7 @@
         <div class="col-sm-12" *ngIf="bioSampleObj?.specimens?.length">
             <hr>
             <h1 class="col-sm-12 page-header">Related Specimens</h1>
+            <button type="button" style="float: right;" class="btn btn-primary" mat-raised-button (click)="exporter.exportTable('csv', {fileName:'related-specimens-metadata'})">Download metadata</button>
             <mat-form-field>
                 <mat-label>Search</mat-label>
                 <input matInput [(ngModel)]='searchText' (keyup)="getSearchResults()" placeholder="Ex. ILLUMINA" #input>
@@ -168,7 +169,7 @@
                                 Remove all filters
                             </button>
                         </h1>
-                        <table mat-table [dataSource]="dataSourceRecords" matSort style="width: 100%;">
+                        <table mat-table matTableExporter #exporter="matTableExporter" [dataSource]="dataSourceRecords" matSort style="width: 100%;">
                             <ng-container matColumnDef="accession">
                                 <mat-header-cell *matHeaderCellDef mat-sort-header> BioSample ID </mat-header-cell>
                                 <mat-cell *matCellDef="let element" class="txt-center">

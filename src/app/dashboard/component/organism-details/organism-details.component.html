@@ -89,11 +89,12 @@
         <div class="col-sm-12" *ngIf="dataSourceAssembliesCount != 0">
             <hr>
             <h1 class="col-sm-12 page-header">Related assemblies</h1>
+            <button type="button" style="float: right;" class="btn btn-primary" mat-raised-button (click)="exporter.exportTable('csv', {fileName:'assemblies-metadata'})">Download metadata</button>
             <mat-form-field>
                 <mat-label>Search</mat-label>
                 <input matInput (keyup)="assembliesSearch($event)" placeholder="Ex. ILLUMINA" #input>
             </mat-form-field>
-            <table mat-table [dataSource]="dataSourceAssemblies" matSort style="width: 100%;">
+            <table mat-table matTableExporter #exporter="matTableExporter" [dataSource]="dataSourceAssemblies" matSort style="width: 100%;">
                 <ng-container matColumnDef="accession">
                     <mat-header-cell *matHeaderCellDef> Accession </mat-header-cell>
                     <mat-cell *matCellDef="let element" class="txt-center">
@@ -120,145 +121,16 @@
             <mat-paginator #assembliesTable [pageSizeOptions]="[10, 20, 30]" showFirstLastButtons [length]="dataSourceAssembliesCount" style="width: 100%;"></mat-paginator>
         </div>
 
-        <!-- Related Organisms -->
-        <div class="col-sm-12" *ngIf="bioSampleObj?.records.length">
-            <hr>
-            <h1 class="col-sm-12 page-header">Related Organisms</h1>
-            <mat-form-field>
-                <mat-label>Search</mat-label>
-                <input matInput [(ngModel)]='searchText' (keyup)="getSearchResults()" placeholder="Ex. ILLUMINA" #input>
-            </mat-form-field>
-            <div class="row">
-                <div class="col-sm-2">
-                    <div class="row">
-                        <div class="col-md-12 col-sm-6" *ngIf="sexFilters.length">
-                            <div class="card bg-lite mb-3 filter-top">
-                                <h3 class="card-header filter-heading">
-                                    <span #lbltextSex>Sex</span>
-                                    <i class="material-icons float-right sex-inactive" *ngIf="sexFilters.length > 3 && isSexFilterCollapsed" (click)="toggleCollapse(lbltextSex.innerText)">add</i>
-                                    <i class="material-icons float-right sex-inactive" *ngIf="sexFilters.length > 3 && !isSexFilterCollapsed" (click)="toggleCollapse(lbltextSex.innerText)">remove</i>
-                                </h3>
-                                <ul id="sex-inactive" class="list-group" [ngClass]="{'long-list': itemLimitSexFilter > filterSize}">
-                                    <ng-container *ngFor="let filter of sexFilters; let i = index">
-                                        <li id="{{i}}" class="list-group-item d-flex justify-content-between align-items-center sex-inactive" [ngClass]="checkFilterIsActive(filter.key)" (click)="onFilterClick($event, lbltextSex.innerText, filter.key)" style="cursor: pointer; padding: .75rem 0.25rem;"
-                                            *ngIf="i<itemLimitSexFilter && filter.key != ''">
-                                            {{filter.key}}
-                                            <span class="badge badge-pill badge-info">{{filter.doc_count}}</span>
-                                        </li>
-                                    </ng-container>
-                                </ul>
-                            </div>
-                        </div>
-
-                        <div class="col-md-12 col-sm-6" *ngIf="organismPartFilters.length">
-                            <div class="card bg-lite mb-3 filter-top">
-                                <h3 class="card-header filter-heading">
-                                    <span #lbltextOrgPart>Organism Part</span>
-                                    <i class="material-icons float-right org-part-inactive" *ngIf="organismPartFilters.length > 3 && isOrganismPartCollapsed" (click)="toggleCollapse(lbltextOrgPart.innerText)">add</i>
-                                    <i class="material-icons float-right org-part-inactive" *ngIf="organismPartFilters.length > 3 && !isOrganismPartCollapsed" (click)="toggleCollapse(lbltextOrgPart.innerText)">remove</i>
-                                </h3>
-                                <ul id="org-part-inactive" class="list-group" [ngClass]="{'long-list': itemLimitOrgFilter > filterSize}">
-                                    <ng-container *ngFor="let filter of organismPartFilters; let i = index">
-                                        <li id="{{i}}" class="list-group-item d-flex justify-content-between align-items-center org-part-inactive" [ngClass]="checkFilterIsActive(filter.key)" (click)="onFilterClick($event, lbltextOrgPart.innerText, filter.key)" style="cursor: pointer; padding: .75rem 0.25rem;"
-                                            *ngIf="i<itemLimitOrgFilter && filter.key != ''">
-                                            {{filter.key}}
-                                            <span class="badge badge-pill badge-info">{{filter.doc_count}}</span>
-                                        </li>
-                                    </ng-container>
-                                </ul>
-                            </div>
-                        </div>
-
-                        <div class="col-md-12 col-sm-6" *ngIf="trackingSystemFilters.length">
-                            <div class="card bg-lite mb-3 filter-top">
-                                <h3 class="card-header filter-heading">
-                                    <span #lbltextTrack>Tracking Status</span>
-                                    <i class="material-icons float-right tracking-status-inactive" *ngIf="trackingSystemFilters.length > 3 && isTrackCollapsed" (click)="toggleCollapse(lbltextTrack.innerText)">add</i>
-                                    <i class="material-icons float-right tracking-status-inactive" *ngIf="trackingSystemFilters.length > 3 && !isTrackCollapsed" (click)="toggleCollapse(lbltextTrack.innerText)">remove</i>
-                                </h3>
-                                <ul id="tracking-status-inactive" class="list-group" [ngClass]="{'long-list': itemLimitTrackFilter > filterSize}">
-                                    <ng-container *ngFor="let filter of trackingSystemFilters; let i = index">
-                                        <li id="i" class="list-group-item d-flex justify-content-between align-items-center tracking-status-inactive" [ngClass]="checkFilterIsActive(filter.key)" (click)="onFilterClick($event, lbltextTrack.innerText, filter.key)" style="cursor: pointer; padding: .75rem 0.25rem;"
-                                            *ngIf="i<itemLimitTrackFilter && filter.key != ''">
-                                            {{filter.key}}
-                                            <span class="badge badge-pill badge-info">{{filter.doc_count}}</span>
-                                        </li>
-                                    </ng-container>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-sm-10">
-                    <div class="row">
-                        <h1 *ngIf="activeFilters.length !== 0">Filters:
-                            <button type="button" class="btn btn-success" *ngFor="let filter of activeFilters">
-                                {{filter}}
-                                <span class="badge badge-light" (click)="removeFilter(filter)">X</span>
-                            </button>
-                            <button type="button" class="btn btn-primary" (click)="removeAllFilters()">
-                                Remove all filters
-                            </button>
-                        </h1>
-                        <table mat-table [dataSource]="dataSourceRecords" matSort style="width: 100%;">
-                            <ng-container matColumnDef="accession">
-                                <mat-header-cell *matHeaderCellDef mat-sort-header> BioSample ID </mat-header-cell>
-                                <mat-cell *matCellDef="let element" class="txt-center">
-                                    <a [routerLink]="['/data/organism/details/', element.accession]">
-                                        {{element.accession}}</a>
-                                </mat-cell>
-                            </ng-container>
-
-                            <ng-container matColumnDef="organism">
-                                <mat-header-cell *matHeaderCellDef mat-sort-header> Organism </mat-header-cell>
-                                <mat-cell *matCellDef="let element" class="txt-center">
-                                    {{element.organism}}
-                                </mat-cell>
-                            </ng-container>
-
-                            <ng-container matColumnDef="commonName">
-                                <mat-header-cell *matHeaderCellDef mat-sort-header>Common Name </mat-header-cell>
-                                <mat-cell *matCellDef="let element" class="txt-center"> {{element?.commonName}}
-                                </mat-cell>
-                            </ng-container>
-
-                            <ng-container matColumnDef="sex">
-                                <mat-header-cell *matHeaderCellDef mat-sort-header> Sex </mat-header-cell>
-                                <mat-cell *matCellDef="let element" class="txt-center"> {{element.sex}} </mat-cell>
-                            </ng-container>
-
-                            <ng-container matColumnDef="organismPart">
-                                <mat-header-cell *matHeaderCellDef mat-sort-header> Organism part </mat-header-cell>
-                                <mat-cell *matCellDef="let element" class="txt-center"> {{element.organismPart}}
-                                </mat-cell>
-                            </ng-container>
-
-                            <ng-container matColumnDef="trackingSystem">
-                                <mat-header-cell *matHeaderCellDef mat-sort-header> Tracking status
-                                </mat-header-cell>
-                                <mat-cell *matCellDef="let element">
-                                    <span [ngClass]="getStatusClass(element.trackingSystem)">{{element.trackingSystem}}</span>
-                                </mat-cell>
-                            </ng-container>
-
-                            <mat-header-row *matHeaderRowDef="specDisplayedColumns"></mat-header-row>
-                            <mat-row *matRowDef="let row; columns: specDisplayedColumns;"></mat-row>
-                        </table>
-                        <mat-paginator style="width: 100%;" [pageSizeOptions]="[10, 20, 30]" showFirstLastButtons [length]="specBioSampleTotalCount"></mat-paginator>
-                    </div>
-                </div>
-            </div>
-        </div>
-
         <!-- Experiment Files Section -->
         <div class="col-sm-12" *ngIf="dataSourceFilesCount != 0">
             <hr>
             <h1 class="col-sm-12 page-header">Related files</h1>
+            <button type="button" style="float: right;" class="btn btn-primary" mat-raised-button (click)="exporter.exportTable('csv', {fileName:'experiments-metadata'})">Download metadata</button>
             <mat-form-field>
                 <mat-label>Search</mat-label>
                 <input matInput (keyup)="filesSearch($event)" placeholder="Ex. ILLUMINA" #input>
             </mat-form-field>
-            <table mat-table [dataSource]="dataSourceFiles">
+            <table mat-table matTableExporter #exporter="matTableExporter" [dataSource]="dataSourceFiles">
 
                 <ng-container matColumnDef="study_accession">
                     <mat-header-cell *matHeaderCellDef> Study Accession </mat-header-cell>
@@ -340,6 +212,137 @@
                 <mat-row *matRowDef="let row; columns: displayedColumnsFiles;"></mat-row>
             </table>
             <mat-paginator #experimentsTable [pageSizeOptions]="[10, 20, 30]" showFirstLastButtons [length]="dataSourceFilesCount"></mat-paginator>
+        </div>
+
+        <!-- Related Organisms -->
+        <div class="col-sm-12" *ngIf="bioSampleObj?.records.length">
+            <hr>
+            <h1 class="col-sm-12 page-header">Related Organisms</h1>
+            <button type="button" style="float: right;" class="btn btn-primary" mat-raised-button (click)="exporter.exportTable('csv', {fileName:'related-organisms-metadata'})">Download metadata</button>
+            <mat-form-field>
+                <mat-label>Search</mat-label>
+                <input matInput [(ngModel)]='searchText' (keyup)="getSearchResults()" placeholder="Ex. ILLUMINA" #input>
+            </mat-form-field>
+            <div class="row">
+                <div class="col-sm-2">
+                    <div class="row">
+                        <div class="col-md-12 col-sm-6" *ngIf="sexFilters.length">
+                            <div class="card bg-lite mb-3 filter-top">
+                                <h3 class="card-header filter-heading">
+                                    <span #lbltextSex>Sex</span>
+                                    <i class="material-icons float-right sex-inactive" *ngIf="sexFilters.length > 3 && isSexFilterCollapsed" (click)="toggleCollapse(lbltextSex.innerText)">add</i>
+                                    <i class="material-icons float-right sex-inactive" *ngIf="sexFilters.length > 3 && !isSexFilterCollapsed" (click)="toggleCollapse(lbltextSex.innerText)">remove</i>
+                                </h3>
+                                <ul id="sex-inactive" class="list-group" [ngClass]="{'long-list': itemLimitSexFilter > filterSize}">
+                                    <ng-container *ngFor="let filter of sexFilters; let i = index">
+                                        <li id="{{i}}" class="list-group-item d-flex justify-content-between align-items-center sex-inactive" [ngClass]="checkFilterIsActive(filter.key)" (click)="onFilterClick($event, lbltextSex.innerText, filter.key)" style="cursor: pointer; padding: .75rem 0.25rem;"
+                                            *ngIf="i<itemLimitSexFilter && filter.key != ''">
+                                            {{filter.key}}
+                                            <span class="badge badge-pill badge-info">{{filter.doc_count}}</span>
+                                        </li>
+                                    </ng-container>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div class="col-md-12 col-sm-6" *ngIf="organismPartFilters.length">
+                            <div class="card bg-lite mb-3 filter-top">
+                                <h3 class="card-header filter-heading">
+                                    <span #lbltextOrgPart>Organism Part</span>
+                                    <i class="material-icons float-right org-part-inactive" *ngIf="organismPartFilters.length > 3 && isOrganismPartCollapsed" (click)="toggleCollapse(lbltextOrgPart.innerText)">add</i>
+                                    <i class="material-icons float-right org-part-inactive" *ngIf="organismPartFilters.length > 3 && !isOrganismPartCollapsed" (click)="toggleCollapse(lbltextOrgPart.innerText)">remove</i>
+                                </h3>
+                                <ul id="org-part-inactive" class="list-group" [ngClass]="{'long-list': itemLimitOrgFilter > filterSize}">
+                                    <ng-container *ngFor="let filter of organismPartFilters; let i = index">
+                                        <li id="{{i}}" class="list-group-item d-flex justify-content-between align-items-center org-part-inactive" [ngClass]="checkFilterIsActive(filter.key)" (click)="onFilterClick($event, lbltextOrgPart.innerText, filter.key)" style="cursor: pointer; padding: .75rem 0.25rem;"
+                                            *ngIf="i<itemLimitOrgFilter && filter.key != ''">
+                                            {{filter.key}}
+                                            <span class="badge badge-pill badge-info">{{filter.doc_count}}</span>
+                                        </li>
+                                    </ng-container>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div class="col-md-12 col-sm-6" *ngIf="trackingSystemFilters.length">
+                            <div class="card bg-lite mb-3 filter-top">
+                                <h3 class="card-header filter-heading">
+                                    <span #lbltextTrack>Tracking Status</span>
+                                    <i class="material-icons float-right tracking-status-inactive" *ngIf="trackingSystemFilters.length > 3 && isTrackCollapsed" (click)="toggleCollapse(lbltextTrack.innerText)">add</i>
+                                    <i class="material-icons float-right tracking-status-inactive" *ngIf="trackingSystemFilters.length > 3 && !isTrackCollapsed" (click)="toggleCollapse(lbltextTrack.innerText)">remove</i>
+                                </h3>
+                                <ul id="tracking-status-inactive" class="list-group" [ngClass]="{'long-list': itemLimitTrackFilter > filterSize}">
+                                    <ng-container *ngFor="let filter of trackingSystemFilters; let i = index">
+                                        <li id="i" class="list-group-item d-flex justify-content-between align-items-center tracking-status-inactive" [ngClass]="checkFilterIsActive(filter.key)" (click)="onFilterClick($event, lbltextTrack.innerText, filter.key)" style="cursor: pointer; padding: .75rem 0.25rem;"
+                                            *ngIf="i<itemLimitTrackFilter && filter.key != ''">
+                                            {{filter.key}}
+                                            <span class="badge badge-pill badge-info">{{filter.doc_count}}</span>
+                                        </li>
+                                    </ng-container>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-10">
+                    <div class="row">
+                        <h1 *ngIf="activeFilters.length !== 0">Filters:
+                            <button type="button" class="btn btn-success" *ngFor="let filter of activeFilters">
+                                {{filter}}
+                                <span class="badge badge-light" (click)="removeFilter(filter)">X</span>
+                            </button>
+                            <button type="button" class="btn btn-primary" (click)="removeAllFilters()">
+                                Remove all filters
+                            </button>
+                        </h1>
+                        <table matTableExporter #exporter="matTableExporter" mat-table [dataSource]="dataSourceRecords" matSort style="width: 100%;">
+                            <ng-container matColumnDef="accession">
+                                <mat-header-cell *matHeaderCellDef mat-sort-header> BioSample ID </mat-header-cell>
+                                <mat-cell *matCellDef="let element" class="txt-center">
+                                    <a [routerLink]="['/data/organism/details/', element.accession]">
+                                        {{element.accession}}</a>
+                                </mat-cell>
+                            </ng-container>
+
+                            <ng-container matColumnDef="organism">
+                                <mat-header-cell *matHeaderCellDef mat-sort-header> Organism </mat-header-cell>
+                                <mat-cell *matCellDef="let element" class="txt-center">
+                                    {{element.organism}}
+                                </mat-cell>
+                            </ng-container>
+
+                            <ng-container matColumnDef="commonName">
+                                <mat-header-cell *matHeaderCellDef mat-sort-header>Common Name </mat-header-cell>
+                                <mat-cell *matCellDef="let element" class="txt-center"> {{element?.commonName}}
+                                </mat-cell>
+                            </ng-container>
+
+                            <ng-container matColumnDef="sex">
+                                <mat-header-cell *matHeaderCellDef mat-sort-header> Sex </mat-header-cell>
+                                <mat-cell *matCellDef="let element" class="txt-center"> {{element.sex}} </mat-cell>
+                            </ng-container>
+
+                            <ng-container matColumnDef="organismPart">
+                                <mat-header-cell *matHeaderCellDef mat-sort-header> Organism part </mat-header-cell>
+                                <mat-cell *matCellDef="let element" class="txt-center"> {{element.organismPart}}
+                                </mat-cell>
+                            </ng-container>
+
+                            <ng-container matColumnDef="trackingSystem">
+                                <mat-header-cell *matHeaderCellDef mat-sort-header> Tracking status
+                                </mat-header-cell>
+                                <mat-cell *matCellDef="let element">
+                                    <span [ngClass]="getStatusClass(element.trackingSystem)">{{element.trackingSystem}}</span>
+                                </mat-cell>
+                            </ng-container>
+
+                            <mat-header-row *matHeaderRowDef="specDisplayedColumns"></mat-header-row>
+                            <mat-row *matRowDef="let row; columns: specDisplayedColumns;"></mat-row>
+                        </table>
+                        <mat-paginator style="width: 100%;" [pageSizeOptions]="[10, 20, 30]" showFirstLastButtons [length]="specBioSampleTotalCount"></mat-paginator>
+                    </div>
+                </div>
+            </div>
         </div>
 
     </dl>
