@@ -58,3 +58,25 @@
     color: #fff;
     background-color: #4BBEFD;
 }
+
+.blue-text {
+    font-size: 1em;
+    color: #007c82!important;
+}
+
+table {
+    width: 100%;
+}
+
+.mat-row {
+    height: auto;
+}
+
+.mat-cell {
+    padding: 8px 8px 8px 0;
+    word-break: break-word;
+}
+
+.table-container {
+    overflow: auto;
+}

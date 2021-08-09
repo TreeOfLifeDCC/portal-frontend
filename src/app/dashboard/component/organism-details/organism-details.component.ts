@@ -57,9 +57,9 @@ export class OrganismDetailsComponent implements OnInit, AfterViewInit {
   dataSourceAnnotation;
   dataSourceAnnotationCount;
 
-  displayedColumnsFiles = ['study_accession', 'experiment_accession', 'run_accession', 'fastq_ftp', 'submitted_ftp',
-    'instrument_platform', 'instrument_model', 'library_layout', 'library_strategy', 'library_source',
-    'library_selection'];
+  experimentColumnsDefination = [{column: "study_accession", selected: true},{column: "secondary_study_accession", selected: false},{column: "sample_accession", selected: true},{column: "secondary_sample_accession", selected: false},{column: "experiment_accession", selected: true},{column: "run_accession", selected: true},{column: "submission_accession", selected: false},{column: "tax_id", selected: true},{column: "scientific_name", selected: true},{column: "instrument_platform", selected: false},{column: "instrument_model", selected: false},{column: "library_name", selected: false},{column: "nominal_length", selected: false},{column: "library_layout", selected: false},{column: "library_strategy", selected: false},{column: "library_source", selected: false},{column: "library_selection", selected: false},{column: "read_count", selected: false},{column: "base_count", selected: false},{column: "center_name", selected: false},{column: "first_public", selected: false},{column: "last_updated", selected: false},{column: "experiment_title", selected: false},{column: "study_title", selected: false},{column: "study_alias", selected: false},{column: "experiment_alias", selected: false},{column: "run_alias", selected: false},{column: "fastq_bytes", selected: false},{column: "fastq_md5", selected: false},{column: "fastq_ftp", selected: true},{column: "fastq_aspera", selected: false},{column: "fastq_galaxy", selected: false},{column: "submitted_bytes", selected: false},{column: "submitted_md5", selected: false},{column: "submitted_ftp", selected: true},{column: "submitted_aspera", selected: false},{column: "submitted_galaxy", selected: false},{column: "submitted_format", selected: false},{column: "sra_bytes", selected: false},{column: "sra_md5", selected: false},{column: "sra_ftp", selected: true},{column: "sra_aspera", selected: false},{column: "sra_galaxy", selected: false},{column: "cram_index_ftp", selected: false},{column: "cram_index_aspera", selected: false},{column: "cram_index_galaxy", selected: false},{column: "sample_alias", selected: false},{column: "broker_name", selected: false},{column: "sample_title", selected: false},{column: "nominal_sdev", selected: false},{column: "first_created", selected: false},{column: "library_construction_protocol", selected: false}]
+
+  displayedColumnsFiles = [];
   displayedColumnsAssemblies = ['accession', 'assembly_name', 'description', 'version'];
   displayedColumnsAnnotation = ['accession', 'annotation', 'proteins', 'transcripts', 'softmasked_genome', 'other_data', 'view_in_browser'];
   
@@ -81,6 +81,29 @@ export class OrganismDetailsComponent implements OnInit, AfterViewInit {
     this.filterJson['sex'] = '';
     this.filterJson['organismPart'] = '';
     this.filterJson['trackingSystem'] = '';
+    this.getDisplayedColumns();
+    this.getBiosampleByOrganism();
+
+  }
+
+  getDisplayedColumns() {
+    this.displayedColumnsFiles = [];
+    this.experimentColumnsDefination.forEach(obj => {
+      if(obj.selected) {
+        this.displayedColumnsFiles.push(obj.column)
+      }
+    });
+  }
+
+  expanded() {
+  }
+
+  showSelectedColumn(selectedColumn, checked) {
+    let index = this.experimentColumnsDefination.indexOf(selectedColumn);
+    let item = this.experimentColumnsDefination[index];
+    item.selected = checked;
+    this.experimentColumnsDefination[index] = item;
+    this.getDisplayedColumns();
     this.getBiosampleByOrganism();
   }
 

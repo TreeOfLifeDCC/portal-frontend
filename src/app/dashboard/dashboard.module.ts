@@ -17,6 +17,8 @@ import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatInputModule} from '@angular/material/input';
 import { NgxSpinnerModule } from "ngx-spinner";
 import { MatTableExporterModule } from 'mat-table-exporter';
+import {MatExpansionModule} from '@angular/material/expansion';
+import {MatCheckboxModule} from '@angular/material/checkbox';
 
 import { DashboardService } from '../dashboard/services/dashboard.service';
 import { OrganismDetailsComponent } from './component/organism-details/organism-details.component'
@@ -38,7 +40,9 @@ import { TaxanomyService } from '../taxanomy/taxanomy.service';
     MatFormFieldModule,
     MatInputModule,
     NgxSpinnerModule,
-    MatTableExporterModule
+    MatTableExporterModule,
+    MatExpansionModule,
+    MatCheckboxModule
   ],
   providers: [DashboardService, TaxanomyService]
 })
