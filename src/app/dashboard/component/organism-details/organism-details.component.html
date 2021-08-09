@@ -20,11 +20,12 @@
         <div class="col-sm-12" *ngIf="dataSourceAnnotationCount != 0">
             <hr>
             <h1 class="col-sm-12 page-header">Annotation</h1>
+            <button type="button" style="float: right;" class="btn btn-primary" mat-raised-button (click)="exporter.exportTable('csv', {fileName:'annotation-metadata'})">Download metadata</button>
             <mat-form-field>
                 <mat-label>Search</mat-label>
                 <input matInput (keyup)="annotationSearch($event)" #input>
             </mat-form-field>
-            <table mat-table [dataSource]="dataSourceAnnotation" matSort style="width: 100%;">
+            <table mat-table matTableExporter #exporter="matTableExporter" [dataSource]="dataSourceAnnotation" matSort style="width: 100%;">
                 <ng-container matColumnDef="accession">
                     <mat-header-cell *matHeaderCellDef> Accession </mat-header-cell>
                     <mat-cell *matCellDef="let element" class="txt-center">
