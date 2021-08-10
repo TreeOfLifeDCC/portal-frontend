@@ -35,10 +35,10 @@
     /* justify-content: center; */
 }
 
-.mat-header-cell {
+
+/* .mat-header-cell {
     text-align: center;
-    /* justify-content: center; */
-}
+} */
 
 .inactiveFilter {
     pointer-events: none;

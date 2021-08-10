@@ -150,43 +150,43 @@
                 <table mat-table matTableExporter #exporter="matTableExporter" [dataSource]="dataSourceFiles">
                     <ng-container matColumnDef="study_accession">
                         <mat-header-cell *matHeaderCellDef> Study Accession </mat-header-cell>
-                        <mat-cell *matCellDef="let element" class="txt-center assemblies-font"> <a class="no-underline" target="_blank" href="https://www.ebi.ac.uk/ena/browser/view/{{element.study_accession}}">{{element.study_accession}}</a>
+                        <mat-cell *matCellDef="let element" class="assemblies-font"> <a class="no-underline" target="_blank" href="https://www.ebi.ac.uk/ena/browser/view/{{element.study_accession}}">{{element.study_accession}}</a>
                         </mat-cell>
                     </ng-container>
 
                     <ng-container matColumnDef="sample_accession">
                         <mat-header-cell *matHeaderCellDef> Sample Accession </mat-header-cell>
-                        <mat-cell *matCellDef="let element" class="txt-center assemblies-font"> <a class="no-underline" target="_blank" href="https://www.ebi.ac.uk/ena/browser/view/{{element.sample_accession}}">{{element.sample_accession}}</a>
+                        <mat-cell *matCellDef="let element" class="assemblies-font"> <a class="no-underline" target="_blank" href="https://www.ebi.ac.uk/ena/browser/view/{{element.sample_accession}}">{{element.sample_accession}}</a>
                         </mat-cell>
                     </ng-container>
 
                     <ng-container matColumnDef="experiment_accession">
                         <mat-header-cell *matHeaderCellDef> Experiment Accession </mat-header-cell>
-                        <mat-cell *matCellDef="let element" class="txt-center assemblies-font"> <a class="no-underline" target="_blank" href="https://www.ebi.ac.uk/ena/browser/view/{{element.experiment_accession}}">{{element.experiment_accession}}</a>
+                        <mat-cell *matCellDef="let element" class="assemblies-font"> <a class="no-underline" target="_blank" href="https://www.ebi.ac.uk/ena/browser/view/{{element.experiment_accession}}">{{element.experiment_accession}}</a>
                         </mat-cell>
                     </ng-container>
                     <!-- Third Column -->
                     <ng-container matColumnDef="run_accession">
                         <mat-header-cell *matHeaderCellDef> Run Accession </mat-header-cell>
-                        <mat-cell *matCellDef="let element" class="txt-center assemblies-font"> <a class="no-underline" target="_blank" href="https://www.ebi.ac.uk/ena/browser/view/{{element.run_accession}}">{{element.run_accession}}</a>
+                        <mat-cell *matCellDef="let element" class="assemblies-font"> <a class="no-underline" target="_blank" href="https://www.ebi.ac.uk/ena/browser/view/{{element.run_accession}}">{{element.run_accession}}</a>
                         </mat-cell>
                     </ng-container>
 
                     <ng-container matColumnDef="tax_id">
                         <mat-header-cell *matHeaderCellDef> Tax Id </mat-header-cell>
-                        <mat-cell *matCellDef="let element" class="txt-center assemblies-font"> <a class="no-underline" target="_blank" href="https://www.ebi.ac.uk/ena/browser/view/Taxon:{{element.tax_id}}">{{element.tax_id}}</a>
+                        <mat-cell *matCellDef="let element" class="assemblies-font"> <a class="no-underline" target="_blank" href="https://www.ebi.ac.uk/ena/browser/view/Taxon:{{element.tax_id}}">{{element.tax_id}}</a>
                         </mat-cell>
                     </ng-container>
 
                     <ng-container matColumnDef="scientific_name">
                         <mat-header-cell *matHeaderCellDef> Scientific Name </mat-header-cell>
-                        <mat-cell *matCellDef="let element" class="txt-center assemblies-font"> {{element.scientific_name}}
+                        <mat-cell *matCellDef="let element" class="assemblies-font"> {{element.scientific_name}}
                         </mat-cell>
                     </ng-container>
 
                     <ng-container matColumnDef="fastq_ftp">
                         <mat-header-cell *matHeaderCellDef> FASTQ FTP </mat-header-cell>
-                        <mat-cell *matCellDef="let element" class="txt-center assemblies-font">
+                        <mat-cell *matCellDef="let element" class="assemblies-font">
                             <ul class="list-group ">
                                 <li *ngFor="let fastq of element.fastq_ftp">
                                     <a href="ftp://{{fastq}}">{{element.run_accession}}</a>
@@ -197,7 +197,7 @@
 
                     <ng-container matColumnDef="submitted_ftp">
                         <mat-header-cell *matHeaderCellDef> Submitted FTP </mat-header-cell>
-                        <mat-cell *matCellDef="let element" class="txt-center assemblies-font">
+                        <mat-cell *matCellDef="let element" class="assemblies-font">
                             <ul class="list-group ">
                                 <li *ngFor="let submitted_ftp of element.submitted_ftp">
                                     <a href="ftp://{{submitted_ftp}}">{{element.study_accession}}</a>
@@ -208,7 +208,7 @@
 
                     <ng-container matColumnDef="sra_ftp">
                         <mat-header-cell *matHeaderCellDef> SRA FTP </mat-header-cell>
-                        <mat-cell *matCellDef="let element" class="txt-center assemblies-font">
+                        <mat-cell *matCellDef="let element" class="assemblies-font">
                             <ul class="list-group ">
                                 <li *ngFor="let sra_ftp of element.sra_ftp">
                                     <a href="ftp://{{sra_ftp}}">{{element.sra_ftp}}</a>
@@ -218,256 +218,256 @@
                     </ng-container>
                     <ng-container matColumnDef="base_count">
                         <mat-header-cell *matHeaderCellDef> Base count </mat-header-cell>
-                        <mat-cell *matCellDef="let element" class="txt-center assemblies-font">
+                        <mat-cell *matCellDef="let element" class="assemblies-font">
                             {{element.base_count}} </mat-cell>
                     </ng-container>
 
                     <ng-container matColumnDef="broker_name">
                         <mat-header-cell *matHeaderCellDef> Broker name </mat-header-cell>
-                        <mat-cell *matCellDef="let element" class="txt-center assemblies-font"> {{element.broker_name}}
+                        <mat-cell *matCellDef="let element" class="assemblies-font"> {{element.broker_name}}
                         </mat-cell>
                     </ng-container>
 
                     <ng-container matColumnDef="center_name">
                         <mat-header-cell *matHeaderCellDef> Center name </mat-header-cell>
-                        <mat-cell *matCellDef="let element" class="txt-center assemblies-font"> {{element.center_name}}
+                        <mat-cell *matCellDef="let element" class="assemblies-font"> {{element.center_name}}
                         </mat-cell>
                     </ng-container>
 
                     <ng-container matColumnDef="cram_index_aspera">
                         <mat-header-cell *matHeaderCellDef> Cram index aspera </mat-header-cell>
-                        <mat-cell *matCellDef="let element" class="txt-center assemblies-font">
+                        <mat-cell *matCellDef="let element" class="assemblies-font">
                             {{element.cram_index_aspera}} </mat-cell>
                     </ng-container>
 
                     <ng-container matColumnDef="cram_index_galaxy">
                         <mat-header-cell *matHeaderCellDef> Cram index galaxy </mat-header-cell>
-                        <mat-cell *matCellDef="let element" class="txt-center assemblies-font"> {{element.cram_index_galaxy}}
+                        <mat-cell *matCellDef="let element" class="assemblies-font"> {{element.cram_index_galaxy}}
                         </mat-cell>
                     </ng-container>
 
                     <ng-container matColumnDef="cram_index_ftp">
                         <mat-header-cell *matHeaderCellDef> Cram index FTP </mat-header-cell>
-                        <mat-cell *matCellDef="let element" class="txt-center assemblies-font"> {{element.cram_index_ftp}}
+                        <mat-cell *matCellDef="let element" class="assemblies-font"> {{element.cram_index_ftp}}
                         </mat-cell>
                     </ng-container>
 
                     <ng-container matColumnDef="experiment_alias">
                         <mat-header-cell *matHeaderCellDef> Experiment alias </mat-header-cell>
-                        <mat-cell *matCellDef="let element" class="txt-center assemblies-font"> {{element.experiment_alias}}
+                        <mat-cell *matCellDef="let element" class="assemblies-font"> {{element.experiment_alias}}
                         </mat-cell>
                     </ng-container>
 
                     <ng-container matColumnDef="experiment_title">
                         <mat-header-cell *matHeaderCellDef> Experiment title </mat-header-cell>
-                        <mat-cell *matCellDef="let element" class="txt-center assemblies-font">
+                        <mat-cell *matCellDef="let element" class="assemblies-font">
                             {{element.experiment_title}} </mat-cell>
                     </ng-container>
 
                     <ng-container matColumnDef="fastq_aspera">
                         <mat-header-cell *matHeaderCellDef> Fastq aspera </mat-header-cell>
-                        <mat-cell *matCellDef="let element" class="txt-center assemblies-font"> {{element.fastq_aspera}}
+                        <mat-cell *matCellDef="let element" class="assemblies-font"> {{element.fastq_aspera}}
                         </mat-cell>
                     </ng-container>
 
                     <ng-container matColumnDef="fastq_bytes">
                         <mat-header-cell *matHeaderCellDef> Fastq bytes </mat-header-cell>
-                        <mat-cell *matCellDef="let element" class="txt-center assemblies-font"> {{element.fastq_bytes}}
+                        <mat-cell *matCellDef="let element" class="assemblies-font"> {{element.fastq_bytes}}
                         </mat-cell>
                     </ng-container>
 
                     <ng-container matColumnDef="fastq_galaxy">
                         <mat-header-cell *matHeaderCellDef> Fastq galaxy </mat-header-cell>
-                        <mat-cell *matCellDef="let element" class="txt-center assemblies-font">
+                        <mat-cell *matCellDef="let element" class="assemblies-font">
                             {{element.fastq_galaxy}} </mat-cell>
                     </ng-container>
 
                     <ng-container matColumnDef="fastq_md5">
                         <mat-header-cell *matHeaderCellDef> Fastq md5 </mat-header-cell>
-                        <mat-cell *matCellDef="let element" class="txt-center assemblies-font"> {{element.fastq_md5}}
+                        <mat-cell *matCellDef="let element" class="assemblies-font"> {{element.fastq_md5}}
                         </mat-cell>
                     </ng-container>
 
                     <ng-container matColumnDef="first_created">
                         <mat-header-cell *matHeaderCellDef> First created </mat-header-cell>
-                        <mat-cell *matCellDef="let element" class="txt-center assemblies-font"> {{element.first_created}}
+                        <mat-cell *matCellDef="let element" class="assemblies-font"> {{element.first_created}}
                         </mat-cell>
                     </ng-container>
 
                     <ng-container matColumnDef="first_public">
                         <mat-header-cell *matHeaderCellDef> First public </mat-header-cell>
-                        <mat-cell *matCellDef="let element" class="txt-center assemblies-font">
+                        <mat-cell *matCellDef="let element" class="assemblies-font">
                             {{element.first_public}} </mat-cell>
                     </ng-container>
 
                     <ng-container matColumnDef="instrument_platform">
                         <mat-header-cell *matHeaderCellDef> Instrument Platform </mat-header-cell>
-                        <mat-cell *matCellDef="let element" class="txt-center assemblies-font">
+                        <mat-cell *matCellDef="let element" class="assemblies-font">
                             {{element.instrument_platform}} </mat-cell>
                     </ng-container>
 
                     <ng-container matColumnDef="instrument_model">
                         <mat-header-cell *matHeaderCellDef> Instrument Model </mat-header-cell>
-                        <mat-cell *matCellDef="let element" class="txt-center assemblies-font"> {{element.instrument_model}}
+                        <mat-cell *matCellDef="let element" class="assemblies-font"> {{element.instrument_model}}
                         </mat-cell>
                     </ng-container>
 
                     <ng-container matColumnDef="last_updated">
                         <mat-header-cell *matHeaderCellDef> Last updated </mat-header-cell>
-                        <mat-cell *matCellDef="let element" class="txt-center assemblies-font">
+                        <mat-cell *matCellDef="let element" class="assemblies-font">
                             {{element.last_updated}} </mat-cell>
                     </ng-container>
 
                     <ng-container matColumnDef="library_layout">
                         <mat-header-cell *matHeaderCellDef> Library Layout </mat-header-cell>
-                        <mat-cell *matCellDef="let element" class="txt-center assemblies-font"> {{element.library_layout}}
+                        <mat-cell *matCellDef="let element" class="assemblies-font"> {{element.library_layout}}
                         </mat-cell>
                     </ng-container>
 
                     <ng-container matColumnDef="library_name">
                         <mat-header-cell *matHeaderCellDef> Library name </mat-header-cell>
-                        <mat-cell *matCellDef="let element" class="txt-center assemblies-font"> {{element.library_name}}
+                        <mat-cell *matCellDef="let element" class="assemblies-font"> {{element.library_name}}
                         </mat-cell>
                     </ng-container>
 
                     <ng-container matColumnDef="library_strategy">
                         <mat-header-cell *matHeaderCellDef> Library Strategy </mat-header-cell>
-                        <mat-cell *matCellDef="let element" class="txt-center assemblies-font"> {{element.library_strategy}}
+                        <mat-cell *matCellDef="let element" class="assemblies-font"> {{element.library_strategy}}
                         </mat-cell>
                     </ng-container>
 
                     <ng-container matColumnDef="library_source">
                         <mat-header-cell *matHeaderCellDef> Library Source </mat-header-cell>
-                        <mat-cell *matCellDef="let element" class="txt-center assemblies-font"> {{element.library_source}}
+                        <mat-cell *matCellDef="let element" class="assemblies-font"> {{element.library_source}}
                         </mat-cell>
                     </ng-container>
 
                     <ng-container matColumnDef="library_selection">
                         <mat-header-cell *matHeaderCellDef> Library Selection </mat-header-cell>
-                        <mat-cell *matCellDef="let element" class="txt-center assemblies-font">
+                        <mat-cell *matCellDef="let element" class="assemblies-font">
                             {{element.library_selection}} </mat-cell>
                     </ng-container>
 
                     <ng-container matColumnDef="library_construction_protocol">
                         <mat-header-cell *matHeaderCellDef> Library Construction </mat-header-cell>
-                        <mat-cell *matCellDef="let element" class="txt-center assemblies-font">
+                        <mat-cell *matCellDef="let element" class="assemblies-font">
                             {{element.library_construction_protocol}} </mat-cell>
                     </ng-container>
 
                     <ng-container matColumnDef="nominal_length">
                         <mat-header-cell *matHeaderCellDef> Nominal length </mat-header-cell>
-                        <mat-cell *matCellDef="let element" class="txt-center assemblies-font">
+                        <mat-cell *matCellDef="let element" class="assemblies-font">
                             {{element.nominal_length}} </mat-cell>
                     </ng-container>
 
                     <ng-container matColumnDef="nominal_sdev">
                         <mat-header-cell *matHeaderCellDef> Nominal sdev </mat-header-cell>
-                        <mat-cell *matCellDef="let element" class="txt-center assemblies-font"> {{element.nominal_sdev}}
+                        <mat-cell *matCellDef="let element" class="assemblies-font"> {{element.nominal_sdev}}
                         </mat-cell>
                     </ng-container>
 
                     <ng-container matColumnDef="read_count">
                         <mat-header-cell *matHeaderCellDef> Read count </mat-header-cell>
-                        <mat-cell *matCellDef="let element" class="txt-center assemblies-font"> {{element.read_count}}
+                        <mat-cell *matCellDef="let element" class="assemblies-font"> {{element.read_count}}
                         </mat-cell>
                     </ng-container>
 
                     <ng-container matColumnDef="run_alias">
                         <mat-header-cell *matHeaderCellDef> Run alias </mat-header-cell>
-                        <mat-cell *matCellDef="let element" class="txt-center assemblies-font"> {{element.run_alias}}
+                        <mat-cell *matCellDef="let element" class="assemblies-font"> {{element.run_alias}}
                         </mat-cell>
                     </ng-container>
 
                     <ng-container matColumnDef="sample_alias">
                         <mat-header-cell *matHeaderCellDef> Sample alias </mat-header-cell>
-                        <mat-cell *matCellDef="let element" class="txt-center assemblies-font"> {{element.sample_alias}}
+                        <mat-cell *matCellDef="let element" class="assemblies-font"> {{element.sample_alias}}
                         </mat-cell>
                     </ng-container>
 
                     <ng-container matColumnDef="sample_title">
                         <mat-header-cell *matHeaderCellDef> Sample title </mat-header-cell>
-                        <mat-cell *matCellDef="let element" class="txt-center assemblies-font">
+                        <mat-cell *matCellDef="let element" class="assemblies-font">
                             {{element.sample_title}} </mat-cell>
                     </ng-container>
 
                     <ng-container matColumnDef="secondary_sample_accession">
                         <mat-header-cell *matHeaderCellDef> Secondary sample accession </mat-header-cell>
-                        <mat-cell *matCellDef="let element" class="txt-center assemblies-font"> <a class="no-underline" target="_blank" href="https://www.ebi.ac.uk/ena/browser/view/{{element.secondary_sample_accession}}">{{element.secondary_sample_accession}}</a></mat-cell>
+                        <mat-cell *matCellDef="let element" class="assemblies-font"> <a class="no-underline" target="_blank" href="https://www.ebi.ac.uk/ena/browser/view/{{element.secondary_sample_accession}}">{{element.secondary_sample_accession}}</a></mat-cell>
                     </ng-container>
 
                     <ng-container matColumnDef="secondary_study_accession">
                         <mat-header-cell *matHeaderCellDef> Secondary study accession </mat-header-cell>
-                        <mat-cell *matCellDef="let element" class="txt-center assemblies-font"> <a class="no-underline" target="_blank" href="https://www.ebi.ac.uk/ena/browser/view/{{element.secondary_study_accession}}">{{element.secondary_study_accession}}</a></mat-cell>
+                        <mat-cell *matCellDef="let element" class="assemblies-font"> <a class="no-underline" target="_blank" href="https://www.ebi.ac.uk/ena/browser/view/{{element.secondary_study_accession}}">{{element.secondary_study_accession}}</a></mat-cell>
                     </ng-container>
 
                     <ng-container matColumnDef="sra_aspera">
                         <mat-header-cell *matHeaderCellDef> SRA aspera </mat-header-cell>
-                        <mat-cell *matCellDef="let element" class="txt-center assemblies-font"> {{element.sra_aspera}}
+                        <mat-cell *matCellDef="let element" class="assemblies-font"> {{element.sra_aspera}}
                         </mat-cell>
                     </ng-container>
 
                     <ng-container matColumnDef="sra_bytes">
                         <mat-header-cell *matHeaderCellDef> SRA bytes </mat-header-cell>
-                        <mat-cell *matCellDef="let element" class="txt-center assemblies-font"> {{element.sra_bytes}}
+                        <mat-cell *matCellDef="let element" class="assemblies-font"> {{element.sra_bytes}}
                         </mat-cell>
                     </ng-container>
 
                     <ng-container matColumnDef="sra_galaxy">
                         <mat-header-cell *matHeaderCellDef> SRA galaxy </mat-header-cell>
-                        <mat-cell *matCellDef="let element" class="txt-center assemblies-font"> {{element.sra_galaxy}}
+                        <mat-cell *matCellDef="let element" class="assemblies-font"> {{element.sra_galaxy}}
                         </mat-cell>
                     </ng-container>
 
                     <ng-container matColumnDef="sra_md5">
                         <mat-header-cell *matHeaderCellDef> SRA md5 </mat-header-cell>
-                        <mat-cell *matCellDef="let element" class="txt-center assemblies-font"> {{element.sra_md5}}
+                        <mat-cell *matCellDef="let element" class="assemblies-font"> {{element.sra_md5}}
                         </mat-cell>
                     </ng-container>
 
                     <ng-container matColumnDef="study_alias">
                         <mat-header-cell *matHeaderCellDef> Study alias </mat-header-cell>
-                        <mat-cell *matCellDef="let element" class="txt-center assemblies-font">
+                        <mat-cell *matCellDef="let element" class="assemblies-font">
                             {{element.study_alias}} </mat-cell>
                     </ng-container>
 
                     <ng-container matColumnDef="study_title">
                         <mat-header-cell *matHeaderCellDef> Study title </mat-header-cell>
-                        <mat-cell *matCellDef="let element" class="txt-center assemblies-font">
+                        <mat-cell *matCellDef="let element" class="assemblies-font">
                             {{element.study_title}} </mat-cell>
                     </ng-container>
                     <ng-container matColumnDef="submission_accession">
                         <mat-header-cell *matHeaderCellDef> Submission accession </mat-header-cell>
-                        <mat-cell *matCellDef="let element" class="txt-center assemblies-font">
+                        <mat-cell *matCellDef="let element" class="assemblies-font">
                             {{element.submission_accession}} </mat-cell>
                     </ng-container>
 
                     <ng-container matColumnDef="submitted_aspera">
                         <mat-header-cell *matHeaderCellDef> Submitted aspera </mat-header-cell>
-                        <mat-cell *matCellDef="let element" class="txt-center assemblies-font"> {{element.submitted_aspera}}
+                        <mat-cell *matCellDef="let element" class="assemblies-font"> {{element.submitted_aspera}}
                         </mat-cell>
                     </ng-container>
 
                     <ng-container matColumnDef="submitted_bytes">
                         <mat-header-cell *matHeaderCellDef> Submitted bytes </mat-header-cell>
-                        <mat-cell *matCellDef="let element" class="txt-center assemblies-font"> {{element.submitted_bytes}}
+                        <mat-cell *matCellDef="let element" class="assemblies-font"> {{element.submitted_bytes}}
                         </mat-cell>
                     </ng-container>
 
                     <ng-container matColumnDef="submitted_format">
                         <mat-header-cell *matHeaderCellDef> Submitted format </mat-header-cell>
-                        <mat-cell *matCellDef="let element" class="txt-center assemblies-font"> {{element.submitted_format}}
+                        <mat-cell *matCellDef="let element" class="assemblies-font"> {{element.submitted_format}}
                         </mat-cell>
                     </ng-container>
 
                     <ng-container matColumnDef="submitted_galaxy">
                         <mat-header-cell *matHeaderCellDef> Submitted galaxy </mat-header-cell>
-                        <mat-cell *matCellDef="let element" class="txt-center assemblies-font"> {{element.submitted_galaxy}}
+                        <mat-cell *matCellDef="let element" class="assemblies-font"> {{element.submitted_galaxy}}
                         </mat-cell>
                     </ng-container>
 
                     <ng-container matColumnDef="submitted_md5">
                         <mat-header-cell *matHeaderCellDef> Submitted md5 </mat-header-cell>
-                        <mat-cell *matCellDef="let element" class="txt-center assemblies-font">
+                        <mat-cell *matCellDef="let element" class="assemblies-font">
                             {{element.submitted_md5}} </mat-cell>
                     </ng-container>
 
