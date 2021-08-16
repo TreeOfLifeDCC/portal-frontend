@@ -292,7 +292,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
     }
     for (const key of Object.keys(data)) {
       if(key === 'tax_id') {
-        dataToReturn['goatInfo'] = "https://goat.genomehubs.org/records?record_id="+data[key]+"&result=taxon"
+        dataToReturn['goatInfo'] = "https://goat.genomehubs.org/records?record_id="+data[key]+"&result=taxon&taxonomy=ncbi#"+dataToReturn["organism"]
         dataToReturn[key] = data[key];
       }
       if (key === 'commonName' && data[key] == null) {
