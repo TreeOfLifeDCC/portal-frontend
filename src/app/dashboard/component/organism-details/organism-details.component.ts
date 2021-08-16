@@ -66,6 +66,7 @@ export class OrganismDetailsComponent implements OnInit, AfterViewInit {
   @ViewChild('experimentsTable') exPaginator: MatPaginator;
   @ViewChild('assembliesTable') asPaginator: MatPaginator;
   @ViewChild('annotationTable') anPaginator: MatPaginator;
+  @ViewChild('relatedOrganisms') relatedOrganismsTable: MatPaginator;
 
   constructor(private route: ActivatedRoute, private dashboardService: DashboardService, private spinner: NgxSpinnerService, private router: Router) {
     this.route.params.subscribe(param => this.bioSampleId = param.id);
@@ -126,7 +127,7 @@ export class OrganismDetailsComponent implements OnInit, AfterViewInit {
             this.organismName = data.organism;
             this.dataSourceRecords = new MatTableDataSource<any>(unpackedData);
             this.specBioSampleTotalCount = unpackedData?.length;
-            this.dataSourceRecords.paginator = this.paginator;
+            // this.dataSourceRecords.paginator = this.paginator;
 
             if (data.experiment != null) {
               this.dataSourceFiles = new MatTableDataSource<Sample>(data.experiment);
@@ -156,6 +157,7 @@ export class OrganismDetailsComponent implements OnInit, AfterViewInit {
             this.dataSourceFiles.paginator = this.exPaginator;
             this.dataSourceAssemblies.paginator = this.asPaginator;
             this.dataSourceAnnotation.paginator = this.anPaginator;
+            this.dataSourceRecords.paginator = this.relatedOrganismsTable;
 
             this.dataSourceRecords.sort = this.sort;
             this.dataSourceFiles.sort = this.sort;

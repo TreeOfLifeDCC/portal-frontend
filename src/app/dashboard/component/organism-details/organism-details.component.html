@@ -605,7 +605,7 @@
                             <mat-header-row *matHeaderRowDef="specDisplayedColumns"></mat-header-row>
                             <mat-row *matRowDef="let row; columns: specDisplayedColumns;"></mat-row>
                         </table>
-                        <mat-paginator style="width: 100%;" [pageSizeOptions]="[10, 20, 30]" showFirstLastButtons [length]="specBioSampleTotalCount"></mat-paginator>
+                        <mat-paginator #relatedOrganisms style="width: 100%;" [pageSizeOptions]="[10, 20, 30]" showFirstLastButtons [length]="specBioSampleTotalCount"></mat-paginator>
                     </div>
                 </div>
             </div>
