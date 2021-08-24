@@ -50,11 +50,3 @@ div.tooltip {
     border-radius: 8px;
     pointer-events: none;
 }
-
-.col-md-4 {
-    padding-right: 0.6em;
-    padding-left: 0.6em;
-    border-radius: 10rem;
-    color: #fff;
-    background-color: #4BBEFD;
-}
