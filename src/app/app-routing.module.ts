@@ -31,7 +31,7 @@ const routes: Routes = [
     path: '',
     children: [
       {
-        path: 'tracking_system', loadChildren: () => import('./tracking-system/tracking-system.module').then(
+        path: 'tracking', loadChildren: () => import('./tracking-system/tracking-system.module').then(
           m => m.TrackingSystemModule)
       }
     ]

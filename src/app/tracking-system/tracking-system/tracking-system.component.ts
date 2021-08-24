@@ -426,7 +426,7 @@ export class TrackingSystemComponent implements OnInit, AfterViewInit {
       for (let i = 0; i < paramArray.length; i++) {
         params[paramArray[i].name] = paramArray[i].value;
       }
-      this.router.navigate(['tracking_system'], { queryParams: params });
+      this.router.navigate(['tracking'], { queryParams: params });
     }
   }
 
@@ -450,7 +450,7 @@ export class TrackingSystemComponent implements OnInit, AfterViewInit {
     this.dataSource.filter = undefined;
     this.getAllStatuses(0, 15, this.sort.active, this.sort.direction);
     this.getChildTaxonomyRank('superkingdom', 'Eukaryota', 'kingdom');
-    this.router.navigate(['tracking_system'], {});
+    this.router.navigate(['tracking'], {});
     this.spinner.show();
     setTimeout(() => {
       this.spinner.hide();
@@ -478,7 +478,7 @@ export class TrackingSystemComponent implements OnInit, AfterViewInit {
         if (this.activeFilters.length == 0) {
           this.urlAppendFilterArray = [];
           this.dataSource.filter = undefined;
-          this.router.navigate(['tracking_system'], {});
+          this.router.navigate(['tracking'], {});
         }
         this.getFilterResults(this.activeFilters.toString(), this.sort.active, this.sort.direction, 0, 15, [this.currentTaxonomyTree]);
         setTimeout(() => {
@@ -491,7 +491,7 @@ export class TrackingSystemComponent implements OnInit, AfterViewInit {
         this.getChildTaxonomyRank('superkingdom', 'Eukaryota', 'kingdom');
         this.modalTaxa = "";
 
-        this.router.navigate(['tracking_system'], {});
+        this.router.navigate(['tracking'], {});
         this.dataSource.filter = undefined;
         this.getAllStatuses(0, 15, this.sort.active, this.sort.direction);
       }
@@ -573,7 +573,7 @@ export class TrackingSystemComponent implements OnInit, AfterViewInit {
 
   // tslint:disable-next-line:typedef
   getSearchResults(from?, size?) {
-    this.router.navigate(['tracking_system'], {});
+    this.router.navigate(['tracking'], {});
     this.resetTaxaTree();
     $('.biosamples-inactive').removeClass('non-disp active-filter');
     $('.raw-data-inactive').removeClass('non-disp active-filter');
