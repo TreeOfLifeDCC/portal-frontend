@@ -33,7 +33,7 @@ treeJSON = d3.json(url, function(error, treeData) {
     var div = d3.select("#tree-container").append("div")
         .attr("class", "col-md-12 tooltip")
         .style("opacity", 0)
-        .style("padding-top", "10px")
+        // .style("padding-top", "10px")
         .style("font-weight", "lighter")
         .style("background", "none")
         .style("font-size", "initial");
@@ -388,7 +388,7 @@ treeJSON = d3.json(url, function(error, treeData) {
         div.transition()
             .duration(200)
             .style("opacity", .9);
-        div.html("<div id='doc' class='row' style='padding-top: 25px;'><div class='col-md-2'></div><div class='col-md-3'>Single click to expand Graph</div><div class='col-md-3'>Double click to show Organisms table</div><div class='col-md-3'>Graph can be zoomed in & out and is draggable</div></div>")
+        div.html("<div id='doc' class='row' style='padding-top: 25px;'><div class='col-md-2'></div><div class='col-md-3'>Single click to expand or collapse a node</div><div class='col-md-3'>Double click to show Organisms table</div><div class='col-md-3'>Graph can be zoomed in & out and is draggable</div></div>")
             // Transition nodes to their new position.
         var nodeUpdate = node.transition()
             .duration(duration)
@@ -477,4 +477,25 @@ treeJSON = d3.json(url, function(error, treeData) {
     // Layout the tree initially and center on the root node.
     update(root);
     centerNode(root);
+
+    $('#reset').on('click', resetGraph)
+
+    function resetGraph() {
+        // Append a group which holds all nodes and which the zoom Listener can act upon.
+        var svgGroup = baseSvg.append("g");
+
+        // Define the root
+        root = treeData;
+        root.x0 = viewerHeight / 2;
+        root.y0 = 0;
+
+        // Collapse all children of roots children before rendering.
+        root.children.forEach(function(child) {
+            collapse(child);
+        });
+
+        // Layout the tree initially and center on the root node.
+        update(root);
+        centerNode(root);
+    }
 });

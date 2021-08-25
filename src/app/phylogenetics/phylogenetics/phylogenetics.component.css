@@ -49,3 +49,15 @@
     padding-left: .6em;
     border-radius: 10rem;
 }
+
+.jumbotron {
+    background: url("../../../assets/dtol banner thin.jpg") center center no-repeat;
+    background-size: cover;
+    padding-top: 20px !important;
+    padding-bottom: 20px !important;
+    margin-bottom: 0 !important;
+}
+
+#reset {
+    display: none;
+}
