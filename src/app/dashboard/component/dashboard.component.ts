@@ -21,6 +21,34 @@ import 'bootstrap';
   styleUrls: ['./dashboard.component.css']
 })
 export class DashboardComponent implements OnInit, AfterViewInit {
+  codes = {
+    m: 'mammals',
+    d: 'dicots',
+    i: 'insects',
+    u: 'algae',
+    p: 'protists',
+    x: 'molluscs',
+    t: 'other-animal-phyla',
+    q: 'arthropods',
+    k: 'chordates',
+    f: 'fish',
+    a: 'amphibians',
+    b: 'birds',
+    e: 'echinoderms',
+    w: 'annelids',
+    j: 'jellyfish',
+    h: 'platyhelminths',
+    n: 'nematodes',
+    v: 'vascular-plants',
+    l: 'monocots',
+    c: 'non-vascular-plants',
+    g: 'fungi',
+    o: 'sponges',
+    r: 'reptiles',
+    s: 'sharks',
+    y: 'bacteria',
+    z: 'archea'
+  };
   displayedColumns = ['organism', 'commonName', 'trackingSystem', 'goatInfo'];
   bioSamples: Sample[];
   loading = true;
@@ -889,6 +917,17 @@ export class DashboardComponent implements OnInit, AfterViewInit {
     setTimeout(() => {
       this.currentTaxonomy = this.currentTaxonomyTree[this.currentTaxonomyTree.length - 1];
     }, 50);
+  }
+
+  checkTolidExists(data) {
+    return data.tolid !== null;
+  }
+
+  generateTolidLink(data) {
+    console.log(data);
+    const organismName = data.organism.split(' ').join('_');
+    const clade = this.codes[data.tolid.charAt(0)];
+    return `https://tolqc.cog.sanger.ac.uk/darwin/${clade}/${organismName}`;
   }
 
 }

@@ -207,4 +207,11 @@ ul[class*="other-"] {
 .goat-color {
     color: #fff;
     background-color: #4BBEFD;
+    margin-left: 3px;
+}
+
+.goat-color2 {
+    color: #fff;
+    background-color: #5cc45e;
+    margin-left: 3px;
 }

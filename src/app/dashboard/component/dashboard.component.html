@@ -104,10 +104,13 @@
                     </ng-container>
 
                     <ng-container matColumnDef="goatInfo">
-                        <mat-header-cell *matHeaderCellDef mat-sort-header style=" padding-right: 0px; ">Genomes on a Tree reference</mat-header-cell>
+                        <mat-header-cell *matHeaderCellDef mat-sort-header style=" padding-right: 0px; ">External references</mat-header-cell>
                         <mat-cell *matCellDef="let element" class="text-center" style=" padding-right: 0px; ">
-                            <span class="goat-padding">
+                            <span>
                                 <a class="no-underline badge badge-pill goat-color" target="_blank" href="{{element?.goatInfo}}">GoaT info</a>
+                                <ng-container *ngIf="checkTolidExists(element)">
+                                    <a class="no-underline badge badge-pill goat-color2" target="_blank" href="{{generateTolidLink(element)}}">ToL QC</a>
+                                </ng-container>
                             </span>
                         </mat-cell>
                     </ng-container>

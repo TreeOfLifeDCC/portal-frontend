@@ -13,6 +13,34 @@ import { NgxSpinnerService } from 'ngx-spinner';
   styleUrls: ['./organism-details.component.css']
 })
 export class OrganismDetailsComponent implements OnInit, AfterViewInit {
+  codes = {
+    m: 'mammals',
+    d: 'dicots',
+    i: 'insects',
+    u: 'algae',
+    p: 'protists',
+    x: 'molluscs',
+    t: 'other-animal-phyla',
+    q: 'arthropods',
+    k: 'chordates',
+    f: 'fish',
+    a: 'amphibians',
+    b: 'birds',
+    e: 'echinoderms',
+    w: 'annelids',
+    j: 'jellyfish',
+    h: 'platyhelminths',
+    n: 'nematodes',
+    v: 'vascular-plants',
+    l: 'monocots',
+    c: 'non-vascular-plants',
+    g: 'fungi',
+    o: 'sponges',
+    r: 'reptiles',
+    s: 'sharks',
+    y: 'bacteria',
+    z: 'archea'
+  };
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
@@ -429,6 +457,18 @@ export class OrganismDetailsComponent implements OnInit, AfterViewInit {
   redirectTo(accession: string) {
     this.router.navigateByUrl('/', { skipLocationChange: true }).then(() =>
       this.router.navigate(["/data/root/details/" + accession]));
+  }
+
+  checkTolidExists(data) {
+    console.log(data);
+    return data.tolid !== null;
+  }
+
+  generateTolidLink(data) {
+    console.log(data);
+    const organismName = data.organism.split(' ').join('_');
+    const clade = this.codes[data.tolid.charAt(0)];
+    return `https://tolqc.cog.sanger.ac.uk/darwin/${clade}/${organismName}`;
   }
 
 }
