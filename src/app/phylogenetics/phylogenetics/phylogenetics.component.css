@@ -65,3 +65,7 @@
 .zoom {
     display: none;
 }
+
+#organismsModal {
+    top: 10px;
+}

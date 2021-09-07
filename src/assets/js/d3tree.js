@@ -20,6 +20,35 @@ treeJSON = d3.json(url, function(error, treeData) {
     var viewerWidth = $(document).width();
     var viewerHeight = $(document).height();
 
+    var codes = {
+        m: 'mammals',
+        d: 'dicots',
+        i: 'insects',
+        u: 'algae',
+        p: 'protists',
+        x: 'molluscs',
+        t: 'other-animal-phyla',
+        q: 'arthropods',
+        k: 'chordates',
+        f: 'fish',
+        a: 'amphibians',
+        b: 'birds',
+        e: 'echinoderms',
+        w: 'annelids',
+        j: 'jellyfish',
+        h: 'platyhelminths',
+        n: 'nematodes',
+        v: 'vascular-plants',
+        l: 'monocots',
+        c: 'non-vascular-plants',
+        g: 'fungi',
+        o: 'sponges',
+        r: 'reptiles',
+        s: 'sharks',
+        y: 'bacteria',
+        z: 'archea'
+    };
+
     var tree = d3.layout.tree()
         .size([viewerHeight, viewerWidth]);
 
@@ -255,10 +284,22 @@ treeJSON = d3.json(url, function(error, treeData) {
                         var name = record.commonName != null ? record.commonName : "-";
                         var trackingStatus = record.trackingSystem.status;
                         var tax_id = record.tax_id;
+                        var tolid = '';
+                        var externalReference = '';
                         var goatLink = 'https://goat.genomehubs.org/records?record_id=' + tax_id + '&result=taxon&taxonomy=ncbi#' + organism
                         var goatElement = '<a class="no-underline badge badge-pill goat-color" target="_blank" style="background-color: #4bbefd; color: #fff;" href="' + goatLink + '">GoaT info</a>'
                         var organismElement = '<a class="no-underline" target="_blank" href="https://portal.darwintreeoflife.org/data/root/details/' + organism + '">' + organism + '</a>'
-                        $('#organisms').append('<tr><td>' + organismElement + '</td><td>' + name + '</td><td>' + trackingStatus + '</td><td>' + goatElement + '</td></tr>');
+
+                        if (record.tolid != null) {
+                            const organismName = organism.split(' ').join('_');
+                            const clade = codes[record.tolid.charAt(0)];
+                            const link = `https://tolqc.cog.sanger.ac.uk/darwin/${clade}/${organismName}`;
+                            tolid = '<a class="no-underline badge badge-pill" target="_blank" style="margin-left: 3px;background-color: #5cc45e; color: #fff;" href="' + link + '">ToL QC</a>'
+                            externalReference = '<span>' + goatElement + tolid + '</span>'
+                        } else {
+                            externalReference = '<span>' + goatElement + '</span>'
+                        }
+                        $('#organisms').append('<tr><td>' + organismElement + '</td><td>' + name + '</td><td>' + trackingStatus + '</td><td>' + externalReference + '</td></tr>');
                     }
                     $('#organismsTable').DataTable({
                         destroy: true

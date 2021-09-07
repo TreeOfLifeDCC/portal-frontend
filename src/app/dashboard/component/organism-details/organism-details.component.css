@@ -80,3 +80,9 @@ table {
 .table-container {
     overflow: auto;
 }
+
+.goat-color2 {
+    color: #fff;
+    background-color: #5cc45e;
+    margin-left: 3px;
+}

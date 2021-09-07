@@ -7,10 +7,11 @@
         <dt class="col-md-3">Organism:</dt>
         <dd class="col-md-3">{{bioSampleObj?.organism}}</dd>
         <dd class="col-md-6">
-            <a class="no-underline badge badge-pill goat-color" target="_blank" href="https://goat.genomehubs.org/records?record_id={{bioSampleObj?.taxId}}&result=taxon&taxonomy=ncbi#{{bioSampleObj?.organism}}">GoaT info</a>
-<!--            <ng-container *ngIf="bioSampleObj && checkTolidExists(bioSampleObj)">-->
-<!--                <a class="no-underline badge badge-pill goat-color2" target="_blank" href="https://goat.genomehubs.org/records?record_id={{bioSampleObj?.taxId}}&result=taxon&taxonomy=ncbi#{{bioSampleObj?.organism}}">ToL QC</a>-->
-<!--            </ng-container>-->
+            <a class="no-underline badge badge-pill goat-color" target="_blank" href="https://goat.genomehubs.org/records?record_id={{bioSampleObj?.taxId}}&result=taxon&taxonomy=ncbi#{{bioSampleObj?.organism}}">GoaT
+                info</a>
+            <ng-container *ngIf="bioSampleObj && checkTolidExists(bioSampleObj)">
+                <a class="no-underline badge badge-pill goat-color2" target="_blank" href="{{generateTolidLink(bioSampleObj)}}">ToL QC</a>
+            </ng-container>
         </dd>
 
         <dt class="col-md-3" *ngIf="bioSampleObj?.sex">Sex:</dt>
@@ -395,12 +396,14 @@
 
                     <ng-container matColumnDef="secondary_sample_accession">
                         <mat-header-cell *matHeaderCellDef> Secondary sample accession </mat-header-cell>
-                        <mat-cell *matCellDef="let element" class="assemblies-font"> <a class="no-underline" target="_blank" href="https://www.ebi.ac.uk/ena/browser/view/{{element.secondary_sample_accession}}">{{element.secondary_sample_accession}}</a></mat-cell>
+                        <mat-cell *matCellDef="let element" class="assemblies-font"> <a class="no-underline" target="_blank" href="https://www.ebi.ac.uk/ena/browser/view/{{element.secondary_sample_accession}}">{{element.secondary_sample_accession}}</a>
+                        </mat-cell>
                     </ng-container>
 
                     <ng-container matColumnDef="secondary_study_accession">
                         <mat-header-cell *matHeaderCellDef> Secondary study accession </mat-header-cell>
-                        <mat-cell *matCellDef="let element" class="assemblies-font"> <a class="no-underline" target="_blank" href="https://www.ebi.ac.uk/ena/browser/view/{{element.secondary_study_accession}}">{{element.secondary_study_accession}}</a></mat-cell>
+                        <mat-cell *matCellDef="let element" class="assemblies-font"> <a class="no-underline" target="_blank" href="https://www.ebi.ac.uk/ena/browser/view/{{element.secondary_study_accession}}">{{element.secondary_study_accession}}</a>
+                        </mat-cell>
                     </ng-container>
 
                     <ng-container matColumnDef="sra_aspera">

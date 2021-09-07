@@ -63,10 +63,6 @@
                 </div>
             </div>
             <div class="col-md-8">
-                <!-- <div class="alert alert-danger alert-dismissible fade show">
-                    <strong>Error!</strong> A problem has been occurred and we are fixing it. Sorry for any inconvenience caused.
-                    <button type="button" class="close" data-dismiss="alert">&times;</button>
-                </div> -->
                 <h1 class="page-header">Organisms</h1>
                 <button type="button" style="float: right;" class="btn btn-primary" mat-raised-button (click)="exporter.exportTable('csv', {fileName:'organisms-metadata'})">Download metadata</button>
                 <h1 *ngIf="activeFilters.length !== 0">Filters:
@@ -140,8 +136,6 @@
                         <!-- subkingdom level -->
                         <ul class="nested subkingdom" *ngIf="childTaxanomy.kingdom.length > 0">
                             <li class="rank-heading">
-                                <!-- <i *ngIf="currentTaxonomy.childRank != 'subkingdom'" (click)="traverseBackTaxonomies()"
-                                    class="fas fa-arrow-circle-left"></i> -->
                                 {{currentTaxaOnExpand.childRank | uppercase}}
                             </li>
 
