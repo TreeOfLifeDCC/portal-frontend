@@ -87,7 +87,7 @@ treeJSON = d3.json(url, function(error, treeData) {
     // Call visit function to establish maxLabelLength
     visit(treeData, function(d) {
         totalNodes++;
-        maxLabelLength = d.name.length + 2;
+        maxLabelLength = d.name.length + d.commonName.length + 5;
 
     }, function(d) {
         return d.children && d.children.length > 0 ? d.children : null;
@@ -379,7 +379,11 @@ treeJSON = d3.json(url, function(error, treeData) {
                 return d.children || d._children ? "end" : "start";
             })
             .text(function(d) {
-                var name = d.name + " (" + d.commonName + ")";
+                var name;
+                if (d.commonName != 'Other')
+                    name = d.name + " (" + d.commonName + ")";
+                else
+                    name = d.name;
                 return name;
             })
             .style("fill-opacity", 0);
@@ -401,7 +405,11 @@ treeJSON = d3.json(url, function(error, treeData) {
                 return d.children || d._children ? "end" : "start";
             })
             .text(function(d) {
-                var name = d.name + " (" + d.commonName + ")";
+                var name;
+                if (d.commonName != 'Other')
+                    name = d.name + " (" + d.commonName + ")";
+                else
+                    name = d.name;
                 return name;
             });
 
