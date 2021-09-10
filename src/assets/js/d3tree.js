@@ -88,7 +88,6 @@ treeJSON = d3.json(url, function(error, treeData) {
     visit(treeData, function(d) {
         totalNodes++;
         maxLabelLength = d.name.length + d.commonName.length + 5;
-
     }, function(d) {
         return d.children && d.children.length > 0 ? d.children : null;
     });
@@ -380,10 +379,17 @@ treeJSON = d3.json(url, function(error, treeData) {
             })
             .text(function(d) {
                 var name;
-                if (d.commonName != 'Other')
-                    name = d.name + " (" + d.commonName + ")";
-                else
+                name = d.name;
+                if ($('#commonName').prop("checked") == true) {
+                    if (d.commonName != 'Other')
+                        name = d.name + " (" + d.commonName + ")";
+                    else
+                        name = d.name;
+                    console.log('toggle on:' + name);
+                } else if ($('#commonName').prop("checked") == false) {
                     name = d.name;
+                    console.log('toggle off:' + name);
+                }
                 return name;
             })
             .style("fill-opacity", 0);
@@ -406,10 +412,15 @@ treeJSON = d3.json(url, function(error, treeData) {
             })
             .text(function(d) {
                 var name;
-                if (d.commonName != 'Other')
-                    name = d.name + " (" + d.commonName + ")";
-                else
+                name = d.name;
+                if ($('#commonName').prop("checked") == true) {
+                    if (d.commonName != 'Other')
+                        name = d.name + " (" + d.commonName + ")";
+                    else
+                        name = d.name;
+                } else if ($('#commonName').prop("checked") == false) {
                     name = d.name;
+                }
                 return name;
             });
 
@@ -419,23 +430,7 @@ treeJSON = d3.json(url, function(error, treeData) {
             .style("fill", function(d) {
                 return d._children ? "lightsteelblue" : "#fff";
             });
-        // .on("mouseover", function(d) {
-        //     if (d.name == "Eukaryota") {
-        //         div.transition()
-        //             .duration(200)
-        //             .style("opacity", .9);
-        //         div.html("<ul><li>Single click to Expand</li><li>Double click to show Organisms</li><li>Graph can be zoomed in & Out and is draggable</li></ul>")
-        //             .style("left", (d3.event.pageX + 12) + "px")
-        //             .style("top", (d3.event.pageY - 28) + "px");
-        //     }
-        // })
-        // .on("mouseout", function(d) {
-        //     if (d.name == "Eukaryota") {
-        //         div.transition()
-        //             .duration(500)
-        //             .style("opacity", 0);
-        //     }
-        // });
+
         div.transition()
             .duration(200)
             .style("opacity", .9);
@@ -530,6 +525,19 @@ treeJSON = d3.json(url, function(error, treeData) {
     centerNode(root);
 
     $('#reset').on('click', resetGraph)
+    $('#commonName').on('click', toggleCommonName)
+
+    function toggleCommonName() {
+        // var svgGroup = baseSvg.append("g");
+        root = treeData;
+        // root.x0 = viewerHeight / 2;
+        // root.y0 = 0;
+        // root.children.forEach(function (child) {
+        //     collapse(child);
+        // });
+        update(root);
+
+    }
 
     function resetGraph() {
         // Append a group which holds all nodes and which the zoom Listener can act upon.
