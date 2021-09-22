@@ -460,12 +460,10 @@ export class OrganismDetailsComponent implements OnInit, AfterViewInit {
   }
 
   checkTolidExists(data) {
-    console.log(data);
     return data.tolid !== null;
   }
 
   generateTolidLink(data) {
-    console.log(data);
     const organismName = data.organism.split(' ').join('_');
     const clade = this.codes[data.tolid.charAt(0)];
     return `https://tolqc.cog.sanger.ac.uk/darwin/${clade}/${organismName}`;

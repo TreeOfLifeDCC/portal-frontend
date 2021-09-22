@@ -385,10 +385,8 @@ treeJSON = d3.json(url, function(error, treeData) {
                         name = d.name + " (" + d.commonName + ")";
                     else
                         name = d.name;
-                    console.log('toggle on:' + name);
                 } else if ($('#commonName').prop("checked") == false) {
                     name = d.name;
-                    console.log('toggle off:' + name);
                 }
                 return name;
             })
