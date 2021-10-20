@@ -1,0 +1,19 @@
+
+<div class="row">
+    <div class="col-md-8">
+        <div style="text-align: center;">
+            <h2 class='filter-heading'>Tracking Status</h2>
+            <div id="trackingStatusPie">
+                <canvas baseChart
+                        [data]="pieChartData"
+                        [labels]="pieChartLabels"
+                        [chartType]="pieChartType"
+                        [colors]="chartColors"
+                        [options]="pieChartOptions"
+                        [plugins]="pieChartPlugins"
+                        [legend]="pieChartLegend">
+                </canvas>
+            </div>
+        </div>
+    </div>
+</div>

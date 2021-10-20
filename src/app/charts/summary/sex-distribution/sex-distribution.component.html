@@ -1,0 +1,19 @@
+
+<div class="row">
+    <div class="col-md-8">
+        <div style="text-align: center;">
+            <h2 class='filter-heading'>Sex Distribution</h2>
+            <div id="sexDistribution">
+                <canvas baseChart
+                        [data]="sexPieChartData"
+                        [labels]="sexPieChartLabels"
+                        [chartType]="pieChartType"
+                        [colors]="sexchartColors"
+                        [options]="pieChartOptions"
+                        [plugins]="pieChartPlugins"
+                        [legend]="pieChartLegend">
+                </canvas>
+            </div>
+        </div>
+    </div>
+</div>

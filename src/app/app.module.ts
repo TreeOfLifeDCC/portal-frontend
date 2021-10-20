@@ -18,7 +18,7 @@ import { AboutComponent } from './about/about.component';
 import { HelpComponent } from './help/help.component';
 import { HomeComponent } from './home/home.component';
 import { ApiComponent } from './api/api.component';
-
+import {ChartsModule} from '@rinminase/ng-charts';
 
 @NgModule({
   declarations: [
@@ -40,7 +40,8 @@ import { ApiComponent } from './api/api.component';
     MatTreeModule,
     MatIconModule,
     MatButtonModule,
-    MatTableExporterModule
+    MatTableExporterModule,
+    ChartsModule
   ],
   providers: [],
   bootstrap: [AppComponent]

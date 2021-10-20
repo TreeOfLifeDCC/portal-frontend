@@ -1,0 +1,19 @@
+
+<div class="row">
+    <div class="col-md-6">
+        <div style="text-align: center;">
+            <h2 class='filter-heading'>Kingdom</h2>
+            <div id="KingdomPie">
+                <canvas baseChart
+                        [data]="kingdompieChartData"
+                        [labels]="kingdompieChartLabels"
+                        [chartType]="pieChartType"
+                        [colors]="kingdomChartColors"
+                        [options]="pieChartOptions"
+                        [plugins]="pieChartPlugins"
+                        [legend]="pieChartLegend">
+                </canvas>
+            </div>
+        </div>
+    </div>
+</div>

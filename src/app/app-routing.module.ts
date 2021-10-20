@@ -48,6 +48,16 @@ const routes: Routes = [
   {
     path: '',
     children: [
+      {
+        path: 'summary', loadChildren: () => import('./charts/summary.module').then(
+            m => m.SummaryModule)
+      }
+    ]
+  },
+
+  {
+    path: '',
+    children: [
       { path: '404', loadChildren: () => import('./not-found/not-found.module').then(m => m.NotFoundModule) },
       { path: '**', loadChildren: () => import('./not-found/not-found.module').then(m => m.NotFoundModule) }
     ]
