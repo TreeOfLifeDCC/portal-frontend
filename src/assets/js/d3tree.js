@@ -265,16 +265,26 @@ treeJSON = d3.json(url, function(error, treeData) {
     }
 
     function doubleClick(d) {
+        var obj = d
+        var jsonArray = []
+        while (obj.parent != null) {
+            var json = { 'rank': obj.rank, 'taxonomy': obj.name }
+            jsonArray.push(json)
+            obj = obj.parent
+        }
+        tempObj = { 'rank': 'superkingdom', 'taxonomy': 'Eukaryota' }
+        jsonArray.push(tempObj)
+        jsonArray.reverse();
+        var encodedJsonArray = encodeURIComponent(JSON.stringify(jsonArray))
         if (d.name != 'Eukaryota') {
             $.ajax({
-                url: 'https://portal.darwintreeoflife.org/api/root_organisms/root/filter/results?from=0&size=2000&taxonomyFilter=%5B%7B%22rank%22%3A%22' + d.rank + '%22%2C%22taxonomy%22%3A%22' + d.name + '%22%7D%5D',
+                url: 'https://portal.darwintreeoflife.org/api/root_organisms/root/filter/results?from=0&size=2000&taxonomyFilter=' + encodedJsonArray,
                 type: 'post',
                 data: {},
                 success: function(response) {
                     $('#organismsTable').DataTable().clear().destroy();
                     $('.modal-heading').text(d.rank)
                     $("#organismsTable").find("tr:gt(0)").remove();
-                    // var json = JSON.parse(response);
                     var total = response.hits.total.value;
                     var data = response.hits.hits;
                     for (var i = 0; i < total; i++) {
@@ -385,10 +395,8 @@ treeJSON = d3.json(url, function(error, treeData) {
                         name = d.name + " (" + d.commonName + ")";
                     else
                         name = d.name;
-                    console.log('toggle on:' + name);
                 } else if ($('#commonName').prop("checked") == false) {
                     name = d.name;
-                    console.log('toggle off:' + name);
                 }
                 return name;
             })
@@ -553,9 +561,13 @@ treeJSON = d3.json(url, function(error, treeData) {
             collapse(child);
         });
 
+        var zoom = d3.behavior.zoom()
+        zoom.scale(zoom.scale() / 2)
+
         // Layout the tree initially and center on the root node.
         update(root);
         centerNode(root);
+
     }
 
     function zoomed() {

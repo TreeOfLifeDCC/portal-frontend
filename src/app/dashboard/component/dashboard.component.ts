@@ -924,6 +924,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
   }
 
   generateTolidLink(data) {
+
    // console.log(data);
     const organismName = data.organism.split(' ').join('_');
     const clade = this.codes[data.tolid.charAt(0)];
