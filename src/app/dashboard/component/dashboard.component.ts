@@ -920,7 +920,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
   }
 
   checkTolidExists(data) {
-    return data.tolid !== null;
+    return data.tolid != null;
   }
 
   generateTolidLink(data) {
