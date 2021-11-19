@@ -146,9 +146,6 @@ export class TrackingSystemComponent implements OnInit, AfterViewInit {
             setTimeout(() => {
               let inactiveClassName = '.' + this.urlAppendFilterArray[i].name + '-inactive';
               let element = "li:contains('" + this.urlAppendFilterArray[i].value + "')";
-              // $(inactiveClassName).addClass('non-disp');
-              // $(element).removeClass('non-disp');
-              // $(element).addClass('disp');
               $(element).addClass('active');
             }, 1);
 
@@ -222,12 +219,6 @@ export class TrackingSystemComponent implements OnInit, AfterViewInit {
 
     let from = pageIndex * pageSize;
     let size = pageSize;
-    // if ((from + pageSize) < this.statusesTotalCount) {
-    //   size = from + pageSize;
-    // }
-    // else {
-    //   size = this.statusesTotalCount;
-    // }
 
     if (this.activeFilters.length !== 0 || this.currentTaxonomyTree.length !== 0) {
       this.getFilterResults(this.activeFilters.toString(), this.sort.active, this.sort.direction, from, size, taxonomy);
