@@ -291,7 +291,7 @@ treeJSON = d3.json(url, function(error, treeData) {
                         var record = data[i]._source;
                         var organism = record.organism;
                         var name = record.commonName != null ? record.commonName : "-";
-                        var trackingStatus = record.trackingSystem.status;
+                        var trackingStatus = record.currentStatus;
                         var tax_id = record.tax_id;
                         var tolid = '';
                         var externalReference = '';
