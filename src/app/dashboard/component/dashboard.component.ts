@@ -49,7 +49,6 @@ export class DashboardComponent implements OnInit, AfterViewInit {
     y: 'bacteria',
     z: 'archea'
   };
-  displayedColumns = ['organism', 'commonName', 'currentStatus', 'goatInfo'];
   bioSamples: Sample[];
   loading = true;
   dataSource = new MatTableDataSource<any>();
@@ -103,10 +102,13 @@ export class DashboardComponent implements OnInit, AfterViewInit {
   itemLimitBiosampleFilter: number;
   itemLimitEnaFilter: number;
 
+  dataColumnsDefination = [{column: "organism", selected: true},{column: "commonName", selected: true},{column: "currentStatus", selected: true},{column: "goatInfo", selected: true},{column: "biosamples", selected: false},{column: "raw_data", selected: false},{column: "mapped_reads", selected: false},{column: "assemblies", selected: false},{column: "annotation_complete", selected: false}, {column: "annotation", selected: false}]
+  displayedColumns = [];
   constructor(private titleService: Title, private dashboardService: DashboardService,
     private activatedRoute: ActivatedRoute, private router: Router, private spinner: NgxSpinnerService, private taxanomyService: TaxanomyService) { }
 
   ngOnInit(): void {
+    this.getDisplayedColumns();
     this.activeFilters = [];
     this.urlAppendFilterArray = [];
     this.filterSize = 4;
@@ -129,6 +131,27 @@ export class DashboardComponent implements OnInit, AfterViewInit {
   ngAfterViewInit() {
     this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;
+  }
+
+  getDisplayedColumns() {
+    this.displayedColumns = [];
+    this.dataColumnsDefination.forEach(obj => {
+      if(obj.selected) {
+        this.displayedColumns.push(obj.column)
+      }
+    });
+  }
+
+  expanded() {
+  }
+
+  showSelectedColumn(selectedColumn, checked) {
+    let index = this.dataColumnsDefination.indexOf(selectedColumn);
+    let item = this.dataColumnsDefination[index];
+    item.selected = checked;
+    this.dataColumnsDefination[index] = item;
+    this.getDisplayedColumns();
+    this.getOrganismsQueryParamonInit();
   }
 
   getOrganismsQueryParamonInit() {
@@ -528,8 +551,15 @@ export class DashboardComponent implements OnInit, AfterViewInit {
   getStatusClass(status: string) {
     if (status === 'Annotation Complete') {
       return 'badge badge-pill badge-success';
-    } else {
-      return 'badge badge-pill badge-warning'
+    }
+    else if(status == 'Done') {
+      return 'badge badge-pill badge-success';
+    }
+    else if(status == 'Waiting') {
+      return 'badge badge-pill badge-warning';
+    }
+    else {
+      return 'badge badge-pill badge-warning';
     }
   }
 

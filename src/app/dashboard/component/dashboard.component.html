@@ -92,6 +92,22 @@
             </div>
             <div class="col-md-8">
                 <h1 class="page-header">Organisms</h1>
+
+                <mat-expansion-panel (opened)="expanded()">
+                    <mat-expansion-panel-header class="page-header">
+                        Column Selection
+                    </mat-expansion-panel-header>
+                    <div class="col-md-12">
+                        <div class="row">
+                            <mat-checkbox *ngFor="let data of dataColumnsDefination" class="col-md-4" color="primary" (click)="$event.stopPropagation()" (keydown)="$event.stopPropagation()" [checked]="data.selected" (change)="showSelectedColumn(data, $event.checked)">
+                                {{data.column}}
+                            </mat-checkbox>
+                        </div>
+                    </div>
+                </mat-expansion-panel>
+                <br />
+
+
                 <button type="button" style="float: right;" class="btn btn-primary" mat-raised-button (click)="exporter.exportTable('csv', {fileName:'organisms-metadata'})">Download metadata</button>
                 <h1 *ngIf="activeFilters.length !== 0">Filters:
                     <button type="button" class="btn btn-success" *ngFor="let filter of activeFilters">
@@ -139,6 +155,48 @@
                                         href="{{generateTolidLink(element)}}">ToL QC</a>
                                 </ng-container>
                             </span>
+                        </mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="biosamples">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header> Metadata submitted to BioSamples </mat-header-cell>
+                        <mat-cell *matCellDef="let element">
+                            <span [ngClass]="getStatusClass(element.biosamples)">{{element.biosamples}}</span>
+                        </mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="raw_data">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header> Raw data submitted to ENA </mat-header-cell>
+                        <mat-cell *matCellDef="let element">
+                            <span [ngClass]="getStatusClass(element.raw_data)">{{element.raw_data}}</span>
+                        </mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="mapped_reads">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header> Mapped reads submitted to ENA </mat-header-cell>
+                        <mat-cell *matCellDef="let element">
+                            <span [ngClass]="getStatusClass(element.mapped_reads)">{{element.mapped_reads}}</span>
+                        </mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="assemblies">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header> Assemblies submitted to ENA </mat-header-cell>
+                        <mat-cell *matCellDef="let element">
+                            <span [ngClass]="getStatusClass(element.assemblies_status)">{{element.assemblies_status}}</span>
+                        </mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="annotation_complete">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header> Annotation complete </mat-header-cell>
+                        <mat-cell *matCellDef="let element">
+                            <span [ngClass]="getStatusClass(element.annotation_complete)">{{element.annotation_complete}}</span>
+                        </mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="annotation">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header> Annotation submitted to ENA </mat-header-cell>
+                        <mat-cell *matCellDef="let element">
+                            <span [ngClass]="getStatusClass(element.annotation_status)">{{element.annotation_status}}</span>
                         </mat-cell>
                     </ng-container>
 
