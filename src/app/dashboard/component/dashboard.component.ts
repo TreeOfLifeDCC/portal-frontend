@@ -102,7 +102,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
   itemLimitBiosampleFilter: number;
   itemLimitEnaFilter: number;
 
-  dataColumnsDefination = [{column: "organism", selected: true},{column: "commonName", selected: true},{column: "currentStatus", selected: true},{column: "goatInfo", selected: true},{column: "biosamples", selected: false},{column: "raw_data", selected: false},{column: "mapped_reads", selected: false},{column: "assemblies", selected: false},{column: "annotation_complete", selected: false}, {column: "annotation", selected: false}]
+  dataColumnsDefination = [{name: "Organism", column: "organism", selected: true},{name: "Common Name", column: "commonName", selected: true},{name: "Current Status", column: "currentStatus", selected: true},{name: "External references", column: "goatInfo", selected: true},{name: "Submitted to Biosamples", column: "biosamples", selected: false},{name: "Raw data submitted to ENA", column: "raw_data", selected: false},{name: "Mapped reads submitted to ENA", column: "mapped_reads", selected: false},{name: "Assemblies submitted to ENA", column: "assemblies", selected: false},{name: "Annotation complete", column: "annotation_complete", selected: false}, {name: "Annotation submitted to ENA", column: "annotation", selected: false}]
   displayedColumns = [];
   constructor(private titleService: Title, private dashboardService: DashboardService,
     private activatedRoute: ActivatedRoute, private router: Router, private spinner: NgxSpinnerService, private taxanomyService: TaxanomyService) { }

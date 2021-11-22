@@ -100,7 +100,7 @@
                     <div class="col-md-12">
                         <div class="row">
                             <mat-checkbox *ngFor="let data of dataColumnsDefination" class="col-md-4" color="primary" (click)="$event.stopPropagation()" (keydown)="$event.stopPropagation()" [checked]="data.selected" (change)="showSelectedColumn(data, $event.checked)">
-                                {{data.column}}
+                                {{data.name}}
                             </mat-checkbox>
                         </div>
                     </div>
