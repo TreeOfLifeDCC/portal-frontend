@@ -111,7 +111,7 @@ export class OrganismDetailsComponent implements OnInit, AfterViewInit {
     this.filterJson['organismPart'] = '';
     this.filterJson['trackingSystem'] = '';
     this.getDisplayedColumns();
-    this.getBiosampleByOrganism();
+    this.getBiosampleById();
 
   }
 
@@ -133,14 +133,14 @@ export class OrganismDetailsComponent implements OnInit, AfterViewInit {
     item.selected = checked;
     this.experimentColumnsDefination[index] = item;
     this.getDisplayedColumns();
-    this.getBiosampleByOrganism();
+    this.getBiosampleById();
   }
 
   ngAfterViewInit(): void {
   }
 
-  getBiosampleByOrganism() {
-    this.dashboardService.getRootOrganismByOrganism(this.bioSampleId)
+  getBiosampleById() {
+    this.dashboardService.getRootOrganismById(this.bioSampleId)
       .subscribe(
         data => {
           const unpackedData = [];
@@ -346,7 +346,7 @@ export class OrganismDetailsComponent implements OnInit, AfterViewInit {
     this.filterJson['organismPart'] = '';
     this.filterJson['trackingSystem'] = '';
     this.dataSourceRecords.filter = this.filterJson;
-    this.getBiosampleByOrganism();
+    this.getBiosampleById();
   }
 
   removeFilter(filter: string) {
@@ -362,7 +362,7 @@ export class OrganismDetailsComponent implements OnInit, AfterViewInit {
         this.filterJson['organismPart'] = '';
         this.filterJson['trackingSystem'] = '';
         this.dataSourceRecords.filter = this.filterJson;
-        this.getBiosampleByOrganism();
+        this.getBiosampleById();
       }
     }
   }
@@ -407,7 +407,7 @@ export class OrganismDetailsComponent implements OnInit, AfterViewInit {
     $('.tracking-status-inactive').removeClass('non-disp active');
     $('.org-part-inactive').removeClass('non-disp active');
     if (this.searchText.length == 0) {
-      this.getBiosampleByOrganism();
+      this.getBiosampleById();
     }
     else {
       this.activeFilters = [];

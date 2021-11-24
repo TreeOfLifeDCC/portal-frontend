@@ -46,6 +46,10 @@ export class DashboardService {
     return this.http.get(`${this.API_BASE_URL}/root_organisms/${organism}`);
   }
 
+  public getRootOrganismById(id: string): Observable<any> {
+    return this.http.get(`${this.API_BASE_URL}/root_organisms/root?id=${id}`);
+  }
+
   public getRootOrganismByAccession(accession: string): Observable<any> {
     return this.http.get(`${this.API_BASE_URL}/root_organisms/accession/${accession}`);
   }
