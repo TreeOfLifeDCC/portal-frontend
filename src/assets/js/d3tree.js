@@ -245,6 +245,13 @@ treeJSON = d3.json(url, function(error, treeData) {
 
     function click(d) {
         clickCount++;
+        if ((d.children && d.children.length === 1) || (d._children && d._children.length === 1)) {
+            singleClickTimer = setTimeout(function () {
+                clickCount = 0;
+                expand(d);
+                singleClick(d);
+            }, 400);
+        }
         if (clickCount === 1) {
             singleClickTimer = setTimeout(function() {
                 clickCount = 0;
