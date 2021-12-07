@@ -44,7 +44,7 @@
                                     </li>
                                 </ng-container>
                                 <ng-container *ngFor="let filter of RawDataFilters; let i = index">
-                                    <li class="raw-data list-group-item d-flex justify-content-between align-items-center raw-data-inactive" [ngClass]="checkFilterIsActive(filter.key)" (click)="onFilterClick($event, 'raw-data' , filter.key)" style="cursor: pointer" *ngIf="filter.key === 'Raw data - Done'">
+                                  §  <li class="raw-data list-group-item d-flex justify-content-between align-items-center raw-data-inactive" [ngClass]="checkFilterIsActive(filter.key)" (click)="onFilterClick($event, 'raw-data' , filter.key)" style="cursor: pointer" *ngIf="filter.key === 'Raw data - Done'">
                                         <span>Raw Data - Submitted</span>
                                         <span class="badge badge-pill badge-info">{{filter.doc_count}}</span>
                                     </li>

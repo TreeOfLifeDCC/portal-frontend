@@ -13,14 +13,15 @@
         <span id='reset' type="button" class="material-icons">restart_alt</span>
         <div class="custom-control custom-switch zoom switch">
             <input type="checkbox" class="custom-control-input" id="commonName">
-            <label class="custom-control-label" for="commonName">Common name &nbsp;</label>
-            &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
-            &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
-            &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
-            &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;  &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
-            &nbsp; &nbsp; &nbsp; &nbsp;
-            <input #searchInput matInput id="searchBox"> <span> &nbsp;</span>
-            <label for="searchBox">Search</label>
+            <label class="custom-control-label" for="commonName">Common name </label>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+            &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+            &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+            &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+            <mat-form-field appearance="fill">
+                <mat-label>Search</mat-label>
+                <input #searchInput matInput id="searchBox" placeholder="Eukaryota" #input>
+            </mat-form-field>
+
         </div>
 
     </div>
