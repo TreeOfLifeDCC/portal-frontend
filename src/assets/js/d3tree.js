@@ -453,7 +453,24 @@ treeJSON = d3.json(url, function(error, treeData) {
         // Fade the text in
         nodeUpdate.select("text")
             .style("fill-opacity", 1);
-
+        nodeUpdate.select("circle")
+            .attr("r", 4.5)
+            .style("fill", function(d) {
+                if(d.class === "found"){
+                    return "#2E8B57"; //red
+                }
+                else if(d._children){
+                    return "lightsteelblue";
+                }
+                else{
+                    return "#fff";
+                }
+            })
+            .style("stroke", function(d) {
+                if(d.class === "found"){
+                    return "#2E8B57"; //red
+                }
+            });
         // Transition exiting nodes to the parent's new position.
         var nodeExit = node.exit().transition()
             .duration(duration)
@@ -491,7 +508,12 @@ treeJSON = d3.json(url, function(error, treeData) {
         // Transition links to their new position.
         link.transition()
             .duration(duration)
-            .attr("d", diagonal);
+            .attr("d", diagonal)
+            .style("stroke",function(d){
+                if(d.target.class==="found"){
+                    return "#2E8B57";
+                }
+            });
 
         // Transition exiting nodes to the parent's new position.
         link.exit().transition()
@@ -534,7 +556,66 @@ treeJSON = d3.json(url, function(error, treeData) {
 
     $('#reset').on('click', resetGraph)
     $('#commonName').on('click', toggleCommonName)
+    $('#searchBox').on('keyup', searchText)
 
+    function searchText() {
+        // var svgGroup = baseSvg.append("g");
+        root = treeData;
+        let input= d3.select("#searchBox").node().value;
+        if(input) {
+            var paths = searchTree(root, input, []);
+            if (typeof (paths) !== "undefined") {
+                openPaths(paths);
+            } else {
+                alert(e.object.text + " not found!");
+            }
+        }else{
+            resetGraph();
+        }
+
+    }
+    function searchTree(obj,search,path){
+        if(obj.name === search){ //if search is found return, add the object to the path and return it
+            path.push(obj);
+            return path;
+        }
+        else if(obj.children || obj._children){ //if children are collapsed d3 object will have them instantiated as _children
+            var children = (obj.children) ? obj.children : obj._children;
+            for(var i=0;i<children.length;i++){
+                path.push(obj);// we assume this path is the right one
+                var found = searchTree(children[i],search,path);
+                if(found){// we were right, this should return the bubbled-up path from the first if statement
+                    return found;
+                }
+                else{//we were wrong, remove this parent from the path and continue iterating
+                    path.pop();
+                }
+            }
+        }
+        else{//not the right object, return false so it will continue to iterate in the loop
+            return false;
+        }
+    }
+
+    function openPaths(paths){
+        for(var i =0;i<paths.length;i++){
+            if(paths[i].id !== "1"){//i.e. not root
+                paths[i].class = 'found';
+                if(paths[i]._children){ //if children are hidden: open them, otherwise: don't do anything
+                    paths[i].children = paths[i]._children;
+                    paths[i]._children = null;
+                }
+                update(paths[i]);
+            }
+        }
+    }
+    function clearAll(d) {
+        d.class = "";
+        if (d.children)
+            d.children.forEach(clearAll);
+        else if (d._children)
+            d._children.forEach(clearAll);
+    }
     function toggleCommonName() {
         // var svgGroup = baseSvg.append("g");
         root = treeData;
@@ -560,7 +641,7 @@ treeJSON = d3.json(url, function(error, treeData) {
         root.children.forEach(function(child) {
             collapse(child);
         });
-
+        clearAll(root);
         var zoom = d3.behavior.zoom()
         zoom.scale(zoom.scale() / 2)
 
