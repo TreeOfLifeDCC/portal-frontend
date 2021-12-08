@@ -316,7 +316,7 @@ treeJSON = d3.json(url, function(error, treeData) {
                                 const genomeLink = record.genome_notes[0].url;
                                 const link = `https://tolqc.cog.sanger.ac.uk/darwin/${clade}/${organismName}`;
                                 tolid = '<a class="no-underline badge badge-pill" target="_blank" style="margin-left: 3px;background-color: #5cc45e; color: #fff;" href="' + link + '">ToL QC</a>'
-                                genomeURL = '<a class="no-underline badge badge-pill" target="_blank" style="margin-left: 3px;background-color: indianred; color: #fff;" href="' + genomeLink + '">Genome Notes</a>'
+                                genomeURL = '<a class="no-underline badge badge-pill" target="_blank" style="margin-left: 3px;background-color: grey; color: #fff;" href="' + genomeLink + '">Genome Notes</a>'
                                 externalReference = '<span>' + goatElement + tolid + genomeURL + '</span>'
                             } else {
                                 const link = `https://tolqc.cog.sanger.ac.uk/darwin/${clade}/${organismName}`;
