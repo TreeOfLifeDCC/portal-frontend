@@ -245,10 +245,17 @@ treeJSON = d3.json(url, function(error, treeData) {
 
     function click(d) {
         clickCount++;
-        if ((d.children && d.children.length === 1) || (d._children && d._children.length === 1)) {
+        if ((d._children && d._children.length === 1)) {
             singleClickTimer = setTimeout(function () {
                 clickCount = 0;
                 expand(d);
+                singleClick(d);
+            }, 400);
+
+        }else if(d.children && d.children.length === 1){
+            singleClickTimer = setTimeout(function () {
+                clickCount = 0;
+                collapse(d);
                 singleClick(d);
             }, 400);
         }
@@ -585,7 +592,7 @@ treeJSON = d3.json(url, function(error, treeData) {
             if (typeof (paths) !== "undefined") {
                 openPaths(paths);
             } else {
-                alert(e.object.text + " not found!");
+               // alert(input + " not found!");
             }
         }else{
             resetGraph();
