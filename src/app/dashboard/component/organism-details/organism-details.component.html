@@ -12,14 +12,228 @@
             <ng-container *ngIf="bioSampleObj && checkTolidExists(bioSampleObj)">
                 <a class="no-underline badge badge-pill goat-color2" target="_blank" href="{{generateTolidLink(bioSampleObj)}}">ToL QC</a>
             </ng-container>
+            <ng-container *ngIf="bioSampleObj && checkGenomeExists(bioSampleObj)">
+                <a class="no-underline badge badge-pill genome" target="_blank" href="{{getGenomeURL(bioSampleObj)}}">Genome Notes</a>
+            </ng-container>
         </dd>
 
         <dt class="col-md-3" *ngIf="bioSampleObj?.sex">Sex:</dt>
         <dd class="col-md-9" *ngIf="bioSampleObj?.sex">{{bioSampleObj?.sex}}</dd>
 
-        <dt class="col-md-3" *ngIf="bioSampleObj?.trackingSystem">Tracking Status:</dt>
-        <dd class="col-md-9" *ngIf="bioSampleObj?.trackingSystem"><span [ngClass]="getStatusClass(bioSampleObj?.trackingSystem.status)">{{bioSampleObj?.trackingSystem.status}}</span>
+        <dt class="col-md-3" *ngIf="bioSampleObj?.currentStatus">Current Status:</dt>
+        <dd class="col-md-9" *ngIf="bioSampleObj?.currentStatus"><span [ngClass]="getStatusClass(bioSampleObj?.currentStatus)">{{bioSampleObj?.currentStatus}}</span>
         </dd>
+
+        <!-- Related Annotation Section -->
+        <div class="col-md-12" *ngIf="dataSourceRelatedAnnotationCount != 0">
+            <hr>
+            <h1 class="col-md-12 page-header">Related Annotation</h1>
+            <mat-expansion-panel (opened)="expanded()">
+                <mat-expansion-panel-header class="page-header">
+                    Column Selection
+                </mat-expansion-panel-header>
+                <div class="col-md-12">
+                    <div class="row">
+                        <mat-checkbox *ngFor="let data of displayedColumnsRelatedAnnotation" class="col-md-4" color="primary" (click)="$event.stopPropagation()" (keydown)="$event.stopPropagation()" [checked]="data.selected" (change)="showSelectedAnnotationsColumn(data, $event.checked)">
+                            {{data.name}}
+                        </mat-checkbox>
+                    </div>
+                </div>
+            </mat-expansion-panel>
+            <br />
+            <button type="button" style="float: right;" class="btn btn-primary" mat-raised-button (click)="exporter.exportTable('csv', {fileName:'related-annotation-metadata'})">Download metadata</button>
+            <mat-form-field>
+                <mat-label>Search</mat-label>
+                <input matInput (keyup)="relatedAnnotationSearch($event)" #input>
+            </mat-form-field>
+            <table mat-table matTableExporter #exporter="matTableExporter" [dataSource]="dataSourceRelatedAnnotation" matSort style="width: 100%;">
+                <ng-container matColumnDef="study_accession">
+                    <mat-header-cell *matHeaderCellDef> Study Accession </mat-header-cell>
+                    <mat-cell *matCellDef="let element" class="txt-center">
+                        <a class="no-underline" target="_blank" href="https://www.ebi.ac.uk/ena/browser/view/{{element.study_accession}}">{{element.study_accession}}</a>
+                    </mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="sample_accession">
+                    <mat-header-cell *matHeaderCellDef> Sample Accession </mat-header-cell>
+                    <mat-cell *matCellDef="let element" class="txt-center">
+                        <a class="no-underline" target="_blank" href="https://www.ebi.ac.uk/ena/browser/view/{{element.sample_accession}}">{{element.sample_accession}}</a>
+                    </mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="secondary_sample_accession">
+                    <mat-header-cell *matHeaderCellDef> Secondary Sample Accession </mat-header-cell>
+                    <mat-cell *matCellDef="let element" class="txt-center">
+                        <a class="no-underline" target="_blank" href="https://www.ebi.ac.uk/ena/browser/view/{{element.secondary_sample_accession}}">{{element.secondary_sample_accession}}</a>
+                    </mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="analysis_accession">
+                    <mat-header-cell *matHeaderCellDef> Analysis Accession </mat-header-cell>
+                    <mat-cell *matCellDef="let element" class="txt-center">
+                        <a class="no-underline" target="_blank" href="https://www.ebi.ac.uk/ena/browser/view/{{element.analysis_accession}}">{{element.analysis_accession}}</a>
+                    </mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="analysis_title">
+                    <mat-header-cell *matHeaderCellDef> Analysis Title </mat-header-cell>
+                    <mat-cell *matCellDef="let element" class="txt-center">
+                        {{element.analysis_title}}
+                    </mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="analysis_type">
+                    <mat-header-cell *matHeaderCellDef> Analysis Type </mat-header-cell>
+                    <mat-cell *matCellDef="let element" class="txt-center">
+                        {{element.analysis_type}}
+                    </mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="assembly_type">
+                    <mat-header-cell *matHeaderCellDef> Assembly Type </mat-header-cell>
+                    <mat-cell *matCellDef="let element" class="txt-center">
+                        {{element.assembly_type}}
+                    </mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="center_name">
+                    <mat-header-cell *matHeaderCellDef> Center Name </mat-header-cell>
+                    <mat-cell *matCellDef="let element" class="txt-center">
+                        {{element.center_name}}
+                    </mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="first_public">
+                    <mat-header-cell *matHeaderCellDef> First Public </mat-header-cell>
+                    <mat-cell *matCellDef="let element" class="txt-center">
+                        {{element.first_public}}
+                    </mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="last_updated">
+                    <mat-header-cell *matHeaderCellDef> Last Updated </mat-header-cell>
+                    <mat-cell *matCellDef="let element" class="txt-center">
+                        {{element.last_updated}}
+                    </mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="study_title">
+                    <mat-header-cell *matHeaderCellDef> Study Title </mat-header-cell>
+                    <mat-cell *matCellDef="let element" class="txt-center">
+                        {{element.study_title}}
+                    </mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="tax_id">
+                    <mat-header-cell *matHeaderCellDef> Tax ID </mat-header-cell>
+                    <mat-cell *matCellDef="let element" class="txt-center">
+                        <a class="no-underline" target="_blank" href="https://www.ebi.ac.uk/ena/browser/view/{{tax_id}}">{{tax_id}}</a>
+                    </mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="study_alias">
+                    <mat-header-cell *matHeaderCellDef> Study Alias </mat-header-cell>
+                    <mat-cell *matCellDef="let element" class="txt-center">
+                        {{element.study_alias}}
+                    </mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="analysis_alias">
+                    <mat-header-cell *matHeaderCellDef> Analysis Alias </mat-header-cell>
+                    <mat-cell *matCellDef="let element" class="txt-center">
+                        {{element.analysis_alias}}
+                    </mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="generated_bytes">
+                    <mat-header-cell *matHeaderCellDef> Generated files: Size </mat-header-cell>
+                    <mat-cell *matCellDef="let element" class="txt-center">
+                        {{element.generated_bytes}}
+                    </mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="generated_md5">
+                    <mat-header-cell *matHeaderCellDef> Generated files: MD5 </mat-header-cell>
+                    <mat-cell *matCellDef="let element" class="txt-center">
+                        {{element.generated_md5}}
+                    </mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="generated_ftp">
+                    <mat-header-cell *matHeaderCellDef> Generated files: FTP </mat-header-cell>
+                    <mat-cell *matCellDef="let element" class="txt-center">
+                        {{element.generated_ftp}}
+                    </mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="generated_aspera">
+                    <mat-header-cell *matHeaderCellDef> Generated files: Aspera </mat-header-cell>
+                    <mat-cell *matCellDef="let element" class="txt-center">
+                        {{element.generated_aspera}}
+                    </mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="generated_galaxy">
+                    <mat-header-cell *matHeaderCellDef> Generated files: Galaxy </mat-header-cell>
+                    <mat-cell *matCellDef="let element" class="txt-center">
+                        {{element.generated_galaxy}}
+                    </mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="submitted_bytes">
+                    <mat-header-cell *matHeaderCellDef> Submitted files: Size </mat-header-cell>
+                    <mat-cell *matCellDef="let element" class="txt-center">
+                        {{element.submitted_bytes}}
+                    </mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="submitted_md5">
+                    <mat-header-cell *matHeaderCellDef> Submitted files: MD5 </mat-header-cell>
+                    <mat-cell *matCellDef="let element" class="txt-center">
+                        {{element.submitted_md5}}
+                    </mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="submitted_ftp">
+                    <mat-header-cell *matHeaderCellDef> Submitted files: FTP </mat-header-cell>
+                    <mat-cell *matCellDef="let element" class="txt-center">
+                        {{element.submitted_ftp}}
+                    </mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="submitted_aspera">
+                    <mat-header-cell *matHeaderCellDef> Submitted files: Aspera </mat-header-cell>
+                    <mat-cell *matCellDef="let element" class="txt-center">
+                        {{element.submitted_aspera}}
+                    </mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="broker_name">
+                    <mat-header-cell *matHeaderCellDef> Broker Name </mat-header-cell>
+                    <mat-cell *matCellDef="let element" class="txt-center">
+                        {{element.broker_name}}
+                    </mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="sample_alias">
+                    <mat-header-cell *matHeaderCellDef> Sample Alias </mat-header-cell>
+                    <mat-cell *matCellDef="let element" class="txt-center">
+                        {{element.sample_alias}}
+                    </mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="sample_title">
+                    <mat-header-cell *matHeaderCellDef> Sample Title </mat-header-cell>
+                    <mat-cell *matCellDef="let element" class="txt-center">
+                        {{element.sample_title}}
+                    </mat-cell>
+                </ng-container>
+
+                <mat-header-row *matHeaderRowDef="displayedColumnsAnnotations"></mat-header-row>
+                <mat-row *matRowDef="let row; columns: displayedColumnsAnnotations;"></mat-row>
+            </table>
+            <mat-paginator #relatedAnnotationTable [pageSizeOptions]="[10, 20, 30]" showFirstLastButtons [length]="dataSourceRelatedAnnotationCount" style="width: 100%;"></mat-paginator>
+        </div>
 
         <!-- Annotation Section -->
         <div class="col-md-12" *ngIf="dataSourceAnnotationCount != 0">

@@ -10,7 +10,7 @@ import { Sample } from '../model/dashboard.model';
 export class DashboardService {
 
   private API_BASE_URL = 'https://portal.darwintreeoflife.org/api';
-  // private API_BASE_URL = 'http://45.86.170.227:30985';
+  // private API_BASE_URL = 'http://45.88.81.118/api';
   // private API_BASE_URL = 'http://localhost:8080';
 
   constructor(private http: HttpClient) { }
@@ -44,6 +44,10 @@ export class DashboardService {
 
   public getRootOrganismByOrganism(organism: string): Observable<any> {
     return this.http.get(`${this.API_BASE_URL}/root_organisms/${organism}`);
+  }
+
+  public getRootOrganismById(id: string): Observable<any> {
+    return this.http.get(`${this.API_BASE_URL}/root_organisms/root?id=${id}`);
   }
 
   public getRootOrganismByAccession(accession: string): Observable<any> {

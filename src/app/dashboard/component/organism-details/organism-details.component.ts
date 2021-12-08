@@ -84,17 +84,49 @@ export class OrganismDetailsComponent implements OnInit, AfterViewInit {
   dataSourceAssembliesCount;
   dataSourceAnnotation;
   dataSourceAnnotationCount;
+  dataSourceRelatedAnnotation;
+  dataSourceRelatedAnnotationCount;
 
-  experimentColumnsDefination = [{column: "study_accession", selected: true},{column: "secondary_study_accession", selected: false},{column: "sample_accession", selected: true},{column: "secondary_sample_accession", selected: false},{column: "experiment_accession", selected: true},{column: "run_accession", selected: true},{column: "submission_accession", selected: false},{column: "tax_id", selected: true},{column: "scientific_name", selected: true},{column: "instrument_platform", selected: false},{column: "instrument_model", selected: false},{column: "library_name", selected: false},{column: "nominal_length", selected: false},{column: "library_layout", selected: false},{column: "library_strategy", selected: false},{column: "library_source", selected: false},{column: "library_selection", selected: false},{column: "read_count", selected: false},{column: "base_count", selected: false},{column: "center_name", selected: false},{column: "first_public", selected: false},{column: "last_updated", selected: false},{column: "experiment_title", selected: false},{column: "study_title", selected: false},{column: "study_alias", selected: false},{column: "experiment_alias", selected: false},{column: "run_alias", selected: false},{column: "fastq_bytes", selected: false},{column: "fastq_md5", selected: false},{column: "fastq_ftp", selected: true},{column: "fastq_aspera", selected: false},{column: "fastq_galaxy", selected: false},{column: "submitted_bytes", selected: false},{column: "submitted_md5", selected: false},{column: "submitted_ftp", selected: true},{column: "submitted_aspera", selected: false},{column: "submitted_galaxy", selected: false},{column: "submitted_format", selected: false},{column: "sra_bytes", selected: false},{column: "sra_md5", selected: false},{column: "sra_ftp", selected: true},{column: "sra_aspera", selected: false},{column: "sra_galaxy", selected: false},{column: "cram_index_ftp", selected: false},{column: "cram_index_aspera", selected: false},{column: "cram_index_galaxy", selected: false},{column: "sample_alias", selected: false},{column: "broker_name", selected: false},{column: "sample_title", selected: false},{column: "nominal_sdev", selected: false},{column: "first_created", selected: false},{column: "library_construction_protocol", selected: true}]
+  experimentColumnsDefination = [{ column: "study_accession", selected: true }, { column: "secondary_study_accession", selected: false }, { column: "sample_accession", selected: true }, { column: "secondary_sample_accession", selected: false }, { column: "experiment_accession", selected: true }, { column: "run_accession", selected: true }, { column: "submission_accession", selected: false }, { column: "tax_id", selected: true }, { column: "scientific_name", selected: true }, { column: "instrument_platform", selected: false }, { column: "instrument_model", selected: false }, { column: "library_name", selected: false }, { column: "nominal_length", selected: false }, { column: "library_layout", selected: false }, { column: "library_strategy", selected: false }, { column: "library_source", selected: false }, { column: "library_selection", selected: false }, { column: "read_count", selected: false }, { column: "base_count", selected: false }, { column: "center_name", selected: false }, { column: "first_public", selected: false }, { column: "last_updated", selected: false }, { column: "experiment_title", selected: false }, { column: "study_title", selected: false }, { column: "study_alias", selected: false }, { column: "experiment_alias", selected: false }, { column: "run_alias", selected: false }, { column: "fastq_bytes", selected: false }, { column: "fastq_md5", selected: false }, { column: "fastq_ftp", selected: true }, { column: "fastq_aspera", selected: false }, { column: "fastq_galaxy", selected: false }, { column: "submitted_bytes", selected: false }, { column: "submitted_md5", selected: false }, { column: "submitted_ftp", selected: true }, { column: "submitted_aspera", selected: false }, { column: "submitted_galaxy", selected: false }, { column: "submitted_format", selected: false }, { column: "sra_bytes", selected: false }, { column: "sra_md5", selected: false }, { column: "sra_ftp", selected: true }, { column: "sra_aspera", selected: false }, { column: "sra_galaxy", selected: false }, { column: "cram_index_ftp", selected: false }, { column: "cram_index_aspera", selected: false }, { column: "cram_index_galaxy", selected: false }, { column: "sample_alias", selected: false }, { column: "broker_name", selected: false }, { column: "sample_title", selected: false }, { column: "nominal_sdev", selected: false }, { column: "first_created", selected: false }, { column: "library_construction_protocol", selected: true }]
 
   displayedColumnsFiles = [];
+  displayedColumnsAnnotations = [];
   displayedColumnsAssemblies = ['accession', 'assembly_name', 'description', 'version'];
   displayedColumnsAnnotation = ['accession', 'annotation', 'proteins', 'transcripts', 'softmasked_genome', 'other_data', 'view_in_browser'];
-  
+  displayedColumnsRelatedAnnotation = [
+    { name: "Study Accession", column: "study_accession", selected: true },
+    { name: "Sample Accession", column: "sample_accession", selected: true },
+    { name: "Secondary Sample Accession", column: "secondary_sample_accession", selected: true },
+    { name: "Tax Id", column: "tax_id", selected: true },
+    { name: "Study Alias", column: "study_alias", selected: true },
+    { name: "Submitted files: FTP", column: "submitted_ftp", selected: true },
+    { name: "Submitted files: Aspera", column: "submitted_aspera", selected: true },
+    { name: "Broker Name", column: "broker_name", selected: true },
+    { name: "Analysis Accession", column: "analysis_accession", selected: false },
+    { name: "Anaylsis Type", column: "analysis_type", selected: false },
+    { name: "Center Name", column: "center_name", selected: false },
+    { name: "Generated Bytes", column: "generated_bytes", selected: false },
+    { name: "Generated MD5", column: "generated_md5", selected: false },
+    { name: "Sample Alias", column: "sample_alias", selected: false },
+    { name: "Submitted Bytes", column: "submitted_bytes", selected: false },
+    { name: "Submitted MD5", column: "submitted_md5", selected: false },
+    { name: "Anaylsis Alias", column: "analysis_alias", selected: false },
+    { name: "Assembly Type", column: "assembly_type", selected: false },
+    { name: "First Public", column: "first_public", selected: false },
+    { name: "Generated FTP", column: "generated_ftp", selected: false },
+    { name: "Last Updated", column: "last_updated", selected: false },
+    { name: "Sample Title", column: "sample_title", selected: false },
+    { name: "Study Title", column: "study_title", selected: false },
+    { name: "Analysis Title", column: "analysis_title", selected: false },
+    { name: "Generated Aspera", column: "generated_aspera", selected: false },
+    { name: "Generated Galaxy", column: "generated_galaxy", selected: false }
+  ]
+
   @ViewChild('experimentsTable') exPaginator: MatPaginator;
   @ViewChild('assembliesTable') asPaginator: MatPaginator;
   @ViewChild('annotationTable') anPaginator: MatPaginator;
   @ViewChild('relatedOrganisms') relatedOrganismsTable: MatPaginator;
+  @ViewChild('relatedAnnotationTable') relatedAnnotationTable: MatPaginator;
 
   constructor(private route: ActivatedRoute, private dashboardService: DashboardService, private spinner: NgxSpinnerService, private router: Router) {
     this.route.params.subscribe(param => this.bioSampleId = param.id);
@@ -111,14 +143,24 @@ export class OrganismDetailsComponent implements OnInit, AfterViewInit {
     this.filterJson['organismPart'] = '';
     this.filterJson['trackingSystem'] = '';
     this.getDisplayedColumns();
-    this.getBiosampleByOrganism();
+    this.getAnnotationDisplayedColumns();
+    this.getBiosampleById();
 
+  }
+
+  getAnnotationDisplayedColumns() {
+    this.displayedColumnsAnnotations = [];
+    this.displayedColumnsRelatedAnnotation.forEach(obj => {
+      if (obj.selected) {
+        this.displayedColumnsAnnotations.push(obj.column)
+      }
+    });
   }
 
   getDisplayedColumns() {
     this.displayedColumnsFiles = [];
     this.experimentColumnsDefination.forEach(obj => {
-      if(obj.selected) {
+      if (obj.selected) {
         this.displayedColumnsFiles.push(obj.column)
       }
     });
@@ -133,14 +175,23 @@ export class OrganismDetailsComponent implements OnInit, AfterViewInit {
     item.selected = checked;
     this.experimentColumnsDefination[index] = item;
     this.getDisplayedColumns();
-    this.getBiosampleByOrganism();
+    this.getBiosampleById();
+  }
+
+  showSelectedAnnotationsColumn(selectedColumn, checked) {
+    let index = this.displayedColumnsRelatedAnnotation.indexOf(selectedColumn);
+    let item = this.displayedColumnsRelatedAnnotation[index];
+    item.selected = checked;
+    this.displayedColumnsRelatedAnnotation[index] = item;
+    this.getAnnotationDisplayedColumns();
+    this.getBiosampleById();
   }
 
   ngAfterViewInit(): void {
   }
 
-  getBiosampleByOrganism() {
-    this.dashboardService.getRootOrganismByOrganism(this.bioSampleId)
+  getBiosampleById() {
+    this.dashboardService.getRootOrganismById(this.bioSampleId)
       .subscribe(
         data => {
           const unpackedData = [];
@@ -155,7 +206,6 @@ export class OrganismDetailsComponent implements OnInit, AfterViewInit {
             this.organismName = data.organism;
             this.dataSourceRecords = new MatTableDataSource<any>(unpackedData);
             this.specBioSampleTotalCount = unpackedData?.length;
-            // this.dataSourceRecords.paginator = this.paginator;
 
             if (data.experiment != null) {
               this.dataSourceFiles = new MatTableDataSource<Sample>(data.experiment);
@@ -182,15 +232,26 @@ export class OrganismDetailsComponent implements OnInit, AfterViewInit {
               this.dataSourceAnnotationCount = 0;
             }
 
+            if (data.related_annotation != null) {
+              this.dataSourceRelatedAnnotation = new MatTableDataSource<any>(data.related_annotation);
+              this.dataSourceRelatedAnnotation = data.related_annotation?.length;
+            }
+            else {
+              this.dataSourceRelatedAnnotation = new MatTableDataSource<Sample>();
+              this.dataSourceRelatedAnnotationCount = 0;
+            }
+
             this.dataSourceFiles.paginator = this.exPaginator;
             this.dataSourceAssemblies.paginator = this.asPaginator;
             this.dataSourceAnnotation.paginator = this.anPaginator;
             this.dataSourceRecords.paginator = this.relatedOrganismsTable;
+            this.dataSourceRelatedAnnotation.paginator = this.relatedAnnotationTable;
 
             this.dataSourceRecords.sort = this.sort;
             this.dataSourceFiles.sort = this.sort;
             this.dataSourceAssemblies.sort = this.sort;
             this.dataSourceAnnotation.sort = this.sort;
+            this.dataSourceRelatedAnnotation.sort = this.sort;
           }, 50)
         },
         err => console.log(err)
@@ -210,6 +271,11 @@ export class OrganismDetailsComponent implements OnInit, AfterViewInit {
   annotationSearch(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
     this.dataSourceAnnotation.filter = filterValue.trim().toLowerCase();
+  }
+
+  relatedAnnotationSearch(event: Event) {
+    const filterValue = (event.target as HTMLInputElement).value;
+    this.dataSourceRelatedAnnotation.filter = filterValue.trim().toLowerCase();
   }
 
   applyFilter(event: Event) {
@@ -346,7 +412,7 @@ export class OrganismDetailsComponent implements OnInit, AfterViewInit {
     this.filterJson['organismPart'] = '';
     this.filterJson['trackingSystem'] = '';
     this.dataSourceRecords.filter = this.filterJson;
-    this.getBiosampleByOrganism();
+    this.getBiosampleById();
   }
 
   removeFilter(filter: string) {
@@ -362,7 +428,7 @@ export class OrganismDetailsComponent implements OnInit, AfterViewInit {
         this.filterJson['organismPart'] = '';
         this.filterJson['trackingSystem'] = '';
         this.dataSourceRecords.filter = this.filterJson;
-        this.getBiosampleByOrganism();
+        this.getBiosampleById();
       }
     }
   }
@@ -407,7 +473,7 @@ export class OrganismDetailsComponent implements OnInit, AfterViewInit {
     $('.tracking-status-inactive').removeClass('non-disp active');
     $('.org-part-inactive').removeClass('non-disp active');
     if (this.searchText.length == 0) {
-      this.getBiosampleByOrganism();
+      this.getBiosampleById();
     }
     else {
       this.activeFilters = [];
@@ -467,6 +533,19 @@ export class OrganismDetailsComponent implements OnInit, AfterViewInit {
     const organismName = data.organism.split(' ').join('_');
     const clade = this.codes[data.tolid.charAt(0)];
     return `https://tolqc.cog.sanger.ac.uk/darwin/${clade}/${organismName}`;
+  }
+
+  checkGenomeExists(data) {
+    return data.genome_notes != null;
+  }
+
+  getGenomeURL(data) {
+    const genomeNotes = data.genome_notes;
+    let genomeNotesURL = '#';
+    if (genomeNotes != null) {
+      genomeNotesURL = genomeNotes[0].url;
+    }
+      return genomeNotesURL;
   }
 
 }

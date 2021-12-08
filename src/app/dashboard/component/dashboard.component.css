@@ -215,3 +215,9 @@ ul[class*="other-"] {
     background-color: #5cc45e;
     margin-left: 3px;
 }
+
+.genome {
+    color: #fff;
+    background-color: grey;
+    margin-left: 3px;
+}

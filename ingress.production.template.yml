@@ -8,7 +8,7 @@ spec:
   tls:
   - hosts:
     - portal.darwintreeoflife.org
-    secretName: tls-secret
+    secretName: tls-msecret
   rules:
   - host: portal.darwintreeoflife.org
     http:

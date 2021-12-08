@@ -27,7 +27,7 @@ deploy-app-master:
         - curl -LO https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl
         - chmod +x ./kubectl
         - mv ./kubectl /usr/local/bin/kubectl
-        - 'printf "apiVersion: v1\nkind: Secret\n$(kubectl create secret docker-registry gitlab-registry --docker-server=$CI_REGISTRY --docker-username=$CI_DEPLOY_USER --docker-password=$CI_DEPLOY_PASSWORD --docker-email=$GITLAB_USER_EMAIL -o yaml --dry-run)" | kubectl apply -f -'
+        - 'printf "apiVersion: v1\nkind: Secret\n$(kubectl create secret docker-registry gitlab-registry --docker-server=$CI_REGISTRY --docker-username=$CI_DEPLOY_USER --docker-password=$CI_DEPLOY_PASSWORD --docker-email=$GITLAB_USER_EMAIL -o yaml --dry-run=server)" | kubectl apply -f -'
         - sed 's=_APP_NAME_='"$CI_PROJECT_NAME"'=g; s=_IMAGE_='"$CI_REGISTRY_IMAGE\:$CI_COMMIT_SHORT_SHA"'=g' kubernetes.template.yml > kubernetes.yml;
         - cat kubernetes.yml
         - sed 's=_APP_NAME_='"$CI_PROJECT_NAME"'=g' ingress.production.template.yml > ingress.yml;

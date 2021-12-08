@@ -298,9 +298,11 @@ treeJSON = d3.json(url, function(error, treeData) {
                         var record = data[i]._source;
                         var organism = record.organism;
                         var name = record.commonName != null ? record.commonName : "-";
-                        var trackingStatus = record.trackingSystem.status;
+                        var trackingStatus = record.currentStatus;
                         var tax_id = record.tax_id;
                         var tolid = '';
+                        var genome = '';
+                        var genomeURL = '';
                         var externalReference = '';
                         var goatLink = 'https://goat.genomehubs.org/records?record_id=' + tax_id + '&result=taxon&taxonomy=ncbi#' + organism
                         var goatElement = '<a class="no-underline badge badge-pill goat-color" target="_blank" style="background-color: #4bbefd; color: #fff;" href="' + goatLink + '">GoaT info</a>'
@@ -309,9 +311,18 @@ treeJSON = d3.json(url, function(error, treeData) {
                         if (record.tolid != null) {
                             const organismName = organism.split(' ').join('_');
                             const clade = codes[record.tolid.charAt(0)];
-                            const link = `https://tolqc.cog.sanger.ac.uk/darwin/${clade}/${organismName}`;
-                            tolid = '<a class="no-underline badge badge-pill" target="_blank" style="margin-left: 3px;background-color: #5cc45e; color: #fff;" href="' + link + '">ToL QC</a>'
-                            externalReference = '<span>' + goatElement + tolid + '</span>'
+
+                            if (record.genome_notes != null) {
+                                const genomeLink = record.genome_notes[0].url;
+                                const link = `https://tolqc.cog.sanger.ac.uk/darwin/${clade}/${organismName}`;
+                                tolid = '<a class="no-underline badge badge-pill" target="_blank" style="margin-left: 3px;background-color: #5cc45e; color: #fff;" href="' + link + '">ToL QC</a>'
+                                genomeURL = '<a class="no-underline badge badge-pill" target="_blank" style="margin-left: 3px;background-color: grey; color: #fff;" href="' + genomeLink + '">Genome Notes</a>'
+                                externalReference = '<span>' + goatElement + tolid + genomeURL + '</span>'
+                            } else {
+                                const link = `https://tolqc.cog.sanger.ac.uk/darwin/${clade}/${organismName}`;
+                                tolid = '<a class="no-underline badge badge-pill" target="_blank" style="margin-left: 3px;background-color: #5cc45e; color: #fff;" href="' + link + '">ToL QC</a>'
+                                externalReference = '<span>' + goatElement + tolid + '</span>'
+                            }
                         } else {
                             externalReference = '<span>' + goatElement + '</span>'
                         }
