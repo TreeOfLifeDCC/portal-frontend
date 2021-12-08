@@ -73,3 +73,17 @@
 .switch {
     margin: 3.5rem 1.5rem;
 }
+
+.mat-form-field {
+    font-size: 14px;
+    width: 100%;
+    position: absolute;
+}
+
+ .mat-form-field-infix {
+     display: block;
+     position: relative;
+     flex: auto;
+     min-width: 0;
+     width: 900px;
+ }

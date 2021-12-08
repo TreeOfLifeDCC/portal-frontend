@@ -13,8 +13,17 @@
         <span id='reset' type="button" class="material-icons">restart_alt</span>
         <div class="custom-control custom-switch zoom switch">
             <input type="checkbox" class="custom-control-input" id="commonName">
-            <label class="custom-control-label" for="commonName">Common name</label>
+            <label class="custom-control-label" for="commonName">Common name </label>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+            &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+            &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+            &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+            <mat-form-field appearance="fill">
+                <mat-label>Search</mat-label>
+                <input #searchInput matInput id="searchBox" placeholder="Eukaryota" #input>
+            </mat-form-field>
+
         </div>
+
     </div>
     <div class="modal fade" id="organismsModal" tabindex="-1" role="dialog" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-xl" role="document">
