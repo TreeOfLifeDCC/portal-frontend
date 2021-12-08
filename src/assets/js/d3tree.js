@@ -155,7 +155,7 @@ treeJSON = d3.json(url, function(error, treeData) {
     }
 
     function expand(d) {
-        if (d._children) {
+        if (d._children && d._children.length === 1) {
             d.children = d._children;
             d.children.forEach(expand);
             d._children = null;
