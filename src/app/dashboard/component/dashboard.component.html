@@ -146,13 +146,17 @@
                     <ng-container matColumnDef="goatInfo">
                         <mat-header-cell *matHeaderCellDef style=" padding-right: 0px; ">External references
                         </mat-header-cell>
-                        <mat-cell *matCellDef="let element" class="text-center" style=" padding-right: 0px; ">
+                        <mat-cell *matCellDef="let element" style=" padding-right: 0px; ">
                             <span>
                                 <a class="no-underline badge badge-pill goat-color" target="_blank"
                                     href="{{element?.goatInfo}}">GoaT info</a>
                                 <ng-container *ngIf="checkTolidExists(element)">
                                     <a class="no-underline badge badge-pill goat-color2" target="_blank"
                                         href="{{generateTolidLink(element)}}">ToL QC</a>
+                                </ng-container>
+                                <ng-container *ngIf="checkGenomeExists(element)">
+                                    <a class="no-underline badge badge-pill genome" target="_blank"
+                                        href="{{getGenomeURL(element)}}">Genome Notes</a>
                                 </ng-container>
                             </span>
                         </mat-cell>

@@ -987,10 +987,23 @@ export class DashboardComponent implements OnInit, AfterViewInit {
     return data.tolid != null;
   }
 
+  checkGenomeExists(data) {
+    return data.genome_notes != null;
+  }
+
   generateTolidLink(data) {
     const organismName = data.organism.split(' ').join('_');
     const clade = this.codes[data.tolid.charAt(0)];
     return `https://tolqc.cog.sanger.ac.uk/darwin/${clade}/${organismName}`;
+  }
+
+  getGenomeURL(data) {
+    const genomeNotes = data.genome_notes;
+    let genomeNotesURL = '#';
+    if (genomeNotes != null) {
+      genomeNotesURL = genomeNotes[0].url;
+    }
+      return genomeNotesURL;
   }
 
   parseFilterAggregation(data: any) {
