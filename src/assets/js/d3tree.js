@@ -600,7 +600,10 @@ treeJSON = d3.json(url, function(error, treeData) {
 
     }
     function searchTree(obj,search,path){
-        if(obj.name === search){ //if search is found return, add the object to the path and return it
+        if(obj.name.toLowerCase() === search.toLowerCase()){ //if search is found return, add the object to the path and return it
+            path.push(obj);
+            return path;
+        }else if(obj.commonName.toLowerCase() === search.toLowerCase() ){ //if search is found return, add the object to the path and return it
             path.push(obj);
             return path;
         }
