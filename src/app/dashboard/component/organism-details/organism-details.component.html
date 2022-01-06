@@ -9,7 +9,7 @@
         <dd class="col-md-6">
             <a class="no-underline badge badge-pill goat-color" target="_blank" href="https://goat.genomehubs.org/records?record_id={{bioSampleObj?.taxId}}&result=taxon&taxonomy=ncbi#{{bioSampleObj?.organism}}">GoaT
                 info</a>
-            <ng-container *ngIf="bioSampleObj && checkTolidExists(bioSampleObj)">
+            <ng-container *ngIf="checkTolidExists(bioSampleObj)">
                 <a class="no-underline badge badge-pill goat-color2" target="_blank" href="{{generateTolidLink(bioSampleObj)}}">ToL QC</a>
             </ng-container>
             <ng-container *ngIf="bioSampleObj && checkGenomeExists(bioSampleObj)">
