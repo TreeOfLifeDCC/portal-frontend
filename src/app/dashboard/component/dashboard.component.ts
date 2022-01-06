@@ -984,7 +984,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
   }
 
   checkTolidExists(data) {
-    return data.tolid != null;
+    return data != undefined && data.tolid != undefined && data.tolid != null;
   }
 
   checkGenomeExists(data) {
