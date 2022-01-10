@@ -11,6 +11,15 @@
         <span id='zoom_in' type="button" class="material-icons zoom">zoom_in</span>
         <span id='zoom_out' type="button" class="material-icons zoom">zoom_out</span>
         <span id='reset' type="button" class="material-icons">restart_alt</span>
+    </div>
+    <div class="col-md-12 zoom" style=" font-weight: lighter; background: none; font-size: initial;">
+    <div id='doc' class='row'>
+        <div class="col-md-2"></div>
+        <div class="col-md-3">Single click to expand or collapse a node</div>
+        <div  class="col-md-3">Double click to show Organisms table</div>
+        <div class="col-xl-3">Graph can be zoomed in & out and is draggable</div>
+</div>
+    </div>
         <div class="custom-control custom-switch zoom switch">
             <input type="checkbox" class="custom-control-input" id="commonName">
             <label class="custom-control-label" for="commonName">Common name </label>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
@@ -25,7 +34,8 @@
         </div>
 
     </div>
-    <div class="modal fade" id="organismsModal" tabindex="-1" role="dialog" aria-hidden="true">
+
+    <div class="modal fade" id="organismsModal" tabindex="-1" role="dialog" aria-hidden="false">
         <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-xl" role="document">
             <div class="modal-content">
                 <div class="modal-header">
@@ -48,9 +58,8 @@
                         <tbody id="organisms">
                         </tbody>
                     </table>
-
+                </div>
                 </div>
             </div>
-        </div>
-    </div>
+
 </div>

@@ -467,7 +467,7 @@ treeJSON = d3.json(url, function(error, treeData) {
         div.transition()
             .duration(200)
             .style("opacity", .9);
-        div.html("<div id='doc' class='row' style='padding-top: 25px;'><div class='col-md-2'></div><div class='col-md-3'>Single click to expand or collapse a node</div><div class='col-md-3'>Double click to show Organisms table</div><div class='col-md-3'>Graph can be zoomed in & out and is draggable</div></div>")
+        // div.html("<div id='doc' class='row' style='padding-top: 25px;'><div class='col-md-2'></div><div class='col-md-3'>Single click to expand or collapse a node</div><div class='col-md-3'>Double click to show Organisms table</div><div class='col-md-3'>Graph can be zoomed in & out and is draggable</div></div>")
             // Transition nodes to their new position.
         var nodeUpdate = node.transition()
             .duration(duration)
