@@ -151,7 +151,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
     item.selected = checked;
     this.dataColumnsDefination[index] = item;
     this.getDisplayedColumns();
-    this.getOrganismsQueryParamonInit();
+    this.getActiveFiltersAndResult();
   }
 
   getOrganismsQueryParamonInit() {
