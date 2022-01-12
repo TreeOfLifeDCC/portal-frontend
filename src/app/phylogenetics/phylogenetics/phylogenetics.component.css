@@ -97,3 +97,8 @@
     margin-right: 0;
     margin-left: 150px;
 }
+#messages {
+    display: block !important;
+    position: absolute;
+
+}
