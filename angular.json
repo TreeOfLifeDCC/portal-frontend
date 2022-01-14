@@ -39,7 +39,8 @@
                             "./node_modules/swagger-ui-dist/swagger-ui-bundle.js",
                             "./node_modules/swagger-ui-dist/swagger-ui-standalone-preset.js",
                             "src/assets/js/d3.v3.min.js",
-                            "src/assets/js/jquery.dataTables.min.js"
+                            "src/assets/js/jquery.dataTables.min.js",
+                            "src/assets/js/autocomplete.js"
                         ]
                     },
                     "configurations": {

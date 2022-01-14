@@ -6,6 +6,8 @@
         </div>
     </div>
 </div>
+<link href = "https://code.jquery.com/ui/1.10.4/themes/ui-lightness/jquery-ui.css"
+      rel = "stylesheet">
 <div id="tree-container" style="text-align: center;" class="svg-container">
     <div>
         <span id='zoom_in' type="button" class="material-icons zoom">zoom_in</span>
@@ -26,15 +28,20 @@
             &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
             &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
             &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+    </div>
+    <div class="col-md-12 zoom" style=" font-weight: lighter; background: none; font-size: initial;">
+
+        <div class="col-md-3 zoom">
             <mat-form-field appearance="fill">
                 <mat-label>Search</mat-label>
-                <input #searchInput matInput id="searchBox" placeholder="Eukaryota" #input>
+                <input #searchInput matInput id="search" >
             </mat-form-field>
 
         </div>
+        <div id="count"  class="col-md-10 zoom" style=" top: 00px; font-weight: bold; background: none; font-size: initial;">
 
+        </div>
     </div>
-
     <div class="modal fade" id="organismsModal" tabindex="-1" role="dialog" aria-hidden="false">
         <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-xl" role="document">
             <div class="modal-content">
