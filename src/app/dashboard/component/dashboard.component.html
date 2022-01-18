@@ -131,6 +131,16 @@
                         </mat-cell>
                     </ng-container>
 
+                    <ng-container matColumnDef="tolid">
+                        <mat-header-cell *matHeaderCellDef> ToL ID </mat-header-cell>
+                        <mat-cell *matCellDef="let element"> {{element?.tolid}}</mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="INSDC_ID">
+                        <mat-header-cell *matHeaderCellDef> INSDC ID </mat-header-cell>
+                        <mat-cell *matCellDef="let element"> {{element?.INSDC_ID}}</mat-cell>
+                    </ng-container>
+
                     <ng-container matColumnDef="commonName">
                         <mat-header-cell *matHeaderCellDef mat-sort-header>Common Name </mat-header-cell>
                         <mat-cell *matCellDef="let element"> {{element?.commonName}}</mat-cell>
