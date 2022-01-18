@@ -581,24 +581,76 @@ treeJSON = d3.json(url, function(error, treeData) {
 
     $('#reset').on('click', resetGraph)
     $('#commonName').on('click', toggleCommonName)
-    $('#searchBox').on('keyup', searchText)
+    let select2Data = [];
+    select2DataCollectName(root);
+    let select2DataObject = [];
+    select2Data.sort(function(a, b) {
+        if (a > b) return 1; // sort
+        if (a < b) return -1;
+        return 0;
+    })
+        .filter(function(item, i, ar) {
+            return ar.indexOf(item) === i;
+        }) // remove duplicate items
+        .filter(function(item, i, ar) {
+            select2DataObject.push({
+                "label": item,
+                "value": i+1
 
-    function searchText() {
-        // var svgGroup = baseSvg.append("g");
-        root = treeData;
-        let input= d3.select("#searchBox").node().value;
-        if(input) {
-            var paths = searchTree(root, input, []);
-            if (typeof (paths) !== "undefined") {
-                openPaths(paths);
-            } else {
-               // alert(input + " not found!");
+            });
+        });
+
+    $( "#search" ).autocomplete({
+        minLength: 2,
+        autoFocus:true,
+        source: select2DataObject,
+
+        response: function (event, ui) {
+            if(ui.content.length===1 ){
+                $("#count").text(  ui.content.length + ' record found');
+            }else if(ui.content.length==0){
+                $("#count").text(  ui.content.length + ' record found');
+            }else{
+                $("#count").text(  ui.content.length + ' records found');
             }
-        }else{
-            resetGraph();
-        }
 
+        },
+        select: function( event, ui ) {
+            $( "#search" ).val( ui.item.label );
+            resetGraph();
+            toggle(root);
+
+            var paths = searchTree(root,ui.item.label,[]);
+            if(typeof(paths) !== "undefined"){
+                openPaths(paths);
+                $("#count").text('');
+            }
+            else{
+                alert(ui.item.label+" not found!");
+            }
+            root.children.forEach(collapseAllNotFound);
+            update(root);
+            return false;
+        }
+    });
+    function collapseAllNotFound(d) {
+        if (d.children) {
+            if (d.class !== "found") {
+                d._children = d.children;
+                d._children.forEach(collapseAllNotFound);
+                d.children = null;
+            } else
+                d.children.forEach(collapseAllNotFound);
+        }
     }
+    function select2DataCollectName(d) {
+        if (d.children)
+            d.children.forEach(select2DataCollectName);
+        else if (d._children)
+            d._children.forEach(select2DataCollectName);
+        select2Data.push(d.name);
+    }
+
     function searchTree(obj,search,path){
         if(obj.name.toLowerCase() === search.toLowerCase()){ //if search is found return, add the object to the path and return it
             path.push(obj);
@@ -656,6 +708,18 @@ treeJSON = d3.json(url, function(error, treeData) {
 
     }
 
+    function toggle(d) {
+        if (d.children) {
+            d._children = d.children;
+            d.children = null;
+        } else {
+            d.children = d._children;
+            d._children = null;
+        }
+        clearAll(root);
+        update(d);
+
+    }
     function resetGraph() {
         // Append a group which holds all nodes and which the zoom Listener can act upon.
         var svgGroup = baseSvg.append("g");

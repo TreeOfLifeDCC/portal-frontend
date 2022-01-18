@@ -66,3 +66,8 @@ div.tooltip {
 #zoom_out {
     margin: 1.5rem 3rem;
 }
+.ui-menu-item .ui-menu-item-wrapper.ui-state-active {
+    background: #EEE;
+    font-weight: bold;
+    color: #585858;
+}
