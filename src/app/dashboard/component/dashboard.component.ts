@@ -988,7 +988,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
   }
 
   checkGenomeExists(data) {
-    return data.genome_notes != null;
+    return data != undefined && data.genome_notes != undefined && data.genome_notes != null && data.genome_notes.length;
   }
 
   generateTolidLink(data) {
@@ -1000,7 +1000,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
   getGenomeURL(data) {
     const genomeNotes = data.genome_notes;
     let genomeNotesURL = '#';
-    if (genomeNotes != null) {
+    if (genomeNotes != null && genomeNotes != undefined) {
       genomeNotesURL = genomeNotes[0].url;
     }
       return genomeNotesURL;

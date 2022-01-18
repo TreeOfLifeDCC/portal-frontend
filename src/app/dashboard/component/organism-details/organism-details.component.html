@@ -12,9 +12,9 @@
             <ng-container *ngIf="checkTolidExists(bioSampleObj)">
                 <a class="no-underline badge badge-pill goat-color2" target="_blank" href="{{generateTolidLink(bioSampleObj)}}">ToL QC</a>
             </ng-container>
-            <ng-container *ngIf="bioSampleObj && checkGenomeExists(bioSampleObj)">
+            <!-- <ng-container *ngIf="bioSampleObj && checkGenomeExists(bioSampleObj)">
                 <a class="no-underline badge badge-pill genome" target="_blank" href="{{getGenomeURL(bioSampleObj)}}">Genome Notes</a>
-            </ng-container>
+            </ng-container> -->
         </dd>
 
         <dt class="col-md-3" *ngIf="bioSampleObj?.sex">Sex:</dt>
@@ -23,6 +23,44 @@
         <dt class="col-md-3" *ngIf="bioSampleObj?.currentStatus">Current Status:</dt>
         <dd class="col-md-9" *ngIf="bioSampleObj?.currentStatus"><span [ngClass]="getStatusClass(bioSampleObj?.currentStatus)">{{bioSampleObj?.currentStatus}}</span>
         </dd>
+
+        <div *ngIf="bioSampleObj?.genome_notes">
+            <mat-expansion-panel [expanded]="true" *ngIf="bioSampleObj?.genome_notes?.length">
+                <mat-expansion-panel-header class="page-header">
+                    <h1>Published Genome Note</h1>
+                </mat-expansion-panel-header>
+                <div *ngFor="let gen of bioSampleObj?.genome_notes">
+                    <div class="card figpanel">
+                        <div class="row">
+                            <h1 class="page-header">{{gen.title}}</h1>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-2">
+                                <img class="card-img-left" src="{{gen.figureURI}}" style="width: 150px;float: left;">
+                            </div>
+                            <div class="col-md-10">
+                                <h1>Abstract</h1>
+                                <p>{{gen.abstract}}</p>
+                                <a href="{{gen.url}}" class="btn btn-success" target="_blank">Read the Genome Note in
+                                    full
+                                    here</a>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <h5 class="card-title rounded mx-auto d-block">{{gen.caption}}</h5>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <h5 class="card-title rounded mx-auto d-block">{{gen.citeURL}}</h5>
+                        </div>
+                    </div>
+                </div>
+            </mat-expansion-panel>
+        </div>
+
 
         <!-- Related Annotation Section -->
         <div class="col-md-12" *ngIf="dataSourceRelatedAnnotationCount != 0">
@@ -41,7 +79,8 @@
                 </div>
             </mat-expansion-panel>
             <br />
-            <button type="button" style="float: right;" class="btn btn-primary" mat-raised-button (click)="exporter.exportTable('csv', {fileName:'related-annotation-metadata'})">Download metadata</button>
+            <button type="button" style="float: right;" class="btn btn-primary" mat-raised-button (click)="exporter.exportTable('csv', {fileName:'related-annotation-metadata'})">Download
+                metadata</button>
             <mat-form-field>
                 <mat-label>Search</mat-label>
                 <input matInput (keyup)="relatedAnnotationSearch($event)" #input>
@@ -255,31 +294,31 @@
                     <mat-header-cell *matHeaderCellDef> Annotation </mat-header-cell>
                     <mat-cell *matCellDef="let element" class="txt-center">
                         <span>
-                            <a class="no-underline" target="_blank" href="{{element.annotation.gtf}}">GTF</a>,
+                            <a class="no-underline" target="_blank" href="{{element.annotation.GTF}}">GTF</a>,
                         </span>
                         <span>
-                            <a class="no-underline" target="_blank" href="{{element.annotation.gff3}}">GFF3</a>
+                            <a class="no-underline" target="_blank" href="{{element.annotation.GFF3}}">GFF3</a>
                         </span>
                     </mat-cell>
                 </ng-container>
                 <ng-container matColumnDef="proteins">
                     <mat-header-cell *matHeaderCellDef> Proteins </mat-header-cell>
                     <mat-cell *matCellDef="let element" class="txt-center">
-                        <a class="no-underline" target="_blank" href="{{element.proteins.fasta}}">FASTA</a>
+                        <a class="no-underline" target="_blank" href="{{element.proteins.FASTA}}">FASTA</a>
                     </mat-cell>
                 </ng-container>
 
                 <ng-container matColumnDef="transcripts">
                     <mat-header-cell *matHeaderCellDef> Transcripts </mat-header-cell>
                     <mat-cell *matCellDef="let element" class="txt-center">
-                        <a class="no-underline" target="_blank" href="{{element.transcripts.fasta}}">FASTA</a>
+                        <a class="no-underline" target="_blank" href="{{element.transcripts.FASTA}}">FASTA</a>
                     </mat-cell>
                 </ng-container>
 
                 <ng-container matColumnDef="softmasked_genome">
                     <mat-header-cell *matHeaderCellDef> Softmasked genome </mat-header-cell>
                     <mat-cell *matCellDef="let element" class="txt-center">
-                        <a class="no-underline" target="_blank" href="{{element.softmasked_genome.fasta}}">FASTA</a>
+                        <a class="no-underline" target="_blank" href="{{element.softmasked_genome.FASTA}}">FASTA</a>
                     </mat-cell>
                 </ng-container>
 

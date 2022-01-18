@@ -122,6 +122,8 @@ export class OrganismDetailsComponent implements OnInit, AfterViewInit {
     { name: "Generated Galaxy", column: "generated_galaxy", selected: false }
   ]
 
+  genomeNotes = [];
+
   @ViewChild('experimentsTable') exPaginator: MatPaginator;
   @ViewChild('assembliesTable') asPaginator: MatPaginator;
   @ViewChild('annotationTable') anPaginator: MatPaginator;
@@ -206,7 +208,7 @@ export class OrganismDetailsComponent implements OnInit, AfterViewInit {
             this.organismName = data.organism;
             this.dataSourceRecords = new MatTableDataSource<any>(unpackedData);
             this.specBioSampleTotalCount = unpackedData?.length;
-
+            this.genomeNotes = data.genome_notes
             if (data.experiment != null) {
               this.dataSourceFiles = new MatTableDataSource<Sample>(data.experiment);
               this.dataSourceFilesCount = data.experiment?.length;

@@ -92,3 +92,12 @@ table {
     background-color: grey;
     margin-left: 3px;
 }
+
+.figpanel {
+    display: block !important;
+    /* width: 69%; */
+    /* background: #eee; */
+    padding: 20px;
+    margin: 20px 0;
+    border-radius: 3px;
+}
