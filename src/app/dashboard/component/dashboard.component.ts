@@ -354,7 +354,10 @@ export class DashboardComponent implements OnInit, AfterViewInit {
     for (const key of Object.keys(data)) {
       if(key === 'experiment') {
         let exp = data[key]
-        dataToReturn['INSDC_ID'] = exp[0].study_accession;
+        if(exp.length >0)
+          dataToReturn['INSDC_ID'] = exp[0].study_accession;
+          else
+          dataToReturn['INSDC_ID'] = null;
       }
       if(key === 'tax_id') {
         dataToReturn['goatInfo'] = "https://goat.genomehubs.org/records?record_id="+data[key]+"&result=taxon&taxonomy=ncbi#"+dataToReturn["organism"]
