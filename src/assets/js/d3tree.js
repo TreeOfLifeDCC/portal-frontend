@@ -246,21 +246,21 @@ treeJSON = d3.json(url, function(error, treeData) {
     function click(d) {
         clickCount++;
         if ((d._children && d._children.length === 1)) {
-            singleClickTimer = setTimeout(function () {
+            singleClickTimer = setTimeout(function() {
                 clickCount = 0;
                 expand(d);
                 singleClick(d);
             }, 400);
 
-        }else if(d.children && d.children.length === 1){
-            singleClickTimer = setTimeout(function () {
+        } else if (d.children && d.children.length === 1) {
+            singleClickTimer = setTimeout(function() {
                 clickCount = 0;
                 collapse(d);
                 singleClick(d);
             }, 400);
         }
         if (clickCount === 1) {
-            singleClickTimer = setTimeout(function () {
+            singleClickTimer = setTimeout(function() {
                 clickCount = 0;
                 singleClick(d);
             }, 400);
@@ -319,7 +319,7 @@ treeJSON = d3.json(url, function(error, treeData) {
                             const organismName = organism.split(' ').join('_');
                             const clade = codes[record.tolid.charAt(0)];
 
-                            if (record.genome_notes != null) {
+                            if (record.genomeNotes != null && record.genomeNotes != undefined && record.genome_notes.length > 0) {
                                 const genomeLink = record.genome_notes[0].url;
                                 const link = `https://tolqc.cog.sanger.ac.uk/darwin/${clade}/${organismName}`;
                                 tolid = '<a class="no-underline badge badge-pill" target="_blank" style="margin-left: 3px;background-color: #5cc45e; color: #fff;" href="' + link + '">ToL QC</a>'
@@ -468,7 +468,7 @@ treeJSON = d3.json(url, function(error, treeData) {
             .duration(200)
             .style("opacity", .9);
         // div.html("<div id='doc' class='row' style='padding-top: 25px;'><div class='col-md-2'></div><div class='col-md-3'>Single click to expand or collapse a node</div><div class='col-md-3'>Double click to show Organisms table</div><div class='col-md-3'>Graph can be zoomed in & out and is draggable</div></div>")
-            // Transition nodes to their new position.
+        // Transition nodes to their new position.
         var nodeUpdate = node.transition()
             .duration(duration)
             .attr("transform", function(d) {
@@ -481,18 +481,16 @@ treeJSON = d3.json(url, function(error, treeData) {
         nodeUpdate.select("circle")
             .attr("r", 4.5)
             .style("fill", function(d) {
-                if(d.class === "found"){
+                if (d.class === "found") {
                     return "#2E8B57"; //red
-                }
-                else if(d._children){
+                } else if (d._children) {
                     return "lightsteelblue";
-                }
-                else{
+                } else {
                     return "#fff";
                 }
             })
             .style("stroke", function(d) {
-                if(d.class === "found"){
+                if (d.class === "found") {
                     return "#2E8B57"; //red
                 }
             });
@@ -534,8 +532,8 @@ treeJSON = d3.json(url, function(error, treeData) {
         link.transition()
             .duration(duration)
             .attr("d", diagonal)
-            .style("stroke",function(d){
-                if(d.target.class==="found"){
+            .style("stroke", function(d) {
+                if (d.target.class === "found") {
                     return "#2E8B57";
                 }
             });
@@ -585,54 +583,54 @@ treeJSON = d3.json(url, function(error, treeData) {
     select2DataCollectName(root);
     let select2DataObject = [];
     select2Data.sort(function(a, b) {
-        if (a > b) return 1; // sort
-        if (a < b) return -1;
-        return 0;
-    })
+            if (a > b) return 1; // sort
+            if (a < b) return -1;
+            return 0;
+        })
         .filter(function(item, i, ar) {
             return ar.indexOf(item) === i;
         }) // remove duplicate items
         .filter(function(item, i, ar) {
             select2DataObject.push({
                 "label": item,
-                "value": i+1
+                "value": i + 1
 
             });
         });
 
-    $( "#search" ).autocomplete({
+    $("#search").autocomplete({
         minLength: 2,
-        autoFocus:true,
+        autoFocus: true,
         source: select2DataObject,
 
-        response: function (event, ui) {
-            if(ui.content.length===1 ){
-                $("#count").text(  ui.content.length + ' record found');
-            }else if(ui.content.length==0){
-                $("#count").text(  ui.content.length + ' record found');
-            }else{
-                $("#count").text(  ui.content.length + ' records found');
+        response: function(event, ui) {
+            if (ui.content.length === 1) {
+                $("#count").text(ui.content.length + ' record found');
+            } else if (ui.content.length == 0) {
+                $("#count").text(ui.content.length + ' record found');
+            } else {
+                $("#count").text(ui.content.length + ' records found');
             }
 
         },
-        select: function( event, ui ) {
-            $( "#search" ).val( ui.item.label );
+        select: function(event, ui) {
+            $("#search").val(ui.item.label);
             resetGraph();
             toggle(root);
 
-            var paths = searchTree(root,ui.item.label,[]);
-            if(typeof(paths) !== "undefined"){
+            var paths = searchTree(root, ui.item.label, []);
+            if (typeof(paths) !== "undefined") {
                 openPaths(paths);
                 $("#count").text('');
-            }
-            else{
-                alert(ui.item.label+" not found!");
+            } else {
+                alert(ui.item.label + " not found!");
             }
             root.children.forEach(collapseAllNotFound);
             update(root);
             return false;
         }
     });
+
     function collapseAllNotFound(d) {
         if (d.children) {
             if (d.class !== "found") {
@@ -643,6 +641,7 @@ treeJSON = d3.json(url, function(error, treeData) {
                 d.children.forEach(collapseAllNotFound);
         }
     }
+
     function select2DataCollectName(d) {
         if (d.children)
             d.children.forEach(select2DataCollectName);
@@ -651,37 +650,34 @@ treeJSON = d3.json(url, function(error, treeData) {
         select2Data.push(d.name);
     }
 
-    function searchTree(obj,search,path){
-        if(obj.name.toLowerCase() === search.toLowerCase()){ //if search is found return, add the object to the path and return it
+    function searchTree(obj, search, path) {
+        if (obj.name.toLowerCase() === search.toLowerCase()) { //if search is found return, add the object to the path and return it
             path.push(obj);
             return path;
-        }else if(obj.commonName.toLowerCase() === search.toLowerCase() ){ //if search is found return, add the object to the path and return it
+        } else if (obj.commonName.toLowerCase() === search.toLowerCase()) { //if search is found return, add the object to the path and return it
             path.push(obj);
             return path;
-        }
-        else if(obj.children || obj._children){ //if children are collapsed d3 object will have them instantiated as _children
+        } else if (obj.children || obj._children) { //if children are collapsed d3 object will have them instantiated as _children
             var children = (obj.children) ? obj.children : obj._children;
-            for(var i=0;i<children.length;i++){
-                path.push(obj);// we assume this path is the right one
-                var found = searchTree(children[i],search,path);
-                if(found){// we were right, this should return the bubbled-up path from the first if statement
+            for (var i = 0; i < children.length; i++) {
+                path.push(obj); // we assume this path is the right one
+                var found = searchTree(children[i], search, path);
+                if (found) { // we were right, this should return the bubbled-up path from the first if statement
                     return found;
-                }
-                else{//we were wrong, remove this parent from the path and continue iterating
+                } else { //we were wrong, remove this parent from the path and continue iterating
                     path.pop();
                 }
             }
-        }
-        else{//not the right object, return false so it will continue to iterate in the loop
+        } else { //not the right object, return false so it will continue to iterate in the loop
             return false;
         }
     }
 
-    function openPaths(paths){
-        for(var i =0;i<paths.length;i++){
-            if(paths[i].id !== "1"){//i.e. not root
+    function openPaths(paths) {
+        for (var i = 0; i < paths.length; i++) {
+            if (paths[i].id !== "1") { //i.e. not root
                 paths[i].class = 'found';
-                if(paths[i]._children){ //if children are hidden: open them, otherwise: don't do anything
+                if (paths[i]._children) { //if children are hidden: open them, otherwise: don't do anything
                     paths[i].children = paths[i]._children;
                     paths[i]._children = null;
                 }
@@ -689,6 +685,7 @@ treeJSON = d3.json(url, function(error, treeData) {
             }
         }
     }
+
     function clearAll(d) {
         d.class = "";
         if (d.children)
@@ -696,6 +693,7 @@ treeJSON = d3.json(url, function(error, treeData) {
         else if (d._children)
             d._children.forEach(clearAll);
     }
+
     function toggleCommonName() {
         // var svgGroup = baseSvg.append("g");
         root = treeData;
@@ -720,6 +718,7 @@ treeJSON = d3.json(url, function(error, treeData) {
         update(d);
 
     }
+
     function resetGraph() {
         // Append a group which holds all nodes and which the zoom Listener can act upon.
         var svgGroup = baseSvg.append("g");
