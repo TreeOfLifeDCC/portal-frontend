@@ -347,13 +347,13 @@ export class DashboardComponent implements OnInit, AfterViewInit {
   // tslint:disable-next-line:typedef
   unpackData(data: any) {
     const dataToReturn = {};
-    dataToReturn["id"] = data["_id"]
+    dataToReturn['id'] = data._id;
     if (data.hasOwnProperty('_source')) {
       data = data._source;
     }
     for (const key of Object.keys(data)) {
       if (key === 'experiment') {
-        let exp = data[key];
+        const exp = data[key];
         if (exp.length > 0) {
           dataToReturn['INSDC_ID'] = exp[0].study_accession;
         } else {
