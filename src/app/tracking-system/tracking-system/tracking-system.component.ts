@@ -38,7 +38,7 @@ export class TrackingSystemComponent implements OnInit, AfterViewInit {
   urlAppendFilterArray = [];
   searchText = '';
 
-
+  ulpam = [];
   activeFilters = [];
   BiosamplesFilters = [];
   RawDataFilters = [];
@@ -79,22 +79,30 @@ export class TrackingSystemComponent implements OnInit, AfterViewInit {
     this.itemLimitEnaFilter = this.filterSize;
     this.titleService.setTitle('Status tracking');
     this.getStatusesQueryParamonInit();
-
+    this.getTaxonomyFilterQueryParamonInit();
     this.selectedTaxonomy = [];
     this.isFilterSelected = false;
     this.selectedFilterValue = '';
     this.currentTaxaOnExpand = '';
     this.resetTaxaTree();
     $('[data-toggle="tooltip"]').tooltip();
-    this.currentTaxonomyTree = [];
-    this.isDoubleClick = false;
+    this.currentTaxonomyTree = this.ulpam;
+    // this.getTaxonomyFilterQueryParamonInit();
+    this.isDoubleClick = this.currentTaxonomyTree === undefined ? false : true ;
+
     this.getChildTaxonomyRank('superkingdom', 'Eukaryota', 'kingdom');
+
   }
 
   // tslint:disable-next-line:typedef
   ngAfterViewInit() {
     this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;
+    console.log(this.ulpam);
+    this.urlAppendFilterArray.push('taxonomyFilter', this.ulpam);
+    console.log( this.urlAppendFilterArray.length);
+    this.updateActiveRouteParams();
+
   }
 
   getStatusesQueryParamonInit() {
@@ -102,7 +110,9 @@ export class TrackingSystemComponent implements OnInit, AfterViewInit {
     const params = queryParamMap['params'];
     if (Object.keys(params).length != 0) {
       for (let key in params) {
-        this.appendActiveFilters(key, params);
+        if (key != 'taxonomyFilter') {
+          this.appendActiveFilters(key, params);
+        }
       }
       setTimeout(() => {
         this.getActiveFiltersAndResult();
@@ -119,7 +129,21 @@ export class TrackingSystemComponent implements OnInit, AfterViewInit {
       this.activeFilters.push(params[key]);
     }, 10);
   }
+  getTaxonomyFilterQueryParamonInit() {
+    const queryParamMap = this.activatedRoute.snapshot.queryParamMap;
+    const params = queryParamMap.params;
+    // tslint:disable-next-line:triple-equals
+    if (Object.keys(params).length != 0) {
+      for (const key in params) {
+        // tslint:disable-next-line:triple-equals
+        if (key == 'taxonomyFilter') {
+          this.ulpam = JSON.parse(decodeURIComponent(queryParamMap.get(key)));
+          console.log(this.ulpam);
+        }
 
+      }
+    }
+  }
   getActiveFiltersAndResult(taxa?) {
     let taxonomy;
     if (taxa) {
@@ -127,6 +151,11 @@ export class TrackingSystemComponent implements OnInit, AfterViewInit {
     }
     else {
       taxonomy = [this.currentTaxonomyTree];
+    }
+    if (this.currentTaxonomyTree != undefined) {
+      const taxa1 = encodeURIComponent(JSON.stringify(taxonomy[0]));
+      this.urlAppendFilterArray.push({name: 'taxonomyFilter', value: taxa1});
+      this.updateActiveRouteParams();
     }
     this.statusesService.getFilterResults(this.activeFilters.toString(), this.sort.active, this.sort.direction, 0, 15, taxonomy)
       .subscribe(
@@ -842,7 +871,7 @@ export class TrackingSystemComponent implements OnInit, AfterViewInit {
 
   getChildTaxonomyRank(rank: string, taxonomy: string, childRank: string) {
     let taxa = { 'rank': rank, 'taxonomy': taxonomy, 'childRank': childRank };
-    this.currentTaxonomy = taxa;
+    this.currentTaxonomy = (this.currentTaxonomyTree !== undefined && this.currentTaxonomyTree.length  > 0) ? this.currentTaxonomyTree : taxa;
     this.createTaxaTree(rank, taxa);
     if (this.showElement) {
       this.taxanomyService.getChildTaxonomyRank(this.activeFilters, rank, taxonomy, childRank, this.currentTaxonomyTree, 'status').subscribe(
@@ -859,7 +888,7 @@ export class TrackingSystemComponent implements OnInit, AfterViewInit {
             }
             else {
               this.currentTaxaOnExpand = this.currentTaxonomy;
-              if ((childData.length > 1 && childData.filter(function (e) { return e.key.toLowerCase() === 'other'; }).length > 0) || (childData.length == 1 && this.currentTaxaOnExpand.taxonomy.toLowerCase() === 'other')) {
+              if ((childData.length > 1 && childData.filter(function (e) { return e.key.toLowerCase() === 'other'; }).length > 0) || (childData.length == 1 && (this.currentTaxaOnExpand.taxonomy != undefined && this.currentTaxaOnExpand.taxonomy.toLowerCase() === 'other'))) {
                 let childClass = 'other-' + this.currentTaxaOnExpand.childRank;
                 $('ul.' + childClass).css('padding-inline-start', '40px');
               }
@@ -969,7 +998,7 @@ export class TrackingSystemComponent implements OnInit, AfterViewInit {
           $('#' + prevTaxaToRemove.taxonomy + '-' + prevTaxaToRemove.rank).prev().removeClass('fa-minus-circle');
           $('#' + prevTaxaToRemove.taxonomy + '-' + prevTaxaToRemove.rank).prev().addClass('fa-plus-circle');
         }
-        else {
+        else if (!this.isDoubleClick){
           let index = temp.findIndex(x => x.rank === taxa.rank);
           let itemsToremove = this.currentTaxonomyTree;
           let prevTaxaToRemove = this.currentTaxonomyTree[this.currentTaxonomyTree.length - 1];

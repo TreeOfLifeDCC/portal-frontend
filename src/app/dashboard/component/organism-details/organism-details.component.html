@@ -5,16 +5,21 @@
         <dd class="col-md-9" *ngIf="bioSampleObj?.commonName">{{bioSampleObj?.commonName}}</dd>
 
         <dt class="col-md-3">Organism:</dt>
-        <dd class="col-md-3">{{bioSampleObj?.organism}}</dd>
-        <dd class="col-md-6">
-            <a class="no-underline badge badge-pill goat-color" target="_blank" href="https://goat.genomehubs.org/records?record_id={{bioSampleObj?.taxId}}&result=taxon&taxonomy=ncbi#{{bioSampleObj?.organism}}">GoaT
-                info</a>
+        <dd class="col-md-9">{{bioSampleObj?.organism}}</dd>
+
+        <dt class="col-md-3" *ngIf="bioSampleObj?.tolid != null">ToL ID:</dt>
+        <dd class="col-md-3" *ngIf="bioSampleObj?.tolid != null">{{bioSampleObj?.tolid}}</dd>
+        <dd class="col-md-6" *ngIf="checkTolidExists(bioSampleObj)">
             <ng-container *ngIf="checkTolidExists(bioSampleObj)">
                 <a class="no-underline badge badge-pill goat-color2" target="_blank" href="{{generateTolidLink(bioSampleObj)}}">ToL QC</a>
             </ng-container>
-            <!-- <ng-container *ngIf="bioSampleObj && checkGenomeExists(bioSampleObj)">
-                <a class="no-underline badge badge-pill genome" target="_blank" href="{{getGenomeURL(bioSampleObj)}}">Genome Notes</a>
-            </ng-container> -->
+        </dd>
+
+        <dt class="col-md-3" *ngIf="INSDC_ID != null">INSDC ID:</dt>
+        <dd class="col-md-3" *ngIf="INSDC_ID != null">{{INSDC_ID}}</dd>
+        <dd class="col-md-6">
+            <a class="no-underline badge badge-pill goat-color" target="_blank" href="https://goat.genomehubs.org/records?record_id={{bioSampleObj?.taxId}}&result=taxon&taxonomy=ncbi#{{bioSampleObj?.organism}}">GoaT
+                info</a>
         </dd>
 
         <dt class="col-md-3" *ngIf="bioSampleObj?.sex">Sex:</dt>
@@ -23,6 +28,7 @@
         <dt class="col-md-3" *ngIf="bioSampleObj?.currentStatus">Current Status:</dt>
         <dd class="col-md-9" *ngIf="bioSampleObj?.currentStatus"><span [ngClass]="getStatusClass(bioSampleObj?.currentStatus)">{{bioSampleObj?.currentStatus}}</span>
         </dd>
+
 
         <div *ngIf="bioSampleObj?.genome_notes">
             <mat-expansion-panel [expanded]="true" *ngIf="bioSampleObj?.genome_notes?.length">

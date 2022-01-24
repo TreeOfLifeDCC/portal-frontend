@@ -221,3 +221,8 @@ ul[class*="other-"] {
     background-color: grey;
     margin-left: 3px;
 }
+
+mat-cell:nth-child(5),
+mat-header-cell:nth-child(5) {
+    flex: 1 0 5%;
+}

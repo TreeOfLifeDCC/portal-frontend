@@ -123,6 +123,7 @@ export class OrganismDetailsComponent implements OnInit, AfterViewInit {
   ]
 
   genomeNotes = [];
+  INSDC_ID = null;
 
   @ViewChild('experimentsTable') exPaginator: MatPaginator;
   @ViewChild('assembliesTable') asPaginator: MatPaginator;
@@ -198,6 +199,9 @@ export class OrganismDetailsComponent implements OnInit, AfterViewInit {
         data => {
           const unpackedData = [];
           this.bioSampleObj = data;
+          if(data.experiment?.length > 0) {
+            this.INSDC_ID = data.experiment[0].study_accession;
+          }
           for (const item of data.records) {
             unpackedData.push(this.unpackData(item));
           }
