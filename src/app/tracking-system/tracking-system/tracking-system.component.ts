@@ -130,11 +130,10 @@ export class TrackingSystemComponent implements OnInit, AfterViewInit {
     }, 10);
   }
   getTaxonomyFilterQueryParamonInit() {
-    const queryParamMap = this.activatedRoute.snapshot.queryParamMap;
-    const params = queryParamMap.params;
-    // tslint:disable-next-line:triple-equals
+    const queryParamMap = this.activatedRoute.snapshot['queryParamMap'];
+    const params = queryParamMap['params'];
     if (Object.keys(params).length != 0) {
-      for (const key in params) {
+      for (let key in params) {
         // tslint:disable-next-line:triple-equals
         if (key == 'taxonomyFilter') {
           this.ulpam = JSON.parse(decodeURIComponent(queryParamMap.get(key)));

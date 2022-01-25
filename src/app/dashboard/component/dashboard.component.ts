@@ -161,10 +161,10 @@ export class DashboardComponent implements OnInit, AfterViewInit {
   }
 
   getOrganismsQueryParamonInit() {
-    const queryParamMap = this.activatedRoute.snapshot.queryParamMap;
-    const params = queryParamMap.params;
+    const queryParamMap = this.activatedRoute.snapshot['queryParamMap'];
+    const params = queryParamMap['params'];
     if (Object.keys(params).length != 0) {
-      for (const key in params) {
+      for (let key in params) {
         if (key != 'taxonomyFilter'){
           this.appendActiveFilters(key, params);
         }
@@ -178,11 +178,10 @@ export class DashboardComponent implements OnInit, AfterViewInit {
     }
   }
   getTaxonomyFilterQueryParamonInit() {
-    const queryParamMap = this.activatedRoute.snapshot.queryParamMap;
-    const params = queryParamMap.params;
-    // tslint:disable-next-line:triple-equals
+    const queryParamMap = this.activatedRoute.snapshot['queryParamMap'];
+    const params = queryParamMap['params'];
     if (Object.keys(params).length != 0) {
-      for (const key in params) {
+      for (let key in params) {
         // tslint:disable-next-line:triple-equals
         if (key == 'taxonomyFilter') {
           this.ulpam = JSON.parse(decodeURIComponent(queryParamMap.get(key)));
@@ -376,7 +375,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
   // tslint:disable-next-line:typedef
   unpackData(data: any) {
     const dataToReturn = {};
-    dataToReturn.id = data._id;
+    dataToReturn['id'] = data._id;
     if (data.hasOwnProperty('_source')) {
       data = data._source;
     }
@@ -384,14 +383,14 @@ export class DashboardComponent implements OnInit, AfterViewInit {
       if (key === 'experiment') {
         const exp = data[key];
         if (exp.length > 0) {
-          dataToReturn.INSDC_ID = exp[0].study_accession;
+          dataToReturn['INSDC_ID'] = exp[0].study_accession;
         } else {
-          dataToReturn.INSDC_ID = null;
+          dataToReturn['INSDC_ID'] = null;
         }
 
       }
       if (key === 'tax_id') {
-        dataToReturn.goatInfo = 'https://goat.genomehubs.org/records?record_id=' + data[key] + '&result=taxon&taxonomy=ncbi#' + dataToReturn.organism;
+        dataToReturn['goatInfo'] = 'https://goat.genomehubs.org/records?record_id=' + data[key] + '&result=taxon&taxonomy=ncbi#' + dataToReturn['organism'];
         dataToReturn[key] = data[key];
       }
       if (key === 'commonName' && data[key] == null) {
