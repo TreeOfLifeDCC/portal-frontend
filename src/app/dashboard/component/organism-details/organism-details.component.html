@@ -15,8 +15,9 @@
             </ng-container>
         </dd>
 
-        <dt class="col-md-3" *ngIf="INSDC_ID != null">INSDC ID:</dt>
+        <dt class="col-md-3">INSDC ID:</dt>
         <dd class="col-md-3" *ngIf="INSDC_ID != null">{{INSDC_ID}}</dd>
+        <dd class="col-md-3" *ngIf="INSDC_ID == null">-</dd>
         <dd class="col-md-6">
             <a class="no-underline badge badge-pill goat-color" target="_blank" href="https://goat.genomehubs.org/records?record_id={{bioSampleObj?.taxId}}&result=taxon&taxonomy=ncbi#{{bioSampleObj?.organism}}">GoaT
                 info</a>
