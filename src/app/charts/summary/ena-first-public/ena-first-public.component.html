@@ -1,0 +1,18 @@
+
+<div class="row">
+    <div class="col-md-8">
+        <div style="text-align: center;">
+            <h2 class='filter-heading'>ENA First Public</h2>
+            <div id="lineChart">
+                <canvas baseChart
+                        [datasets]="lineChartData"
+                        [labels]="firstPubliclineChartLabels"
+                        [chartType]="lineChartType"
+                        [colors]="chartColors"
+                        [options]="lineChartOptions"
+                        [legend]="lineChartLegend">
+                </canvas>
+            </div>
+        </div>
+    </div>
+</div>

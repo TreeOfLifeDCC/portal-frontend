@@ -1,0 +1,62 @@
+
+.jumbotron {
+    background: url("../../../assets/dtol banner thin.jpg") center center no-repeat;
+    background-size: cover;
+    padding-top: 20px !important;
+    padding-bottom: 20px !important;
+    margin-bottom: 0 !important;
+}
+
+.overlay {
+    position: fixed;
+    display: none;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.9);
+    z-index: 2;
+    cursor: pointer;
+}
+
+.svg-container {
+    display: inline-block;
+    position: relative;
+    width: 100%;
+    padding-bottom: 100%;
+    vertical-align: top;
+    overflow: hidden;
+}
+.svg-content {
+    display: inline-block;
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+ .boundary {
+    fill: #DEB887;
+    stroke: black;
+    stroke-width: 1px;
+}
+::ng-deep path:hover {
+    fill-opacity: .7;
+}
+
+::ng-deep div.map-tooltip {
+    position: absolute;
+    width: 150px;
+    height: auto;
+    padding: 10px;
+    background-color: white;
+    -webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
+    border-radius: 10px;
+    -webkit-box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.4);
+    -moz-box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.4);
+    box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.4);
+    pointer-events: none;
+}
+
+::ng-deep .mat-tab-body-content { overflow: hidden!important}

@@ -1,0 +1,20 @@
+
+<div class="row">
+    <div class="col-md-8">
+        <div style="text-align: center;">
+            <h2 class='filter-heading'>Lifestage</h2>
+            <div id="lifeStagePie">
+                <canvas baseChart
+                        [data]="lifestagePieChartData"
+                        [labels]="lifestagePieChartLabels"
+                        [chartType]="pieChartType"
+                        [colors]="lifestageChartColors"
+                        [options]="pieChartOptions"
+                        [plugins]="pieChartPlugins"
+                        [legend]="pieChartLegend">
+
+                </canvas>
+            </div>
+        </div>
+    </div>
+</div>
