@@ -96,6 +96,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
   AssembliesFilters = [];
   AnnotationFilters = [];
   AnnotationCompleteFilters = [];
+  GenomeFilters = [];
 
   isBiosampleFilterCollapsed = true;
   isEnaFilterCollapsed = true;
@@ -341,6 +342,9 @@ export class DashboardComponent implements OnInit, AfterViewInit {
       } else if (ena_filters[0] === 'Annotation') {
         return data.annotation === ena_filters[1];
       }
+      else if (ena_filters[0] === 'Genome Notes') {
+        return data.genome === ena_filters[1];
+      }
     }
   }
 
@@ -436,6 +440,11 @@ export class DashboardComponent implements OnInit, AfterViewInit {
       jsonObj = { "name": "annotation", "value": value };
       this.urlAppendFilterArray.push(jsonObj);
     }
+    else if (key.toLowerCase() == "genome") {
+      console.log(value);
+      jsonObj = { "name": "genome", "value": value };
+      this.urlAppendFilterArray.push(jsonObj);
+    }
 
   }
 
@@ -462,6 +471,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
     $('.assemblies-inactive').removeClass('non-disp');
     $('.annotation-complete-inactive').removeClass('non-disp');
     $('.annotation-inactive').removeClass('non-disp');
+    $('.genome-inactive').removeClass('non-disp');
 
     this.resetTaxaTree()
     this.modalTaxa = "";
@@ -551,6 +561,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
         this.AssembliesFilters = this.filtersMap.assemblies.filter(i => i !== "");
         this.AnnotationCompleteFilters = this.filtersMap.annotation_complete.filter(i => i !== "");
         this.AnnotationFilters = this.filtersMap.annotation.filter(i => i !== "");
+        this.GenomeFilters = this.filtersMap.genome.filter(i => i !== "");
       },
       err => console.log(err)
     );
@@ -567,6 +578,9 @@ export class DashboardComponent implements OnInit, AfterViewInit {
     }
     else if(status == 'Waiting') {
       return 'badge badge-pill badge-warning';
+    }
+    else if(status == 'Submitted') {
+      return 'badge badge-pill badge-success';
     }
     else {
       return 'badge badge-pill badge-warning';
@@ -613,6 +627,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
     $('.assemblies-inactive').removeClass('non-disp active-filter');
     $('.annotation-complete-inactive').removeClass('non-disp active-filter');
     $('.annotation-inactive').removeClass('non-disp active-filter');
+    $('.genome-inactive').removeClass('non-disp active-filter');
 
     if (this.searchText.length == 0) {
       this.getAllBiosamples(0, 15, this.sort.active, this.sort.direction);
@@ -1059,6 +1074,8 @@ export class DashboardComponent implements OnInit, AfterViewInit {
         return obj;
       }
     });
+    let genome = this.filtersMap.aggregations.genome.doc_count;
+    this.GenomeFilters = [{key: 'Genome Notes - Submitted', doc_count: genome}]
   }
 
 }
