@@ -172,7 +172,7 @@
                                 </ng-container>
                                 <ng-container *ngIf="checkGenomeExists(element)">
                                     <a class="no-underline badge badge-pill genome" target="_blank"
-                                        href="{{getGenomeURL(element)}}">Genome Notes</a>
+                                        href="{{getGenomeURL(element)}}">Genome Note</a>
                                 </ng-container>
                             </span>
                         </mat-cell>
@@ -233,8 +233,6 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h1 class="modal-title modal-heading" id="ontologyModal" modal-heading>Taxonomy
-                        <!-- <i class="fa fa-info-circle" aria-hidden="true" data-toggle="tooltip" data-placement="top" title="1. Each taxonomy is denoted by Scientific name and common name in bracket.&#013;2. Double click to filter by taxonomy."></i> -->
-                        <!-- <span id="tooltip" data-toggle="tooltip" data-placement="top" title="Double click to select rank">&#9432;</span> -->
                     </h1>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="hideTaxaModal()">
                         <span aria-hidden="true">&times;</span>
