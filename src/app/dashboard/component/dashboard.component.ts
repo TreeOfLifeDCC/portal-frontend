@@ -621,6 +621,8 @@ export class DashboardComponent implements OnInit, AfterViewInit {
   getSearchResults(from?, size?) {
     this.router.navigate(['data'], {});
     this.resetTaxaTree();
+    this.getChildTaxonomyRank('superkingdom', 'Eukaryota', 'kingdom');
+    $('.kingdom, .subkingdom').removeClass('non-disp active-filter');
     $('.biosamples-inactive').removeClass('non-disp active-filter');
     $('.raw-data-inactive').removeClass('non-disp active-filter');
     $('.mapped-reads-inactive').removeClass('non-disp active-filter');
@@ -634,6 +636,8 @@ export class DashboardComponent implements OnInit, AfterViewInit {
       this.getChildTaxonomyRank('superkingdom', 'Eukaryota', 'kingdom');
     }
     else {
+      this.spinner.show()
+      this.isFilterSelected = false;
       this.activeFilters = [];
       this.dashboardService.getRootSearchResults(this.searchText, this.sort.active, this.sort.direction, from, size)
         .subscribe(
