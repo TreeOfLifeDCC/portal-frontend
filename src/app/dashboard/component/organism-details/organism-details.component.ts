@@ -121,6 +121,8 @@ export class OrganismDetailsComponent implements OnInit, AfterViewInit {
     { name: "Generated Aspera", column: "generated_aspera", selected: false },
     { name: "Generated Galaxy", column: "generated_galaxy", selected: false }
   ]
+  dataSourceGoatInfo;
+  displayedColumnsGoatInfo = ['name', 'value', 'count', 'aggregation_method', 'aggregation_source'];
 
   genomeNotes = [];
   INSDC_ID = null;
@@ -145,6 +147,7 @@ export class OrganismDetailsComponent implements OnInit, AfterViewInit {
     this.filterJson['sex'] = '';
     this.filterJson['organismPart'] = '';
     this.filterJson['trackingSystem'] = '';
+    this.dataSourceGoatInfo = {};
     this.getDisplayedColumns();
     this.getAnnotationDisplayedColumns();
     this.getBiosampleById();
@@ -199,6 +202,7 @@ export class OrganismDetailsComponent implements OnInit, AfterViewInit {
         data => {
           const unpackedData = [];
           this.bioSampleObj = data;
+          this.dataSourceGoatInfo = data.goat_info.attributes;
           if(data.experiment?.length > 0) {
             this.INSDC_ID = data.experiment[0].study_accession;
           }

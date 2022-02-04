@@ -101,3 +101,8 @@ table {
     margin: 20px 0;
     border-radius: 3px;
 }
+
+.goat-box {
+    padding-right: 0px;
+    padding-left: 0px;
+}
