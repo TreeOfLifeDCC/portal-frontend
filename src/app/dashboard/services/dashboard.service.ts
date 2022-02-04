@@ -15,10 +15,13 @@ export class DashboardService {
 
   constructor(private http: HttpClient) { }
 
-  public getAllBiosample(offset, limit, sortColumn?, sortOrder?): Observable<any> {
+  public getAllBiosample(offset, limit, sortColumn?, sortOrder?, searchText?): Observable<any> {
     let requestParams = `?offset=${offset}&limit=${limit}`
     if (sortColumn != undefined) {
       requestParams = requestParams + `&sortColumn=${sortColumn}&sortOrder=${sortOrder}`
+    }
+    if(searchText) {
+      requestParams = requestParams + `&searchText=${searchText}`
     }
     return this.http.get(`${this.API_BASE_URL}/root_organisms${requestParams}`);
   }
@@ -84,7 +87,7 @@ export class DashboardService {
     return this.http.get(`${requestURL}`);
   }
 
-  public getFilterResults(filter: any,sortColumn?, sortOrder?, from?, size?, taxonomyFilter?): Observable<any> {
+  public getFilterResults(filter: any,sortColumn?, sortOrder?, from?, size?, taxonomyFilter?, searchText?): Observable<any> {
     let requestParams = `?from=${from}&size=${size}`
     if (sortColumn != undefined) {
       requestParams = requestParams + `&sortColumn=${sortColumn}&sortOrder=${sortOrder}`
@@ -92,6 +95,9 @@ export class DashboardService {
     if(taxonomyFilter != undefined) {
       let taxa = encodeURIComponent(JSON.stringify(taxonomyFilter[0]));
       requestParams = requestParams + `&taxonomyFilter=${taxa}`
+    }
+    if(searchText) {
+      requestParams = requestParams + `&searchText=${searchText}`
     }
     let requestURL = `${this.API_BASE_URL}/root_organisms/root/filter/results${requestParams}`;
     return this.http.post(`${requestURL}`,filter);

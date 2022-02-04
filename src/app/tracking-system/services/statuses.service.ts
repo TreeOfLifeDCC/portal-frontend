@@ -13,10 +13,13 @@ export class StatusesService {
 
   constructor(private http: HttpClient) { }
 
-  public getAllStatuses(offset, limit, sortColumn?, sortOrder?): Observable<any> {
+  public getAllStatuses(offset, limit, sortColumn?, sortOrder?, searchText?): Observable<any> {
     let requestParams = `?offset=${offset}&limit=${limit}`
     if (sortColumn != undefined) {
       requestParams = requestParams + `&sortColumn=${sortColumn}&sortOrder=${sortOrder}`
+    }
+    if(searchText) {
+      requestParams = requestParams + `&searchText=${searchText}`
     }
     return this.http.get(`${this.API_BASE_URL}/statuses${requestParams}`);
   }
@@ -37,7 +40,7 @@ export class StatusesService {
     return this.http.get(`${requestURL}`);
   }
 
-  public getFilterResults(filter: any, sortColumn?, sortOrder?, from?, size?, taxonomyFilter?): Observable<any> {
+  public getFilterResults(filter: any, sortColumn?, sortOrder?, from?, size?, taxonomyFilter?, searchText?): Observable<any> {
     let requestURL = `${this.API_BASE_URL}/statuses/filter/results?from=${from}&size=${size}`;
     if (sortColumn != undefined) {
       requestURL = requestURL + `&sortColumn=${sortColumn}&sortOrder=${sortOrder}`;
@@ -45,6 +48,9 @@ export class StatusesService {
     if(taxonomyFilter != undefined) {
       let taxa = encodeURIComponent(JSON.stringify(taxonomyFilter[0]));
       requestURL = requestURL + `&taxonomyFilter=${taxa}`
+    }
+    if(searchText) {
+      requestURL = requestURL + `&searchText=${searchText}`
     }
     return this.http.post(`${requestURL}`, filter);
   }
