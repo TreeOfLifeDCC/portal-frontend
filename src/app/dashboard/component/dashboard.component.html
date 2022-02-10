@@ -58,7 +58,7 @@
                                     </li>
                                 </ng-container>
                                 <ng-container *ngFor="let filter of GenomeFilters; let i = index">
-                                    <li class="list-group-item d-flex justify-content-between align-items-center genome-inactive" [ngClass]="checkFilterIsActive(filter.key)" (click)="onFilterClick($event, 'genome' , filter.key)" style="cursor: pointer" *ngIf="filter.key === 'Genome Notes - Submitted'">
+                                    <li class="list-group-item d-flex justify-content-between align-items-center genome-inactive" [ngClass]="checkFilterIsActive(filter.key)" (click)="onFilterClick($event, 'genome' , filter.key)" style="cursor: pointer" *ngIf="filter.key === 'Genome Notes - Submitted' && filter.doc_count > 0">
                                         <span>Genome Notes - Submitted</span>
                                         <span class="badge badge-pill badge-info">{{filter.doc_count}}</span>
                                     </li>
