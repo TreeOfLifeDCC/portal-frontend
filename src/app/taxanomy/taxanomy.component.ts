@@ -23,7 +23,7 @@ export class TaxanomyComponent implements OnInit {
 
   initTaxonomyObject() {
     this.childTaxanomy = {
-      cellularorganism: [{ parent: 'Root', rank: 'superkingdom', expanded: false, childData: [{ key: 'Eukaryota', doc_count: '1', commonName: {buckets:[]} }] }],
+      cellularorganism: [{ parent: 'Root', rank: 'superkingdom', expanded: false, taxId: 2759, childData: [{ key: 'Eukaryota', doc_count: '1', commonName: {buckets:[]}, taxId: {buckets:[]} }] }],
       superkingdom: [],
       kingdom: [],
       subkingdom: [],
