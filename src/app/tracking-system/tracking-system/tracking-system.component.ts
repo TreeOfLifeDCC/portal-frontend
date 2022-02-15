@@ -134,7 +134,7 @@ export class TrackingSystemComponent implements OnInit, AfterViewInit {
     else {
       taxonomy = [this.currentTaxonomyTree];
     }
-    this.statusesService.getFilterResults(this.activeFilters.toString(), this.sort.active, this.sort.direction, 0, 15, taxonomy)
+    this.statusesService.getFilterResults(this.activeFilters.toString(), this.sort.active, this.sort.direction, 0, 15, taxonomy, this.searchText)
       .subscribe(
         data => {
           const unpackedData = [];
@@ -176,7 +176,7 @@ export class TrackingSystemComponent implements OnInit, AfterViewInit {
   getAllStatuses(offset, limit, sortColumn?, sortOrder?) {
     this.getFilters();
     this.spinner.show();
-    this.statusesService.getAllStatuses(offset, limit, sortColumn, sortOrder)
+    this.statusesService.getAllStatuses(offset, limit, sortColumn, sortOrder, this.searchText)
       .subscribe(
         data => {
           const unpackedData = [];
@@ -201,7 +201,7 @@ export class TrackingSystemComponent implements OnInit, AfterViewInit {
 
   getNextStatuses(currentSize, offset, limit, sortColumn?, sortOrder?) {
     this.spinner.show();
-    this.statusesService.getAllStatuses(offset, limit, sortColumn, sortOrder)
+    this.statusesService.getAllStatuses(offset, limit, sortColumn, sortOrder, this.searchText)
       .subscribe(
         data => {
           const unpackedData = [];
@@ -247,22 +247,22 @@ export class TrackingSystemComponent implements OnInit, AfterViewInit {
     }
   }
 
-  orgPageChanged(event) {
-    let pageIndex = event.pageIndex;
-    let pageSize = event.pageSize;
-    let previousSize = pageSize * pageIndex;
+  // orgPageChanged(event) {
+  //   let pageIndex = event.pageIndex;
+  //   let pageSize = event.pageSize;
+  //   let previousSize = pageSize * pageIndex;
 
-    let from = pageIndex * pageSize;
-    let size = 0;
-    if ((from + pageSize) < this.statusesTotalCount) {
-      size = from + pageSize;
-    }
-    else {
-      size = this.statusesTotalCount;
-    }
+  //   let from = pageIndex * pageSize;
+  //   let size = 0;
+  //   if ((from + pageSize) < this.statusesTotalCount) {
+  //     size = from + pageSize;
+  //   }
+  //   else {
+  //     size = this.statusesTotalCount;
+  //   }
 
-    this.findBioSampleByOrganismName(this.orgName, from, size);
-  }
+  //   this.findBioSampleByOrganismName(this.orgName, from, size);
+  // }
 
   customSort(event) {
     let taxonomy = [this.currentTaxonomyTree];
@@ -293,29 +293,29 @@ export class TrackingSystemComponent implements OnInit, AfterViewInit {
 
   }
 
-  orgSort(event) {
-    let pageIndex = this.paginator.pageIndex;
-    let pageSize = this.paginator.pageSize;
-    let from = pageIndex * pageSize;
-    let size = 0;
-    if ((from + pageSize) < this.statusesTotalCount) {
-      size = from + pageSize;
-    }
-    else {
-      size = this.orgTotalCount;
-    }
+  // orgSort(event) {
+  //   let pageIndex = this.paginator.pageIndex;
+  //   let pageSize = this.paginator.pageSize;
+  //   let from = pageIndex * pageSize;
+  //   let size = 0;
+  //   if ((from + pageSize) < this.statusesTotalCount) {
+  //     size = from + pageSize;
+  //   }
+  //   else {
+  //     size = this.orgTotalCount;
+  //   }
 
-    if (this.activeFilters.length !== 0) {
-      this.getFilterResults(this.activeFilters.toString(), this.sort.active, this.sort.direction, from, size);
-    }
-    else if (this.searchText.length !== 0) {
-      this.getSearchResults(from, size);
-    }
-    else {
-      this.getAllStatuses((pageIndex).toString(), pageSize.toString(), event.active, event.direction);
-    }
+  //   if (this.activeFilters.length !== 0) {
+  //     this.getFilterResults(this.activeFilters.toString(), this.sort.active, this.sort.direction, from, size);
+  //   }
+  //   else if (this.searchText.length !== 0) {
+  //     this.getSearchResults(from, size);
+  //   }
+  //   else {
+  //     this.getAllStatuses((pageIndex).toString(), pageSize.toString(), event.active, event.direction);
+  //   }
 
-  }
+  // }
 
   // tslint:disable-next-line:typedef
   filterPredicate(data: any, filterValue: any): boolean {
@@ -371,7 +371,7 @@ export class TrackingSystemComponent implements OnInit, AfterViewInit {
   onFilterClick(event, label: string, filter: string) {
     this.paginator.pageIndex = 0;
     let taxonomy = [this.currentTaxonomyTree];
-    this.searchText = '';
+    // this.searchText = '';
     let inactiveClassName = label.toLowerCase().replace(" ", "-") + '-inactive';
     const filterIndex = this.activeFilters.indexOf(filter);
     if (filterIndex !== -1) {
@@ -434,21 +434,25 @@ export class TrackingSystemComponent implements OnInit, AfterViewInit {
 
   // tslint:disable-next-line:typedef
   removeAllFilters() {
-    this.selectedFilterValue = '';
-    this.phylSelectedRank = '';
     this.paginator.pageIndex = 0;
     this.isFilterSelected = false;
     this.selectedFilterValue = '';
     this.phylSelectedRank = '';
-    $('#' + this.modalTaxa + '-kingdom').removeClass('active-filter');
-    this.resetTaxaTree();
+    $('#' + this.modalTaxa + '-kingdom').removeClass('active-filter')
+    this.resetTaxaTree()
     this.modalTaxa = "";
-
     this.activeFilters = [];
     this.urlAppendFilterArray = [];
     this.dataSource.filter = undefined;
-    this.getAllStatuses(0, 15, this.sort.active, this.sort.direction);
-    this.getChildTaxonomyRank('superkingdom', 'Eukaryota', 'kingdom');
+    if (this.searchText.length != 0) {
+      this.getFilterResults(this.activeFilters.toString(), this.sort.active, this.sort.direction, 0, 15, [this.currentTaxonomyTree]);
+      this.getChildTaxonomyRank('superkingdom', 'Eukaryota', 'kingdom');
+    }
+    else {
+      this.getFilters();
+      this.getAllStatuses(0, 15, this.sort.active, this.sort.direction);
+      this.getChildTaxonomyRank('superkingdom', 'Eukaryota', 'kingdom');
+    }
     this.router.navigate(['tracking'], {});
     this.spinner.show();
     setTimeout(() => {
@@ -474,27 +478,37 @@ export class TrackingSystemComponent implements OnInit, AfterViewInit {
         }
       }
       else if (this.currentTaxonomyTree.length > 1) {
-        // if (this.activeFilters.length == 0) {
-        //   this.urlAppendFilterArray = [];
-        //   this.dataSource.filter = undefined;
-        //   this.router.navigate(['tracking'], {});
-        // }
         this.getFilterResults(this.activeFilters.toString(), this.sort.active, this.sort.direction, 0, 15, [this.currentTaxonomyTree]);
         setTimeout(() => {
           $('#' + this.modalTaxa + '-kingdom').addClass('active-filter')
         }, 250);
+      }
+      else if (this.searchText.length != 0) {
+        this.modalTaxa = "";
+        this.router.navigate(['tracking'], {});
+        this.isFilterSelected = false;
+        this.removeRankFromTaxaTree('superkingdom');
+        this.dataSource.filter = undefined;
+        this.activeFilters = [];
+        this.urlAppendFilterArray = [];
+        this.dataSource.filter = undefined;
+        this.getFilterResults(this.activeFilters.toString(), this.sort.active, this.sort.direction, 0, 15, [this.currentTaxonomyTree]);
+        this.getChildTaxonomyRank('superkingdom', 'Eukaryota', 'kingdom');
       }
       else {
         this.isFilterSelected = false;
         this.selectedFilterValue = '';
         this.phylSelectedRank = '';
         this.removeRankFromTaxaTree('superkingdom');
+        this.dataSource.filter = undefined;
+        this.activeFilters = [];
+        this.urlAppendFilterArray = [];
+        this.dataSource.filter = undefined;
+        this.getFilters();
+        this.getAllStatuses(0, 15, this.sort.active, this.sort.direction);
         this.getChildTaxonomyRank('superkingdom', 'Eukaryota', 'kingdom');
         this.modalTaxa = "";
-
         this.router.navigate(['tracking'], {});
-        this.dataSource.filter = undefined;
-        this.getAllStatuses(0, 15, this.sort.active, this.sort.direction);
       }
     }
   }
@@ -555,7 +569,7 @@ export class TrackingSystemComponent implements OnInit, AfterViewInit {
 
   getFilterResults(filter, sortColumn?, sortOrder?, from?, size?, taxonomyFilter?) {
     this.spinner.show();
-    this.statusesService.getFilterResults(filter, this.sort.active, this.sort.direction, from, size, taxonomyFilter)
+    this.statusesService.getFilterResults(filter, this.sort.active, this.sort.direction, from, size, taxonomyFilter, this.searchText)
       .subscribe(
         data => {
           const unpackedData = [];
@@ -585,6 +599,8 @@ export class TrackingSystemComponent implements OnInit, AfterViewInit {
   getSearchResults(from?, size?) {
     this.router.navigate(['tracking'], {});
     this.resetTaxaTree();
+    this.getChildTaxonomyRank('superkingdom', 'Eukaryota', 'kingdom');
+    $('.kingdom, .subkingdom').removeClass('non-disp active-filter');
     $('.biosamples-inactive').removeClass('non-disp active-filter');
     $('.raw-data-inactive').removeClass('non-disp active-filter');
     $('.mapped-reads-inactive').removeClass('non-disp active-filter');
@@ -601,7 +617,7 @@ export class TrackingSystemComponent implements OnInit, AfterViewInit {
       this.spinner.show()
       this.isFilterSelected = false;
       this.activeFilters = [];
-
+      this.selectedFilterValue = '';
       this.statusesService.getSearchResults(this.searchText, this.sort.active, this.sort.direction, from, size)
         .subscribe(
           data => {
@@ -648,38 +664,6 @@ export class TrackingSystemComponent implements OnInit, AfterViewInit {
         this.isEnaFilterCollapsed = true;
       }
     }
-  }
-
-  findBioSampleByOrganismName(name, from?, size?) {
-    this.spinner.show();
-    this.orgName = name;
-    this.statusesService.findBioSampleByOrganismName(this.orgName, this.sort.active, this.sort.direction, from, size)
-      .subscribe(
-        data => {
-          const unpackedData = [];
-          for (const item of data.hits.hits) {
-            unpackedData.push(this.unpackData(item));
-          }
-          this.orgTotalCount = data.hits.total.value;
-          if (this.orgTotalCount == 1) {
-            this.spinner.hide();
-            this.router.navigate(['/data/details/' + data.hits.hits[0]._source.accession], {});
-          }
-          else {
-            this.orgDataSource = new MatTableDataSource<any>(unpackedData);
-            this.orgDataSource.sort = this.sort;
-            this.showOrganismTable = true;
-            this.spinner.hide();
-            $("#org-table").show();
-            $("#overlay").css({ "display": "block" });
-            $(window).scrollTop(200);
-          }
-        },
-        err => {
-          this.spinner.hide();
-          console.log(err);
-        }
-      )
   }
 
   toggleOrganismTable() {
@@ -820,7 +804,7 @@ export class TrackingSystemComponent implements OnInit, AfterViewInit {
 
   showTaxonomyModal(event: any, rank: string, taxonomy: string, childRank: string) {
     this.paginator.pageIndex = 0;
-    this.searchText = "";
+    // this.searchText = "";
     this.isDoubleClick = false;
     setTimeout(() => {
       if (!this.isDoubleClick) {
@@ -875,12 +859,38 @@ export class TrackingSystemComponent implements OnInit, AfterViewInit {
     }, 250);
   }
 
+  removeTaxaFilter(taxonomy: any) {
+    this.spinner.show();
+    let filter = this.selectedFilterValue.rank + ' - ' +this.selectedFilterValue.taxId;
+    const filterIndex = this.activeFilters.indexOf(filter);
+    if (filterIndex !== -1) {
+      this.activeFilters.splice(filterIndex);
+    }
+    this.isFilterSelected = false;
+    this.phylSelectedRank = '';
+    setTimeout(() => {
+      this.updateDomForRemovedPhylogenyFilter(filter);
+      this.updateActiveRouteParams();
+    }, 100);
+    let taxa = { 'rank': 'superkingdom', 'taxonomy': 'Eukaryota', 'childRank': 'kingdom' };
+    this.currentTaxonomyTree = [];
+    this.currentTaxonomyTree = [taxa];
+    this.currentTaxonomy = taxa;
+    this.selectedFilterValue = '';
+    $(taxonomy+'-kingdom').removeClass('active-filter');
+    $('#myUL').css('display', 'block');
+    this.getActiveFiltersAndResult();
+    setTimeout(() => {
+      this.spinner.hide()
+    }, 400);
+  }
+
   getChildTaxonomyRank(rank: string, taxonomy: string, childRank: string) {
     let taxa = { 'rank': rank, 'taxonomy': taxonomy, 'childRank': childRank };
     this.currentTaxonomy = taxa;
     this.createTaxaTree(rank, taxa);
     if (this.showElement) {
-      this.taxanomyService.getChildTaxonomyRank(this.activeFilters, rank, taxonomy, childRank, this.currentTaxonomyTree, 'status').subscribe(
+      this.taxanomyService.getChildTaxonomyRank(this.activeFilters, rank, taxonomy, childRank, this.currentTaxonomyTree, 'status', this.searchText).subscribe(
         data => {
           this.parseAndPushTaxaData(rank, data);
           setTimeout(() => {
@@ -942,13 +952,13 @@ export class TrackingSystemComponent implements OnInit, AfterViewInit {
   }
 
   filterTaxonomy(rank: string, taxonomy: string, childRank: string, commonName, taxId) {
+    let taxa = { 'rank': rank, 'taxonomy': taxonomy, 'childRank': childRank, 'commonName': commonName, 'taxId': taxId };
+    this.selectedFilterValue = taxa;
     let filterObj = rank + ' - ' +taxId;
     this.selectedFilterArray('phylogeny', filterObj);
     this.updateActiveRouteParams();
     this.paginator.pageIndex = 0;
     this.isDoubleClick = true;
-    let taxa = { 'rank': rank, 'taxonomy': taxonomy, 'childRank': childRank, 'commonName': commonName, 'taxId': taxId };
-    this.selectedFilterValue = taxa;
     this.createTaxaTree(rank, taxa);
     this.selectedTaxonomy.push(taxa);
     $('#taxonomyModal').modal('hide');

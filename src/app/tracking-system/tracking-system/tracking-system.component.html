@@ -75,7 +75,7 @@
                             <ul id="ontology-inactive" class="list-group">
                                 <li *ngIf="isFilterSelected" class="rank-heading"> {{selectedFilterValue.rank | uppercase}}
                                 </li>
-                                <li *ngIf="isFilterSelected" class="list-group-item d-flex justify-content-between align-items-center kingdom active-filter" style="cursor: pointer; padding: .75rem 0.25rem;" id="filterSelected" (click)="showTaxonomyModal($event, currentTaxonomy.rank, currentTaxonomy.taxonomy, 'subkingdom')">
+                                <li *ngIf="isFilterSelected" class="list-group-item d-flex justify-content-between align-items-center kingdom active-filter" style="cursor: pointer; padding: .75rem 0.25rem;" id="{{selectedFilterValue.taxonomy}}-kingdom" (click)="showTaxonomyModal($event, currentTaxonomy.rank, currentTaxonomy.taxonomy, 'subkingdom')">
                                     {{selectedFilterValue.taxonomy}} ({{selectedFilterValue.commonName}})
                                     <span class="badge badge-pill badge-info">{{statusesTotalCount}}</span>
                                 </li>
@@ -97,15 +97,22 @@
             <div class="col-md-10 status-table">
                 <h1 class="page-header">Statuses</h1>
                 <button type="button" style="float: right;" class="btn btn-primary" mat-raised-button (click)="exporter.exportTable('csv', {fileName:'organisms-statuses-metadata'})">Download metadata</button>
-                <h1 *ngIf="(phylSelectedRank != '' && activeFilters.length > 1) || (phylSelectedRank == '' && activeFilters.length > 0)">Filters:
-                    <span *ngFor="let filter of activeFilters">
-                        <span *ngIf="phylSelectedRank != filter">
-                            <button type="button" class="btn btn-success">{{filter}}
-                                <span class="badge badge-light" (click)="removeFilter(filter)">X</span>
+                <h1 *ngIf="activeFilters.length > 0 || selectedFilterValue != ''">Filters:
+                    <span *ngIf="(phylSelectedRank != '' && activeFilters.length > 1) || (phylSelectedRank == '' && activeFilters.length > 0)">
+                        <span *ngFor="let filter of activeFilters">
+                            <span *ngIf="phylSelectedRank != filter">
+                                <button type="button" class="btn btn-success">{{filter}}
+                                    <span class="badge badge-light" (click)="removeFilter(filter)">X</span>
                     </button>
                     </span>
                     </span>
-                    <button *ngIf="(phylSelectedRank != '' && activeFilters.length > 1) || (phylSelectedRank == '' && activeFilters.length > 0)" type="button" class="btn btn-primary" (click)="removeAllFilters()">
+                    </span>
+                    <span *ngIf="selectedFilterValue != ''">
+                        <button type="button" class="btn btn-success">{{selectedFilterValue.taxonomy}}
+                            <span class="badge badge-light" (click)="removeTaxaFilter(selectedFilterValue.taxonomy)">X</span>
+                    </button>
+                    </span>
+                    <button *ngIf="activeFilters.length > 0 || selectedFilterValue != ''" type="button" class="btn btn-primary" (click)="removeAllFilters()">
                         Remove all filters
                     </button>
                 </h1>
