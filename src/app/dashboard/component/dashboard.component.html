@@ -114,7 +114,7 @@
                 <br />
 
 
-                <button type="button" style="float: right;" class="btn btn-primary" mat-raised-button (click)="exporter.exportTable('csv', {fileName:'organisms-metadata'})">Download metadata</button>
+                <button type="button" style="float: right;" class="btn btn-primary" mat-raised-button (click)="downloadCSV()">Download metadata</button>
                 <h1 *ngIf="activeFilters.length !== 0">Filters:
                     <button type="button" class="btn btn-success" *ngFor="let filter of activeFilters">
                         {{filter}}

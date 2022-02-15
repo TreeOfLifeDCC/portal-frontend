@@ -649,38 +649,6 @@ export class TrackingSystemComponent implements OnInit, AfterViewInit {
     }
   }
 
-  // findBioSampleByOrganismName(name, from?, size?) {
-  //   this.spinner.show();
-  //   this.orgName = name;
-  //   this.statusesService.findBioSampleByOrganismName(this.orgName, this.sort.active, this.sort.direction, from, size)
-  //     .subscribe(
-  //       data => {
-  //         const unpackedData = [];
-  //         for (const item of data.hits.hits) {
-  //           unpackedData.push(this.unpackData(item));
-  //         }
-  //         this.orgTotalCount = data.hits.total.value;
-  //         if (this.orgTotalCount == 1) {
-  //           this.spinner.hide();
-  //           this.router.navigate(['/data/details/' + data.hits.hits[0]._source.accession], {});
-  //         }
-  //         else {
-  //           this.orgDataSource = new MatTableDataSource<any>(unpackedData);
-  //           this.orgDataSource.sort = this.sort;
-  //           this.showOrganismTable = true;
-  //           this.spinner.hide();
-  //           $("#org-table").show();
-  //           $("#overlay").css({ "display": "block" });
-  //           $(window).scrollTop(200);
-  //         }
-  //       },
-  //       err => {
-  //         this.spinner.hide();
-  //         console.log(err);
-  //       }
-  //     )
-  // }
-
   toggleOrganismTable() {
     $("#org-table").hide();
     $("#overlay").css({ "display": "none" });
@@ -1060,6 +1028,19 @@ export class TrackingSystemComponent implements OnInit, AfterViewInit {
     setTimeout(() => {
       this.currentTaxonomy = this.currentTaxonomyTree[this.currentTaxonomyTree.length - 1];
     }, 50);
+  }
+
+  downloadCSV() {
+    let taxonomy = [this.currentTaxonomyTree];
+    this.statusesService.downloadCSV(this.activeFilters.toString(), this.sort.active, this.sort.direction, 0, 5000, taxonomy, this.searchText).subscribe(data => {
+			const blob = new Blob([data], {type: 'application/csv'});
+      var downloadURL = window.URL.createObjectURL(data);
+      var link = document.createElement('a');
+      link.href = downloadURL;
+      link.download = "organism-statuses-metadata.csv";
+      link.click();
+		}), error => console.log('Error downloading the file'),
+                 () => console.info('File downloaded successfully');
   }
 
 }

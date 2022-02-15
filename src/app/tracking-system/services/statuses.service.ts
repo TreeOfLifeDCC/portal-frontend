@@ -63,4 +63,20 @@ export class StatusesService {
     return this.http.get(`${requestURL}`);
   }
 
+  public downloadCSV(filter: any,sortColumn?, sortOrder?, from?, size?, taxonomyFilter?, searchText?): any {
+    let requestParams = `?from=${from}&size=${size}`
+    if (sortColumn != undefined) {
+      requestParams = requestParams + `&sortColumn=${sortColumn}&sortOrder=${sortOrder}`
+    }
+    if(taxonomyFilter != undefined) {
+      let taxa = encodeURIComponent(JSON.stringify(taxonomyFilter[0]));
+      requestParams = requestParams + `&taxonomyFilter=${taxa}`
+    }
+    if(searchText) {
+      requestParams = requestParams + `&searchText=${searchText}`
+    }
+    let requestURL = `${this.API_BASE_URL}/statuses/data/csv${requestParams}`;
+		return this.http.post(`${requestURL}`,filter, {responseType: 'blob'});
+  }
+
 }

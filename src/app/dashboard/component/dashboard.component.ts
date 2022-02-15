@@ -1097,4 +1097,17 @@ export class DashboardComponent implements OnInit, AfterViewInit {
     this.GenomeFilters = [{ key: 'Genome Notes - Submitted', doc_count: genome }]
   }
 
+  downloadCSV() {
+    let taxonomy = [this.currentTaxonomyTree];
+    this.dashboardService.downloadCSV(this.activeFilters.toString(), this.sort.active, this.sort.direction, 0, 5000, taxonomy, this.searchText).subscribe(data => {
+			const blob = new Blob([data], {type: 'application/csv'});
+      var downloadURL = window.URL.createObjectURL(data);
+      var link = document.createElement('a');
+      link.href = downloadURL;
+      link.download = "organism-metadata.csv";
+      link.click();
+		}), error => console.log('Error downloading the file'),
+                 () => console.info('File downloaded successfully');
+  }
+
 }
