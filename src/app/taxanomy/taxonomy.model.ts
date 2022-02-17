@@ -2,6 +2,7 @@ export interface TaxonomyDTO {
     parent: string;
     rank: string;
     expanded: boolean;
+    taxId: number;
     childData: TaxonomyChildDTO[];
 
 }
@@ -9,10 +10,11 @@ export interface TaxonomyDTO {
 export interface TaxonomyChildDTO {
     key: string;
     doc_count: string;
-    commonName: CommonNameDTO;
+    commonName: ChildObjCommonDTO;
+    taxId: ChildObjCommonDTO;
 }
 
-export interface CommonNameDTO {
+export interface ChildObjCommonDTO {
     buckets: TaxonomyChildDTO[];
 }
 export interface Taxonomy {
