@@ -203,7 +203,9 @@ export class OrganismDetailsComponent implements OnInit, AfterViewInit {
         data => {
           const unpackedData = [];
           this.bioSampleObj = data;
-          this.dataSourceGoatInfo = data.goat_info.attributes;
+          if(data.goat_info) {
+            this.dataSourceGoatInfo = data.goat_info.attributes;
+          }
           if(data.experiment?.length > 0) {
             this.INSDC_ID = data.experiment[0].study_accession;
           }

@@ -708,7 +708,7 @@
                 <mat-paginator #experimentsTable [pageSizeOptions]="[10, 20, 30]" showFirstLastButtons [length]="dataSourceFilesCount"></mat-paginator>
             </div>
         </mat-tab>
-        <mat-tab label="Metadata" *ngIf="bioSampleObj?.records.length">
+        <mat-tab label="Metadata" *ngIf="bioSampleObj?.records && bioSampleObj?.records.length">
             <!-- Related Organisms -->
             <div class="col-md-12" *ngIf="bioSampleObj?.records.length">
                 <hr>
@@ -841,7 +841,7 @@
                 </div>
             </div>
         </mat-tab>
-        <mat-tab label="Genome Note" *ngIf="bioSampleObj?.genome_notes.length">
+        <mat-tab label="Genome Note" *ngIf="bioSampleObj?.genome_notes && bioSampleObj?.genome_notes.length">
             <!-- Genome Notes Section -->
             <div class="goat-box" *ngIf="bioSampleObj?.genome_notes">
                 <hr>
@@ -882,7 +882,7 @@
                 </mat-expansion-panel>
             </div>
         </mat-tab>
-        <mat-tab label="GoaT" *ngIf="(goat_info | json) != '{}'">
+        <mat-tab label="GoaT" *ngIf="bioSampleObj?.goat_info && (bioSampleObj?.goat_info | json) != '{}'">
             <!-- Goat Info Section -->
             <div class="tab-box" *ngIf="bioSampleObj?.goat_info">
                 <hr>
