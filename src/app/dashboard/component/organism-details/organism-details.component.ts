@@ -47,8 +47,8 @@ export class OrganismDetailsComponent implements OnInit, AfterViewInit {
   bioSampleId: string;
   bioSampleObj;
   dataSourceRecords;
-  specBioSampleTotalCount;
-  specDisplayedColumns = ['accession', 'organism', 'commonName', 'sex', 'organismPart', 'trackingSystem'];
+  bioSampleTotalCount;
+  displayedColumns = ['accession', 'organism', 'commonName', 'sex', 'organismPart', 'trackingSystem'];
 
 
   isSexFilterCollapsed = true;
@@ -124,6 +124,8 @@ export class OrganismDetailsComponent implements OnInit, AfterViewInit {
 
   genomeNotes = [];
   INSDC_ID = null;
+  dataSourceGoatInfo;
+  displayedColumnsGoatInfo = ['name', 'value', 'count', 'aggregation_method', 'aggregation_source'];
 
   @ViewChild('experimentsTable') exPaginator: MatPaginator;
   @ViewChild('assembliesTable') asPaginator: MatPaginator;
@@ -131,11 +133,40 @@ export class OrganismDetailsComponent implements OnInit, AfterViewInit {
   @ViewChild('relatedOrganisms') relatedOrganismsTable: MatPaginator;
   @ViewChild('relatedAnnotationTable') relatedAnnotationTable: MatPaginator;
 
+  //Related Specimens
+  @ViewChild(MatPaginator) specPaginator: MatPaginator;
+  @ViewChild(MatSort) specSort: MatSort;
+  dataSourceSpecRecords;
+  specBioSampleTotalCount;
+  specDisplayedColumns = ['accession', 'organism', 'commonName', 'sex', 'organismPart'];
+
+
+  isSpecSexFilterCollapsed = true;
+  isSpecOrganismPartCollapsed = true;
+  specitemLimitSexFilter: number;
+  specitemLimitOrgFilter: number;
+  specfilterSize: number;
+  specSearchText = '';
+  specActiveFilters = [];
+  specFiltersMap;
+  specFilters = {
+    sex: {},
+    organismPart: {}
+  };
+  specSexFilters = [];
+  specOrganismPartFilters = [];
+  specUnpackedData;
+  specFilterJson = {
+    sex: "",
+    organismPart: "",
+  };
+
   constructor(private route: ActivatedRoute, private dashboardService: DashboardService, private spinner: NgxSpinnerService, private router: Router) {
     this.route.params.subscribe(param => this.bioSampleId = param.id);
   }
 
   ngOnInit(): void {
+    this.dataSourceGoatInfo = {};
     this.activeFilters = [];
     this.filterSize = 3;
     this.itemLimitSexFilter = this.filterSize;
@@ -145,6 +176,14 @@ export class OrganismDetailsComponent implements OnInit, AfterViewInit {
     this.filterJson['sex'] = '';
     this.filterJson['organismPart'] = '';
     this.filterJson['trackingSystem'] = '';
+
+    this.specActiveFilters = [];
+    this.specfilterSize = 3;
+    this.specitemLimitSexFilter = this.specfilterSize;
+    this.specitemLimitOrgFilter = this.specfilterSize;
+    this.specFilterJson['sex'] = '';
+    this.specFilterJson['organismPart'] = '';
+
     this.getDisplayedColumns();
     this.getAnnotationDisplayedColumns();
     this.getBiosampleById();
@@ -199,6 +238,7 @@ export class OrganismDetailsComponent implements OnInit, AfterViewInit {
         data => {
           const unpackedData = [];
           this.bioSampleObj = data;
+          this.dataSourceGoatInfo = data.goat_info.attributes;
           if(data.experiment?.length > 0) {
             this.INSDC_ID = data.experiment[0].study_accession;
           }
@@ -211,7 +251,7 @@ export class OrganismDetailsComponent implements OnInit, AfterViewInit {
           setTimeout(() => {
             this.organismName = data.organism;
             this.dataSourceRecords = new MatTableDataSource<any>(unpackedData);
-            this.specBioSampleTotalCount = unpackedData?.length;
+            this.bioSampleTotalCount = unpackedData?.length;
             this.genomeNotes = data.genome_notes
             if (data.experiment != null) {
               this.dataSourceFiles = new MatTableDataSource<Sample>(data.experiment);
@@ -259,10 +299,200 @@ export class OrganismDetailsComponent implements OnInit, AfterViewInit {
             this.dataSourceAnnotation.sort = this.sort;
             this.dataSourceRelatedAnnotation.sort = this.sort;
           }, 50)
+
+          if (this.bioSampleObj.specimens.length > 0) {
+            this.bioSampleObj.specimens.filter(obj => {
+              if (obj.commonName == null) {
+                obj.commonName = "-";
+              }
+            });
+            this.getSpecFiltersForSelectedFilter(this.bioSampleObj.specimens);
+          }
+
+          setTimeout(() => {
+            this.dataSourceSpecRecords = new MatTableDataSource<any>(this.bioSampleObj.specimens);
+            this.specBioSampleTotalCount = this.bioSampleObj.specimens?.length;
+            this.dataSourceSpecRecords.paginator = this.paginator;
+            this.dataSourceSpecRecords.sort = this.sort;
+          }, 50);
         },
         err => console.log(err)
       );
   }
+
+  // Related Specimens
+  checkSpecFilterIsActive(filter: string) {
+    if (this.specActiveFilters.indexOf(filter) !== -1) {
+      return 'active';
+    }
+
+  }
+
+  onSpecFilterClick(event, label: string, filter: string) {
+    this.specSearchText = '';
+    let inactiveClassName = 'spec-'+label.toLowerCase().replace(" ", "-") + '-inactive';
+    this.createspecFilterJson(label.toLowerCase().replace(" ", ""), filter);
+    const filterIndex = this.specActiveFilters.indexOf(filter);
+
+    if (filterIndex !== -1) {
+      $('.' + inactiveClassName).removeClass('non-disp');
+      this.removeSpecFilter(filter);
+    } else {
+      this.specActiveFilters.push(filter);
+      this.dataSourceSpecRecords.filter = this.specFilterJson;
+      this.getSpecFiltersForSelectedFilter(this.dataSourceSpecRecords.filteredData);
+      $('.' + inactiveClassName).addClass('non-disp');
+      $(event.target).removeClass('non-disp');
+      $(event.target).addClass('disp');
+      $(event.target).addClass('active');
+    }
+  }
+
+  createspecFilterJson(key, value) {
+    if (key === 'sex') {
+      this.specFilterJson['sex'] = value;
+    }
+    else if (key === 'organismpart') {
+      this.specFilterJson['organismPart'] = value;
+    }
+    this.dataSourceSpecRecords.filterPredicate = ((data, filter) => {
+      const a = !filter.sex || data.sex === filter.sex;
+      const b = !filter.organismPart || data.organismPart === filter.organismPart;
+      return a && b;
+    }) as (PeriodicElement, string) => boolean;
+  }
+
+  getSpecFiltersForSelectedFilter(data: any) {
+    const filters = {
+      sex: {},
+      organismPart: {}
+    };
+    this.specSexFilters = [];
+    this.specOrganismPartFilters = [];
+
+    this.specFilters = filters;
+    for (const item of data) {
+      if (item.sex in filters.sex) {
+        filters.sex[item.sex] += 1;
+      } else {
+        filters.sex[item.sex] = 1;
+      }
+      if (item.organismPart in filters.organismPart) {
+        filters.organismPart[item.organismPart] += 1;
+      } else {
+        filters.organismPart[item.organismPart] = 1;
+      }
+    }
+    this.specFilters = filters;
+    const sexFilterObj = Object.entries(this.specFilters.sex);
+    const orgFilterObj = Object.entries(this.specFilters.organismPart);
+    let j = 0;
+    for (let i = 0; i < sexFilterObj.length; i++) {
+      let jsonObj = { "key": sexFilterObj[i][j], doc_count: sexFilterObj[i][j + 1] };
+      this.specSexFilters.push(jsonObj);
+    }
+    for (let i = 0; i < orgFilterObj.length; i++) {
+      let jsonObj = { "key": orgFilterObj[i][j], doc_count: orgFilterObj[i][j + 1] };
+      this.specOrganismPartFilters.push(jsonObj);
+    }
+  }
+
+  removeAllSpecFilters() {
+    $('.spec-sex-inactive').removeClass('non-disp');
+    $('.spec-org-part-inactive').removeClass('non-disp');
+    this.specActiveFilters = [];
+    this.specFilterJson['sex'] = '';
+    this.specFilterJson['organismPart'] = '';
+    this.dataSourceSpecRecords.filter = this.specFilterJson;
+    this.getBiosampleById();
+  }
+
+  removeSpecFilter(filter: string) {
+    if (filter != undefined) {
+      const filterIndex = this.specActiveFilters.indexOf(filter);
+      if (this.specActiveFilters.length !== 0) {
+        this.spliceSpecFilterArray(filter);
+        this.specActiveFilters.splice(filterIndex, 1);
+        this.dataSourceSpecRecords.filter = this.specFilterJson;
+        this.getSpecFiltersForSelectedFilter(this.dataSourceSpecRecords.filteredData);
+      } else {
+        this.specFilterJson['sex'] = '';
+        this.specFilterJson['organismPart'] = '';
+        this.dataSourceSpecRecords.filter = this.specFilterJson;
+        this.getBiosampleById();
+      }
+    }
+  }
+
+  spliceSpecFilterArray(filter: string) {
+    if (this.specFilterJson['sex'] === filter) {
+      this.specFilterJson['sex'] = '';
+    }
+    else if (this.specFilterJson['organismPart'] === filter) {
+      this.specFilterJson['organismPart'] = '';
+    }
+  }
+
+  getSpecFilters(accession) {
+    this.dashboardService.getSpecimenFilters(accession).subscribe(
+      data => {
+        this.specFiltersMap = data;
+        this.specSexFilters = this.specFiltersMap.sex.filter(i => i !== "");
+        this.specOrganismPartFilters = this.specFiltersMap.organismPart.filter(i => i !== "");
+      },
+      err => console.log(err)
+    );
+
+
+  }
+
+
+  getSpecSearchResults(from?, size?) {
+    $('.spec-sex-inactive').removeClass('non-disp active');
+    $('.spec-org-part-inactive').removeClass('non-disp active');
+    if (this.specSearchText.length == 0) {
+      this.getBiosampleById()
+    }
+    else {
+      this.specActiveFilters = [];
+      this.dataSourceSpecRecords.filter = this.specSearchText.trim();
+      this.dataSourceSpecRecords.filterPredicate = ((data, filter) => {
+        const a = !filter || data.sex.toLowerCase().includes(filter.toLowerCase());
+        const b = !filter || data.organismPart.toLowerCase().includes(filter.toLowerCase());
+        const c = !filter || data.accession.toLowerCase().includes(filter.toLowerCase());
+        const d = !filter || data.commonName.toLowerCase().includes(filter.toLowerCase());
+        return a || b || c || d;
+      }) as (PeriodicElement, string) => boolean;
+      this.getSpecFiltersForSelectedFilter(this.dataSourceSpecRecords.filteredData);
+    }
+  }
+
+  specToggleCollapse(filterKey) {
+    if (filterKey == 'Sex') {
+      if (this.isSpecSexFilterCollapsed) {
+        this.specitemLimitSexFilter = 10000;
+        this.isSpecSexFilterCollapsed = false;
+      } else {
+        this.specitemLimitSexFilter = 3;
+        this.isSpecSexFilterCollapsed = true;
+      }
+    }
+    else if (filterKey == 'Organism Part') {
+      if (this.isSpecOrganismPartCollapsed) {
+        this.specitemLimitOrgFilter = 10000;
+        this.isSpecOrganismPartCollapsed = false;
+      } else {
+        this.specitemLimitOrgFilter = 3;
+        this.isSpecOrganismPartCollapsed = true;
+      }
+    }
+  }
+
+  specRedirectTo(accession: string) {
+    this.router.navigateByUrl('/', { skipLocationChange: true }).then(() =>
+      this.router.navigate(["/data/root/details/" + accession]));
+  }
+  // Related Specimens
 
   filesSearch(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;

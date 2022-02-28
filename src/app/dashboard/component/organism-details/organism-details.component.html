@@ -19,8 +19,8 @@
         <dd class="col-md-3" *ngIf="INSDC_ID != null">{{INSDC_ID}}</dd>
         <dd class="col-md-3" *ngIf="INSDC_ID == null">-</dd>
         <dd class="col-md-6">
-            <a class="no-underline badge badge-pill goat-color" target="_blank" href="https://goat.genomehubs.org/records?record_id={{bioSampleObj?.taxId}}&result=taxon&taxonomy=ncbi#{{bioSampleObj?.organism}}">GoaT
-                info</a>
+            <!-- <a class="no-underline badge badge-pill goat-color" target="_blank" href="https://goat.genomehubs.org/records?record_id={{bioSampleObj?.taxId}}&result=taxon&taxonomy=ncbi#{{bioSampleObj?.organism}}">GoaT
+                info</a> -->
         </dd>
 
         <dt class="col-md-3" *ngIf="bioSampleObj?.sex">Sex:</dt>
@@ -32,8 +32,8 @@
     </dl>
 
 
-    <mat-tab-group dynamicHeight>
-        <mat-tab label="DATA">
+    <mat-tab-group>
+        <mat-tab label="Data">
             <!-- Related Annotation Section -->
             <div class="col-md-12" *ngIf="dataSourceRelatedAnnotationCount != 0">
                 <hr>
@@ -708,7 +708,7 @@
                 <mat-paginator #experimentsTable [pageSizeOptions]="[10, 20, 30]" showFirstLastButtons [length]="dataSourceFilesCount"></mat-paginator>
             </div>
         </mat-tab>
-        <mat-tab label="METADATA">
+        <mat-tab label="Metadata">
             <!-- Related Organisms -->
             <div class="col-md-12" *ngIf="bioSampleObj?.records.length">
                 <hr>
@@ -832,17 +832,123 @@
                                     </mat-cell>
                                 </ng-container>
 
+                                <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+                                <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+                            </table>
+                            <mat-paginator #relatedOrganisms style="width: 100%;" [pageSizeOptions]="[10, 20, 30]" showFirstLastButtons [length]="bioSampleTotalCount"></mat-paginator>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Related specimens -->
+            <div class="col-md-12" *ngIf="bioSampleObj?.specimens?.length">
+                <hr>
+                <h1 class="col-md-12 page-header">Related Specimens</h1>
+                <button type="button" style="float: right;" class="btn btn-primary" mat-raised-button (click)="exporter.exportTable('csv', {fileName:'related-specimens-metadata'})">Download metadata</button>
+                <mat-form-field>
+                    <mat-label>Search</mat-label>
+                    <input matInput [(ngModel)]='specSearchText' (keyup)="getSpecSearchResults()" placeholder="Ex. ILLUMINA" #input>
+                </mat-form-field>
+                <div class="row">
+                    <div class="col-sm-2">
+                        <div class="row">
+                            <div class="col-md-12 col-sm-6">
+                                <div class="card bg-lite mb-3 filter-top">
+                                    <h3 class="card-header filter-heading">
+                                        <span #lbltextSpecSex>Sex</span>
+                                        <i class="material-icons float-right spec-sex-inactive" *ngIf="specSexFilters.length > 3 && isSpecSexFilterCollapsed" (click)="specToggleCollapse(lbltextSpecSex.innerText)">add</i>
+                                        <i class="material-icons float-right spec-sex-inactive" *ngIf="specSexFilters.length > 3 && !isSpecSexFilterCollapsed" (click)="specToggleCollapse(lbltextSpecSex.innerText)">remove</i>
+                                    </h3>
+                                    <ul id="spec-sex-inactive" class="list-group" [ngClass]="{'long-list': specitemLimitSexFilter > specfilterSize}">
+                                        <ng-container *ngFor="let filter of specSexFilters; let i = index">
+                                            <li id="{{i}}" class="list-group-item d-flex justify-content-between align-items-center spec-sex-inactive" [ngClass]="checkSpecFilterIsActive(filter.key)" (click)="onSpecFilterClick($event, lbltextSpecSex.innerText, filter.key)" style="cursor: pointer; padding: .75rem 0.25rem;"
+                                                *ngIf="i<specitemLimitSexFilter && filter.key != ''">
+                                                {{filter.key}}
+                                                <span class="badge badge-pill badge-info">{{filter.doc_count}}</span>
+                                            </li>
+                                        </ng-container>
+                                    </ul>
+                                </div>
+                            </div>
+
+                            <div class="col-md-12 col-sm-6">
+                                <div class="card bg-lite mb-3 filter-top">
+                                    <h3 class="card-header filter-heading org-filter">
+                                        <span #lbltextSpecOrgPart>Organism Part</span>
+                                        <i class="material-icons float-right spec-organism-part-inactive" *ngIf="specOrganismPartFilters.length > 3 && isSpecOrganismPartCollapsed" (click)="specToggleCollapse(lbltextSpecOrgPart.innerText)">add</i>
+                                        <i class="material-icons float-right spec-organism-part-inactive" *ngIf="specOrganismPartFilters.length > 3 && !isSpecOrganismPartCollapsed" (click)="specToggleCollapse(lbltextSpecOrgPart.innerText)">remove</i>
+                                    </h3>
+                                    <ul id="spec-organism-part-inactive" class="list-group" [ngClass]="{'long-list': specitemLimitOrgFilter > specfilterSize}">
+                                        <ng-container *ngFor="let filter of specOrganismPartFilters; let i = index">
+                                            <li id="{{i}}" class="list-group-item d-flex justify-content-between align-items-center spec-organism-part-inactive" [ngClass]="checkSpecFilterIsActive(filter.key)" (click)="onSpecFilterClick($event, lbltextSpecOrgPart.innerText, filter.key)" style="cursor: pointer; padding: .75rem 0.25rem;"
+                                                *ngIf="i<specitemLimitOrgFilter && filter.key != ''">
+                                                {{filter.key}}
+                                                <span class="badge badge-pill badge-info">{{filter.doc_count}}</span>
+                                            </li>
+                                        </ng-container>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-10">
+                        <div class="row">
+                            <h1 *ngIf="specActiveFilters.length !== 0">Filters:
+                                <button type="button" class="btn btn-success" *ngFor="let filter of specActiveFilters">
+                                    {{filter}}
+                                    <span class="badge badge-light" (click)="removeSpecFilter(filter)">X</span>
+                                </button>
+                                <button type="button" class="btn btn-primary" (click)="removeAllSpecFilters()">
+                                    Remove all filters
+                                </button>
+                            </h1>
+                            <table mat-table matTableExporter #exporter="matTableExporter" [dataSource]="dataSourceSpecRecords" matSort style="width: 100%;">
+                                <ng-container matColumnDef="accession">
+                                    <mat-header-cell *matHeaderCellDef mat-sort-header> BioSample ID </mat-header-cell>
+                                    <mat-cell *matCellDef="let element" class="txt-center">
+                                        <a [routerLink]="['/data/specimens/details/', element.accession]">
+                                            {{element.accession}}</a>
+                                    </mat-cell>
+                                </ng-container>
+
+                                <ng-container matColumnDef="organism">
+                                    <mat-header-cell *matHeaderCellDef mat-sort-header> Organism </mat-header-cell>
+                                    <mat-cell *matCellDef="let element" class="txt-center">
+                                        {{element.organism}}
+                                    </mat-cell>
+                                </ng-container>
+
+                                <ng-container matColumnDef="commonName">
+                                    <mat-header-cell *matHeaderCellDef mat-sort-header>Common Name </mat-header-cell>
+                                    <mat-cell *matCellDef="let element" class="txt-center"> {{element?.commonName}}
+                                    </mat-cell>
+                                </ng-container>
+
+                                <ng-container matColumnDef="sex">
+                                    <mat-header-cell *matHeaderCellDef mat-sort-header> Sex </mat-header-cell>
+                                    <mat-cell *matCellDef="let element" class="txt-center"> {{element.sex}} </mat-cell>
+                                </ng-container>
+
+                                <ng-container matColumnDef="organismPart">
+                                    <mat-header-cell *matHeaderCellDef mat-sort-header> Organism part </mat-header-cell>
+                                    <mat-cell *matCellDef="let element" class="txt-center"> {{element.organismPart}}
+                                    </mat-cell>
+                                </ng-container>
+
                                 <mat-header-row *matHeaderRowDef="specDisplayedColumns"></mat-header-row>
                                 <mat-row *matRowDef="let row; columns: specDisplayedColumns;"></mat-row>
                             </table>
-                            <mat-paginator #relatedOrganisms style="width: 100%;" [pageSizeOptions]="[10, 20, 30]" showFirstLastButtons [length]="specBioSampleTotalCount"></mat-paginator>
+                            <mat-paginator style="width: 100%;" [pageSizeOptions]="[20, 30, 50]" showFirstLastButtons [length]="specBioSampleTotalCount"></mat-paginator>
                         </div>
                     </div>
                 </div>
             </div>
         </mat-tab>
-        <mat-tab label="EXTERNAL REFERENCES">
-            <div *ngIf="bioSampleObj?.genome_notes">
+        <mat-tab label="Genome Note">
+            <!-- Genome Notes Section -->
+            <div class="goat-box" *ngIf="bioSampleObj?.genome_notes">
+                <hr>
                 <mat-expansion-panel [expanded]="true" *ngIf="bioSampleObj?.genome_notes?.length">
                     <mat-expansion-panel-header class="page-header">
                         <h1>Published Genome Note</h1>
@@ -878,6 +984,55 @@
                         </div>
                     </div>
                 </mat-expansion-panel>
+            </div>
+        </mat-tab>
+        <mat-tab label="GoaT">
+            <!-- Goat Info Section -->
+            <div class="tab-box" *ngIf="bioSampleObj?.goat_info">
+                <hr>
+                <mat-expansion-panel [expanded]="true" *ngIf="bioSampleObj?.goat_info?.attributes.length">
+                    <mat-expansion-panel-header class="page-header">
+                        <h1>Goat Info</h1>
+                    </mat-expansion-panel-header>
+                    <div class="figpanel">
+                        <div class="row">
+                            <table mat-table matTableExporter #exporter="matTableExporter" [dataSource]="dataSourceGoatInfo" matSort style="width: 100%;">
+                                <ng-container matColumnDef="name">
+                                    <mat-header-cell *matHeaderCellDef> Attribute </mat-header-cell>
+                                    <mat-cell *matCellDef="let element" class="txt-center"> {{element.name}} </mat-cell>
+                                </ng-container>
+                                <ng-container matColumnDef="value">
+                                    <mat-header-cell *matHeaderCellDef> Value </mat-header-cell>
+                                    <mat-cell *matCellDef="let element" class="txt-center"> {{element.value}} </mat-cell>
+                                </ng-container>
+                                <ng-container matColumnDef="count">
+                                    <mat-header-cell *matHeaderCellDef> Count </mat-header-cell>
+                                    <mat-cell *matCellDef="let element" class="txt-center"> {{element.count}} </mat-cell>
+                                </ng-container>
+
+                                <ng-container matColumnDef="aggregation_method">
+                                    <mat-header-cell *matHeaderCellDef> Summary </mat-header-cell>
+                                    <mat-cell *matCellDef="let element" class="txt-center"> {{element.aggregation_method}}
+                                    </mat-cell>
+                                </ng-container>
+
+                                <ng-container matColumnDef="aggregation_source">
+                                    <mat-header-cell *matHeaderCellDef> Source </mat-header-cell>
+                                    <mat-cell *matCellDef="let element" class="txt-center"> {{element.aggregation_source}}
+                                    </mat-cell>
+                                </ng-container>
+
+                                <mat-header-row *matHeaderRowDef="displayedColumnsGoatInfo"></mat-header-row>
+                                <mat-row *matRowDef="let row; columns: displayedColumnsGoatInfo;"></mat-row>
+                            </table>
+                            <!-- <mat-paginator #assembliesTable [pageSizeOptions]="[10, 20, 30]" showFirstLastButtons style="width: 100%;"></mat-paginator> -->
+                        </div>
+                    </div>
+                    <div class="row">
+                        <a href="{{bioSampleObj?.goat_info.url}}" class="btn btn-success" target="_blank">Read the Goat Info in full here</a>
+                    </div>
+                </mat-expansion-panel>
+                <hr>
             </div>
         </mat-tab>
     </mat-tab-group>

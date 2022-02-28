@@ -19,29 +19,29 @@ export class DetailsComponent implements OnInit {
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
-  dataSourceRecords;
+  dataSourceSpecRecords;
   specBioSampleTotalCount;
   specDisplayedColumns = ['accession', 'organism', 'commonName', 'sex', 'organismPart'];
 
 
-  isSexFilterCollapsed = true;
-  isOrganismPartCollapsed = true;
-  itemLimitSexFilter: number;
-  itemLimitOrgFilter: number;
-  filterSize: number;
-  searchText = '';
-  activeFilters = [];
-  filtersMap;
-  filters = {
+  isSpecSexFilterCollapsed = true;
+  isSpecOrganismPartCollapsed = true;
+  specitemLimitSexFilter: number;
+  specitemLimitOrgFilter: number;
+  specfilterSize: number;
+  specSearchText = '';
+  specActiveFilters = [];
+  specFiltersMap;
+  specFilters = {
     sex: {},
     organismPart: {}
   };
-  sexFilters = [];
-  organismPartFilters = [];
-  unpackedData;
+  specSexFilters = [];
+  specOrganismPartFilters = [];
+  specUnpackedData;
   organismName;
   relatedRecords;
-  filterJson = {
+  specFilterJson = {
     sex: "",
     organismPart: "",
   };
@@ -51,13 +51,13 @@ export class DetailsComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.activeFilters = [];
-    this.filterSize = 3;
-    this.itemLimitSexFilter = this.filterSize;
-    this.itemLimitOrgFilter = this.filterSize;
+    this.specActiveFilters = [];
+    this.specfilterSize = 3;
+    this.specitemLimitSexFilter = this.specfilterSize;
+    this.specitemLimitOrgFilter = this.specfilterSize;
     this.relatedRecords = [];
-    this.filterJson['sex'] = '';
-    this.filterJson['organismPart'] = '';
+    this.specFilterJson['sex'] = '';
+    this.specFilterJson['organismPart'] = '';
     this.getBiosamples();
   }
 
@@ -66,11 +66,11 @@ export class DetailsComponent implements OnInit {
     this.dashboardService.getBiosampleByAccession(this.bioSampleId)
       .subscribe(
         data => {
-          const unpackedData = [];
+          const specUnpackedData = [];
           for (const item of data.hits.hits) {
-            unpackedData.push(this.unpackData(item));
+            specUnpackedData.push(this.unpackData(item));
           }
-          this.bioSampleObj = unpackedData[0];
+          this.bioSampleObj = specUnpackedData[0];
           if (this.bioSampleObj.specimens.length > 0) {
             this.bioSampleObj.specimens.filter(obj => {
               if (obj.commonName == null) {
@@ -81,10 +81,10 @@ export class DetailsComponent implements OnInit {
           }
           setTimeout(() => {
             this.organismName = data.organism;
-            this.dataSourceRecords = new MatTableDataSource<any>(this.bioSampleObj.specimens);
-            this.specBioSampleTotalCount = unpackedData?.length;
-            this.dataSourceRecords.paginator = this.paginator;
-            this.dataSourceRecords.sort = this.sort;
+            this.dataSourceSpecRecords = new MatTableDataSource<any>(this.bioSampleObj.specimens);
+            this.specBioSampleTotalCount = specUnpackedData?.length;
+            this.dataSourceSpecRecords.paginator = this.paginator;
+            this.dataSourceSpecRecords.sort = this.sort;
           }, 50);
         },
         err => console.log(err)
@@ -93,7 +93,7 @@ export class DetailsComponent implements OnInit {
 
   applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
-    this.dataSourceRecords.filter = filterValue.trim().toLowerCase();
+    this.dataSourceSpecRecords.filter = filterValue.trim().toLowerCase();
   }
 
   unpackData(data: any) {
@@ -118,25 +118,25 @@ export class DetailsComponent implements OnInit {
   }
 
   checkFilterIsActive(filter: string) {
-    if (this.activeFilters.indexOf(filter) !== -1) {
+    if (this.specActiveFilters.indexOf(filter) !== -1) {
       return 'active';
     }
 
   }
 
   onFilterClick(event, label: string, filter: string) {
-    this.searchText = '';
+    this.specSearchText = '';
     let inactiveClassName = label.toLowerCase().replace(" ", "-") + '-inactive';
-    this.createFilterJson(label.toLowerCase().replace(" ", ""), filter);
-    const filterIndex = this.activeFilters.indexOf(filter);
+    this.createspecFilterJson(label.toLowerCase().replace(" ", ""), filter);
+    const filterIndex = this.specActiveFilters.indexOf(filter);
 
     if (filterIndex !== -1) {
       $('.' + inactiveClassName).removeClass('non-disp');
       this.removeFilter(filter);
     } else {
-      this.activeFilters.push(filter);
-      this.dataSourceRecords.filter = this.filterJson;
-      this.getFiltersForSelectedFilter(this.dataSourceRecords.filteredData);
+      this.specActiveFilters.push(filter);
+      this.dataSourceSpecRecords.filter = this.specFilterJson;
+      this.getFiltersForSelectedFilter(this.dataSourceSpecRecords.filteredData);
       $('.' + inactiveClassName).addClass('non-disp');
       $(event.target).removeClass('non-disp');
       $(event.target).addClass('disp');
@@ -144,14 +144,14 @@ export class DetailsComponent implements OnInit {
     }
   }
 
-  createFilterJson(key, value) {
+  createspecFilterJson(key, value) {
     if (key === 'sex') {
-      this.filterJson['sex'] = value;
+      this.specFilterJson['sex'] = value;
     }
     else if (key === 'organismpart') {
-      this.filterJson['organismPart'] = value;
+      this.specFilterJson['organismPart'] = value;
     }
-    this.dataSourceRecords.filterPredicate = ((data, filter) => {
+    this.dataSourceSpecRecords.filterPredicate = ((data, filter) => {
       const a = !filter.sex || data.sex === filter.sex;
       const b = !filter.organismPart || data.organismPart === filter.organismPart;
       return a && b;
@@ -163,10 +163,10 @@ export class DetailsComponent implements OnInit {
       sex: {},
       organismPart: {}
     };
-    this.sexFilters = [];
-    this.organismPartFilters = [];
+    this.specSexFilters = [];
+    this.specOrganismPartFilters = [];
 
-    this.filters = filters;
+    this.specFilters = filters;
     for (const item of data) {
       if (item.sex in filters.sex) {
         filters.sex[item.sex] += 1;
@@ -179,53 +179,53 @@ export class DetailsComponent implements OnInit {
         filters.organismPart[item.organismPart] = 1;
       }
     }
-    this.filters = filters;
-    const sexFilterObj = Object.entries(this.filters.sex);
-    const orgFilterObj = Object.entries(this.filters.organismPart);
+    this.specFilters = filters;
+    const sexFilterObj = Object.entries(this.specFilters.sex);
+    const orgFilterObj = Object.entries(this.specFilters.organismPart);
     let j = 0;
     for (let i = 0; i < sexFilterObj.length; i++) {
       let jsonObj = { "key": sexFilterObj[i][j], doc_count: sexFilterObj[i][j + 1] };
-      this.sexFilters.push(jsonObj);
+      this.specSexFilters.push(jsonObj);
     }
     for (let i = 0; i < orgFilterObj.length; i++) {
       let jsonObj = { "key": orgFilterObj[i][j], doc_count: orgFilterObj[i][j + 1] };
-      this.organismPartFilters.push(jsonObj);
+      this.specOrganismPartFilters.push(jsonObj);
     }
   }
 
   removeAllFilters() {
     $('.sex-inactive').removeClass('non-disp');
     $('.org-part-inactive').removeClass('non-disp');
-    this.activeFilters = [];
-    this.filterJson['sex'] = '';
-    this.filterJson['organismPart'] = '';
-    this.dataSourceRecords.filter = this.filterJson;
+    this.specActiveFilters = [];
+    this.specFilterJson['sex'] = '';
+    this.specFilterJson['organismPart'] = '';
+    this.dataSourceSpecRecords.filter = this.specFilterJson;
     this.getBiosamples();
   }
 
   removeFilter(filter: string) {
     if (filter != undefined) {
-      const filterIndex = this.activeFilters.indexOf(filter);
-      if (this.activeFilters.length !== 0) {
+      const filterIndex = this.specActiveFilters.indexOf(filter);
+      if (this.specActiveFilters.length !== 0) {
         this.spliceFilterArray(filter);
-        this.activeFilters.splice(filterIndex, 1);
-        this.dataSourceRecords.filter = this.filterJson;
-        this.getFiltersForSelectedFilter(this.dataSourceRecords.filteredData);
+        this.specActiveFilters.splice(filterIndex, 1);
+        this.dataSourceSpecRecords.filter = this.specFilterJson;
+        this.getFiltersForSelectedFilter(this.dataSourceSpecRecords.filteredData);
       } else {
-        this.filterJson['sex'] = '';
-        this.filterJson['organismPart'] = '';
-        this.dataSourceRecords.filter = this.filterJson;
+        this.specFilterJson['sex'] = '';
+        this.specFilterJson['organismPart'] = '';
+        this.dataSourceSpecRecords.filter = this.specFilterJson;
         this.getBiosamples();
       }
     }
   }
 
   spliceFilterArray(filter: string) {
-    if (this.filterJson['sex'] === filter) {
-      this.filterJson['sex'] = '';
+    if (this.specFilterJson['sex'] === filter) {
+      this.specFilterJson['sex'] = '';
     }
-    else if (this.filterJson['organismPart'] === filter) {
-      this.filterJson['organismPart'] = '';
+    else if (this.specFilterJson['organismPart'] === filter) {
+      this.specFilterJson['organismPart'] = '';
     }
   }
 
@@ -233,9 +233,9 @@ export class DetailsComponent implements OnInit {
   getFilters(accession) {
     this.dashboardService.getSpecimenFilters(accession).subscribe(
       data => {
-        this.filtersMap = data;
-        this.sexFilters = this.filtersMap.sex.filter(i => i !== "");
-        this.organismPartFilters = this.filtersMap.organismPart.filter(i => i !== "");
+        this.specFiltersMap = data;
+        this.specSexFilters = this.specFiltersMap.sex.filter(i => i !== "");
+        this.specOrganismPartFilters = this.specFiltersMap.organismPart.filter(i => i !== "");
       },
       err => console.log(err)
     );
@@ -254,40 +254,40 @@ export class DetailsComponent implements OnInit {
   getSearchResults(from?, size?) {
     $('.sex-inactive').removeClass('non-disp active');
     $('.org-part-inactive').removeClass('non-disp active');
-    if (this.searchText.length == 0) {
+    if (this.specSearchText.length == 0) {
       this.getBiosamples();
     }
     else {
-      this.activeFilters = [];
-      this.dataSourceRecords.filter = this.searchText.trim();
-      this.dataSourceRecords.filterPredicate = ((data, filter) => {
+      this.specActiveFilters = [];
+      this.dataSourceSpecRecords.filter = this.specSearchText.trim();
+      this.dataSourceSpecRecords.filterPredicate = ((data, filter) => {
         const a = !filter || data.sex.toLowerCase().includes(filter.toLowerCase());
         const b = !filter || data.organismPart.toLowerCase().includes(filter.toLowerCase());
         const c = !filter || data.accession.toLowerCase().includes(filter.toLowerCase());
         const d = !filter || data.commonName.toLowerCase().includes(filter.toLowerCase());
         return a || b || c || d;
       }) as (PeriodicElement, string) => boolean;
-      this.getFiltersForSelectedFilter(this.dataSourceRecords.filteredData);
+      this.getFiltersForSelectedFilter(this.dataSourceSpecRecords.filteredData);
     }
   }
 
   toggleCollapse(filterKey) {
     if (filterKey == 'Sex') {
-      if (this.isSexFilterCollapsed) {
-        this.itemLimitSexFilter = 10000;
-        this.isSexFilterCollapsed = false;
+      if (this.isSpecSexFilterCollapsed) {
+        this.specitemLimitSexFilter = 10000;
+        this.isSpecSexFilterCollapsed = false;
       } else {
-        this.itemLimitSexFilter = 3;
-        this.isSexFilterCollapsed = true;
+        this.specitemLimitSexFilter = 3;
+        this.isSpecSexFilterCollapsed = true;
       }
     }
     else if (filterKey == 'Organism Part') {
-      if (this.isOrganismPartCollapsed) {
-        this.itemLimitOrgFilter = 10000;
-        this.isOrganismPartCollapsed = false;
+      if (this.isSpecOrganismPartCollapsed) {
+        this.specitemLimitOrgFilter = 10000;
+        this.isSpecOrganismPartCollapsed = false;
       } else {
-        this.itemLimitOrgFilter = 3;
-        this.isOrganismPartCollapsed = true;
+        this.specitemLimitOrgFilter = 3;
+        this.isSpecOrganismPartCollapsed = true;
       }
     }
   }

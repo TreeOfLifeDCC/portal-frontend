@@ -114,7 +114,7 @@
             <button type="button" style="float: right;" class="btn btn-primary" mat-raised-button (click)="exporter.exportTable('csv', {fileName:'related-specimens-metadata'})">Download metadata</button>
             <mat-form-field>
                 <mat-label>Search</mat-label>
-                <input matInput [(ngModel)]='searchText' (keyup)="getSearchResults()" placeholder="Ex. ILLUMINA" #input>
+                <input matInput [(ngModel)]='specSearchText' (keyup)="getSearchResults()" placeholder="Ex. ILLUMINA" #input>
             </mat-form-field>
             <div class="row">
                 <div class="col-sm-2">
@@ -123,13 +123,13 @@
                             <div class="card bg-lite mb-3 filter-top">
                                 <h3 class="card-header filter-heading">
                                     <span #lbltextSex>Sex</span>
-                                    <i class="material-icons float-right sex-inactive" *ngIf="sexFilters.length > 3 && isSexFilterCollapsed" (click)="toggleCollapse(lbltextSex.innerText)">add</i>
-                                    <i class="material-icons float-right sex-inactive" *ngIf="sexFilters.length > 3 && !isSexFilterCollapsed" (click)="toggleCollapse(lbltextSex.innerText)">remove</i>
+                                    <i class="material-icons float-right sex-inactive" *ngIf="specSexFilters.length > 3 && isSpecSexFilterCollapsed" (click)="toggleCollapse(lbltextSex.innerText)">add</i>
+                                    <i class="material-icons float-right sex-inactive" *ngIf="specSexFilters.length > 3 && !isSpecSexFilterCollapsed" (click)="toggleCollapse(lbltextSex.innerText)">remove</i>
                                 </h3>
-                                <ul id="sex-inactive" class="list-group" [ngClass]="{'long-list': itemLimitSexFilter > filterSize}">
-                                    <ng-container *ngFor="let filter of sexFilters; let i = index">
+                                <ul id="sex-inactive" class="list-group" [ngClass]="{'long-list': specitemLimitSexFilter > specfilterSize}">
+                                    <ng-container *ngFor="let filter of specSexFilters; let i = index">
                                         <li id="{{i}}" class="list-group-item d-flex justify-content-between align-items-center sex-inactive" [ngClass]="checkFilterIsActive(filter.key)" (click)="onFilterClick($event, lbltextSex.innerText, filter.key)" style="cursor: pointer; padding: .75rem 0.25rem;"
-                                            *ngIf="i<itemLimitSexFilter && filter.key != ''">
+                                            *ngIf="i<specitemLimitSexFilter && filter.key != ''">
                                             {{filter.key}}
                                             <span class="badge badge-pill badge-info">{{filter.doc_count}}</span>
                                         </li>
@@ -140,15 +140,15 @@
 
                         <div class="col-md-12 col-sm-6">
                             <div class="card bg-lite mb-3 filter-top">
-                                <h3 class="card-header filter-heading">
+                                <h3 class="card-header filter-heading org-filter">
                                     <span #lbltextOrgPart>Organism Part</span>
-                                    <i class="material-icons float-right org-part-inactive" *ngIf="organismPartFilters.length > 3 && isOrganismPartCollapsed" (click)="toggleCollapse(lbltextOrgPart.innerText)">add</i>
-                                    <i class="material-icons float-right org-part-inactive" *ngIf="organismPartFilters.length > 3 && !isOrganismPartCollapsed" (click)="toggleCollapse(lbltextOrgPart.innerText)">remove</i>
+                                    <i class="material-icons float-right org-part-inactive" *ngIf="specOrganismPartFilters.length > 3 && isSpecOrganismPartCollapsed" (click)="toggleCollapse(lbltextOrgPart.innerText)">add</i>
+                                    <i class="material-icons float-right org-part-inactive" *ngIf="specOrganismPartFilters.length > 3 && !isSpecOrganismPartCollapsed" (click)="toggleCollapse(lbltextOrgPart.innerText)">remove</i>
                                 </h3>
-                                <ul id="org-part-inactive" class="list-group" [ngClass]="{'long-list': itemLimitOrgFilter > filterSize}">
-                                    <ng-container *ngFor="let filter of organismPartFilters; let i = index">
+                                <ul id="org-part-inactive" class="list-group" [ngClass]="{'long-list': specitemLimitOrgFilter > specfilterSize}">
+                                    <ng-container *ngFor="let filter of specOrganismPartFilters; let i = index">
                                         <li id="{{i}}" class="list-group-item d-flex justify-content-between align-items-center org-part-inactive" [ngClass]="checkFilterIsActive(filter.key)" (click)="onFilterClick($event, lbltextOrgPart.innerText, filter.key)" style="cursor: pointer; padding: .75rem 0.25rem;"
-                                            *ngIf="i<itemLimitOrgFilter && filter.key != ''">
+                                            *ngIf="i<specitemLimitOrgFilter && filter.key != ''">
                                             {{filter.key}}
                                             <span class="badge badge-pill badge-info">{{filter.doc_count}}</span>
                                         </li>
@@ -160,8 +160,8 @@
                 </div>
                 <div class="col-sm-10">
                     <div class="row">
-                        <h1 *ngIf="activeFilters.length !== 0">Filters:
-                            <button type="button" class="btn btn-success" *ngFor="let filter of activeFilters">
+                        <h1 *ngIf="specActiveFilters.length !== 0">Filters:
+                            <button type="button" class="btn btn-success" *ngFor="let filter of specActiveFilters">
                                 {{filter}}
                                 <span class="badge badge-light" (click)="removeFilter(filter)">X</span>
                             </button>
@@ -169,7 +169,7 @@
                                 Remove all filters
                             </button>
                         </h1>
-                        <table mat-table matTableExporter #exporter="matTableExporter" [dataSource]="dataSourceRecords" matSort style="width: 100%;">
+                        <table mat-table matTableExporter #exporter="matTableExporter" [dataSource]="dataSourceSpecRecords" matSort style="width: 100%;">
                             <ng-container matColumnDef="accession">
                                 <mat-header-cell *matHeaderCellDef mat-sort-header> BioSample ID </mat-header-cell>
                                 <mat-cell *matCellDef="let element" class="txt-center">

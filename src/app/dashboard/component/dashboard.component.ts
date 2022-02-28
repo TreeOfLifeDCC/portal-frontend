@@ -928,7 +928,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
             $('#myUL').css('display', 'block');
             this.spinner.hide();
           }, 850);
-        }, 100);
+        }, 200);
       }
       else if ($(event.target).hasClass('fa-minus-circle')) {
         this.spinner.show();

@@ -2,8 +2,8 @@
     text-align: center!important;
 }
 
-.card-header,z
-.btn-success,
+.card-header,
+z .btn-success,
 .badge-success {
     background-color: #8FBC45;
 }
@@ -43,4 +43,8 @@
 .inactiveFilter {
     pointer-events: none;
     cursor: default;
- }
+}
+
+.org-filter {
+    padding-left: 6px;
+}
