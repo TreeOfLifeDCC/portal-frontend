@@ -115,11 +115,16 @@
 
 
                 <button type="button" style="float: right;" class="btn btn-primary" mat-raised-button (click)="downloadCSV()">Download metadata</button>
-                <h1 *ngIf="activeFilters.length !== 0">Filters:
-                    <button type="button" class="btn btn-success" *ngFor="let filter of activeFilters">
-                        {{filter}}
-                        <span class="badge badge-light" (click)="removeFilter(filter)">X</span>
+                <h1 *ngIf="activeFilters.length > 0 || selectedFilterValue != ''">Filters:
+                    <span *ngIf="(phylSelectedRank != '' && activeFilters.length > 1) || (phylSelectedRank == '' && activeFilters.length > 0)">
+                        <span *ngFor="let filter of activeFilters">
+                            <span *ngIf="phylSelectedRank != filter">
+                                <button type="button" class="btn btn-success">{{filter}}
+                                    <span class="badge badge-light" (click)="removeFilter(filter)">X</span>
                     </button>
+                    </span>
+                    </span>
+                    </span>
                     <span *ngIf="selectedFilterValue != ''">
                         <button type="button" class="btn btn-success">{{selectedFilterValue.taxonomy}}
                             <span class="badge badge-light" (click)="removeTaxaFilter(selectedFilterValue.taxonomy)">X</span>
