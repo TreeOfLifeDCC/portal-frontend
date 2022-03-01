@@ -251,3 +251,8 @@ mat-header-cell:nth-child(5) {
 .w-150 {
     max-width: 150px !important;
 }
+
+.badge-primary-cns {
+    color: #fff;
+    background-color: #4BBEFD;
+}

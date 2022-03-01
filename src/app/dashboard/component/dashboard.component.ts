@@ -1173,7 +1173,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
     if (element.commonNameSource === 'UKSI') {
       return 'badge badge-pill badge-warning';
     } else {
-      return 'badge badge-pill badge-primary';
+      return 'badge badge-pill badge-primary-cns';
     }
   }
 
