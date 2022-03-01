@@ -153,13 +153,13 @@
                     </ng-container>
 
                     <ng-container matColumnDef="INSDC_ID">
-                        <mat-header-cell *matHeaderCellDef [ngClass]="'w-100 th-left'"> INSDC ID </mat-header-cell>
-                        <mat-cell *matCellDef="let element" [ngClass]="'w-100 th-left'"> {{element?.INSDC_ID}}</mat-cell>
+                        <mat-header-cell *matHeaderCellDef [ngClass]="'w-85 th-left'"> INSDC ID </mat-header-cell>
+                        <mat-cell *matCellDef="let element" [ngClass]="'w-85 th-left'"> {{element?.INSDC_ID}}</mat-cell>
                     </ng-container>
 
                     <ng-container matColumnDef="commonName">
-                        <mat-header-cell *matHeaderCellDef mat-sort-header [ngClass]="'w-150 th-left'">Common Name </mat-header-cell>
-                        <mat-cell *matCellDef="let element" [ngClass]="'w-150 th-left'">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header [ngClass]="'w-100 th-left'">Common Name </mat-header-cell>
+                        <mat-cell *matCellDef="let element" [ngClass]="'w-100 th-left'">
                             {{element?.commonName}}
                         </mat-cell>
                     </ng-container>
@@ -167,7 +167,7 @@
                     <ng-container matColumnDef="commonNameSource">
                         <mat-header-cell *matHeaderCellDef mat-sort-header [ngClass]="'w-75 th-center'">Common Name Source</mat-header-cell>
                         <mat-cell *matCellDef="let element" [ngClass]="'w-75 th-center'">
-                            <span [ngClass]="commonNameSourceStyle(element)" style="width: 75px;text-align: center;">{{element.commonNameSource}}</span>
+                            <span *ngIf="checkElement(element)" [ngClass]="commonNameSourceStyle(element)" style="width: 75px;text-align: center;">{{element.commonNameSource}}</span>
                         </mat-cell>
                     </ng-container>
 

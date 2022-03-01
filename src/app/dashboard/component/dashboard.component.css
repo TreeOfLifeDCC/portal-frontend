@@ -241,7 +241,11 @@ mat-header-cell:nth-child(5) {
 }
 
 .w-75 {
-    max-width: 80px !important;
+    max-width: 75px !important;
+}
+
+.w-85 {
+    max-width: 85px !important;
 }
 
 .w-100 {
@@ -250,6 +254,10 @@ mat-header-cell:nth-child(5) {
 
 .w-150 {
     max-width: 150px !important;
+}
+
+.w-200 {
+    max-width: 200px !important;
 }
 
 .badge-primary-cns {
