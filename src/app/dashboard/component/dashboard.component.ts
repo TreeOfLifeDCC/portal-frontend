@@ -382,9 +382,6 @@ export class DashboardComponent implements OnInit, AfterViewInit {
       if (key === 'commonName' && data[key] == null) {
         dataToReturn[key] = "-"
       }
-      if (key === 'commonNameSource' && data[key] == null) {
-        dataToReturn[key] = "-"
-      }
       else {
         dataToReturn[key] = data[key];
       }
@@ -1169,7 +1166,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
   }
 
   checkElement(element: any) {
-    return element.commonName !== '-';
+    return element.commonName != "-";
   }
 
   commonNameSourceStyle(element: any) {

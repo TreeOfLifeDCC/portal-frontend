@@ -159,12 +159,18 @@
 
                     <ng-container matColumnDef="commonName">
                         <mat-header-cell *matHeaderCellDef mat-sort-header [ngClass]="'w-150 th-left'">Common Name </mat-header-cell>
-                        <mat-cell *matCellDef="let element" [ngClass]="'w-150 th-left'"> {{element?.commonName}}</mat-cell>
+                        <mat-cell *matCellDef="let element" [ngClass]="'w-150 th-left'">
+                            {{element?.commonName}}
+                        </mat-cell>
                     </ng-container>
 
                     <ng-container matColumnDef="commonNameSource">
-                        <mat-header-cell *matHeaderCellDef mat-sort-header [ngClass]="'w-75 th-left'">Common Name Source</mat-header-cell>
-                        <mat-cell *matCellDef="let element" [ngClass]="'w-75 th-left'"> {{element?.commonNameSource}}</mat-cell>
+                        <mat-header-cell *matHeaderCellDef mat-sort-header [ngClass]="'w-75 th-center'">Common Name Source</mat-header-cell>
+                        <mat-cell *matCellDef="let element" [ngClass]="'w-75 th-center'">
+                            <sup *ngIf="checkElement(element)" matTooltip="Source: {{element.commonNameSource}}">
+                                <span [ngClass]="commonNameSourceStyle(element)">{{element.commonNameSource}}</span>
+                            </sup>
+                        </mat-cell>
                     </ng-container>
 
                     <ng-container matColumnDef="currentStatus">
