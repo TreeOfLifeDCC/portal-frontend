@@ -104,7 +104,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
   itemLimitEnaFilter: number;
   taxaRankArray = ["superkingdom", "kingdom","subkingdom","superphylum","phylum","subphylum","superclass","class","subclass","infraclass","cohort","subcohort","superorder","order","suborder","infraorder","parvorder","section","subsection","superfamily","family","subfamily","tribe","subtribe","genus","series","subgenus","species_group","species_subgroup","species","subspecies","varietas","forma"]
 
-  dataColumnsDefination = [{ name: "Organism", column: "organism", selected: true }, { name: "ToL ID", column: "tolid", selected: true }, { name: "INSDC ID", column: "INSDC_ID", selected: true }, { name: "Common Name", column: "commonName", selected: true }, { name: "Current Status", column: "currentStatus", selected: true }, { name: "External references", column: "goatInfo", selected: true }, { name: "Submitted to Biosamples", column: "biosamples", selected: false }, { name: "Raw data submitted to ENA", column: "raw_data", selected: false }, { name: "Mapped reads submitted to ENA", column: "mapped_reads", selected: false }, { name: "Assemblies submitted to ENA", column: "assemblies", selected: false }, { name: "Annotation complete", column: "annotation_complete", selected: false }, { name: "Annotation submitted to ENA", column: "annotation", selected: false }]
+  dataColumnsDefination = [{ name: "Organism", column: "organism", selected: true }, { name: "ToL ID", column: "tolid", selected: true }, { name: "INSDC ID", column: "INSDC_ID", selected: true }, { name: "Common Name", column: "commonName", selected: true }, { name: "Common Name Source", column: "commonNameSource", selected: true }, { name: "Current Status", column: "currentStatus", selected: true }, { name: "External references", column: "goatInfo", selected: true }, { name: "Submitted to Biosamples", column: "biosamples", selected: false }, { name: "Raw data submitted to ENA", column: "raw_data", selected: false }, { name: "Mapped reads submitted to ENA", column: "mapped_reads", selected: false }, { name: "Assemblies submitted to ENA", column: "assemblies", selected: false }, { name: "Annotation complete", column: "annotation_complete", selected: false }, { name: "Annotation submitted to ENA", column: "annotation", selected: false }]
   displayedColumns = [];
   phylSelectedRank = '';
   constructor(private titleService: Title, private dashboardService: DashboardService,
@@ -380,6 +380,9 @@ export class DashboardComponent implements OnInit, AfterViewInit {
         dataToReturn[key] = data[key];
       }
       if (key === 'commonName' && data[key] == null) {
+        dataToReturn[key] = "-"
+      }
+      if (key === 'commonNameSource' && data[key] == null) {
         dataToReturn[key] = "-"
       }
       else {
