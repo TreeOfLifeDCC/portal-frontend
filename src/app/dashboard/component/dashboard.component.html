@@ -159,7 +159,12 @@
 
                     <ng-container matColumnDef="commonName">
                         <mat-header-cell *matHeaderCellDef mat-sort-header>Common Name </mat-header-cell>
-                        <mat-cell *matCellDef="let element"> {{element?.commonName}}</mat-cell>
+                        <mat-cell *matCellDef="let element">
+                            {{element?.commonName}}
+                            <sup *ngIf="checkElement(element)" matTooltip="Source: {{element.commonNameSource}}">
+                                <span [ngClass]="commonNameSourceStyle(element)">{{element.commonNameSource}}</span>
+                            </sup>
+                        </mat-cell>
                     </ng-container>
 
                     <ng-container matColumnDef="currentStatus">

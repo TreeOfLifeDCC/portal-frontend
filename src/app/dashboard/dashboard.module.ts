@@ -44,7 +44,9 @@ import {MatTabsModule} from '@angular/material/tabs';
     MatTableExporterModule,
     MatExpansionModule,
     MatCheckboxModule,
-    MatTabsModule
+    MatTabsModule,
+    MatCheckboxModule,
+    MatTooltipModule
   ],
   providers: [DashboardService, TaxanomyService]
 })
