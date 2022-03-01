@@ -1168,4 +1168,16 @@ export class DashboardComponent implements OnInit, AfterViewInit {
                  () => console.info('File downloaded successfully');
   }
 
+  checkElement(element: any) {
+    return element.commonName !== '-';
+  }
+
+  commonNameSourceStyle(element: any) {
+    if (element.commonNameSource === 'UKSI') {
+      return 'badge badge-pill badge-warning';
+    } else {
+      return 'badge badge-pill badge-primary';
+    }
+  }
+
 }
