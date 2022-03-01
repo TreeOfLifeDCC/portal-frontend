@@ -244,20 +244,28 @@ mat-header-cell:nth-child(5) {
     max-width: 75px !important;
 }
 
+.w-80 {
+    max-width: 80px !important;
+}
+
 .w-85 {
     max-width: 85px !important;
+}
+
+.w-90 {
+    max-width: 90px !important;
 }
 
 .w-100 {
     max-width: 100px !important;
 }
 
-.w-150 {
-    max-width: 150px !important;
+.w-120 {
+    max-width: 120px !important;
 }
 
-.w-200 {
-    max-width: 200px !important;
+.w-150 {
+    max-width: 150px !important;
 }
 
 .badge-primary-cns {

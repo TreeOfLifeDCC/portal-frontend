@@ -96,7 +96,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-md-8">
+            <div class="col-md-10">
                 <h1 class="page-header">Organisms</h1>
 
                 <mat-expansion-panel (opened)="expanded()">
@@ -148,18 +148,18 @@
                     </ng-container>
 
                     <ng-container matColumnDef="tolid">
-                        <mat-header-cell *matHeaderCellDef [ngClass]="'w-75 th-left'"> ToL ID </mat-header-cell>
-                        <mat-cell *matCellDef="let element" [ngClass]="'w-75 th-left'"> {{element?.tolid}}</mat-cell>
+                        <mat-header-cell *matHeaderCellDef [ngClass]="'w-80 th-left'"> ToL ID </mat-header-cell>
+                        <mat-cell *matCellDef="let element" [ngClass]="'w-80 th-left'"> {{element?.tolid}}</mat-cell>
                     </ng-container>
 
                     <ng-container matColumnDef="INSDC_ID">
-                        <mat-header-cell *matHeaderCellDef [ngClass]="'w-85 th-left'"> INSDC ID </mat-header-cell>
-                        <mat-cell *matCellDef="let element" [ngClass]="'w-85 th-left'"> {{element?.INSDC_ID}}</mat-cell>
+                        <mat-header-cell *matHeaderCellDef [ngClass]="'w-90 th-left'"> INSDC ID </mat-header-cell>
+                        <mat-cell *matCellDef="let element" [ngClass]="'w-90 th-left'"> {{element?.INSDC_ID}}</mat-cell>
                     </ng-container>
 
                     <ng-container matColumnDef="commonName">
-                        <mat-header-cell *matHeaderCellDef mat-sort-header [ngClass]="'w-100 th-left'">Common Name </mat-header-cell>
-                        <mat-cell *matCellDef="let element" [ngClass]="'w-100 th-left'">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header [ngClass]="'w-120 th-left'">Common Name </mat-header-cell>
+                        <mat-cell *matCellDef="let element" [ngClass]="'w-120 th-left'">
                             {{element?.commonName}}
                         </mat-cell>
                     </ng-container>
@@ -167,7 +167,7 @@
                     <ng-container matColumnDef="commonNameSource">
                         <mat-header-cell *matHeaderCellDef mat-sort-header [ngClass]="'w-75 th-center'">Common Name Source</mat-header-cell>
                         <mat-cell *matCellDef="let element" [ngClass]="'w-75 th-center'">
-                            <span *ngIf="checkElement(element)" [ngClass]="commonNameSourceStyle(element)" style="width: 75px;text-align: center;">{{element.commonNameSource}}</span>
+                            <span *ngIf="checkElement(element)" [ngClass]="commonNameSourceStyle(element)" style="width: 65px;text-align: center;">{{element.commonNameSource}}</span>
                         </mat-cell>
                     </ng-container>
 
@@ -178,9 +178,9 @@
                         </mat-cell>
                     </ng-container>
                     <ng-container matColumnDef="goatInfo">
-                        <mat-header-cell *matHeaderCellDef style=" padding-right: 0px; ">External references
+                        <mat-header-cell *matHeaderCellDef style=" padding-right: 0px;" [ngClass]="'w-200 th-left'">External references
                         </mat-header-cell>
-                        <mat-cell *matCellDef="let element" style=" padding-right: 0px; ">
+                        <mat-cell *matCellDef="let element" style=" padding-right: 0px; " [ngClass]="'w-200 th-left'">
                             <span>
                                 <a class="no-underline badge badge-pill goat-color" target="_blank"
                                     href="{{element?.goatInfo}}">GoaT info</a>
