@@ -102,7 +102,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
   isEnaFilterCollapsed = true;
   itemLimitBiosampleFilter: number;
   itemLimitEnaFilter: number;
-  taxaRankArray = ["superkingdom", "kingdom","subkingdom","superphylum","phylum","subphylum","superclass","class","subclass","infraclass","cohort","subcohort","superorder","order","suborder","infraorder","parvorder","section","subsection","superfamily","family","subfamily","tribe","subtribe","genus","series","subgenus","species_group","species_subgroup","species","subspecies","varietas","forma"]
+  taxaRankArray = ["superkingdom", "kingdom", "subkingdom", "superphylum", "phylum", "subphylum", "superclass", "class", "subclass", "infraclass", "cohort", "subcohort", "superorder", "order", "suborder", "infraorder", "parvorder", "section", "subsection", "superfamily", "family", "subfamily", "tribe", "subtribe", "genus", "series", "subgenus", "species_group", "species_subgroup", "species", "subspecies", "varietas", "forma"]
 
   dataColumnsDefination = [{ name: "Organism", column: "organism", selected: true }, { name: "ToL ID", column: "tolid", selected: true }, { name: "INSDC ID", column: "INSDC_ID", selected: true }, { name: "Common Name", column: "commonName", selected: true }, { name: "Common Name Source", column: "commonNameSource", selected: true }, { name: "Current Status", column: "currentStatus", selected: true }, { name: "External references", column: "goatInfo", selected: true }, { name: "Submitted to Biosamples", column: "biosamples", selected: false }, { name: "Raw data submitted to ENA", column: "raw_data", selected: false }, { name: "Mapped reads submitted to ENA", column: "mapped_reads", selected: false }, { name: "Assemblies submitted to ENA", column: "assemblies", selected: false }, { name: "Annotation complete", column: "annotation_complete", selected: false }, { name: "Annotation submitted to ENA", column: "annotation", selected: false }]
   displayedColumns = [];
@@ -162,7 +162,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
     const params = queryParamMap['params'];
     if (Object.keys(params).length != 0) {
       for (let key in params) {
-        if(key == 'phylogeny') {
+        if (key == 'phylogeny') {
           this.isFilterSelected = true;
           this.phylSelectedRank = params[key];
         }
@@ -207,8 +207,8 @@ export class DashboardComponent implements OnInit, AfterViewInit {
           this.filtersMap = data;
           this.parseFilterAggregation(data);
           this.childTaxanomy['superkingdom'] = [{ 'parent': 'Eukaryota', 'rank': 'kingdom', 'expanded': false, 'taxId': 2759, 'childData': data.aggregations.kingdomRank.scientificName.buckets }];
-          if(this.phylSelectedRank != '') {
-            let taxa = { 'rank': this.phylSelectedRank.split(' - ')[0], 'taxonomy': data.aggregations.childRank.scientificName.buckets[0].key, 'commonName': data.aggregations.childRank.scientificName.buckets[0].commonName.buckets[0].key, 'taxId': data.aggregations.childRank.scientificName.buckets[0].taxId.buckets[0].key};
+          if (this.phylSelectedRank != '') {
+            let taxa = { 'rank': this.phylSelectedRank.split(' - ')[0], 'taxonomy': data.aggregations.childRank.scientificName.buckets[0].key, 'commonName': data.aggregations.childRank.scientificName.buckets[0].commonName.buckets[0].key, 'taxId': data.aggregations.childRank.scientificName.buckets[0].taxId.buckets[0].key };
             this.selectedFilterValue = taxa;
           }
           for (let i = 0; i < this.urlAppendFilterArray.length; i++) {
@@ -716,7 +716,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
   // Ontology aware filter
   initTaxonomyObject() {
     this.childTaxanomy = {
-      cellularorganism: [{ parent: 'Root', rank: 'superkingdom', expanded: false, taxId: 2888, childData: [{ key: 'Eukaryota', doc_count: '1', commonName: {buckets:[]}, taxId: {buckets:[]} }] }],
+      cellularorganism: [{ parent: 'Root', rank: 'superkingdom', expanded: false, taxId: 2888, childData: [{ key: 'Eukaryota', doc_count: '1', commonName: { buckets: [] }, taxId: { buckets: [] } }] }],
       superkingdom: [],
       kingdom: [],
       subkingdom: [],
@@ -804,7 +804,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
         this.modalTaxa = taxonomy;
         if ($(event.target).hasClass('active-filter')) {
           this.spinner.show();
-          let filter = this.selectedFilterValue.rank + ' - ' +this.selectedFilterValue.taxId;
+          let filter = this.selectedFilterValue.rank + ' - ' + this.selectedFilterValue.taxId;
           const filterIndex = this.activeFilters.indexOf(filter);
           if (filterIndex !== -1) {
             this.activeFilters.splice(filterIndex);
@@ -850,10 +850,10 @@ export class DashboardComponent implements OnInit, AfterViewInit {
       }
     }, 250);
   }
-  
+
   removeTaxaFilter(taxonomy: any) {
     this.spinner.show();
-    let filter = this.selectedFilterValue.rank + ' - ' +this.selectedFilterValue.taxId;
+    let filter = this.selectedFilterValue.rank + ' - ' + this.selectedFilterValue.taxId;
     const filterIndex = this.activeFilters.indexOf(filter);
     if (filterIndex !== -1) {
       this.activeFilters.splice(filterIndex);
@@ -870,7 +870,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
     this.currentTaxonomyTree = [taxa];
     this.currentTaxonomy = taxa;
     this.selectedFilterValue = '';
-    $(taxonomy+'-kingdom').removeClass('active-filter');
+    $(taxonomy + '-kingdom').removeClass('active-filter');
     $('#myUL').css('display', 'block');
     this.getActiveFiltersAndResult();
     setTimeout(() => {
@@ -946,7 +946,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
   filterTaxonomy(rank: string, taxonomy: string, childRank: string, commonName, taxId) {
     let taxa = { 'rank': rank, 'taxonomy': taxonomy, 'childRank': childRank, 'commonName': commonName, 'taxId': taxId };
     this.selectedFilterValue = taxa;
-    let filterObj = rank + ' - ' +taxId;
+    let filterObj = rank + ' - ' + taxId;
     this.selectedFilterArray('phylogeny', filterObj);
     this.updateActiveRouteParams();
     this.paginator.pageIndex = 0;
@@ -1155,14 +1155,14 @@ export class DashboardComponent implements OnInit, AfterViewInit {
   downloadCSV() {
     let taxonomy = [this.currentTaxonomyTree];
     this.dashboardService.downloadCSV(this.activeFilters.toString(), this.sort.active, this.sort.direction, 0, 5000, taxonomy, this.searchText).subscribe(data => {
-			const blob = new Blob([data], {type: 'application/csv'});
+      const blob = new Blob([data], { type: 'application/csv' });
       var downloadURL = window.URL.createObjectURL(data);
       var link = document.createElement('a');
       link.href = downloadURL;
       link.download = "organism-metadata.csv";
       link.click();
-		}), error => console.log('Error downloading the file'),
-                 () => console.info('File downloaded successfully');
+    }), error => console.log('Error downloading the file'),
+      () => console.info('File downloaded successfully');
   }
 
   checkElement(element: any) {
