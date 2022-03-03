@@ -18,6 +18,10 @@ import { AboutComponent } from './about/about.component';
 import { HelpComponent } from './help/help.component';
 import { HomeComponent } from './home/home.component';
 import { ApiComponent } from './api/api.component';
+import {ConfirmationDialogComponent} from './confirmation-dialog-component/confirmation-dialog.component';
+import {MatDialogModule} from '@angular/material/dialog';
+import {MatSnackBarModule} from '@angular/material/snack-bar';
+import {MatRadioModule} from '@angular/material/radio';
 
 
 @NgModule({
@@ -27,7 +31,8 @@ import { ApiComponent } from './api/api.component';
     AboutComponent,
     HelpComponent,
     HomeComponent,
-    ApiComponent
+    ApiComponent,
+    ConfirmationDialogComponent
   ],
   imports: [
     BrowserModule,
@@ -40,7 +45,10 @@ import { ApiComponent } from './api/api.component';
     MatTreeModule,
     MatIconModule,
     MatButtonModule,
-    MatTableExporterModule
+    MatTableExporterModule,
+    MatDialogModule,
+    MatSnackBarModule,
+    MatRadioModule
   ],
   providers: [],
   bootstrap: [AppComponent]

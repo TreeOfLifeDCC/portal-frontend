@@ -113,6 +113,7 @@
                 </mat-expansion-panel>
                 <br />
 
+                <button *ngIf="activeFilters.length > 0 || selectedFilterValue != ''" type="button" style="float: right;" class="btn btn-primary" mat-raised-button (click)="openDialog()">Download</button>
 
                 <button type="button" style="float: right;" class="btn btn-primary" mat-raised-button (click)="downloadCSV()">Download metadata</button>
                 <h1 *ngIf="activeFilters.length !== 0">Filters:
