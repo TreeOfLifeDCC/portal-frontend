@@ -123,9 +123,10 @@ ul,
 
 /* Hide the nested list */
 
-.nested {
+
+/* .nested {
     display: none;
-}
+} */
 
 
 /* Show the nested list when the user clicks on the caret/arrow (with JavaScript) */
@@ -225,4 +226,49 @@ ul[class*="other-"] {
 mat-cell:nth-child(5),
 mat-header-cell:nth-child(5) {
     flex: 1 0 5%;
+}
+
+.th-center {
+    text-align: center;
+}
+
+.th-left {
+    text-align: left;
+}
+
+.th-right {
+    text-align: right;
+}
+
+.w-75 {
+    max-width: 75px !important;
+}
+
+.w-80 {
+    max-width: 80px !important;
+}
+
+.w-85 {
+    max-width: 85px !important;
+}
+
+.w-90 {
+    max-width: 90px !important;
+}
+
+.w-100 {
+    max-width: 100px !important;
+}
+
+.w-120 {
+    max-width: 120px !important;
+}
+
+.w-150 {
+    max-width: 150px !important;
+}
+
+.badge-primary-cns {
+    color: #fff;
+    background-color: #4BBEFD;
 }

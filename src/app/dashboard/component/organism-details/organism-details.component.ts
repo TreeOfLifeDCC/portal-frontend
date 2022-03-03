@@ -125,6 +125,9 @@ export class OrganismDetailsComponent implements OnInit, AfterViewInit {
   genomeNotes = [];
   INSDC_ID = null;
 
+  dataSourceGoatInfo;
+  displayedColumnsGoatInfo = ['name', 'value', 'count', 'aggregation_method', 'aggregation_source'];
+
   @ViewChild('experimentsTable') exPaginator: MatPaginator;
   @ViewChild('assembliesTable') asPaginator: MatPaginator;
   @ViewChild('annotationTable') anPaginator: MatPaginator;
@@ -136,6 +139,7 @@ export class OrganismDetailsComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit(): void {
+    this.dataSourceGoatInfo = {};
     this.activeFilters = [];
     this.filterSize = 3;
     this.itemLimitSexFilter = this.filterSize;
@@ -199,6 +203,9 @@ export class OrganismDetailsComponent implements OnInit, AfterViewInit {
         data => {
           const unpackedData = [];
           this.bioSampleObj = data;
+          if(data.goat_info) {
+            this.dataSourceGoatInfo = data.goat_info.attributes;
+          }
           if(data.experiment?.length > 0) {
             this.INSDC_ID = data.experiment[0].study_accession;
           }

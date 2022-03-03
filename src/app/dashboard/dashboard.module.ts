@@ -24,6 +24,7 @@ import { DashboardService } from '../dashboard/services/dashboard.service';
 import { OrganismDetailsComponent } from './component/organism-details/organism-details.component'
 import { TaxanomyComponent } from '../taxanomy/taxanomy.component';
 import { TaxanomyService } from '../taxanomy/taxanomy.service';
+import {MatTabsModule} from '@angular/material/tabs';
 
 @NgModule({
   declarations: [DashboardComponent, SpecimensComponent, DetailsComponent, OrganismDetailsComponent, TaxanomyComponent],
@@ -42,7 +43,10 @@ import { TaxanomyService } from '../taxanomy/taxanomy.service';
     NgxSpinnerModule,
     MatTableExporterModule,
     MatExpansionModule,
-    MatCheckboxModule
+    MatCheckboxModule,
+    MatTabsModule,
+    MatCheckboxModule,
+    MatTooltipModule
   ],
   providers: [DashboardService, TaxanomyService]
 })
