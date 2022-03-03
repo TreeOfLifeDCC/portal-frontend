@@ -1,11 +1,11 @@
-image: docker:19.03.13
+image: docker:20.10.12
 
 variables:
   DOCKER_DRIVER: overlay2
   DOCKER_TLS_CERTDIR: ""
 
 services:
-  - docker:19.03.13-dind
+  - docker:20.10.12-dind
 
 build-app-master:
   stage: build
@@ -17,6 +17,8 @@ build-app-master:
     - docker push "$CI_REGISTRY_IMAGE:$CI_COMMIT_SHORT_SHA"
   only:
     - master
+  tags:
+    - abc-treeoflife
 
 deploy-app-master:
       stage: deploy
@@ -39,3 +41,5 @@ deploy-app-master:
         - kubectl get pods
       only:
         - master
+      tags:
+        - abc-treeoflife
