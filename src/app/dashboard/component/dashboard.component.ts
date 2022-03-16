@@ -1194,7 +1194,10 @@ export class DashboardComponent implements OnInit, AfterViewInit {
         sort: this.sort,
         taxonomy: [this.currentTaxonomyTree],
         searchText: this.searchText,
-        selectedOptions:[0,1,2]
+        selectedOptions:[0,1,2],
+        hideAnnotation: this.AnnotationFilters.length === 0 && this.AnnotationCompleteFilters.length === 0 ,
+        hideAssemblies: this.AssembliesFilters.length === 0 ,
+        hideRawData: this.RawDataFilters.length === 0
       }
     });
   }
