@@ -301,7 +301,13 @@ treeJSON = d3.json(url, function(error, treeData) {
                     $("#organismsTable").find("tr:gt(0)").remove();
                     var total = response.hits.total.value;
                     var data = response.hits.hits;
+                    var organismId = ''
                     for (var i = 0; i < total; i++) {
+                        if (data[i]._id != undefined) {
+                            organismId = data[i]._id
+                        } else {
+                            organismId = organism
+                        }
                         var record = data[i]._source;
                         var organism = record.organism;
                         var name = record.commonName != null ? record.commonName : "-";
@@ -313,7 +319,7 @@ treeJSON = d3.json(url, function(error, treeData) {
                         var externalReference = '';
                         var goatLink = 'https://goat.genomehubs.org/records?record_id=' + tax_id + '&result=taxon&taxonomy=ncbi#' + organism
                         var goatElement = '<a class="no-underline badge badge-pill goat-color" target="_blank" style="background-color: #4bbefd; color: #fff;" href="' + goatLink + '">GoaT info</a>'
-                        var organismElement = '<a class="no-underline" target="_blank" href="https://portal.darwintreeoflife.org/data/root/details/' + organism + '">' + organism + '</a>'
+                        var organismElement = '<a class="no-underline" target="_blank" href="https://portal.darwintreeoflife.org/data/root/details/' + organismId + '">' + organism + '</a>'
 
                         if (record.tolid != null) {
                             const organismName = organism.split(' ').join('_');
