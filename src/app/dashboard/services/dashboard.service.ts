@@ -10,7 +10,7 @@ import { Sample } from '../model/dashboard.model';
 export class DashboardService {
 
   private API_BASE_URL = 'https://portal.darwintreeoflife.org/api';
-  // private API_BASE_URL = 'http://45.88.81.118/api';
+  // private API_BASE_URL = 'http://8000/TCP/api';
   // private API_BASE_URL = 'http://localhost:8080';
 
   constructor(private http: HttpClient) { }
@@ -117,6 +117,22 @@ export class DashboardService {
     }
     let requestURL = `${this.API_BASE_URL}/root_organisms/data/csv${requestParams}`;
 		return this.http.post(`${requestURL}`,filter, {responseType: 'blob'});
+  }
+
+  public download(filter: any,sortColumn?, sortOrder?, from?, size?, taxonomyFilter?, searchText? , downloadOption?): any {
+    let requestParams = `?from=${from}&size=${size}`
+    if (sortColumn != undefined) {
+      requestParams = requestParams + `&z=${sortColumn}&sortOrder=${sortOrder}`
+    }
+    if(taxonomyFilter != undefined) {
+      let taxa = encodeURIComponent(JSON.stringify(taxonomyFilter[0]));
+      requestParams = requestParams + `&taxonomyFilter=${taxa}`
+    }
+    if(searchText) {
+      requestParams = requestParams + `&searchText=${searchText}`
+    }
+    let requestURL = `${this.API_BASE_URL}/root_organisms/data-files/csv${requestParams}&downloadOption=` + downloadOption;
+    return this.http.post(`${requestURL}`, filter, {responseType: 'blob'});
   }
 
 }
