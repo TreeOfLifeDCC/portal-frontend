@@ -2,7 +2,6 @@
 import { Component, Inject } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import {HttpClient} from "@angular/common/http";
-import { saveAs } from 'file-saver';
 
 @Component({
   selector: 'confirmation-dialog',
@@ -20,7 +19,7 @@ export class ConfirmationDialogComponent {
 
   download(): void {
       const method = 'post';
-      const downloadUrl = 'https://www.ebi.ac.uk/ena/portal/api/files';
+      const downloadUrl = this.data.url;
       const form = document.createElement('form');
       form.setAttribute('method', method);
       form.setAttribute('action', downloadUrl);

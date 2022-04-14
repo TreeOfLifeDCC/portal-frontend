@@ -6,6 +6,7 @@ import { Sample } from '../model/dashboard.model';
 import {ConfirmationDialogComponent} from "../../confirmation-dialog-component/confirmation-dialog.component";
 import {BytesPipe} from "../../shared/bytes-pipe";
 import {MatDialog} from "@angular/material/dialog";
+import {tap} from "rxjs/operators";
 
 @Injectable({
   providedIn: 'root'
@@ -13,6 +14,7 @@ import {MatDialog} from "@angular/material/dialog";
 export class DashboardService {
 
   private API_BASE_URL = 'https://portal.darwintreeoflife.org/api';
+  private ENA_PORTAL_API_BASE_URL = 'https://www.ebi.ac.uk/ena/portal/api/files';
   // private API_BASE_URL = 'http://8000/TCP/api';
   // private API_BASE_URL = 'http://localhost:8080';
 
@@ -142,13 +144,14 @@ export class DashboardService {
     const field = 'fastq_ftp';
     const body = `result=${result}&accession=${accession}&field=${field}&count=true`;
 
-    const requestURL = 'https://www.ebi.ac.uk/ena/portal/api/files';
+    const requestURL = this.ENA_PORTAL_API_BASE_URL;
     return this.http.post(`${requestURL}`, body, {
       headers: {
         Accept: 'application/json',
         'Content-Type': 'application/x-www-form-urlencoded'
       }
-    }).subscribe(response => {
+    }).pipe(
+        tap((response: any) => {
       this.dialog.open(ConfirmationDialogComponent, {
         width: '550px',
         autoFocus: false,
@@ -157,8 +160,9 @@ export class DashboardService {
           fileCount: response.totalFiles,
           fileSize: this.bytesPipe.transform(response.totalFileSize),
           accession,
+          url: this.ENA_PORTAL_API_BASE_URL
         }
       });
-    });
+    })).subscribe();
   }
 }
