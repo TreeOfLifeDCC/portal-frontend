@@ -1,15 +1,13 @@
-
-// @ts-ignore
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { MatDialogModule, MatDialogRef, MatDialog } from '@angular/material/dialog';
 
-import { AppModule } from '../app.module';
-import { ConfirmationDialogComponent } from './confirmation-dialog.component';
+import { AppModule } from '../../app.module';
+import { DownloadConfirmationDialogComponent } from './download-confirmation-dialog.component';
 import { OverlayRef } from '@angular/cdk/overlay';
 
 describe('ConfirmationDialogComponent', () => {
-  let component: ConfirmationDialogComponent;
-  let fixture: ComponentFixture<ConfirmationDialogComponent>;
+  let component: DownloadConfirmationDialogComponent;
+  let fixture: ComponentFixture<DownloadConfirmationDialogComponent>;
   let dialog: MatDialog;
 
   beforeEach(waitForAsync(() => {
@@ -18,13 +16,13 @@ describe('ConfirmationDialogComponent', () => {
         MatDialogModule,
         AppModule,
       ],
-      declarations: [ ConfirmationDialogComponent ],
+      declarations: [ DownloadConfirmationDialogComponent ],
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(ConfirmationDialogComponent);
+    fixture = TestBed.createComponent(DownloadConfirmationDialogComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

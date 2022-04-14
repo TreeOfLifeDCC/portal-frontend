@@ -561,4 +561,8 @@ export class OrganismDetailsComponent implements OnInit, AfterViewInit {
       return genomeNotesURL;
   }
 
+
+  download(): void {
+    this.dashboardService.downloadFastaq(this.INSDC_ID);
+  }
 }

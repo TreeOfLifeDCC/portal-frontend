@@ -13,7 +13,7 @@ import { TaxanomyService } from 'src/app/taxanomy/taxanomy.service';
 
 import 'jquery';
 import 'bootstrap';
-import {ConfirmationDialogComponent} from '../../confirmation-dialog-component/confirmation-dialog.component';
+import {DownloadConfirmationDialogComponent} from '../../download-confirmation-dialog-component/download-confirmation-dialog.component';
 import {MatDialog} from '@angular/material/dialog';
 import {MatSnackBar} from '@angular/material/snack-bar';
 
@@ -1184,7 +1184,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
     }
  }
   openDialog() {
-    const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
+    const dialogRef = this.dialog.open(DownloadConfirmationDialogComponent, {
       width: '550px',
       autoFocus: false,
       data: {

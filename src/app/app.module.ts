@@ -12,16 +12,19 @@ import { MatTreeModule } from '@angular/material/tree';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MatTableExporterModule } from 'mat-table-exporter';
-
+import { BytesPipe } from './shared/bytes-pipe';
 import { HeaderComponent } from './shared/header/header.component';
 import { AboutComponent } from './about/about.component';
 import { HelpComponent } from './help/help.component';
 import { HomeComponent } from './home/home.component';
 import { ApiComponent } from './api/api.component';
-import {ConfirmationDialogComponent} from './confirmation-dialog-component/confirmation-dialog.component';
+import {DownloadConfirmationDialogComponent} from './download-confirmation-dialog-component/download-confirmation-dialog.component';
 import {MatDialogModule} from '@angular/material/dialog';
 import {MatSnackBarModule} from '@angular/material/snack-bar';
 import {MatRadioModule} from '@angular/material/radio';
+import {ConfirmationDialogComponent} from './confirmation-dialog-component/confirmation-dialog.component';
+import {MatTooltipModule} from "@angular/material/tooltip";
+import {ClipboardModule} from "@angular/cdk/clipboard";
 
 
 @NgModule({
@@ -32,6 +35,8 @@ import {MatRadioModule} from '@angular/material/radio';
     HelpComponent,
     HomeComponent,
     ApiComponent,
+    DownloadConfirmationDialogComponent,
+    BytesPipe,
     ConfirmationDialogComponent
   ],
   imports: [
@@ -48,9 +53,11 @@ import {MatRadioModule} from '@angular/material/radio';
     MatTableExporterModule,
     MatDialogModule,
     MatSnackBarModule,
-    MatRadioModule
+    MatRadioModule,
+    MatTooltipModule,
+    ClipboardModule
   ],
-  providers: [],
+  providers: [BytesPipe],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
