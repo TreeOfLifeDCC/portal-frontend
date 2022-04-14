@@ -3,6 +3,9 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
 import { Sample } from '../model/dashboard.model';
+import {ConfirmationDialogComponent} from "../../confirmation-dialog-component/confirmation-dialog.component";
+import {BytesPipe} from "../../shared/bytes-pipe";
+import {MatDialog} from "@angular/material/dialog";
 
 @Injectable({
   providedIn: 'root'
@@ -13,7 +16,7 @@ export class DashboardService {
   // private API_BASE_URL = 'http://8000/TCP/api';
   // private API_BASE_URL = 'http://localhost:8080';
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient, private bytesPipe: BytesPipe,  private dialog: MatDialog) { }
 
   public getAllBiosample(offset, limit, sortColumn?, sortOrder?, searchText?): Observable<any> {
     let requestParams = `?offset=${offset}&limit=${limit}`
@@ -134,5 +137,28 @@ export class DashboardService {
     let requestURL = `${this.API_BASE_URL}/root_organisms/data-files/csv${requestParams}&downloadOption=` + downloadOption;
     return this.http.post(`${requestURL}`, filter, {responseType: 'blob'});
   }
+  public downloadFastaq(accession: any): any {
+    const result = 'read_run';
+    const field = 'fastq_ftp';
+    const body = `result=${result}&accession=${accession}&field=${field}&count=true`;
 
+    const requestURL = 'https://www.ebi.ac.uk/ena/portal/api/files';
+    return this.http.post(`${requestURL}`, body, {
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/x-www-form-urlencoded'
+      }
+    }).subscribe(response => {
+      this.dialog.open(ConfirmationDialogComponent, {
+        width: '550px',
+        autoFocus: false,
+        data: {
+          field: 'fastq_ftp',
+          fileCount: response.totalFiles,
+          fileSize: this.bytesPipe.transform(response.totalFileSize),
+          accession,
+        }
+      });
+    });
+  }
 }

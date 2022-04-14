@@ -1,6 +1,8 @@
+
 import { Component, Inject } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import {DashboardService} from '../dashboard/services/dashboard.service';
+import {HttpClient} from "@angular/common/http";
+import { saveAs } from 'file-saver';
 
 @Component({
   selector: 'confirmation-dialog',
@@ -8,8 +10,8 @@ import {DashboardService} from '../dashboard/services/dashboard.service';
   styleUrls: ['./confirmation-dialog.component.scss']
 })
 export class ConfirmationDialogComponent {
-  radioOptions: string;
-  constructor(private dashboardService: DashboardService, public dialogRef: MatDialogRef<ConfirmationDialogComponent>, @Inject(MAT_DIALOG_DATA) public data: any) {
+
+  constructor(public dialogRef: MatDialogRef<ConfirmationDialogComponent>, @Inject(MAT_DIALOG_DATA) public data: any, private http: HttpClient) {
   }
 
   close(): void {
@@ -17,15 +19,26 @@ export class ConfirmationDialogComponent {
   }
 
   download(): void {
-    this.dashboardService.download(this.data.activeFilters.toString(), this.data.sort.active, this.data.sort.direction, 0, 5000, this.data.taxonomy, this.data.searchText, this.radioOptions).subscribe(data => {
-      const blob = new Blob([data], {type: 'application/csv'});
-      const downloadURL = window.URL.createObjectURL(data);
-      const link = document.createElement('a');
-      link.href = downloadURL;
-      link.download = this.radioOptions + '.csv';
-      link.click();
-    }), error => console.log('Error downloading the file'),
-        () => console.info('File downloaded successfully');
-  }
+      const method = 'post';
+      const downloadUrl = 'https://www.ebi.ac.uk/ena/portal/api/files';
+      const form = document.createElement('form');
+      form.setAttribute('method', method);
+      form.setAttribute('action', downloadUrl);
 
+      form.appendChild(this.makeInputField('result', 'read_run'));
+      form.appendChild(this.makeInputField('accession', this.data.accession));
+      form.appendChild(this.makeInputField('field', 'fastq_ftp'));
+
+      document.body.appendChild(form);
+      form.submit();
+      document.body.removeChild(form);
+  }
+    // tslint:disable-next-line:typedef
+    private makeInputField(name: string, value: string) {
+        const field = document.createElement('input');
+        field.setAttribute('type', 'hidden');
+        field.setAttribute('name', name);
+        field.setAttribute('value', value);
+        return field;
+    }
 }

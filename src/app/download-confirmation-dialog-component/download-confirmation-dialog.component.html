@@ -1,0 +1,23 @@
+<h1 mat-dialog-title>Download data</h1>
+<div mat-dialog-content>
+    <mat-radio-group aria-labelledby="download-label" [(ngModel)]="this.radioOptions" id="download" name="download"
+                     class="radio-group">
+        <mat-radio-button  *ngIf="!data.hideAssemblies;" class="radio-button" value="assemblies" name="download-label-assemblies" >All assemblies</mat-radio-button>
+        <br *ngIf="!data.hideAnnotation;">
+        <mat-radio-button *ngIf="!data.hideAnnotation;" class="radio-button" value="annotation"  name="download-label-annotation" >Annotation</mat-radio-button>
+        <br>
+        <mat-radio-button *ngIf="!data.hideRawData;" class="radio-button" value="raw_files" name="download-label-files" >All raw data files</mat-radio-button>
+    </mat-radio-group>
+<br>
+</div>
+    <div  mat-dialog-actions class="confirmation-dialog-btn" mat-dialog-actions style="float: right;">
+        <button type="button" style="float: right;" class="btn btn-primary" mat-raised-button (click)="close()">Cancel
+        </button>
+
+        <div *ngIf="!data.hideAction;">
+            <button type="button" mat-raised-button
+                    [mat-dialog-close]="true" style="float: right;" class="btn btn-success" disabled="{{!this.radioOptions}}" (click)="download()">Download
+            </button>
+        </div>
+    </div>
+

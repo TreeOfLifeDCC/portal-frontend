@@ -34,7 +34,9 @@
     text-align: center;
     /* justify-content: center; */
 }
-
+button {
+    margin-left: 5px;
+}
 
 /* .mat-header-cell {
     text-align: center;
