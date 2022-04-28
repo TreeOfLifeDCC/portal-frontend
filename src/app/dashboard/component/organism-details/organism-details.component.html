@@ -369,7 +369,7 @@
                 </mat-expansion-panel>
                 <br />
                 <button type="button" style="float: right;" class="btn btn-primary" mat-raised-button (click)="exporter.exportTable('csv', {fileName:'experiments-metadata'})">Download metadata</button>
-<!--                <button type="button"  style="float: right;" class="btn btn-success" mat-raised-button (click)="download()">Download all FASTQ files</button>-->
+                <button type="button"  style="float: right;" class="btn btn-success" mat-raised-button (click)="download()">Download all FASTQ files</button>
                 <mat-form-field>
                     <mat-label>Search</mat-label>
                     <input matInput (keyup)="filesSearch($event)" placeholder="Ex. ILLUMINA" #input>
