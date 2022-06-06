@@ -1,0 +1,12 @@
+.map-container {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width: 40%;
+}
+
+#map {
+    width: 800px;
+    height: 600px;
+    border: 1px solid #ccc;
+}

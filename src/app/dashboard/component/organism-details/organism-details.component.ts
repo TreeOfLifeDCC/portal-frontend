@@ -6,6 +6,7 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { DashboardService } from '../../services/dashboard.service';
 import { NgxSpinnerService } from 'ngx-spinner';
+import { MatTabGroup } from '@angular/material/tabs';
 
 @Component({
   selector: 'dashboard-organism-details',
@@ -134,11 +135,17 @@ export class OrganismDetailsComponent implements OnInit, AfterViewInit {
   @ViewChild('relatedOrganisms') relatedOrganismsTable: MatPaginator;
   @ViewChild('relatedAnnotationTable') relatedAnnotationTable: MatPaginator;
 
+  geoLocation: Boolean;
+  orgGeoList: any
+  specGeoList: any
+  @ViewChild("tabgroup", { static: false }) tabgroup: MatTabGroup;
+
   constructor(private route: ActivatedRoute, private dashboardService: DashboardService, private spinner: NgxSpinnerService, private router: Router) {
     this.route.params.subscribe(param => this.bioSampleId = param.id);
   }
 
   ngOnInit(): void {
+    this.geoLocation = false;
     this.dataSourceGoatInfo = {};
     this.activeFilters = [];
     this.filterSize = 3;
@@ -198,15 +205,29 @@ export class OrganismDetailsComponent implements OnInit, AfterViewInit {
   }
 
   getBiosampleById() {
+    this.spinner.show();
     this.dashboardService.getRootOrganismById(this.bioSampleId)
       .subscribe(
         data => {
           const unpackedData = [];
           this.bioSampleObj = data;
-          if(data.goat_info) {
+          this.orgGeoList = data.orgGeoList;
+          this.specGeoList = data.specGeoList;
+          if (this.orgGeoList.length != 0 && this.specGeoList.length != 0) {
+            this.geoLocation = true;
+            setTimeout(() => {
+              const tabGroup = this.tabgroup;
+              const selected = this.tabgroup.selectedIndex
+              tabGroup.selectedIndex = 4
+              setTimeout(() => {
+                tabGroup.selectedIndex = selected;
+              }, 1);
+            }, 400);
+          }
+          if (data.goat_info) {
             this.dataSourceGoatInfo = data.goat_info.attributes;
           }
-          if(data.experiment?.length > 0) {
+          if (data.experiment?.length > 0) {
             this.INSDC_ID = data.experiment[0].study_accession;
           }
           for (const item of data.records) {
@@ -266,8 +287,12 @@ export class OrganismDetailsComponent implements OnInit, AfterViewInit {
             this.dataSourceAnnotation.sort = this.sort;
             this.dataSourceRelatedAnnotation.sort = this.sort;
           }, 50)
+
+          setTimeout(() => {
+            this.spinner.hide();
+          }, 500);
         },
-        err => console.log(err)
+        err => {this.spinner.hide(); console.log(err) }
       );
   }
 
@@ -558,7 +583,7 @@ export class OrganismDetailsComponent implements OnInit, AfterViewInit {
     if (genomeNotes != null) {
       genomeNotesURL = genomeNotes[0].url;
     }
-      return genomeNotesURL;
+    return genomeNotesURL;
   }
 
 

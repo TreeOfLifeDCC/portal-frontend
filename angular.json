@@ -30,7 +30,11 @@
                             "./node_modules/swagger-ui-dist/swagger-ui.css",
                             "./node_modules/@fortawesome/fontawesome-free/css/all.css",
                             "src/assets/css/d3.css",
-                            "src/assets/css/jquery.dataTables.css"
+                            "src/assets/css/jquery.dataTables.css",
+                            "./node_modules/leaflet/dist/leaflet.css",
+                            "src/assets/css/MarkerCluster.css",
+                            "src/assets/css/MarkerCluster.Default.css"
+
                         ],
                         "scripts": [
                             "./node_modules/jquery/dist/jquery.min.js",

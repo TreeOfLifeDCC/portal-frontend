@@ -16,6 +16,7 @@ export class DashboardService {
   private API_BASE_URL = 'https://portal.darwintreeoflife.org/api';
   private ENA_PORTAL_API_BASE_URL = 'https://www.ebi.ac.uk/ena/portal/api/files';
   // private API_BASE_URL = 'http://8000/TCP/api';
+  // private API_BASE_URL = 'http://45.88.81.118/api';
   // private API_BASE_URL = 'http://localhost:8080';
 
   constructor(private http: HttpClient, private bytesPipe: BytesPipe,  private dialog: MatDialog) { }

@@ -46,6 +46,10 @@ export class SpecimensComponent implements OnInit {
     organismPart: "",
   };
 
+  lat;
+  lng;
+  geoLocation: Boolean = false;
+
   constructor(private route: ActivatedRoute, private dashboardService: DashboardService, private router: Router) {
     this.route.params.subscribe(param => this.bioSampleId = param.id);
   }
@@ -72,6 +76,9 @@ export class SpecimensComponent implements OnInit {
           }
           this.bioSampleObj = unpackedData[0];
           this.organismName = this.bioSampleObj.organism;
+          this.lat = this.bioSampleObj.geographicLocationLatitude?.text;
+          this.lng = this.bioSampleObj.geographicLocationLongitude?.text;
+          this.geoLocation = true;
         },
         err => console.log(err)
       );
