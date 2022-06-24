@@ -1,0 +1,24 @@
+.map-container {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width: 50%;
+}
+
+#map {
+    width: 1000px;
+    height: 600px;
+    border: 1px solid #ccc;
+}
+
+.leaflet-popup-close-button {
+    display: none;
+}
+
+.control-coordinates {
+    background-color: white;
+}
+
+.map-frame {
+    margin-top: 50px;
+}

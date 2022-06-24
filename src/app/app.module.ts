@@ -25,6 +25,7 @@ import {MatRadioModule} from '@angular/material/radio';
 import {ConfirmationDialogComponent} from './confirmation-dialog-component/confirmation-dialog.component';
 import {MatTooltipModule} from "@angular/material/tooltip";
 import {ClipboardModule} from "@angular/cdk/clipboard";
+import { GisComponent } from './gis/gis.component';
 
 
 @NgModule({
@@ -37,7 +38,8 @@ import {ClipboardModule} from "@angular/cdk/clipboard";
     ApiComponent,
     DownloadConfirmationDialogComponent,
     BytesPipe,
-    ConfirmationDialogComponent
+    ConfirmationDialogComponent,
+    GisComponent
   ],
   imports: [
     BrowserModule,
