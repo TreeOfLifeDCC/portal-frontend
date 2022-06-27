@@ -255,7 +255,7 @@ export class OrganismDetailsComponent implements OnInit, AfterViewInit {
               this.dataSourceAssemblies = new MatTableDataSource<any>(data.assemblies);
               this.dataSourceAssembliesCount = data.assemblies?.length;
               for (let i = 0; i < data.assemblies.length ; i++) {
-                this.assembliesurls.push("https://www.ebi.ac.uk/ena/browser/api/fasta/"+data.assemblies[i].accession+"?download=true&gzip=true");
+                this.assembliesurls.push(this.dashboardService.ENA_PORTAL_API_BASE_URL+data.assemblies[i].accession+"?download=true&gzip=true");
               }
             }
             else {
@@ -266,7 +266,7 @@ export class OrganismDetailsComponent implements OnInit, AfterViewInit {
               this.dataSourceAnnotation = new MatTableDataSource<any>(data.annotation);
               this.dataSourceAnnotationCount = data.annotation?.length;
               for (let i = 0; i < data.annotation.length ; i++) {
-                this.annotationsurls.push("https://www.ebi.ac.uk/ena/browser/api/fasta/"+data.annotation[i].accession+"?download=true&gzip=true");
+                this.annotationsurls.push(this.dashboardService.ENA_PORTAL_API_BASE_URL+data.annotation[i].accession+"?download=true&gzip=true");
               }
             }
             else {

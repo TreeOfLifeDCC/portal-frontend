@@ -17,7 +17,6 @@ export class DownloadConfirmationDialogComponent {
   }
 
   download(): void {
-
       this.dashboardService.download(this.data.activeFilters.toString(), this.data.sort.active, this.data.sort.direction, 0, 5000, this.data.taxonomy, this.data.searchText, this.radioOptions).subscribe(data => {
         const blob = new Blob([data], {type: 'application/csv'});
         const downloadURL = window.URL.createObjectURL(data);
