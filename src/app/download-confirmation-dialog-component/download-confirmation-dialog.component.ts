@@ -18,53 +18,6 @@ export class DownloadConfirmationDialogComponent {
 
   download(): void {
 
-    const method = 'post';
-    let downloadUrl ='';
-    if(this.radioOptions=='assemblies') {
-       downloadUrl = 'https://portal.darwintreeoflife.org/files/assemblies/';
-
-        const form = document.createElement('form');
-        form.setAttribute('method', method);
-        form.setAttribute('action', downloadUrl);
-
-        form.appendChild(this.makeInputField( 'taxonomyFilter',JSON.stringify(this.data.taxonomy[0])));
-        if(this.data.activeFilters!= null && this.data.activeFilters.length > 0)
-        {
-            form.appendChild(this.makeInputField( 'filter',this.data.activeFilters));
-        }else{
-            form.appendChild(this.makeInputField( 'filter', "None"));
-
-        }
-        form.appendChild(this.makeInputField('downloadOption', this.radioOptions));
-        form.appendChild(this.makeInputField('taxonId', this.radioOptions));
-
-        document.body.appendChild(form);
-        form.submit();
-        document.body.removeChild(form);
-    }else if(this.radioOptions=='annotation') {
-      downloadUrl = 'https://portal.darwintreeoflife.org/files/annotations';
-
-
-      const form = document.createElement('form');
-      form.setAttribute('method', method);
-      form.setAttribute('action', downloadUrl);
-
-      form.appendChild(this.makeInputField( 'taxonomyFilter',JSON.stringify(this.data.taxonomy[0])));
-
-     if(this.data.activeFilters!= null && this.data.activeFilters.length > 0)
-      {
-        form.appendChild(this.makeInputField( 'filter',this.data.activeFilters));
-       }else{
-         form.appendChild(this.makeInputField( 'filter', "None"));
-
-     }
-      form.appendChild(this.makeInputField('downloadOption', this.radioOptions));
-      form.appendChild(this.makeInputField('taxonId', this.radioOptions));
-
-      document.body.appendChild(form);
-      form.submit();
-      document.body.removeChild(form);
-    }else{
       this.dashboardService.download(this.data.activeFilters.toString(), this.data.sort.active, this.data.sort.direction, 0, 5000, this.data.taxonomy, this.data.searchText, this.radioOptions).subscribe(data => {
         const blob = new Blob([data], {type: 'application/csv'});
         const downloadURL = window.URL.createObjectURL(data);
@@ -74,13 +27,7 @@ export class DownloadConfirmationDialogComponent {
         link.click();
       }), error => console.log('Error downloading the file'),
           () => console.info('File downloaded successfully');
-    }
+
   }
-  private makeInputField(name: string, value: string) {
-    const field = document.createElement('input');
-    field.setAttribute('type', 'hidden');
-    field.setAttribute('name', name);
-    field.setAttribute('value', value);
-    return field;
-  }
+
 }
