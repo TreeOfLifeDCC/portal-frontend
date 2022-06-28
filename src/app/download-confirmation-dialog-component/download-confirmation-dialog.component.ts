@@ -11,7 +11,7 @@ export class DownloadConfirmationDialogComponent {
   radioOptions: string;
   constructor(private dashboardService: DashboardService, public dialogRef: MatDialogRef<DownloadConfirmationDialogComponent>, @Inject(MAT_DIALOG_DATA) public data: any) {
   }
-
+  private DOWNLOAD_URL = 'https://portal.darwintreeoflife.org/files/';
   close(): void {
     this.dialogRef.close();
   }
@@ -20,7 +20,7 @@ export class DownloadConfirmationDialogComponent {
     const method = 'post';
     let downloadUrl = '';
     if (this.radioOptions == 'assemblies') {
-      downloadUrl = 'https://portal.darwintreeoflife.org/files/assemblies/';
+      downloadUrl = this.DOWNLOAD_URL + 'assemblies/';
 
       const form = document.createElement('form');
       form.setAttribute('method', method);
@@ -40,7 +40,7 @@ export class DownloadConfirmationDialogComponent {
       form.submit();
       document.body.removeChild(form);
     } else if (this.radioOptions == 'annotation') {
-      downloadUrl = 'https://portal.darwintreeoflife.org/files/annotations';
+      downloadUrl = this.DOWNLOAD_URL + 'annotations/';
       const form = document.createElement('form');
       form.setAttribute('method', method);
       form.setAttribute('action', downloadUrl);
