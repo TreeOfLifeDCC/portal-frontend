@@ -1,8 +1,6 @@
 import { Component, AfterViewInit, Input, ViewChild } from '@angular/core';
 import * as L from 'leaflet';
 import 'leaflet.markercluster';
-import orgGeoJson from './organisms-gis.json';
-import specGeoJson from './specimens-gis.json';
 import { GisService } from './gis.service';
 import { NgxSpinnerService } from 'ngx-spinner';
 
@@ -31,8 +29,6 @@ export class GisComponent implements AfterViewInit {
   private tiles;
   private markers;
 
-  orgGeoList = orgGeoJson;
-  specGeoList = specGeoJson;
   unpackedData;
 
   constructor(private gisService: GisService, private spinner: NgxSpinnerService) { }
