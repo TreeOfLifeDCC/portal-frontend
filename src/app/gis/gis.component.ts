@@ -3,6 +3,8 @@ import * as L from 'leaflet';
 import 'leaflet.markercluster';
 import orgGeoJson from './organisms-gis.json';
 import specGeoJson from './specimens-gis.json';
+import { GisService } from './gis.service';
+import { NgxSpinnerService } from 'ngx-spinner';
 
 const iconRetinaUrl = 'assets/marker-icon-2x.png';
 const iconUrl = 'assets/marker-icon.png';
@@ -31,17 +33,44 @@ export class GisComponent implements AfterViewInit {
 
   orgGeoList = orgGeoJson;
   specGeoList = specGeoJson;
+  unpackedData;
 
-  constructor() { }
+  constructor(private gisService: GisService, private spinner: NgxSpinnerService) { }
 
   ngOnInit(): void {
+    this.getGisData();
   }
 
   ngAfterViewInit(): void {
-    setTimeout(() => {
-      this.initMap();
-    }, 400);
   }
+
+  getGisData() {
+    this.spinner.show();
+    this.gisService.getgisData()
+      .subscribe(
+        data => {
+          const unpackedData = [];
+          for (const item of data) {
+            unpackedData.push(this.unpackData(item));
+          }
+          this.unpackedData = unpackedData;
+          setTimeout(() => {
+            this.spinner.hide();
+            this.initMap();
+          }, 300);
+        },
+        err => {
+          console.log(err);
+          this.spinner.hide();
+        }
+      );
+  }
+
+  unpackData(data: any) {
+    data = data._source;
+    return data;
+  }
+
   private initMap(): void {
     this.tiles = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
       maxZoom: 15,
@@ -76,53 +105,73 @@ export class GisComponent implements AfterViewInit {
   }
 
   getLatLong(): any {
-    let orgGeoSize = this.orgGeoList.length
+    let orgGeoSize = this.unpackedData.length
     for (var i = 0; i < orgGeoSize; i++) {
-      let tempArr = this.orgGeoList[i];
-      let tempArrSize = tempArr.length
-      for (var j = 0; j < tempArrSize; j++) {
-        if (tempArr[j].lat != 'not collected' && tempArr[j].lat != 'not provided') {
-          const llat: any = tempArr[j].lat
-          const llng: any = tempArr[j].lng
-          const latlng = L.latLng(llat, llng);
-          const m = L.marker(latlng);
-          const accession = `<div><a target="_blank" href=/data/organism/details/${tempArr[j].accession}>${tempArr[j].accession}</a></div>`;
-          const commonName = tempArr[j].commonName != null ? `<div>${tempArr[j].commonName}</div>` : '';
-          const organismPart = `<div>${tempArr[j].organismPart}</div>`;
-          const popupcontent = accession + commonName + organismPart;
-          const popup = L.popup({
-            closeOnClick: false,
-            autoClose: true,
-            closeButton: false
-          }).setContent(popupcontent);
+      if (Object.keys(this.unpackedData[i]).length != 0) {
+        let tempArr = this.unpackedData[i].organisms;
+        let tempArrSize = tempArr.length
+        for (var j = 0; j < tempArrSize; j++) {
+          if (tempArr[j].lat != 'not collected' && tempArr[j].lat != 'not provided') {
+            let llat: any;
+            let llng: any;
+            if (tempArr[j].lat == '67.34.07' && tempArr[j].lng == '68.07.30') {
+              llat = '67.3407'
+              llng = '68.0730'
+            }
+            else {
+              llat = tempArr[j].lat
+              llng = tempArr[j].lng
+            }
+            const latlng = L.latLng(llat, llng);
+            const m = L.marker(latlng);
+            const accession = `<div><a target="_blank" href=/data/organism/details/${tempArr[j].accession}>${tempArr[j].accession}</a></div>`;
+            const commonName = tempArr[j].commonName != null ? `<div>${tempArr[j].commonName}</div>` : '';
+            const organismPart = `<div>${tempArr[j].organismPart}</div>`;
+            const popupcontent = accession + commonName + organismPart;
+            const popup = L.popup({
+              closeOnClick: false,
+              autoClose: true,
+              closeButton: false
+            }).setContent(popupcontent);
 
-          m.bindPopup(popup)
-          this.markers.addLayer(m);
+            m.bindPopup(popup)
+            this.markers.addLayer(m);
+          }
         }
       }
     }
 
-    let specGeoSize = this.specGeoList.length
+    let specGeoSize = this.unpackedData.length
     for (var i = 0; i < specGeoSize; i++) {
-      let tempspecArr = this.specGeoList[i];
-      let tempspecArrSize = tempspecArr.length
-      for (var j = 0; j < tempspecArrSize; j++) {
-        if (tempspecArr[j].lat != 'not collected' && tempspecArr[j].lat != 'not provided') {
-          const llat: any = tempspecArr[j].lat
-          const llng: any = tempspecArr[j].lng
-          const latlng = L.latLng(llat, llng);
-          const m = L.marker(latlng);
-          const accession = `<div><a target="_blank" href=/data/specimens/details/${tempspecArr[j].accession}>${tempspecArr[j].accession}</a></div>`;
-          const commonName = tempspecArr[j].commonName != null ? `<div>${tempspecArr[j].commonName}</div>` : '';
-          const organismPart = `<div>${tempspecArr[j].organismPart}</div>`;
-          const popupcontent = accession + commonName + organismPart;
-          const popup = L.popup({
-            closeOnClick: false,
-            autoClose: true,
-            closeButton: false
-          }).setContent(popupcontent);
-          m.bindPopup(popup)
-          this.markers.addLayer(m);
+      if (Object.keys(this.unpackedData[i]).length != 0) {
+        let tempspecArr = this.unpackedData[i].specimens;
+        let tempspecArrSize = tempspecArr.length
+        for (var j = 0; j < tempspecArrSize; j++) {
+          if (tempspecArr[j].lat != 'not collected' && tempspecArr[j].lat != 'not provided') {
+            let llat: any;
+            let llng: any;
+            if (tempspecArr[j].lat == '67.34.07' && tempspecArr[j].lng == '68.07.30') {
+              llat = '67.3407'
+              llng = '68.0730'
+            }
+            else {
+              llat = tempspecArr[j].lat
+              llng = tempspecArr[j].lng
+            }
+            const latlng = L.latLng(llat, llng);
+            const m = L.marker(latlng);
+            const accession = `<div><a target="_blank" href=/data/specimens/details/${tempspecArr[j].accession}>${tempspecArr[j].accession}</a></div>`;
+            const commonName = tempspecArr[j].commonName != null ? `<div>${tempspecArr[j].commonName}</div>` : '';
+            const organismPart = `<div>${tempspecArr[j].organismPart}</div>`;
+            const popupcontent = accession + commonName + organismPart;
+            const popup = L.popup({
+              closeOnClick: false,
+              autoClose: true,
+              closeButton: false
+            }).setContent(popupcontent);
+            m.bindPopup(popup)
+            this.markers.addLayer(m);
+          }
         }
       }
     }

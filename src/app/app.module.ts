@@ -26,6 +26,9 @@ import {ConfirmationDialogComponent} from './confirmation-dialog-component/confi
 import {MatTooltipModule} from "@angular/material/tooltip";
 import {ClipboardModule} from "@angular/cdk/clipboard";
 import { GisComponent } from './gis/gis.component';
+import { GisService } from './gis/gis.service';
+
+import { NgxSpinnerModule } from "ngx-spinner";
 
 
 @NgModule({
@@ -57,9 +60,10 @@ import { GisComponent } from './gis/gis.component';
     MatSnackBarModule,
     MatRadioModule,
     MatTooltipModule,
-    ClipboardModule
+    ClipboardModule,
+    NgxSpinnerModule
   ],
-  providers: [BytesPipe],
+  providers: [BytesPipe, GisService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
