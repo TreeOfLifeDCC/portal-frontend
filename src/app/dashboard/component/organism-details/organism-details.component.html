@@ -255,6 +255,7 @@
                     <h1 class="col-md-12 page-header">Annotation</h1>
                     <button type="button" style="float: right;" class="btn btn-primary" mat-raised-button (click)="exporter.exportTable('csv', {fileName:'annotation-metadata'})">Download
                         metadata</button>
+                    <button type="button" style="float: right;" class="btn btn-success" mat-raised-button (click)="downloadAnnotation()">Download all Annotations</button>
                     <mat-form-field>
                         <mat-label>Search</mat-label>
                         <input matInput (keyup)="annotationSearch($event)" #input>
@@ -325,6 +326,7 @@
                     <h1 class="col-md-12 page-header">Related assemblies</h1>
                     <button type="button" style="float: right;" class="btn btn-primary" mat-raised-button (click)="exporter.exportTable('csv', {fileName:'assemblies-metadata'})">Download
                         metadata</button>
+                    <button type="button" style="float: right;" class="btn btn-success" mat-raised-button (click)="downloadAssemblies()">Download all Assemblies</button>
                     <mat-form-field>
                         <mat-label>Search</mat-label>
                         <input matInput (keyup)="assembliesSearch($event)" placeholder="Ex. ILLUMINA" #input>
@@ -376,7 +378,7 @@
                     <br />
                     <button type="button" style="float: right;" class="btn btn-primary" mat-raised-button (click)="exporter.exportTable('csv', {fileName:'experiments-metadata'})">Download
                         metadata</button>
-                    <button type="button" style="float: right;" class="btn btn-success" mat-raised-button (click)="download()">Download all FASTQ files</button>
+                    <button type="button" style="float: right;" class="btn btn-success" mat-raised-button (click)="downloadRawFiles()">Download all FASTQ files</button>
                     <mat-form-field>
                         <mat-label>Search</mat-label>
                         <input matInput (keyup)="filesSearch($event)" placeholder="Ex. ILLUMINA" #input>

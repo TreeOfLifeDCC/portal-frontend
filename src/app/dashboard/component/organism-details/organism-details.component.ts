@@ -51,7 +51,7 @@ export class OrganismDetailsComponent implements OnInit, AfterViewInit {
   specBioSampleTotalCount;
   specDisplayedColumns = ['accession', 'organism', 'commonName', 'sex', 'organismPart', 'trackingSystem'];
 
-
+  private ENA_PORTAL_API_BASE_URL_FASTA = "https://www.ebi.ac.uk/ena/browser/api/fasta/"
   isSexFilterCollapsed = true;
   isTrackCollapsed = true;
   isOrganismPartCollapsed = true;
@@ -125,7 +125,8 @@ export class OrganismDetailsComponent implements OnInit, AfterViewInit {
 
   genomeNotes = [];
   INSDC_ID = null;
-
+  assembliesurls =[]
+  annotationsurls =[]
   dataSourceGoatInfo;
   displayedColumnsGoatInfo = ['name', 'value', 'count', 'aggregation_method', 'aggregation_source'];
 
@@ -139,6 +140,7 @@ export class OrganismDetailsComponent implements OnInit, AfterViewInit {
   orgGeoList: any
   specGeoList: any
   @ViewChild("tabgroup", { static: false }) tabgroup: MatTabGroup;
+  private http: any;
 
   constructor(private route: ActivatedRoute, private dashboardService: DashboardService, private spinner: NgxSpinnerService, private router: Router) {
     this.route.params.subscribe(param => this.bioSampleId = param.id);
@@ -252,6 +254,9 @@ export class OrganismDetailsComponent implements OnInit, AfterViewInit {
             if (data.assemblies != null) {
               this.dataSourceAssemblies = new MatTableDataSource<any>(data.assemblies);
               this.dataSourceAssembliesCount = data.assemblies?.length;
+              for (let i = 0; i < data.assemblies.length ; i++) {
+                this.assembliesurls.push(this.ENA_PORTAL_API_BASE_URL_FASTA+data.assemblies[i].accession+"?download=true&gzip=true");
+              }
             }
             else {
               this.dataSourceAssemblies = new MatTableDataSource<Sample>();
@@ -260,6 +265,9 @@ export class OrganismDetailsComponent implements OnInit, AfterViewInit {
             if (data.annotation != null) {
               this.dataSourceAnnotation = new MatTableDataSource<any>(data.annotation);
               this.dataSourceAnnotationCount = data.annotation?.length;
+              for (let i = 0; i < data.annotation.length ; i++) {
+                this.annotationsurls.push(this.ENA_PORTAL_API_BASE_URL_FASTA+data.annotation[i].accession+"?download=true&gzip=true");
+              }
             }
             else {
               this.dataSourceAnnotation = new MatTableDataSource<Sample>();
@@ -587,7 +595,47 @@ export class OrganismDetailsComponent implements OnInit, AfterViewInit {
   }
 
 
-  download(): void {
+  downloadRawFiles(): void {
     this.dashboardService.downloadFastaq(this.INSDC_ID);
   }
+  downloadAnnotation(): void {
+    this.download_files(this.annotationsurls);
+
+  }
+
+  downloadAssemblies(): void {
+    this.download_files(this.assembliesurls);
+    }
+
+   download_files(files) {
+    function download_next(i) {
+      if (i >= files.length) {
+        return;
+      }
+      var a = document.createElement('a');
+      a.href = files[i];
+      a.target = '_parent';
+      // Use a.download if available, it prevents plugins from opening.
+      if ('download' in a) {
+        a.download = files[i].filename;
+      }
+      // Add a to the doc for click to work.
+      (document.body || document.documentElement).appendChild(a);
+      if (a.click) {
+        a.click(); // The click method is supported by most browsers.
+      } else {
+        $(a).click(); // Backup using jquery
+      }
+      // Delete the temporary link.
+      a.parentNode.removeChild(a);
+      // Download the next file with a small timeout. The timeout is necessary
+      // for IE, which will otherwise only download the first file.
+      setTimeout(function() {
+        download_next(i + 1);
+      }, 500);
+    }
+    // Initiate the first download.
+    download_next(0);
+  }
+
 }
