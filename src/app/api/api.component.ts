@@ -18,7 +18,7 @@ export class ApiComponent implements OnInit {
         SwaggerUIBundle.presets.apis,
         SwaggerUIBundle.SwaggerUIStandalonePreset
       ],
-      url: 'https://portal.darwintreeoflife.org/api/v2/api-docs',
+      url: 'https://dtol-portal-backend-i735mz2iha-ew.a.run.app/v2/api-docs',
       operationsSorter: 'alpha'
     });
   }

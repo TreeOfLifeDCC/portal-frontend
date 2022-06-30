@@ -7,7 +7,7 @@ import { Observable } from 'rxjs';
 })
 export class TaxanomyService {
 
-  private API_BASE_URL = 'https://portal.darwintreeoflife.org/api';
+  private API_BASE_URL = 'https://dtol-portal-backend-i735mz2iha-ew.a.run.app';
   // private API_BASE_URL = 'http://45.88.81.118/api';
   // private API_BASE_URL = 'http://localhost:8080';
 

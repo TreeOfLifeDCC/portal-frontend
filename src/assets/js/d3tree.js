@@ -1,4 +1,4 @@
-var url = "https://portal.darwintreeoflife.org/api/taxonomy/tree";
+var url = "https://dtol-portal-backend-i735mz2iha-ew.a.run.app/taxonomy/tree";
 treeJSON = d3.json(url, function(error, treeData) {
 
     // Calculate total nodes, max label length
