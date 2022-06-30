@@ -20,7 +20,7 @@ export class DownloadConfirmationDialogComponent {
     const method = 'post';
     let downloadUrl = '';
     if (this.radioOptions == 'assemblies') {
-      downloadUrl = this.DOWNLOAD_URL + 'assemblies/';
+      downloadUrl = this.DOWNLOAD_URL + 'assemblies';
 
       const form = document.createElement('form');
       form.setAttribute('method', method);
@@ -40,7 +40,7 @@ export class DownloadConfirmationDialogComponent {
       form.submit();
       document.body.removeChild(form);
     } else if (this.radioOptions == 'annotation') {
-      downloadUrl = this.DOWNLOAD_URL + 'annotations/';
+      downloadUrl = this.DOWNLOAD_URL + 'annotations';
       const form = document.createElement('form');
       form.setAttribute('method', method);
       form.setAttribute('action', downloadUrl);
