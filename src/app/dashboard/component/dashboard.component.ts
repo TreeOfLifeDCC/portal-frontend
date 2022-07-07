@@ -105,10 +105,10 @@ export class DashboardComponent implements OnInit, AfterViewInit {
   isEnaFilterCollapsed = true;
   itemLimitBiosampleFilter: number;
   itemLimitEnaFilter: number;
+  experimentTypeFilters = [];
+  taxaRankArray = ['superkingdom', 'kingdom', 'subkingdom', 'superphylum', 'phylum', 'subphylum', 'superclass', 'class', 'subclass', 'infraclass', 'cohort', 'subcohort', 'superorder', 'order', 'suborder', 'infraorder', 'parvorder', 'section', 'subsection', 'superfamily', 'family', 'subfamily', 'tribe', 'subtribe', 'genus', 'series', 'subgenus', 'species_group', 'species_subgroup', 'species', 'subspecies', 'varietas', 'forma'];
 
-  taxaRankArray = ["superkingdom", "kingdom", "subkingdom", "superphylum", "phylum", "subphylum", "superclass", "class", "subclass", "infraclass", "cohort", "subcohort", "superorder", "order", "suborder", "infraorder", "parvorder", "section", "subsection", "superfamily", "family", "subfamily", "tribe", "subtribe", "genus", "series", "subgenus", "species_group", "species_subgroup", "species", "subspecies", "varietas", "forma"]
-
-  dataColumnsDefination = [{ name: "Organism", column: "organism", selected: true }, { name: "ToL ID", column: "tolid", selected: true }, { name: "INSDC ID", column: "INSDC_ID", selected: true }, { name: "Common Name", column: "commonName", selected: true }, { name: "Common Name Source", column: "commonNameSource", selected: true }, { name: "Current Status", column: "currentStatus", selected: true }, { name: "External references", column: "goatInfo", selected: true }, { name: "Submitted to Biosamples", column: "biosamples", selected: false }, { name: "Raw data submitted to ENA", column: "raw_data", selected: false }, { name: "Mapped reads submitted to ENA", column: "mapped_reads", selected: false }, { name: "Assemblies submitted to ENA", column: "assemblies", selected: false }, { name: "Annotation complete", column: "annotation_complete", selected: false }, { name: "Annotation submitted to ENA", column: "annotation", selected: false }]
+  dataColumnsDefination = [{ name: 'Organism', column: 'organism', selected: true }, { name: 'ToL ID', column: 'tolid', selected: true }, { name: 'INSDC ID', column: 'INSDC_ID', selected: true }, { name: 'Common Name', column: 'commonName', selected: true }, { name: 'Common Name Source', column: 'commonNameSource', selected: true }, { name: 'Current Status', column: 'currentStatus', selected: true }, { name: 'External references', column: 'goatInfo', selected: true }, { name: 'Submitted to Biosamples', column: 'biosamples', selected: false }, { name: 'Raw data submitted to ENA', column: 'raw_data', selected: false }, { name: 'Mapped reads submitted to ENA', column: 'mapped_reads', selected: false }, { name: 'Assemblies submitted to ENA', column: 'assemblies', selected: false }, { name: 'Annotation complete', column: 'annotation_complete', selected: false }, { name: 'Annotation submitted to ENA', column: 'annotation', selected: false }];
   displayedColumns = [];
   phylSelectedRank = '';
   constructor(private titleService: Title, private dashboardService: DashboardService,
@@ -163,11 +163,11 @@ export class DashboardComponent implements OnInit, AfterViewInit {
   }
 
   getOrganismsQueryParamonInit() {
-    const queryParamMap = this.activatedRoute.snapshot['queryParamMap'];
-    const params = queryParamMap['params'];
+    const queryParamMap = this.activatedRoute.snapshot.queryParamMap;
+    const params = queryParamMap.params;
     if (Object.keys(params).length != 0) {
 
-      for (let key in params) {
+      for (const key in params) {
         if (key == 'phylogeny') {
           this.isFilterSelected = true;
           this.phylSelectedRank = params[key];
@@ -186,7 +186,13 @@ export class DashboardComponent implements OnInit, AfterViewInit {
   appendActiveFilters(key, params) {
     setTimeout(() => {
       this.urlAppendFilterArray.push({ name: key, value: params[key] });
-      this.activeFilters.push(params[key]);
+      if (key === 'experiment-type'){
+        const list = params[key].split(',');
+        list.forEach((param: any) => { this.activeFilters.push(param); });
+      }else {
+        this.activeFilters.push(params[key]);
+      }
+
     }, 10);
   }
 
@@ -213,9 +219,9 @@ export class DashboardComponent implements OnInit, AfterViewInit {
           this.filtersMap = data;
           this.parseFilterAggregation(data);
 
-          this.childTaxanomy['superkingdom'] = [{ 'parent': 'Eukaryota', 'rank': 'kingdom', 'expanded': false, 'taxId': 2759, 'childData': data.aggregations.kingdomRank.scientificName.buckets }];
+          this.childTaxanomy.superkingdom = [{ parent: 'Eukaryota', rank: 'kingdom', expanded: false, taxId: 2759, childData: data.aggregations.kingdomRank.scientificName.buckets }];
           if (this.phylSelectedRank != '') {
-            let taxa = { 'rank': this.phylSelectedRank.split(' - ')[0], 'taxonomy': data.aggregations.childRank.scientificName.buckets[0].key, 'commonName': data.aggregations.childRank.scientificName.buckets[0].commonName.buckets[0].key, 'taxId': data.aggregations.childRank.scientificName.buckets[0].taxId.buckets[0].key };
+            const taxa = { rank: this.phylSelectedRank.split(' - ')[0], taxonomy: data.aggregations.childRank.scientificName.buckets[0].key, commonName: data.aggregations.childRank.scientificName.buckets[0].commonName.buckets[0].key, taxId: data.aggregations.childRank.scientificName.buckets[0].taxId.buckets[0].key };
             this.selectedFilterValue = taxa;
           }
           for (let i = 0; i < this.urlAppendFilterArray.length; i++) {
@@ -368,7 +374,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
   // tslint:disable-next-line:typedef
   unpackData(data: any) {
     const dataToReturn = {};
-    dataToReturn['id'] = data._id;
+    dataToReturn.id = data._id;
     if (data.hasOwnProperty('_source')) {
       data = data._source;
     }
@@ -376,14 +382,14 @@ export class DashboardComponent implements OnInit, AfterViewInit {
       if (key === 'experiment') {
         const exp = data[key];
         if (exp.length > 0) {
-          dataToReturn['INSDC_ID'] = exp[0].study_accession;
+          dataToReturn.INSDC_ID = exp[0].study_accession;
         } else {
-          dataToReturn['INSDC_ID'] = null;
+          dataToReturn.INSDC_ID = null;
         }
 
       }
       if (key === 'tax_id') {
-        dataToReturn['goatInfo'] = 'https://goat.genomehubs.org/records?record_id=' + data[key] + '&result=taxon&taxonomy=ncbi#' + dataToReturn['organism'];
+        dataToReturn.goatInfo = 'https://goat.genomehubs.org/records?record_id=' + data[key] + '&result=taxon&taxonomy=ncbi#' + dataToReturn.organism;
         dataToReturn[key] = data[key];
       }
       if (key === 'commonName' && data[key] == null) {
@@ -413,9 +419,15 @@ export class DashboardComponent implements OnInit, AfterViewInit {
     const taxonomy = [this.currentTaxonomyTree];
     const inactiveClassName = label.toLowerCase().replace(' ', '-') + '-inactive';
     const filterIndex = this.activeFilters.indexOf(filter);
+
+    if (filterIndex !== -1 && label === 'experiment-type'){
+        const filterValue = this.selectedFilterArray[label];
+        console.log('filterValue' + filterValue);
+    }
     if (filterIndex !== -1) {
       this.removeFilter(filter);
     } else {
+
       this.selectedFilterArray(label, filter);
       this.activeFilters.push(filter);
       this.dataSource.filter = `${filter.trim().toLowerCase()}|${label}`;
@@ -457,6 +469,15 @@ export class DashboardComponent implements OnInit, AfterViewInit {
     }
     else if (key.toLowerCase() == 'phylogeny') {
       jsonObj = { name: 'phylogeny', value };
+      this.urlAppendFilterArray.push(jsonObj);
+    } else if (key.toLowerCase() == 'experiment-type') {
+      const oldValue = this.urlAppendFilterArray.map(function(a) {
+        if (a.name === 'experiment-type') {
+          return a.value;
+        }
+      });
+      value = oldValue[0] !== undefined ? value + ','  + oldValue[0] : value ;
+      jsonObj = { name: 'experiment-type', value };
       this.urlAppendFilterArray.push(jsonObj);
     }
 
@@ -599,8 +620,12 @@ export class DashboardComponent implements OnInit, AfterViewInit {
       },
       err => console.log(err)
     );
-
-
+    this.dashboardService.getExperimentTypeFilters().subscribe(
+        data => {
+          this.experimentTypeFilters = data.Experiment_type.filter(i => i !== '');
+        },
+        err => console.log(err)
+    );
   }
 
   getStatusClass(status: string) {
@@ -1157,23 +1182,26 @@ export class DashboardComponent implements OnInit, AfterViewInit {
     });
     const genome = this.filtersMap.aggregations.genome.doc_count;
     this.GenomeFilters = [{ key: 'Genome Notes - Submitted', doc_count: genome }];
+    const experiement = this.filtersMap.aggregations.experiment.library_construction_protocol.buckets;
+    console.log(experiement);
+    this.experimentTypeFilters = experiement;
   }
 
   downloadCSV() {
     const taxonomy = [this.currentTaxonomyTree];
     this.dashboardService.downloadCSV(this.activeFilters.toString(), this.sort.active, this.sort.direction, 0, 5000, taxonomy, this.searchText).subscribe(data => {
       const blob = new Blob([data], { type: 'application/csv' });
-      var downloadURL = window.URL.createObjectURL(data);
-      var link = document.createElement('a');
+      const downloadURL = window.URL.createObjectURL(data);
+      const link = document.createElement('a');
       link.href = downloadURL;
-      link.download = "organism-metadata.csv";
+      link.download = 'organism-metadata.csv';
       link.click();
     }), error => console.log('Error downloading the file'),
       () => console.info('File downloaded successfully');
   }
 
   checkElement(element: any) {
-    return element.commonName != "-";
+    return element.commonName != '-';
   }
 
   commonNameSourceStyle(element: any) {
@@ -1194,7 +1222,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
         sort: this.sort,
         taxonomy: [this.currentTaxonomyTree],
         searchText: this.searchText,
-        selectedOptions:[0,1,2],
+        selectedOptions: [0, 1, 2],
         hideAnnotation: this.AnnotationFilters.length === 0 && this.AnnotationCompleteFilters.length === 0 ,
         hideAssemblies: this.AssembliesFilters.length === 0 ,
         hideRawData: this.RawDataFilters.length === 0

@@ -67,6 +67,9 @@ export class DashboardService {
   public getOrganismFilters(): Observable<any> {
     return this.http.get(`${this.API_BASE_URL}/root_organisms/root/filters`);
   }
+  public getExperimentTypeFilters(): Observable<any> {
+    return this.http.get(`${this.API_BASE_URL}/root_organisms/root/experiment-type/filters`);
+  }
 
   public getRootOrganismFilters(organism): Observable<any> {
     return this.http.get(`${this.API_BASE_URL}/root_organisms/filters?organism=${organism}`);
