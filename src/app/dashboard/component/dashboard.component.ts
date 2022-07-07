@@ -163,11 +163,11 @@ export class DashboardComponent implements OnInit, AfterViewInit {
   }
 
   getOrganismsQueryParamonInit() {
-    const queryParamMap = this.activatedRoute.snapshot.queryParamMap;
-    const params = queryParamMap.params;
+    const queryParamMap = this.activatedRoute.snapshot['queryParamMap'];
+    const params = queryParamMap['params'];
     if (Object.keys(params).length != 0) {
 
-      for (const key in params) {
+      for (let key in params) {
         if (key == 'phylogeny') {
           this.isFilterSelected = true;
           this.phylSelectedRank = params[key];
@@ -374,7 +374,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
   // tslint:disable-next-line:typedef
   unpackData(data: any) {
     const dataToReturn = {};
-    dataToReturn.id = data._id;
+    dataToReturn['id'] = data._id;
     if (data.hasOwnProperty('_source')) {
       data = data._source;
     }
@@ -382,14 +382,14 @@ export class DashboardComponent implements OnInit, AfterViewInit {
       if (key === 'experiment') {
         const exp = data[key];
         if (exp.length > 0) {
-          dataToReturn.INSDC_ID = exp[0].study_accession;
+          dataToReturn['INSDC_ID'] = exp[0].study_accession;
         } else {
-          dataToReturn.INSDC_ID = null;
+          dataToReturn['INSDC_ID'] = null;
         }
 
       }
       if (key === 'tax_id') {
-        dataToReturn.goatInfo = 'https://goat.genomehubs.org/records?record_id=' + data[key] + '&result=taxon&taxonomy=ncbi#' + dataToReturn.organism;
+        dataToReturn['goatInfo'] = 'https://goat.genomehubs.org/records?record_id=' + data[key] + '&result=taxon&taxonomy=ncbi#' + dataToReturn['organism'];
         dataToReturn[key] = data[key];
       }
       if (key === 'commonName' && data[key] == null) {
@@ -419,11 +419,6 @@ export class DashboardComponent implements OnInit, AfterViewInit {
     const taxonomy = [this.currentTaxonomyTree];
     const inactiveClassName = label.toLowerCase().replace(' ', '-') + '-inactive';
     const filterIndex = this.activeFilters.indexOf(filter);
-
-    if (filterIndex !== -1 && label === 'experiment-type'){
-        const filterValue = this.selectedFilterArray[label];
-        console.log('filterValue' + filterValue);
-    }
     if (filterIndex !== -1) {
       this.removeFilter(filter);
     } else {
@@ -1222,7 +1217,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
         sort: this.sort,
         taxonomy: [this.currentTaxonomyTree],
         searchText: this.searchText,
-        selectedOptions: [0, 1, 2],
+        selectedOptions:[0,1,2],
         hideAnnotation: this.AnnotationFilters.length === 0 && this.AnnotationCompleteFilters.length === 0 ,
         hideAssemblies: this.AssembliesFilters.length === 0 ,
         hideRawData: this.RawDataFilters.length === 0
