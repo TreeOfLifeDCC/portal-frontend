@@ -371,7 +371,6 @@ export class DashboardComponent implements OnInit, AfterViewInit {
     }
   }
 
-  // tslint:disable-next-line:typedef
   unpackData(data: any) {
     const dataToReturn = {};
     dataToReturn['id'] = data._id;
@@ -401,6 +400,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
     }
     return dataToReturn;
   }
+
 
   // tslint:disable-next-line:typedef
   checkFilterIsActive(filter: string) {
@@ -466,13 +466,17 @@ export class DashboardComponent implements OnInit, AfterViewInit {
       jsonObj = { name: 'phylogeny', value };
       this.urlAppendFilterArray.push(jsonObj);
     } else if (key.toLowerCase() == 'experiment-type') {
-      const oldValue = this.urlAppendFilterArray.map(function(a) {
-        if (a.name === 'experiment-type') {
-          return a.value;
+      let oldValue = [];
+      for (let i = 0; i < this.urlAppendFilterArray.length; i++) {
+        if (this.urlAppendFilterArray[i].name === 'experiment-type') {
+          oldValue.push(this.urlAppendFilterArray[i].value);
         }
-      });
-      value = oldValue[0] !== undefined ? value + ','  + oldValue[0] : value ;
-      jsonObj = { name: 'experiment-type', value };
+      }
+      if ( oldValue === undefined || oldValue.length === 0){
+          jsonObj = { name: 'experiment-type', value };
+        }else{
+          jsonObj = { name: 'experiment-type', value: oldValue[oldValue.length - 1] == undefined ? value  : oldValue[oldValue.length - 1] + ',' + value };
+        }
       this.urlAppendFilterArray.push(jsonObj);
     }
 
