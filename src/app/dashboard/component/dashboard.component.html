@@ -95,6 +95,25 @@
                         </div>
                     </div>
                 </div>
+                <!-- Experiment type filters -->
+                <div class="row">
+                    <div class="col-md-12 col-sm-6">
+                        <div class="card bg-lite mb-3 filter-top">
+                            <h3 class="card-header filter-heading">
+                                <span>Experiment Type</span>
+                            </h3>
+                            <ul id="experimentType" class="list-group">
+                                <ng-container *ngFor="let filter of experimentTypeFilters; let i = index">
+                                    <li class="biosample list-group-item d-flex justify-content-between align-items-center biosamples-inactive" id="{{filter.key}}-Experiment Type"  [ngClass]="checkFilterIsActive(filter.key)" (click)="onFilterClick($event, 'experiment-type', filter.key)" style="cursor: pointer" >
+                                        <span>{{filter.key}}</span>
+                                        <span class="badge badge-pill badge-info">{{filter.doc_count}}</span>
+                                    </li>
+                                </ng-container>
+
+                            </ul>
+                        </div>
+                    </div>
+                </div>
             </div>
             <div class="col-md-10">
                 <h1 class="page-header">Organisms</h1>
