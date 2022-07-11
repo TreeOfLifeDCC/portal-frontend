@@ -14,4 +14,8 @@ export class GisService {
   public getgisData(): Observable<any> {
     return this.http.get(`${this.API_BASE_URL}/root_organisms/gis`);
   }
+
+  public getGisSearchData(search: any): Observable<any> {
+    return this.http.get(`${this.API_BASE_URL}/root_organisms/gis/search?filter=${search}`);
+  }
 }

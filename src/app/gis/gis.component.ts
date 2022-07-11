@@ -19,6 +19,7 @@ const iconDefault = L.icon({
 });
 L.Marker.prototype.options.icon = iconDefault;
 
+
 @Component({
   selector: 'app-gis',
   templateUrl: './gis.component.html',
@@ -28,12 +29,14 @@ export class GisComponent implements AfterViewInit {
   private map;
   private tiles;
   private markers;
+  searchText;
 
   unpackedData;
 
   constructor(private gisService: GisService, private spinner: NgxSpinnerService) { }
 
   ngOnInit(): void {
+    this.searchText = "";
     this.getGisData();
   }
 
@@ -53,6 +56,8 @@ export class GisComponent implements AfterViewInit {
           setTimeout(() => {
             this.spinner.hide();
             this.initMap();
+            this.populateMap();
+            this.showCursorCoordinates();
           }, 300);
         },
         err => {
@@ -80,7 +85,15 @@ export class GisComponent implements AfterViewInit {
       zoom: 6,
       layers: [this.tiles],
     });
+  }
 
+  populateMap() {
+    this.setMarkers();
+    this.getLatLong();
+    this.map.addLayer(this.markers);
+  }
+
+  setMarkers() {
     this.markers = L.markerClusterGroup({
       spiderfyOnMaxZoom: true,
       showCoverageOnHover: true,
@@ -94,10 +107,6 @@ export class GisComponent implements AfterViewInit {
         a.layer.spiderfy();
       }
     });
-
-    this.getLatLong();
-    this.showCursorCoordinates();
-    this.map.addLayer(this.markers);
   }
 
   getLatLong(): any {
@@ -185,6 +194,74 @@ export class GisComponent implements AfterViewInit {
       }
     });
     this.map.addControl(new Coordinates({ position: "bottomright" }));
+  }
+
+  refreshMapLayers() {
+    this.map.eachLayer(layer => {
+      this.map.removeLayer(layer);
+    });
+    this.map.addLayer(this.tiles);
+  }
+
+  resetMapView() {
+    this.map.setView([53.4862, -1.8904], 6);
+  }
+
+  searchGisData() {
+    this.getSearchData(this.searchText);
+  }
+
+  getSearchData(search: any) {
+    if (search.length > 0) {
+      this.spinner.show();
+      this.gisService.getGisSearchData(search)
+        .subscribe(
+          data => {
+            const unpackedData = [];
+            this.unpackedData = [];
+            for (const item of data) {
+              unpackedData.push(this.unpackData(item));
+            }
+            this.unpackedData = unpackedData;
+            this.refreshMapLayers();
+            setTimeout(() => {
+              this.populateMap();
+              this.resetMapView();
+              this.spinner.hide();
+            }, 100);
+          },
+          err => {
+            console.log(err);
+            this.spinner.hide();
+          }
+        );
+    }
+  }
+
+  getAllData() {
+    this.searchText = "";
+    this.spinner.show();
+    this.gisService.getgisData()
+      .subscribe(
+        data => {
+          const unpackedData = [];
+          this.unpackedData = [];
+          for (const item of data) {
+            unpackedData.push(this.unpackData(item));
+          }
+          this.unpackedData = unpackedData;
+          this.refreshMapLayers();
+          setTimeout(() => {
+            this.populateMap();
+            this.resetMapView();
+            this.spinner.hide();
+          }, 400);
+        },
+        err => {
+          console.log(err);
+          this.spinner.hide();
+        }
+      );
   }
 
 }
