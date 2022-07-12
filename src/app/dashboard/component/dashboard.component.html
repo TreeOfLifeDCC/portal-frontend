@@ -106,7 +106,7 @@
                                 <ng-container *ngFor="let filter of experimentTypeFilters; let i = index">
                                     <li class="biosample list-group-item d-flex justify-content-between align-items-center biosamples-inactive" id="{{filter.key}}-Experiment Type"  [ngClass]="checkFilterIsActive(filter.key)" (click)="onFilterClick($event, 'experiment-type', filter.key)" style="cursor: pointer" >
                                         <span>{{filter.key}}</span>
-                                        <span class="badge badge-pill badge-info">{{filter.doc_count}}</span>
+                                        <span class="badge badge-pill badge-info">{{filter.organism_count.doc_count}}</span>
                                     </li>
                                 </ng-container>
 
