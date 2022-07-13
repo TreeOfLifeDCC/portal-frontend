@@ -228,7 +228,14 @@ export class GisComponent implements AfterViewInit {
             this.refreshMapLayers();
             setTimeout(() => {
               this.populateMap();
-              this.resetMapView();
+              if(this.unpackedData.length > 0) {
+                var lat = this.unpackedData[0]['organisms'][0]['lat']
+                var lng = this.unpackedData[0]['organisms'][0]['lng']
+                this.map.setView([lat, lng], 6);
+              }
+              else {
+                this.resetMapView();
+              }
               this.spinner.hide();
             }, 100);
           },
