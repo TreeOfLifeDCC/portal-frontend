@@ -130,6 +130,7 @@ export class GisComponent implements AfterViewInit {
             const latlng = L.latLng(llat, llng);
             const m = L.marker(latlng);
             const accession = `<div><a target="_blank" href=/data/organism/details/${tempArr[j].accession}>${tempArr[j].accession}</a></div>`;
+            // const organism = tempArr[j].organism != null ? `<div>${tempArr[j].organism}</div>` : '';
             const commonName = tempArr[j].commonName != null ? `<div>${tempArr[j].commonName}</div>` : '';
             const organismPart = `<div>${tempArr[j].organismPart}</div>`;
             const popupcontent = accession + commonName + organismPart;
@@ -166,6 +167,7 @@ export class GisComponent implements AfterViewInit {
             const latlng = L.latLng(llat, llng);
             const m = L.marker(latlng);
             const accession = `<div><a target="_blank" href=/data/specimens/details/${tempspecArr[j].accession}>${tempspecArr[j].accession}</a></div>`;
+            // const organism = tempspecArr[j].organism != null ? `<div>${tempspecArr[j].organism}</div>` : '';
             const commonName = tempspecArr[j].commonName != null ? `<div>${tempspecArr[j].commonName}</div>` : '';
             const organismPart = `<div>${tempspecArr[j].organismPart}</div>`;
             const popupcontent = accession + commonName + organismPart;
