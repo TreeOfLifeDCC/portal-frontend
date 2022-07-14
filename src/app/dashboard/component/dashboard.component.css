@@ -22,10 +22,14 @@ button {
     margin-left: 5px;
 }
 
-.card-header,
+.card-header{
+    background-color: #8FBC45;
+    width: 107%;
+}
 .btn-success,
 .badge-success {
     background-color: #8FBC45;
+
 }
 
 .btn-primary,
@@ -68,16 +72,16 @@ ul.long-list {
     overflow: scroll;
 }
 
-.filter-heading {
-    font-size: unset;
-    font-weight: 400;
-}
-
 .inactiveFilter {
     pointer-events: none;
     cursor: default;
 }
-
+.material-icons {
+    vertical-align: after-edge;
+    font-size: 25px;
+    line-height: 1;
+    padding-right: 5px;
+}
 
 /* Remove default bullets */
 
@@ -170,10 +174,16 @@ hr {
 .rank-heading {
     text-align: center;
     font-size: large;
+    width: 107%;
 }
 
 .filter-heading {
-    margin: 0px !important;
+    font-size: unset;
+    font-weight: 400;
+    line-height: 2;
+    margin: auto;
+    padding-right: 5px;
+
 }
 
 .left {
@@ -199,6 +209,7 @@ ul[class*="other-"] {
 
 .list-group-item {
     padding: 0.25rem;
+    width: 107%;
 }
 
 .goat-padding {
