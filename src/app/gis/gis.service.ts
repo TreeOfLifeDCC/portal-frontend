@@ -6,8 +6,8 @@ import { Observable } from 'rxjs';
 })
 export class GisService {
 
-  private API_BASE_URL = 'https://portal.darwintreeoflife.org/api';
-  // private API_BASE_URL = 'http://localhost:8080';
+  // private API_BASE_URL = 'https://portal.darwintreeoflife.org/api';
+  private API_BASE_URL = 'http://localhost:8080';
 
   constructor(private http: HttpClient) { }
 
