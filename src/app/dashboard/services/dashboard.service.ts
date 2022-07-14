@@ -167,4 +167,7 @@ export class DashboardService {
       });
     })).subscribe();
   }
+  public getExperimentTypeFilters(): Observable<any> {
+    return this.http.get(`${this.API_BASE_URL}/root_organisms/root/experiment-type/filters`);
+  }
 }
