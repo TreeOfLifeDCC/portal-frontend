@@ -75,13 +75,13 @@
                                 <span>Phylogeny</span>
                             </h3>
                             <ul id="ontology-inactive" class="list-group">
-                                <li *ngIf="isFilterSelected" class="rank-heading"> {{selectedFilterValue.rank | uppercase}}
+                                <li *ngIf="isFilterSelected" class="rank-heading list-group-item"> {{selectedFilterValue.rank | uppercase}}
                                 </li>
                                 <li *ngIf="isFilterSelected" class="list-group-item d-flex justify-content-between align-items-center kingdom active-filter" style="cursor: pointer; padding: .75rem 0.25rem;" id="{{selectedFilterValue.taxonomy}}-kingdom" (click)="showTaxonomyModal($event, currentTaxonomy.rank, currentTaxonomy.taxonomy, 'subkingdom')">
                                     {{selectedFilterValue.taxonomy}} ({{selectedFilterValue.commonName}})
                                     <span class="badge badge-pill badge-info">{{bioSampleTotalCount}}</span>
                                 </li>
-                                <li *ngIf="!isFilterSelected" class="rank-heading"> KINGDOM </li>
+                                <li *ngIf="!isFilterSelected" class="rank-heading list-group-item"> KINGDOM </li>
                                 <ng-container *ngIf="!isFilterSelected">
                                     <ng-container *ngFor="let super of childTaxanomy.superkingdom">
                                         <li *ngFor="let superchild of super.childData" class="list-group-item d-flex justify-content-between align-items-center kingdom" style="cursor: pointer; padding: .75rem 0.25rem;" id="{{superchild.key}}-kingdom" (click)="showTaxonomyModal($event, super.rank, superchild.key, 'subkingdom')"
@@ -95,6 +95,30 @@
                         </div>
                     </div>
                 </div>
+
+<!--             Experiment type filters -->
+            <div class="row">
+                <div class="col-md-12 col-sm-6">
+                    <div class="card bg-lite mb-3 filter-top">
+                        <h3 class="card-header filter-heading" >
+                            <span>Experiment Type</span>
+
+                            <i class="material-icons float-right"  *ngIf="experimentTypeFilters?.length > 5 && isCollapsed" (click)="toggleCollapseForExp()">add</i>
+                            <i class="material-icons float-right"  *ngIf="experimentTypeFilters?.length > 5 && !isCollapsed" (click)="toggleCollapseForExp()">remove</i>
+
+                        </h3>
+                        <ul id="experimentType" class="list-group">
+                            <ng-container *ngFor="let filter of experimentTypeFilters; let i = index ">
+                                <li   *ngIf="i<itemLimit" class="biosample list-group-item d-flex justify-content-between align-items-center biosamples-inactive" id="{{filter.key}}-Experiment Type"  [ngClass]="checkFilterIsActive(filter.key)" (click)="onFilterClick($event, 'experiment-type', filter.key)" style="cursor: pointer" >
+                                    <span>{{filter.key}}</span>
+                                    <span class="badge badge-pill badge-info">{{filter.organism_count.doc_count}}</span>
+                                </li>
+                            </ng-container>
+
+                        </ul>
+                    </div>
+                </div>
+            </div>
             </div>
             <div class="col-md-10">
                 <h1 class="page-header">Organisms</h1>

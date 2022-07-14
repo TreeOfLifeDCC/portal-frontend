@@ -105,7 +105,9 @@ export class DashboardComponent implements OnInit, AfterViewInit {
   isEnaFilterCollapsed = true;
   itemLimitBiosampleFilter: number;
   itemLimitEnaFilter: number;
-
+  experimentTypeFilters = [];
+  isCollapsed = true;
+  itemLimit = 5;
   taxaRankArray = ["superkingdom", "kingdom", "subkingdom", "superphylum", "phylum", "subphylum", "superclass", "class", "subclass", "infraclass", "cohort", "subcohort", "superorder", "order", "suborder", "infraorder", "parvorder", "section", "subsection", "superfamily", "family", "subfamily", "tribe", "subtribe", "genus", "series", "subgenus", "species_group", "species_subgroup", "species", "subspecies", "varietas", "forma"]
 
   dataColumnsDefination = [{ name: "Organism", column: "organism", selected: true }, { name: "ToL ID", column: "tolid", selected: true }, { name: "INSDC ID", column: "INSDC_ID", selected: true }, { name: "Common Name", column: "commonName", selected: true }, { name: "Common Name Source", column: "commonNameSource", selected: true }, { name: "Current Status", column: "currentStatus", selected: true }, { name: "External references", column: "goatInfo", selected: true }, { name: "Submitted to Biosamples", column: "biosamples", selected: false }, { name: "Raw data submitted to ENA", column: "raw_data", selected: false }, { name: "Mapped reads submitted to ENA", column: "mapped_reads", selected: false }, { name: "Assemblies submitted to ENA", column: "assemblies", selected: false }, { name: "Annotation complete", column: "annotation_complete", selected: false }, { name: "Annotation submitted to ENA", column: "annotation", selected: false }]
@@ -186,7 +188,12 @@ export class DashboardComponent implements OnInit, AfterViewInit {
   appendActiveFilters(key, params) {
     setTimeout(() => {
       this.urlAppendFilterArray.push({ name: key, value: params[key] });
-      this.activeFilters.push(params[key]);
+      if (key === 'experiment-type'){
+        const list = params[key].split(',');
+        list.forEach((param: any) => { this.activeFilters.push(param); });
+      }else {
+        this.activeFilters.push(params[key]);
+      }
     }, 10);
   }
 
@@ -458,6 +465,19 @@ export class DashboardComponent implements OnInit, AfterViewInit {
     else if (key.toLowerCase() == 'phylogeny') {
       jsonObj = { name: 'phylogeny', value };
       this.urlAppendFilterArray.push(jsonObj);
+    } else if (key.toLowerCase() == 'experiment-type') {
+      let oldValue = [];
+      for (let i = 0; i < this.urlAppendFilterArray.length; i++) {
+        if (this.urlAppendFilterArray[i].name === 'experiment-type') {
+          oldValue.push(this.urlAppendFilterArray[i].value);
+        }
+      }
+      if ( oldValue === undefined || oldValue.length === 0){
+        jsonObj = { name: 'experiment-type', value };
+      }else{
+        jsonObj = { name: 'experiment-type', value: oldValue[oldValue.length - 1] == undefined ? value  : oldValue[oldValue.length - 1] + ',' + value };
+      }
+      this.urlAppendFilterArray.push(jsonObj);
     }
 
   }
@@ -599,7 +619,12 @@ export class DashboardComponent implements OnInit, AfterViewInit {
       },
       err => console.log(err)
     );
-
+    this.dashboardService.getExperimentTypeFilters().subscribe(
+        data => {
+          this.experimentTypeFilters = data.Experiment_type.filter(i => i !== '');
+        },
+        err => console.log(err)
+    );
 
   }
 
@@ -1157,6 +1182,8 @@ export class DashboardComponent implements OnInit, AfterViewInit {
     });
     const genome = this.filtersMap.aggregations.genome.doc_count;
     this.GenomeFilters = [{ key: 'Genome Notes - Submitted', doc_count: genome }];
+    const experiement = this.filtersMap.aggregations.experiment.library_construction_protocol.buckets;
+    this.experimentTypeFilters = experiement;
   }
 
   downloadCSV() {
@@ -1200,5 +1227,14 @@ export class DashboardComponent implements OnInit, AfterViewInit {
         hideRawData: this.RawDataFilters.length === 0
       }
     });
+  }
+  toggleCollapseForExp() {
+    if (this.isCollapsed) {
+      this.itemLimit = 10000;
+      this.isCollapsed = false;
+    } else {
+      this.itemLimit = 5;
+      this.isCollapsed = true;
+    }
   }
 }
