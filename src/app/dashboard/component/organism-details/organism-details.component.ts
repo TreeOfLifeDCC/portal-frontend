@@ -215,7 +215,7 @@ export class OrganismDetailsComponent implements OnInit, AfterViewInit {
           this.bioSampleObj = data;
           this.orgGeoList = data.orgGeoList;
           this.specGeoList = data.specGeoList;
-          if (this.orgGeoList.length != 0 && this.specGeoList.length != 0) {
+          if (this.orgGeoList.length != 0) {
             this.geoLocation = true;
             setTimeout(() => {
               const tabGroup = this.tabgroup;

@@ -121,9 +121,10 @@ export class GisComponent implements AfterViewInit {
             const latlng = L.latLng(llat, llng);
             const m = L.marker(latlng);
             const accession = `<div><a target="_blank" href=/data/organism/details/${tempArr[j].accession}>${tempArr[j].accession}</a></div>`;
+            const organism = tempArr[j].organism != null ? `<div>${tempArr[j].organism}</div>` : '';
             const commonName = tempArr[j].commonName != null ? `<div>${tempArr[j].commonName}</div>` : '';
             const organismPart = `<div>${tempArr[j].organismPart}</div>`;
-            const popupcontent = accession + commonName + organismPart;
+            const popupcontent = accession + organism + commonName + organismPart;
             const popup = L.popup({
               closeOnClick: false,
               autoClose: true,
@@ -157,9 +158,10 @@ export class GisComponent implements AfterViewInit {
             const latlng = L.latLng(llat, llng);
             const m = L.marker(latlng);
             const accession = `<div><a target="_blank" href=/data/specimens/details/${tempspecArr[j].accession}>${tempspecArr[j].accession}</a></div>`;
+            const organism = tempspecArr[j].organism != null ? `<div>${tempspecArr[j].organism}</div>` : '';
             const commonName = tempspecArr[j].commonName != null ? `<div>${tempspecArr[j].commonName}</div>` : '';
             const organismPart = `<div>${tempspecArr[j].organismPart}</div>`;
-            const popupcontent = accession + commonName + organismPart;
+            const popupcontent = accession + organism + commonName + organismPart;
             const popup = L.popup({
               closeOnClick: false,
               autoClose: true,
@@ -186,5 +188,82 @@ export class GisComponent implements AfterViewInit {
     });
     this.map.addControl(new Coordinates({ position: "bottomright" }));
   }
+
+
+  refreshMapLayers() {
+    this.map.eachLayer(layer => {
+      this.map.removeLayer(layer);
+    });
+    this.map.addLayer(this.tiles);
+  }
+
+  resetMapView() {
+    this.map.setView([53.4862, -1.8904], 6);
+  }
+
+  searchGisData() {
+    this.getSearchData(this.searchText);
+  }
+
+  getSearchData(search: any) {
+    if (search.length > 0) {
+      this.spinner.show();
+      this.gisService.getGisSearchData(search)
+        .subscribe(
+          data => {
+            const unpackedData = [];
+            this.unpackedData = [];
+            for (const item of data) {
+              unpackedData.push(this.unpackData(item));
+            }
+            this.unpackedData = unpackedData;
+            this.refreshMapLayers();
+            setTimeout(() => {
+              this.populateMap();
+              if(this.unpackedData.length > 0) {
+                var lat = this.unpackedData[0]['organisms'][0]['lat']
+                var lng = this.unpackedData[0]['organisms'][0]['lng']
+                this.map.setView([lat, lng], 6);
+              }
+              else {
+                this.resetMapView();
+              }
+              this.spinner.hide();
+            }, 100);
+          },
+          err => {
+            console.log(err);
+            this.spinner.hide();
+          }
+        );
+    }
+  }
+
+  getAllData() {
+    this.searchText = "";
+    this.spinner.show();
+    this.gisService.getgisData()
+      .subscribe(
+        data => {
+          const unpackedData = [];
+          this.unpackedData = [];
+          for (const item of data) {
+            unpackedData.push(this.unpackData(item));
+          }
+          this.unpackedData = unpackedData;
+          this.refreshMapLayers();
+          setTimeout(() => {
+            this.populateMap();
+            this.resetMapView();
+            this.spinner.hide();
+          }, 400);
+        },
+        err => {
+          console.log(err);
+          this.spinner.hide();
+        }
+      );
+  }
+
 
 }

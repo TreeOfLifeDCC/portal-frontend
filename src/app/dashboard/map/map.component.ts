@@ -27,8 +27,8 @@ export class MapComponent implements AfterViewInit {
   private tiles;
   private markers;
 
-  @Input('lat') lat: number;
-  @Input('lng') lng: number;
+  @Input('lat') lat: any;
+  @Input('lng') lng: any;
 
   constructor() { }
 
@@ -67,9 +67,11 @@ export class MapComponent implements AfterViewInit {
   }
 
   getLatLong(): any {
-    var latlng = L.latLng(this.lat, this.lng);
-    var m = L.marker(latlng);
-    this.markers.addLayer(m);
+    if (this.lat != 'not collected' && this.lat != 'not provided') {
+      var latlng = L.latLng(this.lat, this.lng);
+      var m = L.marker(latlng);
+      this.markers.addLayer(m);
+    }
   }
 
 }

@@ -46,9 +46,13 @@ export class MapClusterComponent implements AfterViewInit {
       minZoom: 3,
       attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
     });
+
     let latCoo = this.orgGeoList[0].lat;
     let lngCoo = this.orgGeoList[0].lng;
-    var latlng = L.latLng(latCoo, lngCoo);
+    var latlng = L.latLng(53.4862, -1.8904);
+    if (latCoo != 'not collected' && latCoo != 'not provided') {
+      latlng = L.latLng(latCoo, lngCoo);
+    }
 
     this.map = L.map('map', {
       center: latlng,
@@ -75,37 +79,43 @@ export class MapClusterComponent implements AfterViewInit {
   getLatLong(): any {
     let orgGeoSize = this.orgGeoList.length
     for (var i = 0; i < orgGeoSize; i++) {
-      const latlng = L.latLng(this.orgGeoList[i].lat, this.orgGeoList[i].lng);
-      const m = L.marker(latlng);
-      const accession = `<div><a target="_blank" href=/data/organism/details/${ this.orgGeoList[i].accession }>${ this.orgGeoList[i].accession }</a></div>`;
-      const commonName = this.orgGeoList[i].commonName != null ? `<div>${ this.orgGeoList[i].commonName }</div>` : '';
-      const organismPart = `<div>${ this.orgGeoList[i].organismPart }</div>`;
-      const popupcontent = accession + commonName + organismPart;
-      const popup = L.popup({
-        closeOnClick: false,
-        autoClose: true,
-        closeButton: false
-      }).setContent(popupcontent);
+      if (this.orgGeoList[i].lat != 'not collected' && this.orgGeoList[i].lat != 'not provided') {
+        const latlng = L.latLng(this.orgGeoList[i].lat, this.orgGeoList[i].lng);
+        const m = L.marker(latlng);
+        const accession = `<div><a target="_blank" href=/data/organism/details/${this.orgGeoList[i].accession}>${this.orgGeoList[i].accession}</a></div>`;
+        // const organism = this.orgGeoList[i].organism != null ? `<div>${this.orgGeoList[i].organism}</div>` : '';
+        const commonName = this.orgGeoList[i].commonName != null ? `<div>${this.orgGeoList[i].commonName}</div>` : '';
+        const organismPart = `<div>${this.orgGeoList[i].organismPart}</div>`;
+        const popupcontent = accession + commonName + organismPart;
+        const popup = L.popup({
+          closeOnClick: false,
+          autoClose: true,
+          closeButton: false
+        }).setContent(popupcontent);
 
-      m.bindPopup(popup)
-      this.markers.addLayer(m);
+        m.bindPopup(popup)
+        this.markers.addLayer(m);
+      }
     }
 
     let specGeoSize = this.specGeoList.length
     for (var i = 0; i < specGeoSize; i++) {
-      const latlng = L.latLng(this.specGeoList[i].lat, this.specGeoList[i].lng);
-      const m = L.marker(latlng);
-      const accession = `<div><a target="_blank" href=/data/specimens/details/${ this.specGeoList[i].accession }>${ this.specGeoList[i].accession }</a></div>`;
-      const commonName = this.specGeoList[i].commonName != null ? `<div>${ this.specGeoList[i].commonName }</div>` : '';
-      const organismPart = `<div>${ this.specGeoList[i].organismPart }</div>`;
-      const popupcontent = accession + commonName + organismPart;
-      const popup = L.popup({
-        closeOnClick: false,
-        autoClose: true,
-        closeButton: false
-      }).setContent(popupcontent);
-      m.bindPopup(popup)
-      this.markers.addLayer(m);
+      if (this.specGeoList[i].lat != 'not collected' && this.specGeoList[i].lat != 'not provided') {
+        const latlng = L.latLng(this.specGeoList[i].lat, this.specGeoList[i].lng);
+        const m = L.marker(latlng);
+        const accession = `<div><a target="_blank" href=/data/specimens/details/${this.specGeoList[i].accession}>${this.specGeoList[i].accession}</a></div>`;
+        // const organism = this.specGeoList[i].organism != null ? `<div>${this.specGeoList[i].organism}</div>` : '';
+        const commonName = this.specGeoList[i].commonName != null ? `<div>${this.specGeoList[i].commonName}</div>` : '';
+        const organismPart = `<div>${this.specGeoList[i].organismPart}</div>`;
+        const popupcontent = accession + commonName + organismPart;
+        const popup = L.popup({
+          closeOnClick: false,
+          autoClose: true,
+          closeButton: false
+        }).setContent(popupcontent);
+        m.bindPopup(popup)
+        this.markers.addLayer(m);
+      }
     }
   }
 
@@ -120,7 +130,7 @@ export class MapClusterComponent implements AfterViewInit {
         return container;
       }
     });
-    this.map.addControl(new Coordinates({ position: "bottomright"}));
+    this.map.addControl(new Coordinates({ position: "bottomright" }));
   }
 
 }
