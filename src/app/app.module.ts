@@ -29,7 +29,9 @@ import { GisComponent } from './gis/gis.component';
 import { GisService } from './gis/gis.service';
 
 import { NgxSpinnerModule } from "ngx-spinner";
-
+import {MatAutocompleteModule} from '@angular/material/autocomplete';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 
 @NgModule({
   declarations: [
@@ -61,7 +63,10 @@ import { NgxSpinnerModule } from "ngx-spinner";
     MatRadioModule,
     MatTooltipModule,
     ClipboardModule,
-    NgxSpinnerModule
+    NgxSpinnerModule,
+    MatFormFieldModule,
+    MatAutocompleteModule,
+    MatSlideToggleModule
   ],
   providers: [BytesPipe, GisService],
   bootstrap: [AppComponent]

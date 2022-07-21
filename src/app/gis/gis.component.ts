@@ -3,6 +3,9 @@ import * as L from 'leaflet';
 import 'leaflet.markercluster';
 import { GisService } from './gis.service';
 import { NgxSpinnerService } from 'ngx-spinner';
+import { FormControl } from '@angular/forms';
+import { map, startWith } from 'rxjs/operators';
+import { Observable } from 'rxjs';
 
 const iconRetinaUrl = 'assets/marker-icon-2x.png';
 const iconUrl = 'assets/marker-icon.png';
@@ -29,18 +32,62 @@ export class GisComponent implements AfterViewInit {
   private map;
   private tiles;
   private markers;
-  searchText;
+  toggleSpecimen = new FormControl();
 
   unpackedData;
+
+  myControl = new FormControl('');
+  filteredOptions: string[];
 
   constructor(private gisService: GisService, private spinner: NgxSpinnerService) { }
 
   ngOnInit(): void {
-    this.searchText = "";
+    this.toggleSpecimen.setValue(false)
     this.getGisData();
   }
 
   ngAfterViewInit(): void {
+  }
+
+  filterSearchResults(value: string) {
+    if (value != '' && value.length > 1) {
+      const filterValue = value.toLowerCase();
+      this.filteredOptions = this.unpackedData.filter(option => {
+        if (option.id != undefined) {
+          if (option.id.toLowerCase().includes(filterValue)) {
+            return option.id;
+          }
+        }
+      });
+    }
+    else {
+      this.filteredOptions = [];
+    }
+  }
+
+  toggleSpecimens() {
+    if (this.toggleSpecimen.value) {
+      this.spinner.show()
+      this.refreshMapLayers();
+      setTimeout(() => {
+        this.setMarkers();
+        this.getAllLatLong();
+        this.map.addLayer(this.markers);
+        this.resetMapView();
+        this.spinner.hide();
+      }, 50);
+    }
+    else {
+      this.spinner.show()
+      this.refreshMapLayers();
+      setTimeout(() => {
+        this.setMarkers();
+        this.getOrganismLatLong();
+        this.map.addLayer(this.markers);
+        this.resetMapView();
+        this.spinner.hide();
+      }, 50);
+    }
   }
 
   getGisData() {
@@ -89,7 +136,7 @@ export class GisComponent implements AfterViewInit {
 
   populateMap() {
     this.setMarkers();
-    this.getLatLong();
+    this.getOrganismLatLong();
     this.map.addLayer(this.markers);
   }
 
@@ -109,7 +156,46 @@ export class GisComponent implements AfterViewInit {
     });
   }
 
-  getLatLong(): any {
+  getOrganismLatLong(): any {
+    let orgGeoSize = this.unpackedData.length
+    for (var i = 0; i < orgGeoSize; i++) {
+      if (Object.keys(this.unpackedData[i]).length != 0) {
+        let tempArr = this.unpackedData[i].organisms;
+        let tempArrSize = tempArr.length
+        for (var j = 0; j < tempArrSize; j++) {
+          if (tempArr[j].lat != 'not collected' && tempArr[j].lat != 'not provided') {
+            let llat: any;
+            let llng: any;
+            if (tempArr[j].lat == '67.34.07' && tempArr[j].lng == '68.07.30') {
+              llat = '67.3407'
+              llng = '68.0730'
+            }
+            else {
+              llat = tempArr[j].lat
+              llng = tempArr[j].lng
+            }
+            const latlng = L.latLng(llat, llng);
+            const m = L.marker(latlng);
+            const accession = `<div><a target="_blank" href=/data/organism/details/${tempArr[j].accession}>${tempArr[j].accession}</a></div>`;
+            const organism = tempArr[j].organism != null ? `<div>${tempArr[j].organism}</div>` : '';
+            const commonName = tempArr[j].commonName != null ? `<div>${tempArr[j].commonName}</div>` : '';
+            const organismPart = `<div>${tempArr[j].organismPart}</div>`;
+            const popupcontent = accession + organism + commonName + organismPart;
+            const popup = L.popup({
+              closeOnClick: false,
+              autoClose: true,
+              closeButton: false
+            }).setContent(popupcontent);
+
+            m.bindPopup(popup)
+            this.markers.addLayer(m);
+          }
+        }
+      }
+    }
+  }
+
+  getAllLatLong(): any {
     let orgGeoSize = this.unpackedData.length
     for (var i = 0; i < orgGeoSize; i++) {
       if (Object.keys(this.unpackedData[i]).length != 0) {
@@ -209,11 +295,12 @@ export class GisComponent implements AfterViewInit {
     this.map.setView([53.4862, -1.8904], 6);
   }
 
-  searchGisData() {
-    this.getSearchData(this.searchText);
+  searchGisData(searchText) {
+    this.getSearchData(searchText);
   }
 
   getSearchData(search: any) {
+    this.toggleSpecimen.setValue(false)
     if (search.length > 0) {
       this.spinner.show();
       this.gisService.getGisSearchData(search)
@@ -228,7 +315,7 @@ export class GisComponent implements AfterViewInit {
             this.refreshMapLayers();
             setTimeout(() => {
               this.populateMap();
-              if(this.unpackedData.length > 0) {
+              if (this.unpackedData.length > 0) {
                 var lat = this.unpackedData[0]['organisms'][0]['lat']
                 var lng = this.unpackedData[0]['organisms'][0]['lng']
                 this.map.setView([lat, lng], 6);
@@ -245,10 +332,19 @@ export class GisComponent implements AfterViewInit {
           }
         );
     }
+    else {
+      this.getAllData();
+    }
+  }
+
+  removeInputAndGetAllData() {
+    this.toggleSpecimen.setValue(false);
+    this.getAllData();
   }
 
   getAllData() {
-    this.searchText = "";
+    this.filteredOptions = [];
+    this.myControl.reset();
     this.spinner.show();
     this.gisService.getgisData()
       .subscribe(

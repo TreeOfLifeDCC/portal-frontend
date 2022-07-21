@@ -2,12 +2,21 @@
     <ngx-spinner bdColor="rgba(0,0,0,0.9)" [fullScreen]="true" size="large" color="#fff" type="ball-clip-rotate-pulse">
     </ngx-spinner>
     <div class="row">
-        <div class="col-lg-2"></div>
-        <div class="col-lg-8">
-            <div class="search">
-                <i class="fa fa-times" *ngIf="searchText.length > 0" (click)="getAllData()"></i>
-                <input id="search" (keyup.enter)="searchGisData()" [(ngModel)]="searchText" #ctrlName="ngModel" type="text" class="form-control" placeholder="Search for Organisms">
-                <button class="btn btn-primary" (click)="searchGisData()">Search</button>
+        <div class="col-lg-2">
+            <div class="toggle">
+                <mat-slide-toggle [formControl]="toggleSpecimen" (change)="toggleSpecimens()">Specimens</mat-slide-toggle>
+            </div>
+        </div>
+        <div class="col-lg-8 ">
+            <div class="search ">
+                <i class="fa fa-times " *ngIf="searchText.value.length> 0" (click)="removeInputAndGetAllData()"></i>
+                <input #searchText id="search" (keyup)="filterSearchResults(searchText.value)" (keyup.enter)="searchGisData(searchText.value)" [formControl]="myControl" type="text" class="form-control" placeholder="Search for Organisms" [matAutocomplete]="auto">
+                <button class="btn btn-primary" (click)="searchGisData(searchText.value)">Search</button>
+                <mat-autocomplete #auto="matAutocomplete">
+                    <mat-option *ngFor="let option of filteredOptions" [value]="option.id" (click)="searchGisData(option.id)">
+                        {{option.id}}
+                    </mat-option>
+                </mat-autocomplete>
             </div>
         </div>
         <div class="col-lg-2"></div>

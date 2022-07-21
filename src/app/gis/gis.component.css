@@ -60,3 +60,8 @@
     top: 20px;
     left: 16px;
 }
+
+.toggle {
+    position: relative;
+    margin-top: 50px;
+}
