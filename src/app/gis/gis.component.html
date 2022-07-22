@@ -1,0 +1,23 @@
+<div class="container">
+    <ngx-spinner bdColor="rgba(0,0,0,0.9)" [fullScreen]="true" size="large" color="#fff" type="ball-clip-rotate-pulse">
+    </ngx-spinner>
+    <div class="row">
+        <div class="col-lg-2"></div>
+        <div class="col-lg-8">
+            <div class="search">
+                <i class="fa fa-times" *ngIf="searchText.length > 0" (click)="getAllData()"></i>
+                <input id="search" (keyup.enter)="searchGisData()" [(ngModel)]="searchText" #ctrlName="ngModel" type="text" class="form-control" placeholder="Search for Organisms">
+                <button class="btn btn-primary" (click)="searchGisData()">Search</button>
+            </div>
+        </div>
+        <div class="col-lg-2"></div>
+    </div>
+
+    <div class="row">
+        <div class="map-container">
+            <div class="map-frame">
+                <div id="map"></div>
+            </div>
+        </div>
+    </div>
+</div>

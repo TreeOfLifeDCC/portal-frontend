@@ -23,11 +23,20 @@ button {
 }
 
 .card-header,
+.card-header{
+    background-color: #8FBC45;
+    width: 107%;
+}
 .btn-success,
 .badge-success {
     background-color: #8FBC45;
 }
-
+.material-icons {
+    vertical-align: after-edge;
+    font-size: 22px;
+    line-height: 1.2;
+    padding-right: 5px;
+}
 .btn-primary,
 .active {
     background-color: #4BBEFD;
@@ -71,6 +80,9 @@ ul.long-list {
 .filter-heading {
     font-size: unset;
     font-weight: 400;
+    line-height: 2;
+    margin: auto;
+    padding-right: 5px;
 }
 
 .inactiveFilter {
@@ -170,11 +182,10 @@ hr {
 .rank-heading {
     text-align: center;
     font-size: large;
+    width: 107%;
 }
 
-.filter-heading {
-    margin: 0px !important;
-}
+
 
 .left {
     float: left;
@@ -199,6 +210,7 @@ ul[class*="other-"] {
 
 .list-group-item {
     padding: 0.25rem;
+    width: 107%;
 }
 
 .goat-padding {

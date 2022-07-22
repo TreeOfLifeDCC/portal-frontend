@@ -6,6 +6,7 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { DashboardService } from '../../services/dashboard.service';
 import { NgxSpinnerService } from 'ngx-spinner';
+import { MatTabGroup } from '@angular/material/tabs';
 
 @Component({
   selector: 'dashboard-organism-details',
@@ -50,7 +51,7 @@ export class OrganismDetailsComponent implements OnInit, AfterViewInit {
   specBioSampleTotalCount;
   specDisplayedColumns = ['accession', 'organism', 'commonName', 'sex', 'organismPart', 'trackingSystem'];
 
-
+  private ENA_PORTAL_API_BASE_URL_FASTA = "https://www.ebi.ac.uk/ena/browser/api/fasta/"
   isSexFilterCollapsed = true;
   isTrackCollapsed = true;
   isOrganismPartCollapsed = true;
@@ -124,7 +125,8 @@ export class OrganismDetailsComponent implements OnInit, AfterViewInit {
 
   genomeNotes = [];
   INSDC_ID = null;
-
+  assembliesurls =[]
+  annotationsurls =[]
   dataSourceGoatInfo;
   displayedColumnsGoatInfo = ['name', 'value', 'count', 'aggregation_method', 'aggregation_source'];
 
@@ -134,11 +136,18 @@ export class OrganismDetailsComponent implements OnInit, AfterViewInit {
   @ViewChild('relatedOrganisms') relatedOrganismsTable: MatPaginator;
   @ViewChild('relatedAnnotationTable') relatedAnnotationTable: MatPaginator;
 
+  geoLocation: Boolean;
+  orgGeoList: any
+  specGeoList: any
+  @ViewChild("tabgroup", { static: false }) tabgroup: MatTabGroup;
+  private http: any;
+
   constructor(private route: ActivatedRoute, private dashboardService: DashboardService, private spinner: NgxSpinnerService, private router: Router) {
     this.route.params.subscribe(param => this.bioSampleId = param.id);
   }
 
   ngOnInit(): void {
+    this.geoLocation = false;
     this.dataSourceGoatInfo = {};
     this.activeFilters = [];
     this.filterSize = 3;
@@ -198,15 +207,29 @@ export class OrganismDetailsComponent implements OnInit, AfterViewInit {
   }
 
   getBiosampleById() {
+    this.spinner.show();
     this.dashboardService.getRootOrganismById(this.bioSampleId)
       .subscribe(
         data => {
           const unpackedData = [];
           this.bioSampleObj = data;
-          if(data.goat_info) {
+          this.orgGeoList = data.orgGeoList;
+          this.specGeoList = data.specGeoList;
+          if (this.orgGeoList.length != 0) {
+            this.geoLocation = true;
+            setTimeout(() => {
+              const tabGroup = this.tabgroup;
+              const selected = this.tabgroup.selectedIndex
+              tabGroup.selectedIndex = 4
+              setTimeout(() => {
+                tabGroup.selectedIndex = selected;
+              }, 1);
+            }, 400);
+          }
+          if (data.goat_info) {
             this.dataSourceGoatInfo = data.goat_info.attributes;
           }
-          if(data.experiment?.length > 0) {
+          if (data.experiment?.length > 0) {
             this.INSDC_ID = data.experiment[0].study_accession;
           }
           for (const item of data.records) {
@@ -231,6 +254,9 @@ export class OrganismDetailsComponent implements OnInit, AfterViewInit {
             if (data.assemblies != null) {
               this.dataSourceAssemblies = new MatTableDataSource<any>(data.assemblies);
               this.dataSourceAssembliesCount = data.assemblies?.length;
+              for (let i = 0; i < data.assemblies.length ; i++) {
+                this.assembliesurls.push(this.ENA_PORTAL_API_BASE_URL_FASTA+data.assemblies[i].accession+"?download=true&gzip=true");
+              }
             }
             else {
               this.dataSourceAssemblies = new MatTableDataSource<Sample>();
@@ -239,6 +265,9 @@ export class OrganismDetailsComponent implements OnInit, AfterViewInit {
             if (data.annotation != null) {
               this.dataSourceAnnotation = new MatTableDataSource<any>(data.annotation);
               this.dataSourceAnnotationCount = data.annotation?.length;
+              for (let i = 0; i < data.annotation.length ; i++) {
+                this.annotationsurls.push(this.ENA_PORTAL_API_BASE_URL_FASTA+data.annotation[i].accession+"?download=true&gzip=true");
+              }
             }
             else {
               this.dataSourceAnnotation = new MatTableDataSource<Sample>();
@@ -266,8 +295,12 @@ export class OrganismDetailsComponent implements OnInit, AfterViewInit {
             this.dataSourceAnnotation.sort = this.sort;
             this.dataSourceRelatedAnnotation.sort = this.sort;
           }, 50)
+
+          setTimeout(() => {
+            this.spinner.hide();
+          }, 500);
         },
-        err => console.log(err)
+        err => {this.spinner.hide(); console.log(err) }
       );
   }
 
@@ -558,11 +591,51 @@ export class OrganismDetailsComponent implements OnInit, AfterViewInit {
     if (genomeNotes != null) {
       genomeNotesURL = genomeNotes[0].url;
     }
-      return genomeNotesURL;
+    return genomeNotesURL;
   }
 
 
-  download(): void {
+  downloadRawFiles(): void {
     this.dashboardService.downloadFastaq(this.INSDC_ID);
   }
+  downloadAnnotation(): void {
+    this.download_files(this.annotationsurls);
+
+  }
+
+  downloadAssemblies(): void {
+    this.download_files(this.assembliesurls);
+    }
+
+   download_files(files) {
+    function download_next(i) {
+      if (i >= files.length) {
+        return;
+      }
+      var a = document.createElement('a');
+      a.href = files[i];
+      a.target = '_parent';
+      // Use a.download if available, it prevents plugins from opening.
+      if ('download' in a) {
+        a.download = files[i].filename;
+      }
+      // Add a to the doc for click to work.
+      (document.body || document.documentElement).appendChild(a);
+      if (a.click) {
+        a.click(); // The click method is supported by most browsers.
+      } else {
+        $(a).click(); // Backup using jquery
+      }
+      // Delete the temporary link.
+      a.parentNode.removeChild(a);
+      // Download the next file with a small timeout. The timeout is necessary
+      // for IE, which will otherwise only download the first file.
+      setTimeout(function() {
+        download_next(i + 1);
+      }, 500);
+    }
+    // Initiate the first download.
+    download_next(0);
+  }
+
 }

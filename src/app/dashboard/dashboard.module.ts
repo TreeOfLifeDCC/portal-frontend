@@ -25,9 +25,11 @@ import { OrganismDetailsComponent } from './component/organism-details/organism-
 import { TaxanomyComponent } from '../taxanomy/taxanomy.component';
 import { TaxanomyService } from '../taxanomy/taxanomy.service';
 import {MatTabsModule} from '@angular/material/tabs';
+import { MapComponent } from './map/map.component';
+import { MapClusterComponent } from './map-cluster/map-cluster.component';
 
 @NgModule({
-  declarations: [DashboardComponent, SpecimensComponent, DetailsComponent, OrganismDetailsComponent, TaxanomyComponent],
+  declarations: [DashboardComponent, SpecimensComponent, DetailsComponent, OrganismDetailsComponent, TaxanomyComponent, MapComponent, MapClusterComponent],
   imports: [
     CommonModule,
     DashboardRoutingModule,

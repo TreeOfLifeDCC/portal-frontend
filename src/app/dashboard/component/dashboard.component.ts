@@ -105,9 +105,11 @@ export class DashboardComponent implements OnInit, AfterViewInit {
   isEnaFilterCollapsed = true;
   itemLimitBiosampleFilter: number;
   itemLimitEnaFilter: number;
-
+  experimentTypeFilters = [];
+  isCollapsed = true;
+  itemLimit = 5;
   taxaRankArray = ["superkingdom", "kingdom", "subkingdom", "superphylum", "phylum", "subphylum", "superclass", "class", "subclass", "infraclass", "cohort", "subcohort", "superorder", "order", "suborder", "infraorder", "parvorder", "section", "subsection", "superfamily", "family", "subfamily", "tribe", "subtribe", "genus", "series", "subgenus", "species_group", "species_subgroup", "species", "subspecies", "varietas", "forma"]
-
+  pagesize = 20;
   dataColumnsDefination = [{ name: "Organism", column: "organism", selected: true }, { name: "ToL ID", column: "tolid", selected: true }, { name: "INSDC ID", column: "INSDC_ID", selected: true }, { name: "Common Name", column: "commonName", selected: true }, { name: "Common Name Source", column: "commonNameSource", selected: true }, { name: "Current Status", column: "currentStatus", selected: true }, { name: "External references", column: "goatInfo", selected: true }, { name: "Submitted to Biosamples", column: "biosamples", selected: false }, { name: "Raw data submitted to ENA", column: "raw_data", selected: false }, { name: "Mapped reads submitted to ENA", column: "mapped_reads", selected: false }, { name: "Assemblies submitted to ENA", column: "assemblies", selected: false }, { name: "Annotation complete", column: "annotation_complete", selected: false }, { name: "Annotation submitted to ENA", column: "annotation", selected: false }]
   displayedColumns = [];
   phylSelectedRank = '';
@@ -179,14 +181,19 @@ export class DashboardComponent implements OnInit, AfterViewInit {
       }, 50);
     }
     else {
-      this.getAllBiosamples(0, 15, this.sort.active, this.sort.direction);
+      this.getAllBiosamples(0, this.pagesize, this.sort.active, this.sort.direction);
     }
   }
 
   appendActiveFilters(key, params) {
     setTimeout(() => {
       this.urlAppendFilterArray.push({ name: key, value: params[key] });
-      this.activeFilters.push(params[key]);
+      if (key === 'experiment-type'){
+        const list = params[key].split(',');
+        list.forEach((param: any) => { this.activeFilters.push(param); });
+      }else {
+        this.activeFilters.push(params[key]);
+      }
     }, 10);
   }
 
@@ -198,7 +205,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
     else {
       taxonomy = [this.currentTaxonomyTree];
     }
-    this.dashboardService.getFilterResults(this.activeFilters.toString(), this.sort.active, this.sort.direction, 0, 15, taxonomy, this.searchText)
+    this.dashboardService.getFilterResults(this.activeFilters.toString(), this.sort.active, this.sort.direction, 0, this.pagesize, taxonomy, this.searchText)
       .subscribe(
         data => {
           const unpackedData = [];
@@ -419,7 +426,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
       this.selectedFilterArray(label, filter);
       this.activeFilters.push(filter);
       this.dataSource.filter = `${filter.trim().toLowerCase()}|${label}`;
-      this.getFilterResults(this.activeFilters.toString(), this.sort.active, this.sort.direction, 0, 15, taxonomy);
+      this.getFilterResults(this.activeFilters.toString(), this.sort.active, this.sort.direction, 0, this.pagesize, taxonomy);
       this.updateActiveRouteParams();
       if (this.currentTaxonomyTree.length > 1) {
         setTimeout(() => {
@@ -458,6 +465,19 @@ export class DashboardComponent implements OnInit, AfterViewInit {
     else if (key.toLowerCase() == 'phylogeny') {
       jsonObj = { name: 'phylogeny', value };
       this.urlAppendFilterArray.push(jsonObj);
+    } else if (key.toLowerCase() == 'experiment-type') {
+      let oldValue = [];
+      for (let i = 0; i < this.urlAppendFilterArray.length; i++) {
+        if (this.urlAppendFilterArray[i].name === 'experiment-type') {
+          oldValue.push(this.urlAppendFilterArray[i].value);
+        }
+      }
+      if ( oldValue === undefined || oldValue.length === 0){
+        jsonObj = { name: 'experiment-type', value };
+      }else{
+        jsonObj = { name: 'experiment-type', value: oldValue[oldValue.length - 1] == undefined ? value  : oldValue[oldValue.length - 1] + ',' + value };
+      }
+      this.urlAppendFilterArray.push(jsonObj);
     }
 
   }
@@ -489,12 +509,12 @@ export class DashboardComponent implements OnInit, AfterViewInit {
     this.urlAppendFilterArray = [];
     this.dataSource.filter = undefined;
     if (this.searchText.length != 0) {
-      this.getFilterResults(this.activeFilters.toString(), this.sort.active, this.sort.direction, 0, 15, [this.currentTaxonomyTree]);
+      this.getFilterResults(this.activeFilters.toString(), this.sort.active, this.sort.direction, 0, this.pagesize, [this.currentTaxonomyTree]);
       this.getChildTaxonomyRank('superkingdom', 'Eukaryota', 'kingdom');
     }
     else {
       this.getFilters();
-      this.getAllBiosamples(0, 15, this.sort.active, this.sort.direction);
+      this.getAllBiosamples(0, this.pagesize, this.sort.active, this.sort.direction);
       this.getChildTaxonomyRank('superkingdom', 'Eukaryota', 'kingdom');
     }
     this.router.navigate(['data'], {});
@@ -515,7 +535,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
 
       if (this.activeFilters.length !== 0) {
         this.dataSource.filter = this.activeFilters[0].trim().toLowerCase();
-        this.getFilterResults(this.activeFilters.toString(), this.sort.active, this.sort.direction, 0, 15, [this.currentTaxonomyTree]);
+        this.getFilterResults(this.activeFilters.toString(), this.sort.active, this.sort.direction, 0, this.pagesize, [this.currentTaxonomyTree]);
         if (this.currentTaxonomyTree.length > 1) {
           setTimeout(() => {
             $('#' + this.modalTaxa + '-kingdom').addClass('active-filter');
@@ -523,7 +543,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
         }
       }
       else if (this.currentTaxonomyTree.length > 1) {
-        this.getFilterResults(this.activeFilters.toString(), this.sort.active, this.sort.direction, 0, 15, [this.currentTaxonomyTree]);
+        this.getFilterResults(this.activeFilters.toString(), this.sort.active, this.sort.direction, 0, this.pagesize, [this.currentTaxonomyTree]);
         setTimeout(() => {
           $('#' + this.modalTaxa + '-kingdom').addClass('active-filter');
         }, 250);
@@ -537,7 +557,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
         this.activeFilters = [];
         this.urlAppendFilterArray = [];
         this.dataSource.filter = undefined;
-        this.getFilterResults(this.activeFilters.toString(), this.sort.active, this.sort.direction, 0, 15, [this.currentTaxonomyTree]);
+        this.getFilterResults(this.activeFilters.toString(), this.sort.active, this.sort.direction, 0, this.pagesize, [this.currentTaxonomyTree]);
         this.getChildTaxonomyRank('superkingdom', 'Eukaryota', 'kingdom');
       }
       else {
@@ -550,7 +570,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
         this.urlAppendFilterArray = [];
         this.dataSource.filter = undefined;
         this.getFilters();
-        this.getAllBiosamples(0, 15, this.sort.active, this.sort.direction);
+        this.getAllBiosamples(0, this.pagesize, this.sort.active, this.sort.direction);
         this.getChildTaxonomyRank('superkingdom', 'Eukaryota', 'kingdom');
         this.modalTaxa = '';
         this.router.navigate(['data'], {});
@@ -599,7 +619,12 @@ export class DashboardComponent implements OnInit, AfterViewInit {
       },
       err => console.log(err)
     );
-
+    this.dashboardService.getExperimentTypeFilters().subscribe(
+        data => {
+          this.experimentTypeFilters = data.Experiment_type.filter(i => i !== '');
+        },
+        err => console.log(err)
+    );
 
   }
 
@@ -666,7 +691,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
     $('.genome-inactive').removeClass('non-disp active-filter');
 
     if (this.searchText.length == 0) {
-      this.getAllBiosamples(0, 15, this.sort.active, this.sort.direction);
+      this.getAllBiosamples(0, this.pagesize, this.sort.active, this.sort.direction);
       this.getChildTaxonomyRank('superkingdom', 'Eukaryota', 'kingdom');
     }
     else {
@@ -1059,13 +1084,13 @@ export class DashboardComponent implements OnInit, AfterViewInit {
     setTimeout(() => {
       if (this.activeFilters.length !== 0 || this.currentTaxonomyTree.length != 0) {
         const taxa = [this.currentTaxonomyTree];
-        this.getFilterResults(this.activeFilters.toString(), this.sort.active, this.sort.direction, 0, 15, taxa);
+        this.getFilterResults(this.activeFilters.toString(), this.sort.active, this.sort.direction, 0, this.pagesize, taxa);
       }
       else {
         this.router.navigate(['data'], {});
         this.dataSource.filter = undefined;
         this.getFilters();
-        this.getAllBiosamples(0, 15, this.sort.active, this.sort.direction);
+        this.getAllBiosamples(0, this.pagesize, this.sort.active, this.sort.direction);
         this.getChildTaxonomyRank('superkingdom', 'Eukaryota', 'kingdom');
       }
       this.spinner.hide();
@@ -1157,6 +1182,8 @@ export class DashboardComponent implements OnInit, AfterViewInit {
     });
     const genome = this.filtersMap.aggregations.genome.doc_count;
     this.GenomeFilters = [{ key: 'Genome Notes - Submitted', doc_count: genome }];
+    const experiement = this.filtersMap.aggregations.experiment.library_construction_protocol.buckets;
+    this.experimentTypeFilters = experiement;
   }
 
   downloadCSV() {
@@ -1200,5 +1227,14 @@ export class DashboardComponent implements OnInit, AfterViewInit {
         hideRawData: this.RawDataFilters.length === 0
       }
     });
+  }
+  toggleCollapseForExp() {
+    if (this.isCollapsed) {
+      this.itemLimit = 10000;
+      this.isCollapsed = false;
+    } else {
+      this.itemLimit = 5;
+      this.isCollapsed = true;
+    }
   }
 }

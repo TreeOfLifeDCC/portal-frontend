@@ -16,7 +16,7 @@ export class SpecimensComponent implements OnInit {
 
   bioSampleId;
   bioSampleObj;
-  
+
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
   dataSourceRecords;
@@ -46,6 +46,10 @@ export class SpecimensComponent implements OnInit {
     organismPart: "",
   };
 
+  lat;
+  lng;
+  geoLocation: Boolean = false;
+
   constructor(private route: ActivatedRoute, private dashboardService: DashboardService, private router: Router) {
     this.route.params.subscribe(param => this.bioSampleId = param.id);
   }
@@ -72,6 +76,14 @@ export class SpecimensComponent implements OnInit {
           }
           this.bioSampleObj = unpackedData[0];
           this.organismName = this.bioSampleObj.organism;
+          this.lat = this.bioSampleObj.geographicLocationLatitude?.text;
+          this.lng = this.bioSampleObj.geographicLocationLongitude?.text;
+          if (this.lat != 'not collected' && this.lat != 'not provided') {
+            this.geoLocation = true;
+          }
+          else {
+            this.geoLocation = false;
+          }
         },
         err => console.log(err)
       );
