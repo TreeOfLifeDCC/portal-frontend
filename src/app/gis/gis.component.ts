@@ -73,7 +73,9 @@ export class GisComponent implements AfterViewInit {
         this.setMarkers();
         this.getAllLatLong();
         this.map.addLayer(this.markers);
-        this.resetMapView();
+        if(this.myControl.value == ""){
+          this.resetMapView();
+        }
         this.spinner.hide();
       }, 50);
     }
@@ -84,7 +86,9 @@ export class GisComponent implements AfterViewInit {
         this.setMarkers();
         this.getOrganismLatLong();
         this.map.addLayer(this.markers);
-        this.resetMapView();
+        if(this.myControl.value == ""){
+          this.resetMapView();
+        }
         this.spinner.hide();
       }, 50);
     }
