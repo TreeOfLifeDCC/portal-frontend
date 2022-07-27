@@ -51,7 +51,7 @@
     top: 5px;
     right: 5px;
     height: 50px;
-    width: 110px;
+    width: 100px;
     background: blue;
 }
 
@@ -64,4 +64,14 @@
 .toggle {
     position: relative;
     margin-top: 50px;
+    white-space: nowrap;
+    margin-left: -110px;
+}
+
+.mat-slide-toggle {
+    max-width: none !important;
+}
+
+.orgLabel {
+    padding-right: 10px;
 }

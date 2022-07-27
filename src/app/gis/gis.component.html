@@ -4,7 +4,8 @@
     <div class="row">
         <div class="col-lg-2">
             <div class="toggle">
-                <mat-slide-toggle [formControl]="toggleSpecimen" (change)="toggleSpecimens()">Include Specimens</mat-slide-toggle>
+                <label for="toggle" class="orgLabel">Show Organisms</label>
+                <mat-slide-toggle id="toggle" [formControl]="toggleSpecimen" (change)="toggleSpecimens()">Include Specimens</mat-slide-toggle>
             </div>
         </div>
         <div class="col-lg-8 ">
