@@ -27,6 +27,7 @@
     position: relative;
     box-shadow: 0 0 40px rgba(51, 51, 51, .1);
     margin-top: 30px;
+    margin-left: 50px;
 }
 
 .search input {
@@ -63,9 +64,10 @@
 
 .toggle {
     position: relative;
-    margin-top: 50px;
+    margin-top: 27px;
     white-space: nowrap;
-    margin-left: -110px;
+    margin-left: 50px;
+    margin-right: 50px;
 }
 
 .mat-slide-toggle {

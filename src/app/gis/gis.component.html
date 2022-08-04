@@ -2,10 +2,22 @@
     <ngx-spinner bdColor="rgba(0,0,0,0.9)" [fullScreen]="true" size="large" color="#fff" type="ball-clip-rotate-pulse">
     </ngx-spinner>
     <div class="row">
-        <div class="col-lg-2">
+        <div class="col-md-2">
+<!--            <div class="toggle">-->
+<!--                <label for="toggle" class="orgLabel">Show Organisms</label>-->
+<!--                <mat-slide-toggle id="toggle" [formControl]="toggleSpecimen" (change)="toggleSpecimens()">Include Specimens</mat-slide-toggle>-->
+<!--                <mat-slide-toggle id="toggle-organisum" [formControl]="toggleSpecimen" (change)="toggleSpecimens()">Include Specimens</mat-slide-toggle>-->
+<!--            </div>-->
             <div class="toggle">
-                <label for="toggle" class="orgLabel">Show Organisms</label>
-                <mat-slide-toggle id="toggle" [formControl]="toggleSpecimen" (change)="toggleSpecimens()">Include Specimens</mat-slide-toggle>
+
+                <mat-radio-group aria-label="Select an option" [(ngModel)]="this.radioOptions" >
+                    <mat-radio-button class="orgLabel" id="default"  value="1"  name="toggleSpecies"   (change)="toggleSpecimens()" checked>Show Species</mat-radio-button>
+                    <br>
+                    <mat-radio-button class="orgLabel" id="toggle-Organisms" name="toggleOrganisms"  value="3"  (change)="toggleSpecimens()" >Include all Organisms</mat-radio-button>
+                    <br>
+                    <mat-radio-button class="orgLabel" id="toggle"  name="toggleSpecimen" (change)="toggleSpecimens()" value="2">Include all Specimens</mat-radio-button>
+
+                </mat-radio-group>
             </div>
         </div>
         <div class="col-lg-8 ">

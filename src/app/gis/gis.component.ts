@@ -6,6 +6,9 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import { FormControl } from '@angular/forms';
 import { map, startWith } from 'rxjs/operators';
 import { Observable } from 'rxjs';
+import {control} from "leaflet";
+import layers = control.layers;
+
 
 const iconRetinaUrl = 'assets/marker-icon-2x.png';
 const iconUrl = 'assets/marker-icon.png';
@@ -38,7 +41,7 @@ export class GisComponent implements AfterViewInit {
 
   myControl = new FormControl('');
   filteredOptions: string[];
-
+  radioOptions = '1';
   constructor(private gisService: GisService, private spinner: NgxSpinnerService) { }
 
   ngOnInit(): void {
@@ -66,7 +69,7 @@ export class GisComponent implements AfterViewInit {
   }
 
   toggleSpecimens() {
-    if (this.toggleSpecimen.value) {
+    if (this.radioOptions === '3') {
       this.spinner.show()
       this.refreshMapLayers();
       setTimeout(() => {
@@ -78,8 +81,7 @@ export class GisComponent implements AfterViewInit {
         }
         this.spinner.hide();
       }, 50);
-    }
-    else {
+    } else  if (this.radioOptions === '1' || this.radioOptions === '2') {
       this.spinner.show()
       this.refreshMapLayers();
       setTimeout(() => {
@@ -125,7 +127,7 @@ export class GisComponent implements AfterViewInit {
 
   private initMap(): void {
     this.tiles = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      maxZoom: 15,
+      maxZoom: 19,
       minZoom: 3,
       attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
     });
@@ -173,26 +175,38 @@ export class GisComponent implements AfterViewInit {
             if (tempArr[j].lat == '67.34.07' && tempArr[j].lng == '68.07.30') {
               llat = '67.3407'
               llng = '68.0730'
-            }
-            else {
+            } else {
               llat = tempArr[j].lat
               llng = tempArr[j].lng
             }
             const latlng = L.latLng(llat, llng);
-            const m = L.marker(latlng);
-            const accession = `<div><a target="_blank" href=/data/organism/details/${tempArr[j].accession}>${tempArr[j].accession}</a></div>`;
-            const organism = tempArr[j].organism != null ? `<div>${tempArr[j].organism}</div>` : '';
-            const commonName = tempArr[j].commonName != null ? `<div>${tempArr[j].commonName}</div>` : '';
-            const organismPart = `<div>${tempArr[j].organismPart}</div>`;
-            const popupcontent = accession + organism + commonName + organismPart;
-            const popup = L.popup({
-              closeOnClick: false,
-              autoClose: true,
-              closeButton: false
-            }).setContent(popupcontent);
 
-            m.bindPopup(popup)
-            this.markers.addLayer(m);
+            let alreadyExists = false;
+            if ((this.markers !== undefined && this.markers.getLayers() !== undefined) && this.radioOptions === '1') {
+              this.markers.getLayers().forEach((layer) => {
+                if (!alreadyExists && layer instanceof L.Marker && (layer.getLatLng().equals(latlng)) && layer.options.title === tempArr[j].organism) {
+                  alreadyExists = true;
+                }
+              });
+            }
+            if (!alreadyExists) {
+              const m = L.marker(latlng);
+              const accession = `<div><a target="_blank" href=/data/organism/details/${tempArr[j].accession}>${tempArr[j].accession}</a></div>`;
+              const organism = tempArr[j].organism != null ? `<div>${tempArr[j].organism}</div>` : '';
+              const commonName = tempArr[j].commonName != null ? `<div>${tempArr[j].commonName}</div>` : '';
+              const organismPart = `<div>${tempArr[j].organismPart}</div>`;
+              const popupcontent = accession + organism + commonName + organismPart;
+              const popup = L.popup({
+                closeOnClick: false,
+                autoClose: true,
+                closeButton: false
+              }).setContent(popupcontent);
+              m.options.title = tempArr[j].organism;
+              m.bindPopup(popup);
+              this.markers.addLayer(m);
+              // }
+              // });
+            }
           }
         }
       }
@@ -201,6 +215,7 @@ export class GisComponent implements AfterViewInit {
 
   getAllLatLong(): any {
     let orgGeoSize = this.unpackedData.length
+
     for (var i = 0; i < orgGeoSize; i++) {
       if (Object.keys(this.unpackedData[i]).length != 0) {
         let tempArr = this.unpackedData[i].organisms;
