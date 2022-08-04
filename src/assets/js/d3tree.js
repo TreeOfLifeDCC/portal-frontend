@@ -250,6 +250,7 @@ treeJSON = d3.json(url, function(error, treeData) {
                 clickCount = 0;
                 expand(d);
                 singleClick(d);
+                centerNodeOnClick(d);
             }, 400);
 
         } else if (d.children && d.children.length === 1) {
@@ -259,10 +260,15 @@ treeJSON = d3.json(url, function(error, treeData) {
                 singleClick(d);
             }, 400);
         }
+        if (d._children === undefined) {
+            clickCount = 0;
+            doubleClick(d);
+        }
         if (clickCount === 1) {
             singleClickTimer = setTimeout(function() {
                 clickCount = 0;
                 singleClick(d);
+                centerNodeOnClick(d);
             }, 400);
         } else if (clickCount === 2) {
             clearTimeout(singleClickTimer);
@@ -275,7 +281,6 @@ treeJSON = d3.json(url, function(error, treeData) {
         // if (d3.event.defaultPrevented) return; // click suppressed
         d = toggleChildren(d);
         update(d);
-        centerNodeOnClick(d);
     }
 
     function doubleClick(d) {
@@ -701,13 +706,7 @@ treeJSON = d3.json(url, function(error, treeData) {
     }
 
     function toggleCommonName() {
-        // var svgGroup = baseSvg.append("g");
         root = treeData;
-        // root.x0 = viewerHeight / 2;
-        // root.y0 = 0;
-        // root.children.forEach(function (child) {
-        //     collapse(child);
-        // });
         update(root);
 
     }
