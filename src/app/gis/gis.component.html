@@ -11,11 +11,11 @@
             <div class="toggle">
 
                 <mat-radio-group aria-label="Select an option" [(ngModel)]="this.radioOptions" >
-                    <mat-radio-button class="orgLabel" id="default"  value="1"  name="toggleSpecies"   (change)="toggleSpecimens()" checked>Show Species</mat-radio-button>
+                    <mat-radio-button class="orgLabel" id="default"  [value]=1  name="toggleSpecies"   (change)="toggleSpecimens($event)" checked>Show Species</mat-radio-button>
                     <br>
-                    <mat-radio-button class="orgLabel" id="toggle-Organisms" name="toggleOrganisms"  value="3"  (change)="toggleSpecimens()" >Include all Organisms</mat-radio-button>
+                    <mat-radio-button class="orgLabel" id="toggle-Organisms" name="toggleOrganisms"  [value]=2  (change)="toggleSpecimens($event)" >Include all Organisms</mat-radio-button>
                     <br>
-                    <mat-radio-button class="orgLabel" id="toggle"  name="toggleSpecimen" (change)="toggleSpecimens()" value="2">Include all Specimens</mat-radio-button>
+                    <mat-radio-button class="orgLabel" id="toggle" name="toggleSpecimen" (change)="toggleSpecimens($event)" [value]=3>Include all Specimens</mat-radio-button>
 
                 </mat-radio-group>
             </div>

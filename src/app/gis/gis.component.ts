@@ -6,8 +6,9 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import { FormControl } from '@angular/forms';
 import { map, startWith } from 'rxjs/operators';
 import { Observable } from 'rxjs';
-import {control} from "leaflet";
+import {control} from 'leaflet';
 import layers = control.layers;
+import {MatRadioChange} from '@angular/material/radio';
 
 
 const iconRetinaUrl = 'assets/marker-icon-2x.png';
@@ -41,11 +42,12 @@ export class GisComponent implements AfterViewInit {
 
   myControl = new FormControl('');
   filteredOptions: string[];
-  radioOptions = '1';
+  radioOptions = 1;
   constructor(private gisService: GisService, private spinner: NgxSpinnerService) { }
 
   ngOnInit(): void {
-    this.toggleSpecimen.setValue(false)
+    this.toggleSpecimen.setValue(false);
+    this.radioOptions = 1;
     this.getGisData();
   }
 
@@ -68,27 +70,42 @@ export class GisComponent implements AfterViewInit {
     }
   }
 
-  toggleSpecimens() {
-    if (this.radioOptions === '3') {
-      this.spinner.show()
+  toggleSpecimens(event: MatRadioChange) {
+    if (event.value === 3) {
+      // this.radioOptions = 3;
+      this.spinner.show();
       this.refreshMapLayers();
       setTimeout(() => {
         this.setMarkers();
         this.getAllLatLong();
         this.map.addLayer(this.markers);
-        if(this.myControl.value == ""){
+        if (this.myControl.value == ''){
           this.resetMapView();
         }
         this.spinner.hide();
       }, 50);
-    } else  if (this.radioOptions === '1' || this.radioOptions === '2') {
-      this.spinner.show()
+    } else  if (event.value === 1) {
+      // this.radioOptions = 1;
+      this.spinner.show();
+      this.refreshMapLayers();
+      setTimeout(() => {
+        this.setMarkers();
+        this.getSpecicesLatLong();
+        this.map.addLayer(this.markers);
+        if (this.myControl.value == ''){
+          this.resetMapView();
+        }
+        this.spinner.hide();
+      }, 50);
+    }else if (event.value === 2){
+      // this.radioOptions = 2;
+      this.spinner.show();
       this.refreshMapLayers();
       setTimeout(() => {
         this.setMarkers();
         this.getOrganismLatLong();
         this.map.addLayer(this.markers);
-        if(this.myControl.value == ""){
+        if (this.myControl.value == ''){
           this.resetMapView();
         }
         this.spinner.hide();
@@ -131,7 +148,7 @@ export class GisComponent implements AfterViewInit {
       minZoom: 3,
       attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
     });
-    var latlng = L.latLng(53.4862, -1.8904);
+    const latlng = L.latLng(53.4862, -1.8904);
 
     this.map = L.map('map', {
       center: latlng,
@@ -142,7 +159,7 @@ export class GisComponent implements AfterViewInit {
 
   populateMap() {
     this.setMarkers();
-    this.getOrganismLatLong();
+    this.getSpecicesLatLong();
     this.map.addLayer(this.markers);
   }
 
@@ -154,7 +171,7 @@ export class GisComponent implements AfterViewInit {
       removeOutsideVisibleBounds: false
     });
 
-    this.markers.on('clusterclick', function (a) {
+    this.markers.on('clusterclick', function(a) {
       const childCluster = a.layer._childClusters;
       if (childCluster.length <= 1) {
         a.layer.spiderfy();
@@ -163,39 +180,83 @@ export class GisComponent implements AfterViewInit {
   }
 
   getOrganismLatLong(): any {
-    let orgGeoSize = this.unpackedData.length
-    for (var i = 0; i < orgGeoSize; i++) {
+    const orgGeoSize = this.unpackedData.length;
+    for (let i = 0; i < orgGeoSize; i++) {
       if (Object.keys(this.unpackedData[i]).length != 0) {
-        let tempArr = this.unpackedData[i].organisms;
-        let tempArrSize = tempArr.length
-        for (var j = 0; j < tempArrSize; j++) {
+        const tempArr = this.unpackedData[i].organisms;
+        const tempArrSize = tempArr.length;
+        for (let j = 0; j < tempArrSize; j++) {
           if (tempArr[j].lat != 'not collected' && tempArr[j].lat != 'not provided') {
             let llat: any;
             let llng: any;
             if (tempArr[j].lat == '67.34.07' && tempArr[j].lng == '68.07.30') {
-              llat = '67.3407'
-              llng = '68.0730'
+              llat = '67.3407';
+              llng = '68.0730';
             } else {
-              llat = tempArr[j].lat
-              llng = tempArr[j].lng
+              llat = tempArr[j].lat;
+              llng = tempArr[j].lng;
+            }
+            const latlng = L.latLng(llat, llng);
+
+            const m = L.marker(latlng);
+            const accession = `<div><a target="_blank" href=/data/organism/details/${tempArr[j].accession}>${tempArr[j].accession}</a></div>`;
+            const organism = tempArr[j].organism != null ? `<div>${tempArr[j].organism}</div>` : '';
+            const commonName = tempArr[j].commonName != null ? `<div>${tempArr[j].commonName}</div>` : '';
+            const organismPart = `<div>${tempArr[j].organismPart}</div>`;
+            const popupcontent = accession + organism + commonName + organismPart;
+            const popup = L.popup({
+              closeOnClick: false,
+              autoClose: true,
+              closeButton: false
+            }).setContent(popupcontent);
+            m.options.title = tempArr[j].organism;
+            m.bindPopup(popup);
+            this.markers.addLayer(m);
+              // }
+              // });
+
+          }
+        }
+      }
+    }
+  }
+
+
+  getSpecicesLatLong(): any {
+    const orgGeoSize = this.unpackedData.length;
+    for (let i = 0; i < orgGeoSize; i++) {
+      if (Object.keys(this.unpackedData[i]).length != 0) {
+        const tempArr = this.unpackedData[i].organisms;
+        const tempArrSize = tempArr.length;
+        for (let j = 0; j < tempArrSize; j++) {
+          if (tempArr[j].lat != 'not collected' && tempArr[j].lat != 'not provided') {
+            let llat: any;
+            let llng: any;
+            if (tempArr[j].lat == '67.34.07' && tempArr[j].lng == '68.07.30') {
+              llat = '67.3407';
+              llng = '68.0730';
+            } else {
+              llat = tempArr[j].lat;
+              llng = tempArr[j].lng;
             }
             const latlng = L.latLng(llat, llng);
 
             let alreadyExists = false;
-            if ((this.markers !== undefined && this.markers.getLayers() !== undefined) && this.radioOptions === '1') {
+            if ((this.markers !== undefined && this.markers.getLayers() !== undefined)) {
               this.markers.getLayers().forEach((layer) => {
                 if (!alreadyExists && layer instanceof L.Marker && (layer.getLatLng().equals(latlng)) && layer.options.title === tempArr[j].organism) {
                   alreadyExists = true;
                 }
               });
             }
+            let popupcontent = '';
             if (!alreadyExists) {
               const m = L.marker(latlng);
-              const accession = `<div><a target="_blank" href=/data/organism/details/${tempArr[j].accession}>${tempArr[j].accession}</a></div>`;
-              const organism = tempArr[j].organism != null ? `<div>${tempArr[j].organism}</div>` : '';
+              const organismString = encodeURIComponent(tempArr[j].organism.toString());
+              console.log(organismString);
+              const organism = `<div><a target="_blank" href=/data/root/details/${organismString}>${tempArr[j].organism}</a></div>`;
               const commonName = tempArr[j].commonName != null ? `<div>${tempArr[j].commonName}</div>` : '';
-              const organismPart = `<div>${tempArr[j].organismPart}</div>`;
-              const popupcontent = accession + organism + commonName + organismPart;
+              popupcontent = organism + commonName ;
               const popup = L.popup({
                 closeOnClick: false,
                 autoClose: true,
@@ -212,25 +273,24 @@ export class GisComponent implements AfterViewInit {
       }
     }
   }
-
   getAllLatLong(): any {
-    let orgGeoSize = this.unpackedData.length
+    const orgGeoSize = this.unpackedData.length;
 
-    for (var i = 0; i < orgGeoSize; i++) {
+    for (let i = 0; i < orgGeoSize; i++) {
       if (Object.keys(this.unpackedData[i]).length != 0) {
-        let tempArr = this.unpackedData[i].organisms;
-        let tempArrSize = tempArr.length
-        for (var j = 0; j < tempArrSize; j++) {
+        const tempArr = this.unpackedData[i].organisms;
+        const tempArrSize = tempArr.length;
+        for (let j = 0; j < tempArrSize; j++) {
           if (tempArr[j].lat != 'not collected' && tempArr[j].lat != 'not provided') {
             let llat: any;
             let llng: any;
             if (tempArr[j].lat == '67.34.07' && tempArr[j].lng == '68.07.30') {
-              llat = '67.3407'
-              llng = '68.0730'
+              llat = '67.3407';
+              llng = '68.0730';
             }
             else {
-              llat = tempArr[j].lat
-              llng = tempArr[j].lng
+              llat = tempArr[j].lat;
+              llng = tempArr[j].lng;
             }
             const latlng = L.latLng(llat, llng);
             const m = L.marker(latlng);
@@ -245,29 +305,29 @@ export class GisComponent implements AfterViewInit {
               closeButton: false
             }).setContent(popupcontent);
 
-            m.bindPopup(popup)
+            m.bindPopup(popup);
             this.markers.addLayer(m);
           }
         }
       }
     }
 
-    let specGeoSize = this.unpackedData.length
-    for (var i = 0; i < specGeoSize; i++) {
+    const specGeoSize = this.unpackedData.length;
+    for (let i = 0; i < specGeoSize; i++) {
       if (Object.keys(this.unpackedData[i]).length != 0) {
-        let tempspecArr = this.unpackedData[i].specimens;
-        let tempspecArrSize = tempspecArr.length
-        for (var j = 0; j < tempspecArrSize; j++) {
+        const tempspecArr = this.unpackedData[i].specimens;
+        const tempspecArrSize = tempspecArr.length;
+        for (let j = 0; j < tempspecArrSize; j++) {
           if (tempspecArr[j].lat != 'not collected' && tempspecArr[j].lat != 'not provided') {
             let llat: any;
             let llng: any;
             if (tempspecArr[j].lat == '67.34.07' && tempspecArr[j].lng == '68.07.30') {
-              llat = '67.3407'
-              llng = '68.0730'
+              llat = '67.3407';
+              llng = '68.0730';
             }
             else {
-              llat = tempspecArr[j].lat
-              llng = tempspecArr[j].lng
+              llat = tempspecArr[j].lat;
+              llng = tempspecArr[j].lng;
             }
             const latlng = L.latLng(llat, llng);
             const m = L.marker(latlng);
@@ -281,7 +341,7 @@ export class GisComponent implements AfterViewInit {
               autoClose: true,
               closeButton: false
             }).setContent(popupcontent);
-            m.bindPopup(popup)
+            m.bindPopup(popup);
             this.markers.addLayer(m);
           }
         }
@@ -292,15 +352,15 @@ export class GisComponent implements AfterViewInit {
   showCursorCoordinates() {
     const Coordinates = L.Control.extend({
       onAdd: map => {
-        const container = L.DomUtil.create("div");
-        container.style.backgroundColor = "rgba(255,255,255,.8)";
-        map.addEventListener("mousemove", e => {
+        const container = L.DomUtil.create('div');
+        container.style.backgroundColor = 'rgba(255,255,255,.8)';
+        map.addEventListener('mousemove', e => {
           container.innerHTML = `Lat: ${e.latlng.lat.toFixed(4)} Lng: ${e.latlng.lng.toFixed(4)}`;
         });
         return container;
       }
     });
-    this.map.addControl(new Coordinates({ position: "bottomright" }));
+    this.map.addControl(new Coordinates({ position: 'bottomright' }));
   }
 
   refreshMapLayers() {
@@ -319,7 +379,8 @@ export class GisComponent implements AfterViewInit {
   }
 
   getSearchData(search: any) {
-    this.toggleSpecimen.setValue(false)
+    this.toggleSpecimen.setValue(false);
+    this.radioOptions = 1;
     if (search.length > 0) {
       this.spinner.show();
       this.gisService.getGisSearchData(search)
@@ -335,8 +396,8 @@ export class GisComponent implements AfterViewInit {
             setTimeout(() => {
               this.populateMap();
               if (this.unpackedData.length > 0) {
-                var lat = this.unpackedData[0]['organisms'][0]['lat']
-                var lng = this.unpackedData[0]['organisms'][0]['lng']
+                const lat = this.unpackedData[0].organisms[0].lat;
+                const lng = this.unpackedData[0].organisms[0].lng;
                 this.map.setView([lat, lng], 6);
               }
               else {
