@@ -253,7 +253,6 @@ export class GisComponent implements AfterViewInit {
             if (!alreadyExists) {
               const m = L.marker(latlng);
               const organismString = encodeURIComponent(tempArr[j].organism.toString());
-              console.log(organismString);
               const organism = `<div><a target="_blank" href=/data/root/details/${organismString}>${tempArr[j].organism}</a></div>`;
               const commonName = tempArr[j].commonName != null ? `<div>${tempArr[j].commonName}</div>` : '';
               popupcontent = organism + commonName ;
