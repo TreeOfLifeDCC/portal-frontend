@@ -2,16 +2,23 @@
     <ngx-spinner bdColor="rgba(0,0,0,0.9)" [fullScreen]="true" size="large" color="#fff" type="ball-clip-rotate-pulse">
     </ngx-spinner>
     <div class="row">
-        <div class="col-lg-2">
+        <div class="col-md-2">
             <div class="toggle">
-                <label for="toggle" class="orgLabel">Show Organisms</label>
-                <mat-slide-toggle id="toggle" [formControl]="toggleSpecimen" (change)="toggleSpecimens()">Include Specimens</mat-slide-toggle>
+
+                <mat-radio-group aria-label="Select an option" [(ngModel)]="this.radioOptions" >
+                    <mat-radio-button class="orgLabel" id="default"  [value]=1  name="toggleSpecies"   (change)="toggleSpecimens($event)" checked>Species</mat-radio-button>
+                    <br>
+                    <mat-radio-button class="orgLabel" id="toggle-Organisms" name="toggleOrganisms"  [value]=2  (change)="toggleSpecimens($event)" >Organisms</mat-radio-button>
+                    <br>
+                    <mat-radio-button class="orgLabel" id="toggle" name="toggleSpecimen" (change)="toggleSpecimens($event)" [value]=3>Organisms and Specimens</mat-radio-button>
+
+                </mat-radio-group>
             </div>
         </div>
         <div class="col-lg-8 ">
             <div class="search ">
                 <i class="fa fa-times " *ngIf="searchText.value.length> 0" (click)="removeInputAndGetAllData()"></i>
-                <input #searchText id="search" (keyup)="filterSearchResults(searchText.value)" (keyup.enter)="searchGisData(searchText.value)" [formControl]="myControl" type="text" class="form-control" placeholder="Search for Organisms" [matAutocomplete]="auto">
+                <input #searchText id="search" (keyup)="filterSearchResults(searchText.value)" (keyup.enter)="searchGisData(searchText.value)" [formControl]="myControl" type="text" class="form-control" placeholder="Search for species" [matAutocomplete]="auto">
                 <button class="btn btn-primary" (click)="searchGisData(searchText.value)">Search</button>
                 <mat-autocomplete #auto="matAutocomplete">
                     <mat-option *ngFor="let option of filteredOptions" [value]="option.id" (click)="searchGisData(option.id)">
