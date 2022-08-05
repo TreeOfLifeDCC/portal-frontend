@@ -97,19 +97,6 @@ export class GisComponent implements AfterViewInit {
         }
         this.spinner.hide();
       }, 50);
-    }else if (event.value === 2){
-      // this.radioOptions = 2;
-      this.spinner.show();
-      this.refreshMapLayers();
-      setTimeout(() => {
-        this.setMarkers();
-        this.getOrganismLatLong();
-        this.map.addLayer(this.markers);
-        if (this.myControl.value == ''){
-          this.resetMapView();
-        }
-        this.spinner.hide();
-      }, 50);
     }
   }
 
@@ -178,49 +165,6 @@ export class GisComponent implements AfterViewInit {
       }
     });
   }
-
-  getOrganismLatLong(): any {
-    const orgGeoSize = this.unpackedData.length;
-    for (let i = 0; i < orgGeoSize; i++) {
-      if (Object.keys(this.unpackedData[i]).length != 0) {
-        const tempArr = this.unpackedData[i].organisms;
-        const tempArrSize = tempArr.length;
-        for (let j = 0; j < tempArrSize; j++) {
-          if (tempArr[j].lat != 'not collected' && tempArr[j].lat != 'not provided') {
-            let llat: any;
-            let llng: any;
-            if (tempArr[j].lat == '67.34.07' && tempArr[j].lng == '68.07.30') {
-              llat = '67.3407';
-              llng = '68.0730';
-            } else {
-              llat = tempArr[j].lat;
-              llng = tempArr[j].lng;
-            }
-            const latlng = L.latLng(llat, llng);
-
-            const m = L.marker(latlng);
-            const accession = `<div><a target="_blank" href=/data/organism/details/${tempArr[j].accession}>${tempArr[j].accession}</a></div>`;
-            const organism = tempArr[j].organism != null ? `<div>${tempArr[j].organism}</div>` : '';
-            const commonName = tempArr[j].commonName != null ? `<div>${tempArr[j].commonName}</div>` : '';
-            const organismPart = `<div>${tempArr[j].organismPart}</div>`;
-            const popupcontent = accession + organism + commonName + organismPart;
-            const popup = L.popup({
-              closeOnClick: false,
-              autoClose: true,
-              closeButton: false
-            }).setContent(popupcontent);
-            m.options.title = tempArr[j].organism;
-            m.bindPopup(popup);
-            this.markers.addLayer(m);
-              // }
-              // });
-
-          }
-        }
-      }
-    }
-  }
-
 
   getSpecicesLatLong(): any {
     const orgGeoSize = this.unpackedData.length;
