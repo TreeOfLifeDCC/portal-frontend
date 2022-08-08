@@ -236,20 +236,33 @@ export class GisComponent implements AfterViewInit {
               llng = tempArr[j].lng;
             }
             const latlng = L.latLng(llat, llng);
-            const m = L.marker(latlng);
-            const accession = `<div><a target="_blank" href=/data/organism/details/${tempArr[j].accession}>${tempArr[j].accession}</a></div>`;
-            const organism = tempArr[j].organism != null ? `<div>${tempArr[j].organism}</div>` : '';
-            const commonName = tempArr[j].commonName != null ? `<div>${tempArr[j].commonName}</div>` : '';
-            const organismPart = `<div>${tempArr[j].organismPart}</div>`;
-            const popupcontent = accession + organism + commonName + organismPart;
-            const popup = L.popup({
-              closeOnClick: false,
-              autoClose: true,
-              closeButton: false
-            }).setContent(popupcontent);
 
-            m.bindPopup(popup);
-            this.markers.addLayer(m);
+            let alreadyExists = false;
+            if ((this.markers !== undefined && this.markers.getLayers() !== undefined)) {
+              this.markers.getLayers().forEach((layer) => {
+                if (!alreadyExists && layer instanceof L.Marker && (layer.getLatLng().equals(latlng)) && layer.options.title === tempArr[j].organism) {
+                  alreadyExists = true;
+                }
+              });
+            }
+            let popupcontent = '';
+            if (!alreadyExists) {
+              const m = L.marker(latlng);
+              const organismString = encodeURIComponent(tempArr[j].organism.toString());
+              const organism = `<div><a target="_blank" href=/data/root/details/${organismString}>${tempArr[j].organism}</a></div>`;
+              const commonName = tempArr[j].commonName != null ? `<div>${tempArr[j].commonName}</div>` : '';
+              popupcontent = organism + commonName ;
+              const popup = L.popup({
+                closeOnClick: false,
+                autoClose: true,
+                closeButton: false
+              }).setContent(popupcontent);
+              m.options.title = tempArr[j].organism;
+              m.bindPopup(popup);
+              this.markers.addLayer(m);
+              // }
+              // });
+            }
           }
         }
       }
@@ -362,6 +375,7 @@ export class GisComponent implements AfterViewInit {
 
   removeInputAndGetAllData() {
     this.toggleSpecimen.setValue(false);
+    this.radioOptions = 1;
     this.getAllData();
   }
 
