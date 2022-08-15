@@ -5,6 +5,7 @@ import { HelpComponent } from './help/help.component';
 import { HomeComponent } from './home/home.component';
 import { ApiComponent } from './api/api.component';
 import { GisComponent } from './gis/gis.component';
+import {BulkDownloadsComponent} from "./bulk-downloads/bulk-downloads.component";
 
 const routes: Routes = [
   {
@@ -24,6 +25,9 @@ const routes: Routes = [
   },
   {
     path: 'gis', component: GisComponent
+  },
+  {
+    path: 'bulk-downloads' , component: BulkDownloadsComponent
   },
   {
     path: '',

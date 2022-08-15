@@ -32,6 +32,7 @@ import { NgxSpinnerModule } from "ngx-spinner";
 import {MatAutocompleteModule} from '@angular/material/autocomplete';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { BulkDownloadsComponent } from './bulk-downloads/bulk-downloads.component';
 
 @NgModule({
   declarations: [
@@ -44,7 +45,8 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
     DownloadConfirmationDialogComponent,
     BytesPipe,
     ConfirmationDialogComponent,
-    GisComponent
+    GisComponent,
+    BulkDownloadsComponent
   ],
   imports: [
     BrowserModule,

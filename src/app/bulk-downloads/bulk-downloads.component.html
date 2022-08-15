@@ -1,0 +1,85 @@
+<div>
+    <ngx-spinner bdColor="rgba(0,0,0,0.9)" [fullScreen]="true" size="large" color="#fff" type="ball-clip-rotate-pulse">
+    </ngx-spinner>
+    <div class="jumbotron jumbotron-fluid">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-3">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container" style="padding-top: 20px;">
+        <h1 class="text-center page-header">
+            Bulk downloads</h1>
+        <h2 style="text-align: left;"><span style="color: #000000;">Downloader Utility </span><br /></h2>
+        Download data using python script. Downloader utility is a python script that used for downloading all assemblies, annotations and experiments data.
+
+        This utility can be run on any machine where Python  or Docker is installed. If you do not have Python installed, it can be downloaded from the <a href="https://www.python.org/downloads/" >Python website</a>.
+        If you want to download Docker, it can be downloaded from the <a href="https://www.docker.com/products/docker-desktop/"> Docker website </a>.
+        <br>
+        <br>
+        <button
+                 style="float: left;" class="btn btn-success" onclick="location.href='https://github.com/TreeOfLifeDCC/downloader-utility';" > Download downloader-utility
+        </button>
+        <br>
+        <br>
+        <br>
+        <p style="text-align: left;">There are two ways to run this utility:</p>
+        <h3><strong>1. Run the python script by providing parameters:</strong></h3>
+        <h4><strong>Requirment:</strong></h4>
+        <ul style="list-style-type: disc;">
+            <li>Python installed:</li>
+            <li>Run requirnment.txt using command <code>pip install -r requirnment.txt </code></li>
+        </ul>
+        <h4><strong>Run script using command:</strong></h4>
+
+        Enter below command in terminal:
+        <br>
+        <br>
+        <code>python  app/downloader-utility.py --phylogeny "Dikarya"   --data_status "Mapped reads - Done"
+            --experiment_type "Chromium genome"  --download_location "/Users/Documents"
+            --download_option "assemblies"</code>
+        <br />
+        <br>
+        Where:
+        <br>
+        <br />
+        <code> <strong>--phylogeny</strong> (Required) The name of the Taxnomy for the download (`eg : Dikarya`)</code>
+        <br />
+        <br />
+        <code> <strong>--data_status</strong> (Optional) The filter of data status for the download (`eg : Biosamples - Submitted,Mapped Reads - Submitted,Assemblies - Submitted,Raw Data - Submitted,Annotation Complete - Done,Genome Notes - Submitted`)</code>
+        <br />
+        <br />
+        <code> <strong>--experiment_type</strong> (Optional) The filter of experiment type (`eg : PacBio - HiFi,Hi-C - Arima v2,Hi-C - Arima v1`)</code>
+        <br />
+        <br />
+        <code> <strong>--download_location</strong> (Optional) The location for the download</code>
+        <br />
+        <br />
+        <code> <strong>--download_option</strong> (Required) The type of data(`annotations,assemblies, experiments`) that you want to download.</code>
+        <br>
+        <br>
+        <h3><strong>2. Build Docker Image: </strong></h3>
+        <h4><strong>Requirment:</strong></h4>
+        <ul style="list-style-type: disc;">
+            <li>Docker is installed and running</li>
+        </ul>
+        <h4>Create docker buid using command:</h4>
+        <ul>
+            <li><code>docker build -t downloader-utility:latest .</code></li>
+        </ul>
+        <br>
+        <h4><strong>Run docker image by providing parameters:</strong><br /></h4>
+        <p><code>docker run --rm -v "$PWD/download_location:/code/app/download_option" downloader-utility:latest --phylogeny Amphipyrinae --experiment_type "Hi-C - Arima v1" --download_option annotations</code></p>
+        <br>
+        <h4><strong>Note:</strong></h4>
+        <p>Using docker image data is downloaded into download_location e.g <code>/Users/downloads </code>  and <code>download_option</code> is (<code>"annotations,assemblies"</code>).</p>
+
+ <br>
+        <h2><strong>Support</strong></h2>
+
+        Please report any issues at <a href="mailto:dtol-dcc@ebi.ac.uk">dtol-dcc@ebi.ac.uk</a>.
+    </div>
+</div>
