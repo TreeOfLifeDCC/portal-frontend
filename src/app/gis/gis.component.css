@@ -5,11 +5,19 @@
     margin-top: -30px;
     /* width: 65%; */
 }
-
+.jumbotron {
+    background: url("../../assets/dtol banner thin.jpg") center center no-repeat;
+    background-size: cover;
+    padding-top: 20px !important;
+    padding-bottom: 20px !important;
+}
 #map {
     width: 1000px;
     height: 600px;
     border: 1px solid #ccc;
+}
+.page-header {
+    color: #4BBEFD;
 }
 
 .leaflet-popup-close-button {
@@ -22,6 +30,7 @@
 
 .map-frame {
     margin-top: 50px;
+    margin-left: 10px;
 }
 
 .search {
@@ -67,8 +76,7 @@
     position: relative;
     margin-top: 50px;
     white-space: nowrap;
-    margin-left: 55px;
-    margin-right: 50px;
+
 }
 
 .mat-slide-toggle {

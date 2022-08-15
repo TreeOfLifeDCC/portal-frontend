@@ -5,10 +5,12 @@ import { GisService } from './gis.service';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { FormControl } from '@angular/forms';
 import { map, startWith } from 'rxjs/operators';
-import { Observable } from 'rxjs';
+import {Observable, Subscription} from 'rxjs';
 import {control} from 'leaflet';
 import layers = control.layers;
 import {MatRadioChange} from '@angular/material/radio';
+import {FilterService} from "../shared/filter-service";
+import {ActivatedRoute, Router} from "@angular/router";
 
 
 const iconRetinaUrl = 'assets/marker-icon-2x.png';
@@ -43,12 +45,15 @@ export class GisComponent implements AfterViewInit {
   myControl = new FormControl('');
   filteredOptions: string[];
   radioOptions = 1;
-  constructor(private gisService: GisService, private spinner: NgxSpinnerService) { }
+  filterServiceSubscription: Subscription;
+  constructor(private gisService: GisService, private spinner: NgxSpinnerService,   private filterService: FilterService, private activatedRoute: ActivatedRoute,
+              private router: Router) { }
 
   ngOnInit(): void {
     this.toggleSpecimen.setValue(false);
     this.radioOptions = 1;
     this.getGisData();
+
   }
 
   ngAfterViewInit(): void {
@@ -105,6 +110,7 @@ export class GisComponent implements AfterViewInit {
     this.gisService.getgisData()
       .subscribe(
         data => {
+
           const unpackedData = [];
           for (const item of data) {
             unpackedData.push(this.unpackData(item));
@@ -120,8 +126,16 @@ export class GisComponent implements AfterViewInit {
         err => {
           console.log(err);
           this.spinner.hide();
+        });
+    this.filterServiceSubscription = this.filterService.field.subscribe((data) => {
+      const params = {};
+      for (const key of Object.keys(data)) {
+        if (data[key] && data[key].length !== 0) {
+          params[key] = data[key];
         }
-      );
+      }
+      this.router.navigate(['gis'], {queryParams: params});
+    });
   }
 
   unpackData(data: any) {

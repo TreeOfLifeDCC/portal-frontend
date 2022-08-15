@@ -724,26 +724,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
     }
   }
 
-  toggleCollapse(filterKey) {
-    if (filterKey == 'Metadata submitted to BioSamples') {
-      if (this.isBiosampleFilterCollapsed) {
-        this.itemLimitBiosampleFilter = 10000;
-        this.isBiosampleFilterCollapsed = false;
-      } else {
-        this.itemLimitBiosampleFilter = 3;
-        this.isBiosampleFilterCollapsed = true;
-      }
-    }
-    else if (filterKey == 'Data submitted to ENA') {
-      if (this.isEnaFilterCollapsed) {
-        this.itemLimitEnaFilter = 10000;
-        this.isEnaFilterCollapsed = false;
-      } else {
-        this.itemLimitEnaFilter = 3;
-        this.isEnaFilterCollapsed = true;
-      }
-    }
-  }
+
 
   // Ontology aware filter
   initTaxonomyObject() {

@@ -33,6 +33,10 @@ import {MatAutocompleteModule} from '@angular/material/autocomplete';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 
+import { FilterComponent } from './dashboard/filter/filter.component';
+import {DashboardModule} from "./dashboard/dashboard.module";
+
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -45,6 +49,7 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
     BytesPipe,
     ConfirmationDialogComponent,
     GisComponent
+
   ],
   imports: [
     BrowserModule,
@@ -66,10 +71,12 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
     NgxSpinnerModule,
     MatFormFieldModule,
     MatAutocompleteModule,
-    MatSlideToggleModule
+    MatSlideToggleModule,
+    DashboardModule
   ],
   providers: [BytesPipe, GisService],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
+
 })
 export class AppModule { }
 

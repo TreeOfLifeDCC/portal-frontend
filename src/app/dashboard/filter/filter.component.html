@@ -1,0 +1,66 @@
+<div class="card bg-lite mb-3 filter-top">
+    <h3 class="card-header filter-heading" >
+        {{title}}
+
+        <i class="material-icons float-right"  *ngIf="(experimentTypeFilters?.length > filterSize && isCollapsed) && title === 'Experiment Type'"  (click)="toggleCollapse()">add</i>
+        <i class="material-icons float-right"   *ngIf="(experimentTypeFilters?.length > filterSize && !isCollapsed) && title === 'Experiment Type'" (click)="toggleCollapse()">remove</i>
+
+    </h3>
+    <ul  class="list-group" *ngIf="title === 'Experiment Type'">
+        <ng-container *ngFor="let filter of experimentTypeFilters; let i = index">
+            <li   *ngIf="i<itemLimit" class="biosample list-group-item d-flex justify-content-between align-items-center biosamples-inactive" id="{{filter.key}}-Experiment Type"  [ngClass]="checkFilterIsActive(filter.key)" (click)="onFilterClick($event, 'experiment-type', filter.key)" style="cursor: pointer" >
+                <span>{{filter.key}}</span>
+                <span class="badge badge-pill badge-info">{{filter.organism_count.doc_count}}</span>
+            </li>
+        </ng-container>
+
+    </ul>
+
+    <ul  class="list-group" *ngIf="title === 'Data Status'">
+            <ng-container *ngFor="let filter of BiosamplesFilters; let i = index">
+                <li class="biosample list-group-item d-flex justify-content-between align-items-center biosamples-inactive" [ngClass]="checkFilterIsActive(filter.key)" (click)="onFilterClick($event, 'biosamples', filter.key)" style="cursor: pointer" *ngIf="filter.key === 'Biosamples - Done'">
+                    <span>Biosamples - Submitted</span>
+                    <span class="badge badge-pill badge-info">{{filter.doc_count}}</span>
+                </li>
+            </ng-container>
+            <ng-container *ngFor="let filter of MappedReadsFilters; let i = index">
+                <li class="list-group-item d-flex justify-content-between align-items-center mapped-reads-inactive" [ngClass]="checkFilterIsActive(filter.key)" (click)="onFilterClick($event, 'mapped-reads' , filter.key)" style="cursor: pointer" *ngIf="filter.key === 'Mapped reads - Done'">
+                    <span>Mapped Reads - Submitted</span>
+                    <span class="badge badge-pill badge-info">{{filter.doc_count}}</span>
+                </li>
+            </ng-container>
+
+            <ng-container *ngFor="let filter of AssembliesFilters; let i = index">
+                <li class="list-group-item d-flex justify-content-between align-items-center assemblies-inactive" [ngClass]="checkFilterIsActive(filter.key)" (click)="onFilterClick($event, 'assemblies' , filter.key)" style="cursor: pointer" *ngIf="filter.key === 'Assemblies - Done'">
+                    <span>Assemblies - Submitted</span>
+                    <span class="badge badge-pill badge-info">{{filter.doc_count}}</span>
+                </li>
+            </ng-container>
+            <ng-container *ngFor="let filter of RawDataFilters; let i = index">
+                <li class="raw-data list-group-item d-flex justify-content-between align-items-center raw-data-inactive" [ngClass]="checkFilterIsActive(filter.key)" (click)="onFilterClick($event, 'raw-data' , filter.key)" style="cursor: pointer" *ngIf="filter.key === 'Raw data - Done'">
+                    <span>Raw Data - Submitted</span>
+                    <span class="badge badge-pill badge-info">{{filter.doc_count}}</span>
+                </li>
+            </ng-container>
+            <ng-container *ngFor="let filter of AnnotationFilters; let i = index">
+                <li class="list-group-item d-flex justify-content-between align-items-center annotation-inactive" [ngClass]="checkFilterIsActive(filter.key)" (click)="onFilterClick($event, 'annotation' , filter.key)" style="cursor: pointer" *ngIf="filter.key === 'Annotation - Done'">
+                    <span>Annotation - Submitted</span>
+                    <span class="badge badge-pill badge-info">{{filter.doc_count}}</span>
+                </li>
+            </ng-container>
+            <ng-container *ngFor="let filter of AnnotationCompleteFilters; let i = index">
+                <li class="list-group-item d-flex justify-content-between align-items-center annotation-complete-inactive" [ngClass]="checkFilterIsActive(filter.key)" (click)="onFilterClick($event, 'annotation-complete' , filter.key)" style="cursor: pointer" *ngIf="filter.key === 'Annotation complete - Done'">
+                    <span>Annotation Complete - Done</span>
+                    <span class="badge badge-pill badge-info">{{filter.doc_count}}</span>
+                </li>
+            </ng-container>
+            <ng-container *ngFor="let filter of GenomeFilters; let i = index">
+
+                <li class="list-group-item d-flex justify-content-between align-items-center genome-inactive" [ngClass]="checkFilterIsActive(filter.key)" (click)="onFilterClick($event, 'genome' , filter.key)" style="cursor: pointer" *ngIf="filter.key === 'Genome Notes - Submitted' && filter.doc_count > 0">
+                    <span>Genome Notes - Submitted</span>
+                    <span class="badge badge-pill badge-info">{{filter.doc_count}}</span>
+                </li>
+            </ng-container>
+        </ul>
+
+</div>

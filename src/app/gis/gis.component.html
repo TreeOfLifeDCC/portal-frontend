@@ -1,20 +1,35 @@
-<div class="container">
+<div>
     <ngx-spinner bdColor="rgba(0,0,0,0.9)" [fullScreen]="true" size="large" color="#fff" type="ball-clip-rotate-pulse">
     </ngx-spinner>
-    <div class="row">
-        <div class="col-md-2">
-            <div class="toggle">
+    <div class="jumbotron jumbotron-fluid">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-3">
+                </div>
+            </div>
+        </div>
+    </div>
 
+    <div class="container" style="padding-top: 20px;">
+    <div class="row">
+        <div class="col-lg-2">
+             <div class="toggle">
                 <mat-radio-group aria-label="Select an option" [(ngModel)]="this.radioOptions" >
-                    <mat-radio-button class="orgLabel" id="default"  [value]=1  name="toggleSpecies"   (change)="toggleSpecimens($event)" checked>Species</mat-radio-button>
-                    <br>
+                    <mat-radio-button class="orgLabel" id="default"  [value]=1  name="toggleSpecies"   (change)="toggleSpecimens($event)" checked>Species</mat-radio-button><br>
                     <mat-radio-button class="orgLabel" id="toggle" name="toggleSpecimen" (change)="toggleSpecimens($event)" [value]=3>Species and Specimens</mat-radio-button>
 
                 </mat-radio-group>
             </div>
+             <br>
+            <app-filter title="Experiment Type"></app-filter>
+            <br>
+            <app-filter title="Data Status"></app-filter>
         </div>
         <div class="col-lg-8 ">
-            <div class="search ">
+            <h1 class="page-header">Sampling Map</h1>
+
+            <div>
+                <div class="search ">
                 <i class="fa fa-times " *ngIf="searchText.value.length> 0" (click)="removeInputAndGetAllData()"></i>
                 <input #searchText id="search" (keyup)="filterSearchResults(searchText.value)" (keyup.enter)="searchGisData(searchText.value)" [formControl]="myControl" type="text" class="form-control" placeholder="Search for species" [matAutocomplete]="auto">
                 <button class="btn btn-primary" (click)="searchGisData(searchText.value)">Search</button>
@@ -23,16 +38,20 @@
                         {{option.id}}
                     </mat-option>
                 </mat-autocomplete>
+                </div>
+                <br>
+                <app-active-filter true></app-active-filter>
+            </div>
+            <div class="row">
+                <div class="map-container">
+                    <div class="map-frame">
+                        <div id="map"></div>
+                    </div>
+                </div>
             </div>
         </div>
-        <div class="col-lg-2"></div>
+
     </div>
 
-    <div class="row">
-        <div class="map-container">
-            <div class="map-frame">
-                <div id="map"></div>
-            </div>
-        </div>
     </div>
 </div>
