@@ -1,6 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { DynamicScriptLoaderService } from './services/dynamic-script-loader.service';
+import { FormControl } from '@angular/forms';
+import {MatRadioChange} from '@angular/material/radio';
+import { NgxSpinnerService } from 'ngx-spinner';
 
 @Component({
   selector: 'app-phylogenetics',
@@ -9,13 +12,22 @@ import { DynamicScriptLoaderService } from './services/dynamic-script-loader.ser
 })
 export class PhylogeneticsComponent implements OnInit {
 
-  constructor(private dynamicScriptLoader: DynamicScriptLoaderService, route: ActivatedRoute) {
-    this.loadScripts();
+  toggleSpecimen = new FormControl();
+  radioOptions = 1;
+
+
+  constructor(private dynamicScriptLoader: DynamicScriptLoaderService, route: ActivatedRoute, private spinner: NgxSpinnerService) {
    }
 
   ngOnInit() {
+    this.toggleSpecimen.setValue(false);
+    this.radioOptions = 1;
   }
-  
+
+  ngAfterViewInit(): void {
+    this.loadScripts();
+  }
+
   private loadScripts() {
     // You can load multiple scripts by just providing the key as argument into load method of the service
     this.dynamicScriptLoader.load('d3min', 'd3tree',  'autocomplete').then(data => {
@@ -23,5 +35,12 @@ export class PhylogeneticsComponent implements OnInit {
     }).catch(error => console.log(error));
   }
 
+  // toggleSpecimens(event: MatRadioChange) {
+  //   this.spinner.show();
+  //     setTimeout(() => {
+  //       this.loadScripts();
+  //       this.spinner.hide();
+  //     }, 50);
+  //   }
 
 }

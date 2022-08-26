@@ -6,39 +6,45 @@
         </div>
     </div>
 </div>
-<link href = "https://code.jquery.com/ui/1.10.4/themes/ui-lightness/jquery-ui.css"
-      rel = "stylesheet">
+<link href="https://code.jquery.com/ui/1.10.4/themes/ui-lightness/jquery-ui.css" rel="stylesheet">
 <div id="tree-container" style="text-align: center;" class="svg-container">
     <div>
         <span id='zoom_in' type="button" class="material-icons zoom">zoom_in</span>
         <span id='zoom_out' type="button" class="material-icons zoom">zoom_out</span>
         <span id='reset' type="button" class="material-icons">restart_alt</span>
     </div>
-    <div class="col-md-12 " id="messages"  style=" font-weight: lighter; background: none; font-size: initial;">
-    <div id='doc' class='row'>
-        <div class="col-md-2"></div>
-        <div class="col-md-3">Single click to expand or collapse a node</div>
-        <div  class="col-md-3">Double click to show Organisms table</div>
-        <div class="col-xl-3">Graph can be zoomed in & out and is draggable</div>
-</div>
+    <div class="col-md-12 " id="messages" style=" font-weight: lighter; background: none; font-size: initial;">
+        <div id='doc' class='row'>
+            <div class="col-md-1"></div>
+            <div class="col-md-3">Single click to expand or collapse a node</div>
+            <div class="col-md-3">Double click to show Organisms table</div>
+            <div class="col-md-4">Graph can be zoomed in & out and is draggable</div>
+        </div>
     </div>
-        <div class="custom-control custom-switch zoom switch">
-            <input type="checkbox" class="custom-control-input" id="commonName">
-            <label class="custom-control-label" for="commonName">Common name </label>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
-            &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
-            &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
-            &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+    <div class="custom-control custom-switch zoom switch">
+        <input type="checkbox" class="custom-control-input" id="commonName">
+        <label class="custom-control-label" for="commonName">Common name </label>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+        &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
     </div>
-    <div class="col-md-12 zoom" style=" font-weight: lighter; background: none; font-size: initial;">
+    <div class="col-md-2" id="tree-switch">
+        <div class="toggle">
+            <mat-radio-group aria-label="Select an option" [(ngModel)]="radioOptions">
+                <mat-radio-button id="default-tree" [value]=1 name="toggleSpecimen" checked>Specialised Tree</mat-radio-button>
+                &nbsp;
+                <mat-radio-button id="toggle-tree" name="toggleSpecimen" [value]=2>Full Tree</mat-radio-button>
+            </mat-radio-group>
+        </div>
+    </div>
+    <div class="col-md-10 zoom" style=" font-weight: lighter; background: none; font-size: initial;">
 
-        <div class="col-md-3 zoom">
+        <div class="col-md-3 search-bar">
             <mat-form-field appearance="fill">
                 <mat-label>Search</mat-label>
-                <input #searchInput matInput id="search" >
+                <input #searchInput matInput id="search">
             </mat-form-field>
 
         </div>
-        <div id="count"  class="col-md-10 zoom" style=" top: 00px; font-weight: bold; background: none; font-size: initial;">
+        <div id="count" class="col-md-10 zoom" style=" top: 00px; font-weight: bold; background: none; font-size: initial;">
 
         </div>
     </div>
@@ -66,7 +72,7 @@
                         </tbody>
                     </table>
                 </div>
-                </div>
             </div>
+        </div>
 
-</div>
+    </div>
