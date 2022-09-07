@@ -185,7 +185,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
     }
   }
 
-  appendActiveFilters(key, params) {
+   appendActiveFilters(key, params) {
     setTimeout(() => {
       this.urlAppendFilterArray.push({ name: key, value: params[key] });
       if (key === 'experiment-type'){
@@ -502,7 +502,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
     this.isFilterSelected = false;
     this.selectedFilterValue = '';
     this.phylSelectedRank = '';
-    $('#' + this.modalTaxa + '-kingdom').removeClass('active-filter');
+    $('#' + this.modalTaxa + '-jnu ').removeClass('active-filter');
     this.resetTaxaTree();
     this.modalTaxa = '';
     this.activeFilters = [];
@@ -724,7 +724,26 @@ export class DashboardComponent implements OnInit, AfterViewInit {
     }
   }
 
-
+  toggleCollapse(filterKey) {
+    if (filterKey == 'Metadata submitted to BioSamples') {
+      if (this.isBiosampleFilterCollapsed) {
+        this.itemLimitBiosampleFilter = 10000;
+        this.isBiosampleFilterCollapsed = false;
+      } else {
+        this.itemLimitBiosampleFilter = 3;
+        this.isBiosampleFilterCollapsed = true;
+      }
+    }
+    else if (filterKey == 'Data submitted to ENA') {
+      if (this.isEnaFilterCollapsed) {
+        this.itemLimitEnaFilter = 10000;
+        this.isEnaFilterCollapsed = false;
+      } else {
+        this.itemLimitEnaFilter = 3;
+        this.isEnaFilterCollapsed = true;
+      }
+    }
+  }
 
   // Ontology aware filter
   initTaxonomyObject() {

@@ -1,4 +1,3 @@
-
 <div>
     <ngx-spinner bdColor="rgba(0,0,0,0.9)" [fullScreen]="true" size="large" color="#fff" type="ball-clip-rotate-pulse">
     </ngx-spinner>
@@ -17,7 +16,54 @@
                 <div class="row">
                     <div class="col-md-12 col-sm-6">
                         <div class="card bg-lite mb-3 filter-top">
-                            <app-filter title="Data Status"></app-filter>
+                            <h3 class="card-header filter-heading">
+                                <span #lbltextENA>Data Status</span>
+                            </h3>
+                            <ul class="list-group">
+                                <ng-container *ngFor="let filter of BiosamplesFilters; let i = index">
+                                    <li class="biosample list-group-item d-flex justify-content-between align-items-center biosamples-inactive" [ngClass]="checkFilterIsActive(filter.key)" (click)="onFilterClick($event, 'biosamples', filter.key)" style="cursor: pointer" *ngIf="filter.key === 'Biosamples - Done'">
+                                        <span>Biosamples - Submitted</span>
+                                        <span class="badge badge-pill badge-info">{{filter.doc_count}}</span>
+                                    </li>
+                                </ng-container>
+                                <ng-container *ngFor="let filter of MappedReadsFilters; let i = index">
+                                    <li class="list-group-item d-flex justify-content-between align-items-center mapped-reads-inactive" [ngClass]="checkFilterIsActive(filter.key)" (click)="onFilterClick($event, 'mapped-reads' , filter.key)" style="cursor: pointer" *ngIf="filter.key === 'Mapped reads - Done'">
+                                        <span>Mapped Reads - Submitted</span>
+                                        <span class="badge badge-pill badge-info">{{filter.doc_count}}</span>
+                                    </li>
+                                </ng-container>
+
+                                <ng-container *ngFor="let filter of AssembliesFilters; let i = index">
+                                    <li class="list-group-item d-flex justify-content-between align-items-center assemblies-inactive" [ngClass]="checkFilterIsActive(filter.key)" (click)="onFilterClick($event, 'assemblies' , filter.key)" style="cursor: pointer" *ngIf="filter.key === 'Assemblies - Done'">
+                                        <span>Assemblies - Submitted</span>
+                                        <span class="badge badge-pill badge-info">{{filter.doc_count}}</span>
+                                    </li>
+                                </ng-container>
+                                <ng-container *ngFor="let filter of RawDataFilters; let i = index">
+                                    <li class="raw-data list-group-item d-flex justify-content-between align-items-center raw-data-inactive" [ngClass]="checkFilterIsActive(filter.key)" (click)="onFilterClick($event, 'raw-data' , filter.key)" style="cursor: pointer" *ngIf="filter.key === 'Raw data - Done'">
+                                        <span>Raw Data - Submitted</span>
+                                        <span class="badge badge-pill badge-info">{{filter.doc_count}}</span>
+                                    </li>
+                                </ng-container>
+                                <ng-container *ngFor="let filter of AnnotationFilters; let i = index">
+                                    <li class="list-group-item d-flex justify-content-between align-items-center annotation-inactive" [ngClass]="checkFilterIsActive(filter.key)" (click)="onFilterClick($event, 'annotation' , filter.key)" style="cursor: pointer" *ngIf="filter.key === 'Annotation - Done'">
+                                        <span>Annotation - Submitted</span>
+                                        <span class="badge badge-pill badge-info">{{filter.doc_count}}</span>
+                                    </li>
+                                </ng-container>
+                                <ng-container *ngFor="let filter of AnnotationCompleteFilters; let i = index">
+                                    <li class="list-group-item d-flex justify-content-between align-items-center annotation-complete-inactive" [ngClass]="checkFilterIsActive(filter.key)" (click)="onFilterClick($event, 'annotation-complete' , filter.key)" style="cursor: pointer" *ngIf="filter.key === 'Annotation complete - Done'">
+                                        <span>Annotation Complete - Done</span>
+                                        <span class="badge badge-pill badge-info">{{filter.doc_count}}</span>
+                                    </li>
+                                </ng-container>
+                                <ng-container *ngFor="let filter of GenomeFilters; let i = index">
+                                    <li class="list-group-item d-flex justify-content-between align-items-center genome-inactive" [ngClass]="checkFilterIsActive(filter.key)" (click)="onFilterClick($event, 'genome' , filter.key)" style="cursor: pointer" *ngIf="filter.key === 'Genome Notes - Submitted' && filter.doc_count > 0">
+                                        <span>Genome Notes - Submitted</span>
+                                        <span class="badge badge-pill badge-info">{{filter.doc_count}}</span>
+                                    </li>
+                                </ng-container>
+                            </ul>
                         </div>
                     </div>
                 </div>
@@ -54,10 +100,22 @@
             <div class="row">
                 <div class="col-md-12 col-sm-6">
                     <div class="card bg-lite mb-3 filter-top">
-                        <div class="col-md-12 col-sm-6">
+                        <h3 class="card-header filter-heading" >
+                            <span>Experiment Type</span>
 
-                            <app-filter title="Experiment type" filterSize="3"></app-filter>
-                        </div>
+                            <i class="material-icons float-right"  *ngIf="experimentTypeFilters?.length > 5 && isCollapsed" (click)="toggleCollapseForExp()">add</i>
+                            <i class="material-icons float-right"  *ngIf="experimentTypeFilters?.length > 5 && !isCollapsed" (click)="toggleCollapseForExp()">remove</i>
+
+                        </h3>
+                        <ul id="experimentType" class="list-group">
+                            <ng-container *ngFor="let filter of experimentTypeFilters; let i = index ">
+                                <li   *ngIf="i<itemLimit" class="biosample list-group-item d-flex justify-content-between align-items-center biosamples-inactive" id="{{filter.key}}-Experiment Type"  [ngClass]="checkFilterIsActive(filter.key)" (click)="onFilterClick($event, 'experiment-type', filter.key)" style="cursor: pointer" >
+                                    <span>{{filter.key}}</span>
+                                    <span class="badge badge-pill badge-info">{{filter.organism_count.doc_count}}</span>
+                                </li>
+                            </ng-container>
+
+                        </ul>
                     </div>
                 </div>
             </div>
@@ -82,7 +140,25 @@
                 <button *ngIf="activeFilters.length > 0 || selectedFilterValue != '' && (this.AnnotationFilters.length > 0 || this.AnnotationCompleteFilters.length > 0 || this.AssembliesFilters.length > 0 || this.RawDataFilters.length > 0)" type="button" style="float: right;" class="btn btn-primary" mat-raised-button (click)="openDialog()">Download</button>
 
                 <button type="button" style="float: right;" class="btn btn-primary" mat-raised-button (click)="downloadCSV()">Download metadata</button>
-                <app-active-filter></app-active-filter>
+                <h1 *ngIf="activeFilters.length > 0 || selectedFilterValue != ''">Filters:
+                    <span *ngIf="(phylSelectedRank != '' && activeFilters.length > 1) || (phylSelectedRank == '' && activeFilters.length > 0)">
+                        <span *ngFor="let filter of activeFilters">
+                            <span *ngIf="phylSelectedRank != filter">
+                                <button type="button" class="btn btn-success">{{filter}}
+                                    <span class="badge badge-light" (click)="removeFilter(filter)">X</span>
+                    </button>
+                    </span>
+                    </span>
+                    </span>
+                    <span *ngIf="selectedFilterValue != ''">
+                        <button type="button" class="btn btn-success">{{selectedFilterValue.taxonomy}}
+                            <span class="badge badge-light" (click)="removeTaxaFilter(selectedFilterValue.taxonomy)">X</span>
+                    </button>
+                    </span>
+                    <button *ngIf="activeFilters.length > 0 || selectedFilterValue != ''" type="button" class="btn btn-primary" (click)="removeAllFilters()">
+                        Remove all filters
+                    </button>
+                </h1>
                 <mat-form-field>
                     <mat-label>Search</mat-label>
                     <input #searchInput matInput [(ngModel)]='searchText' (keyup)="getSearchResults()" placeholder="Ex. lutra" #input>

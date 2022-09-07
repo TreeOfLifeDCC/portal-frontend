@@ -10,7 +10,7 @@
         </div>
     </div>
 
-    <div class="container" style="padding-top: 20px;">
+    <div class="container" style="padding-top: 10px;">
     <div class="row">
         <div class="col-lg-2">
              <div class="toggle">
@@ -20,28 +20,37 @@
 
                 </mat-radio-group>
             </div>
-             <br>
-            <app-filter title="Experiment Type"></app-filter>
+
+            <app-filter title="Data Status" filterSize="4"></app-filter>
             <br>
-            <app-filter title="Data Status"></app-filter>
+            <app-phylogeny-filter></app-phylogeny-filter>
+
+            <app-filter title="Experiment Type" filterSize="5"></app-filter>
+
         </div>
         <div class="col-lg-8 ">
             <h1 class="page-header">Sampling Map</h1>
-
-            <div>
-                <div class="search ">
-                <i class="fa fa-times " *ngIf="searchText.value.length> 0" (click)="removeInputAndGetAllData()"></i>
-                <input #searchText id="search" (keyup)="filterSearchResults(searchText.value)" (keyup.enter)="searchGisData(searchText.value)" [formControl]="myControl" type="text" class="form-control" placeholder="Search for species" [matAutocomplete]="auto">
-                <button class="btn btn-primary" (click)="searchGisData(searchText.value)">Search</button>
+            <div *ngIf="hasActiveFilters()">
+                <app-active-filter true></app-active-filter>
+                <span *ngIf="(filterService.selectedFilterValue!= undefined && filterService.selectedFilterValue != '')">
+                    <button type="button" class="btn btn-success">{{filterService.selectedFilterValue.taxonomy}}
+                        <span class="badge badge-light" (click)="filterService.removeTaxaFilter(filterService.selectedFilterValue.taxonomy)">X</span>
+                    </button>
+                </span>
+                <button class="btn btn-primary" type = "button" (click)="removeFilter()">Remove all filters</button>
+            </div>
+                <div class="search">
+                    <mat-form-field>
+                        <mat-label>Search</mat-label>
+                        <input #searchInput matInput (keyup.enter)="searchGisData()" [(ngModel)]='filterService.searchText' (keyup)="filterSearchResults()" placeholder="Search for species"  #matInput [matAutocomplete]="auto">
+                    </mat-form-field>
                 <mat-autocomplete #auto="matAutocomplete">
-                    <mat-option *ngFor="let option of filteredOptions" [value]="option.id" (click)="searchGisData(option.id)">
+                    <mat-option *ngFor="let option of filteredOptions" [value]="option.id" (click)="searchGisData()">
                         {{option.id}}
                     </mat-option>
                 </mat-autocomplete>
                 </div>
                 <br>
-                <app-active-filter true></app-active-filter>
-            </div>
             <div class="row">
                 <div class="map-container">
                     <div class="map-frame">
