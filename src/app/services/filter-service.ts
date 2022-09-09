@@ -253,8 +253,7 @@ export class FilterService {
                 // tslint:disable-next-line:triple-equals
                 if (obj.name.toLowerCase() === 'experiment-type') {
                     this.removeExperiemtntFilter(filter);
-                }
-                if (obj.value == filter) {
+                }else if(obj.value === filter){
                     inactiveClassName = obj.name + '-inactive';
                     $('.' + inactiveClassName).removeClass('active');
                     const filterIndex = this.urlAppendFilterArray.indexOf(obj);

@@ -387,41 +387,38 @@ export class GisComponent implements AfterViewInit , OnDestroy {
   getSearchData(search: any) {
     this.toggleSpecimen.setValue(false);
     this.radioOptions = 1;
-    if (search.length > 0) {
-      this.spinner.show();
-      this.gisService.getGisData(this.filterService.activeFilters.join(','), search)
-        .subscribe(
-          data => {
-            this.filterService.getFilters(data);
-            const unpackedData = [];
-            this.unpackedData = [];
-            for (const item of data.hits.hits) {
-              unpackedData.push(this.unpackData(item));
-            }
-            this.unpackedData = unpackedData;
-            this.refreshMapLayers();
-            setTimeout(() => {
-              this.populateMap();
-              if (this.unpackedData.length > 0) {
-                const lat = this.unpackedData[0].organisms[0].lat;
-                const lng = this.unpackedData[0].organisms[0].lng;
-                this.map.setView([lat, lng], 6);
-              }
-              else {
-                this.resetMapView();
-              }
-              this.spinner.hide();
-            }, 100);
-          },
-          err => {
-            console.log(err);
-            this.spinner.hide();
+    this.spinner.show();
+    this.gisService.getGisData(this.filterService.activeFilters.join(','), search)
+      .subscribe(
+        data => {
+          this.filterService.getFilters(data);
+          this.filterService.updateActiveRouteParams();
+          const unpackedData = [];
+          this.unpackedData = [];
+          for (const item of data.hits.hits) {
+            unpackedData.push(this.unpackData(item));
           }
-        );
-    }
-    else {
-      this.getAllData();
-    }
+          this.unpackedData = unpackedData;
+          this.refreshMapLayers();
+          setTimeout(() => {
+            this.populateMap();
+            if (this.unpackedData.length > 0) {
+              const lat = this.unpackedData[0].organisms[0].lat;
+              const lng = this.unpackedData[0].organisms[0].lng;
+              this.map.setView([lat, lng], 6);
+            }
+            else {
+              this.resetMapView();
+            }
+            this.spinner.hide();
+          }, 100);
+        },
+        err => {
+          console.log(err);
+          this.spinner.hide();
+        }
+      );
+
   }
 
   removeInputAndGetAllData() {
@@ -465,7 +462,7 @@ export class GisComponent implements AfterViewInit , OnDestroy {
     this.filterService.urlAppendFilterArray = [];
     this.filterService.isFilterSelected = false;
     this.filterService.phylSelectedRank = '';
-    // this.filter_field = {};
+    this.filterService.selectedFilterValue = '';
   }
 
   ngOnDestroy() {

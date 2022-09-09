@@ -216,6 +216,7 @@ export class PhylogenyFilterComponent implements OnInit {
     this.filterService.selectedTaxonomy = [];
     this.currentTaxonomyTree = [];
     this.filterService.modalTaxa = '';
+    this.currentTaxaOnExpand = '';
     this.initTaxonomyObject();
   }
 
