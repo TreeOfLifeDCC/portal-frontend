@@ -392,23 +392,6 @@ export class FilterService {
 
 
 
-    getStatusClass = (status: string) => {
-        if (status === 'Annotation Complete') {
-            return 'badge badge-pill badge-success';
-        }
-        else if (status === 'Done') {
-            return 'badge badge-pill badge-success';
-        }
-        else if (status === 'Waiting') {
-            return 'badge badge-pill badge-warning';
-        }
-        else if (status === 'Submitted') {
-            return 'badge badge-pill badge-success';
-        }
-        else {
-            return 'badge badge-pill badge-warning';
-        }
-    }
 
     updateActiveRouteParams = () => {
         const params = {};
