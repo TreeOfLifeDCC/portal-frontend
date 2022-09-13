@@ -55,7 +55,7 @@ import { BulkDownloadsComponent } from './bulk-downloads/bulk-downloads.componen
     GisComponent,
     FilterComponent,
     ActiveFilterComponent,
-    PhylogenyFilterComponent
+    PhylogenyFilterComponent,
     BulkDownloadsComponent
 
   ],

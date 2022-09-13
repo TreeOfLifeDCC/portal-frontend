@@ -502,7 +502,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
     this.isFilterSelected = false;
     this.selectedFilterValue = '';
     this.phylSelectedRank = '';
-    $('#' + this.modalTaxa + '-jnu ').removeClass('active-filter');
+    $('#' + this.modalTaxa + '-kingdom ').removeClass('active-filter');
     this.resetTaxaTree();
     this.modalTaxa = '';
     this.activeFilters = [];

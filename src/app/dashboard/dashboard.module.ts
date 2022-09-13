@@ -28,7 +28,6 @@ import {MatTabsModule} from '@angular/material/tabs';
 import { MapComponent } from './map/map.component';
 import { MapClusterComponent } from './map-cluster/map-cluster.component';
 
-
 @NgModule({
   declarations: [DashboardComponent, SpecimensComponent, DetailsComponent, OrganismDetailsComponent, TaxanomyComponent, MapComponent, MapClusterComponent],
   imports: [
@@ -50,9 +49,7 @@ import { MapClusterComponent } from './map-cluster/map-cluster.component';
     MatTabsModule,
     MatCheckboxModule,
     MatTooltipModule
-
   ],
-  providers: [DashboardService, TaxanomyService],
-
+  providers: [DashboardService, TaxanomyService]
 })
 export class DashboardModule { }
