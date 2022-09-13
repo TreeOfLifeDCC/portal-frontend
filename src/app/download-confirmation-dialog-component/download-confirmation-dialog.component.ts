@@ -1,4 +1,4 @@
-import { Component, Inject } from '@angular/core';
+import {Component, Inject, OnDestroy} from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import {DashboardService} from '../dashboard/services/dashboard.service';
 
@@ -7,10 +7,13 @@ import {DashboardService} from '../dashboard/services/dashboard.service';
   templateUrl: './download-confirmation-dialog.component.html',
   styleUrls: ['./download-confirmation-dialog.component.scss']
 })
-export class DownloadConfirmationDialogComponent {
+export class DownloadConfirmationDialogComponent implements  OnDestroy {
   radioOptions: string;
   constructor(private dashboardService: DashboardService, public dialogRef: MatDialogRef<DownloadConfirmationDialogComponent>, @Inject(MAT_DIALOG_DATA) public data: any) {
   }
+
+
+
   private DOWNLOAD_URL = 'https://portal.darwintreeoflife.org/files/';
   close(): void {
     this.dialogRef.close();
@@ -78,5 +81,8 @@ export class DownloadConfirmationDialogComponent {
     field.setAttribute('name', name);
     field.setAttribute('value', value);
     return field;
+  }
+  ngOnDestroy(): void {
+    this.dialogRef.close();
   }
 }

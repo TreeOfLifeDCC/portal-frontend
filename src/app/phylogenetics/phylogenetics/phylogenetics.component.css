@@ -69,13 +69,13 @@
 #organismsModal {
     top: 10px;
 }
+
 .modal-backdrop {
     display: none;
 }
 
-
 .switch {
-    margin: 3.5rem 1.5rem;
+    margin: 1.5rem 6.5rem;
 }
 
 .mat-form-field {
@@ -84,21 +84,38 @@
     position: absolute;
 }
 
- .mat-form-field-infix {
-     display: block;
-     position: relative;
-     flex: auto;
-     min-width: 0;
-     width: 900px;
- }
+.mat-form-field-infix {
+    display: block;
+    position: relative;
+    flex: auto;
+    min-width: 0;
+    width: 900px;
+}
+
 .row {
     display: flex;
     flex-wrap: wrap;
     margin-right: 0;
     margin-left: 150px;
 }
+
 #messages {
     display: block !important;
     position: absolute;
+}
 
+.toggle {
+    position: relative;
+    margin-top: 50px;
+    white-space: nowrap;
+    /* margin-left: 55px; */
+    margin-right: 50px;
+}
+
+#tree-switch {
+    margin-bottom: -6px;
+}
+
+.search-bar {
+    margin: 0rem 25rem;
 }

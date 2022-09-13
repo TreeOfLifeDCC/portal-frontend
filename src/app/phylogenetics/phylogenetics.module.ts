@@ -7,6 +7,8 @@ import { LOADERS } from 'ngx-spinner/lib/ngx-spinner.enum';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import {FormsModule} from '@angular/forms';
 import {MatInputModule} from '@angular/material/input';
+import { NgxSpinnerModule } from "ngx-spinner";
+import {MatRadioModule} from '@angular/material/radio';
 
 
 
@@ -17,7 +19,9 @@ import {MatInputModule} from '@angular/material/input';
         CommonModule,
         MatFormFieldModule,
         MatInputModule,
-        FormsModule
+        FormsModule,
+        MatRadioModule,
+        NgxSpinnerModule
     ],
   providers: [
     DynamicScriptLoaderService
