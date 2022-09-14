@@ -1,0 +1,171 @@
+<div class="row">
+    <div class="col-md-12 col-sm-6">
+        <div class="card bg-lite mb-3 filter-top">
+            <h3 class="card-header filter-heading">
+                <span>Phylogeny</span>
+            </h3>
+            <ul id="ontology-inactive" class="list-group">
+                <li *ngIf="(isFilterSelected && filterService.selectedFilterValue!== undefined )"
+                    class="rank-heading list-group-item"> {{filterService.selectedFilterValue.rank | uppercase}}
+                </li>
+                <li *ngIf="(isFilterSelected && filterService.selectedFilterValue!== undefined )"
+                    class="list-group-item d-flex justify-content-between align-items-center kingdom active-filter"
+                    style="cursor: pointer; padding: .75rem 0.25rem;"
+                    id="{{filterService.selectedFilterValue.taxonomy}}-kingdom"
+                    (click)="showTaxonomyModal($event, currentTaxonomy.rank, currentTaxonomy.taxonomy, 'subkingdom')">
+                    {{filterService.selectedFilterValue.taxonomy}} ({{filterService.selectedFilterValue.commonName}})
+<!--                    <span class="badge badge-pill badge-info">{{filterService.bioSampleTotalCount}}</span>-->
+                </li>
+                <li *ngIf="!isFilterSelected" class="rank-heading list-group-item"> KINGDOM </li>
+                <ng-container *ngIf="!this.isFilterSelected">
+                    <ng-container *ngFor="let super of this.childTaxanomy.superkingdom">
+                        <li *ngFor="let superchild of super.childData"
+                            class="list-group-item d-flex justify-content-between align-items-center kingdom"
+                            style="cursor: pointer; padding: .75rem 0.25rem;" id="{{superchild.key}}-kingdom"
+                            (click)="showTaxonomyModal($event, super.rank, superchild.key, 'phylum')"
+                            (dblclick)="filterTaxonomy(super.rank, superchild.key, 'phylum',superchild.commonName.buckets[0].key, superchild.taxId.buckets[0].key)">
+                            {{superchild.key}} ({{superchild.commonName.buckets[0].key}})
+
+                        </li>
+                    </ng-container>
+                </ng-container>
+            </ul>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="taxonomyModal" tabindex="-1" role="dialog" aria-labelledby="ontologyModal"
+     aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-xl" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title modal-heading" id="ontologyModal" modal-heading>Taxonomy
+                </h1>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="hideTaxaModal()">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <ul id="myUL">
+                    <!-- phylum level -->
+                    <ul class="nested phylum" *ngIf="childTaxanomy.kingdom.length > 0">
+                        <li class="rank-heading">
+                            {{currentTaxaOnExpand.childRank | uppercase}}
+                        </li>
+                        <ng-container *ngFor="let king of childTaxanomy.kingdom">
+                            <ng-container>
+                                <li *ngFor="let kingchild of king.childData; let i = index">
+                                    <i *ngIf="((king.childData.length == 1 && kingchild.key != 'Other') || (king.childData.length > 1 ))" class="fas fa-plus-circle {{kingchild.key}}-{{king.rank}}" (click)="getChildTaxonomyRankEvent($event, king.rank, kingchild.key, 'class')"></i>
+                                    <span *ngIf="((king.childData.length == 1 && kingchild.key != 'Other') || (king.childData.length > 1 ))" class="caret {{kingchild.key}}-{{king.rank}}" id="{{kingchild.key}}-{{king.rank}}" (dblclick)="filterTaxonomy(king.rank, kingchild.key, 'class',kingchild.commonName.buckets[0].key, kingchild.taxId.buckets[0].key)">
+                                            {{kingchild.key}} ({{kingchild.commonName.buckets[0].key}})
+                                        </span>
+                                    <span *ngIf="((king.childData.length == 1 && kingchild.key != 'Other') || (king.childData.length > 1 ))" class="badge badge-pill badge-info {{kingchild.key}}-{{king.rank}}"></span>
+                                    <hr *ngIf="((king.childData.length == 1 && kingchild.key != 'Other') || (king.childData.length > 1 ))"
+                                        class="{{kingchild.key}}-{{king.rank}}">
+                                    <!-- class level -->
+                                    <ul class="nested {{kingchild.key}}-class" *ngIf="childTaxanomy.phylum.length > 0">
+                                        <ng-container *ngFor="let phylum of childTaxanomy.phylum">
+                                            <ng-container *ngIf="kingchild.key === phylum.parent">
+                                                <li *ngFor="let phylumchild of phylum.childData; let i = index">
+                                                    <i *ngIf="((phylum.childData.length == 1 && phylumchild.key != 'Other') || (phylum.childData.length > 1 ))" class="fas fa-plus-circle {{phylumchild.key}}-{{phylum.rank}}" (click)="getChildTaxonomyRankEvent($event, phylum.rank, phylumchild.key, 'order')"></i>
+                                                    <span *ngIf="((phylum.childData.length == 1 && phylumchild.key != 'Other') || (phylum.childData.length > 1 ))" class="caret {{phylumchild.key}}-{{phylum.rank}}" id="{{phylumchild.key}}-{{phylum.rank}}" (dblclick)="filterTaxonomy(phylum.rank, phylumchild.key, 'order',phylumchild.commonName.buckets[0].key, phylumchild.taxId.buckets[0].key)">
+                                                            {{phylumchild.key}}
+                                                        ({{phylumchild.commonName.buckets[0].key}})
+                                                        </span>
+                                                    <span *ngIf="((phylum.childData.length == 1 && phylumchild.key != 'Other') || (phylum.childData.length > 1 ))" class="badge badge-pill badge-info {{phylumchild.key}}-{{phylum.rank}}"></span>
+                                                    <hr *ngIf="((phylum.childData.length == 1 && phylumchild.key != 'Other') || (phylum.childData.length > 1 ))"
+                                                        class="{{phylumchild.key}}-{{phylum.rank}}">
+                                                    <!-- order level -->
+                                                    <ul class="nested {{phylumchild.key}}-order"
+                                                        *ngIf="childTaxanomy.class.length > 0">
+                                                        <ng-container *ngFor="let class of childTaxanomy.class">
+                                                            <ng-container *ngIf="phylumchild.key === class.parent">
+                                                                <li
+                                                                        *ngFor="let classchild of class.childData; let i = index">
+                                                                    <i *ngIf="((class.childData.length == 1 && classchild.key != 'Other') || (class.childData.length > 1 ))" class="fas fa-plus-circle" (click)="getChildTaxonomyRankEvent($event, class.rank, classchild.key, 'family')"></i>
+                                                                    <span *ngIf="((class.childData.length == 1 && classchild.key != 'Other') || (class.childData.length > 1 ))" class="caret" id="{{classchild.key}}-{{class.rank}}" (dblclick)="filterTaxonomy(class.rank, classchild.key, 'family',classchild.commonName.buckets[0].key, classchild.taxId.buckets[0].key)">
+                                                                            {{classchild.key}}
+                                                                        ({{classchild.commonName.buckets[0].key}})
+                                                                        </span>
+                                                                    <span *ngIf="((class.childData.length == 1 && classchild.key != 'Other') || (class.childData.length > 1 ))" class="badge badge-pill badge-info"></span>
+                                                                    <hr
+                                                                            *ngIf="((class.childData.length == 1 && classchild.key != 'Other') || (class.childData.length > 1 ))">
+                                                                    <!-- family level -->
+                                                                    <ul class="nested {{classchild.key}}-family"
+                                                                        *ngIf="childTaxanomy.order.length > 0">
+                                                                        <ng-container
+                                                                                *ngFor="let order of childTaxanomy.order">
+                                                                            <ng-container
+                                                                                    *ngIf="classchild.key === order.parent">
+                                                                                <li
+                                                                                        *ngFor="let orderChild of order.childData; let i = index">
+                                                                                    <i *ngIf="((order.childData.length == 1 && orderChild.key != 'Other') || (order.childData.length > 1 ))" class="fas fa-plus-circle" (click)="getChildTaxonomyRankEvent($event, order.rank, orderChild.key, 'genus')"></i>
+                                                                                    <span *ngIf="((order.childData.length == 1 && orderChild.key != 'Other') || (order.childData.length > 1 ))" class="caret" id="{{orderChild.key}}-{{order.rank}}" (dblclick)="filterTaxonomy(order.rank, orderChild.key, 'genus',orderChild.commonName.buckets[0].key, orderChild.taxId.buckets[0].key)">
+                                                                                            {{orderChild.key}}
+                                                                                        ({{orderChild.commonName.buckets[0].key}})
+                                                                                        </span>
+                                                                                    <span *ngIf="((order.childData.length == 1 && orderChild.key != 'Other') || (order.childData.length > 1 ))" class="badge badge-pill badge-info"></span>
+                                                                                    <hr
+                                                                                            *ngIf="((order.childData.length == 1 && orderChild.key != 'Other') || (order.childData.length > 1 ))">
+                                                                                    <!-- genus level -->
+                                                                                    <ul class="nested {{orderChild.key}}-genus"
+                                                                                        *ngIf="childTaxanomy.family.length > 0">
+                                                                                        <ng-container
+                                                                                                *ngFor="let family of childTaxanomy.family">
+                                                                                            <ng-container
+                                                                                                    *ngIf="orderChild.key === family.parent">
+                                                                                                <li
+                                                                                                        *ngFor="let familyChild of family.childData; let i = index">
+                                                                                                    <i *ngIf="((family.childData.length == 1 && familyChild.key != 'Other') || (family.childData.length > 1 ))" class="fas fa-plus-circle" (click)="getChildTaxonomyRankEvent($event, family.rank, familyChild.key, 'species')"></i>
+                                                                                                    <span *ngIf="((family.childData.length == 1 && familyChild.key != 'Other') || (family.childData.length > 1 ))" class="caret" id="{{familyChild.key}}-{{family.rank}}" (dblclick)="filterTaxonomy(family.rank, familyChild.key, 'species',familyChild.commonName.buckets[0].key, familyChild.taxId.buckets[0].key)">
+                                                                                                            {{familyChild.key}}
+                                                                                                        ({{familyChild.commonName.buckets[0].key}})
+                                                                                                        </span>
+                                                                                                    <span *ngIf="((family.childData.length == 1 && familyChild.key != 'Other') || (family.childData.length > 1 ))" class="badge badge-pill badge-info"></span>
+                                                                                                    <hr
+                                                                                                            *ngIf="((family.childData.length == 1 && familyChild.key != 'Other') || (family.childData.length > 1 ))">
+                                                                                                    <!-- species level -->
+                                                                                                    <ul class="nested {{familyChild.key}}-species"
+                                                                                                        *ngIf="childTaxanomy.genus.length > 0">
+                                                                                                        <ng-container
+                                                                                                                *ngFor="let genus of childTaxanomy.genus">
+                                                                                                            <ng-container
+                                                                                                                    *ngIf="familyChild.key === genus.parent">
+                                                                                                                <li
+                                                                                                                        *ngFor="let genusChild of genus.childData; let i = index">
+                                                                                                                    <!-- <i *ngIf="((genus.childData.length == 1 && genusChild.key != 'Other') || (genus.childData.length > 1 ))" class="fas fa-plus-circle" (click)="getChildTaxonomyRankEvent($event, genus.rank, genusChild.key, 'forma')"></i> -->
+                                                                                                                    <span *ngIf="((genus.childData.length == 1 && genusChild.key != 'Other') || (genus.childData.length > 1 ))" class="caret" id="{{genusChild.key}}-{{genus.rank}}" (dblclick)="filterTaxonomy(genus.rank, genusChild.key, 'species',genusChild.commonName.buckets[0].key, genusChild.taxId.buckets[0].key)">
+                                                                                                                            {{genusChild.key}}
+                                                                                                                        ({{genusChild.commonName.buckets[0].key}})
+                                                                                                                        </span>
+                                                                                                                    <span *ngIf="((genus.childData.length == 1 && genusChild.key != 'Other') || (genus.childData.length > 1 ))" class="badge badge-pill badge-info"></span>
+                                                                                                                    <hr
+                                                                                                                            *ngIf="((genus.childData.length == 1 && genusChild.key != 'Other') || (genus.childData.length > 1 ))">
+                                                                                                                </li>
+                                                                                                            </ng-container>
+                                                                                                        </ng-container>
+                                                                                                    </ul>
+                                                                                                </li>
+                                                                                            </ng-container>
+                                                                                        </ng-container>
+                                                                                    </ul>
+                                                                                </li>
+                                                                            </ng-container>
+                                                                        </ng-container>
+                                                                    </ul>
+                                                                </li>
+                                                            </ng-container>
+                                                        </ng-container>
+                                                    </ul>
+                                                </li>
+                                            </ng-container>
+                                        </ng-container>
+                                    </ul>
+                                </li>
+                            </ng-container>
+                        </ng-container>
+                    </ul>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>

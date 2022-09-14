@@ -185,7 +185,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
     }
   }
 
-  appendActiveFilters(key, params) {
+   appendActiveFilters(key, params) {
     setTimeout(() => {
       this.urlAppendFilterArray.push({ name: key, value: params[key] });
       if (key === 'experiment-type'){
@@ -502,7 +502,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
     this.isFilterSelected = false;
     this.selectedFilterValue = '';
     this.phylSelectedRank = '';
-    $('#' + this.modalTaxa + '-kingdom').removeClass('active-filter');
+    $('#' + this.modalTaxa + '-kingdom ').removeClass('active-filter');
     this.resetTaxaTree();
     this.modalTaxa = '';
     this.activeFilters = [];
@@ -787,37 +787,12 @@ export class DashboardComponent implements OnInit, AfterViewInit {
       'cellularorganism',
       'superkingdom',
       'kingdom',
-      'subkingdom',
-      'superphylum',
       'phylum',
-      'subphylum',
-      'superclass',
       'class',
-      'subclass',
-      'infraclass',
-      'cohort',
-      'subcohort',
-      'superorder',
       'order',
-      'parvorder',
-      'suborder',
-      'infraorder',
-      'section',
-      'subsection',
-      'superfamily',
       'family',
-      'subfamily',
-      'tribe',
-      'subtribe',
       'genus',
-      'series',
-      'subgenus',
-      'species_group',
-      'species_subgroup',
-      'species',
-      'subspecies',
-      'varietas',
-      'forma'
+      'species'
     ];
     $('#myUL, #root-list, #Eukaryota-superkingdom').toggleClass('active');
   }

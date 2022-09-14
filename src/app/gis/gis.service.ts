@@ -8,11 +8,17 @@ export class GisService {
 
   private API_BASE_URL = 'https://portal.darwintreeoflife.org/api';
   // private API_BASE_URL = 'http://localhost:8080';
+  //    private API_BASE_URL = 'http://45.88.81.15';
 
   constructor(private http: HttpClient) { }
 
-  public getgisData(): Observable<any> {
-    return this.http.get(`${this.API_BASE_URL}/root_organisms/gis`);
+  public getGisData(filter: any, searchText?): Observable<any> {
+    let requestParams = `?`;
+    if (searchText) {
+      requestParams = requestParams + `&searchText=${searchText}`;
+    }
+    return this.http.post(`${this.API_BASE_URL}/root_organisms/gis-filter${requestParams}`, filter);
+
   }
 
   public getGisSearchData(search: any): Observable<any> {

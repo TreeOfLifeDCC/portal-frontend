@@ -32,6 +32,13 @@ import { NgxSpinnerModule } from "ngx-spinner";
 import {MatAutocompleteModule} from '@angular/material/autocomplete';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+
+import {DashboardModule} from "./dashboard/dashboard.module";
+import {MatInputModule} from "@angular/material/input";
+import {FilterService} from "./services/filter-service";
+import {FilterComponent} from "./shared/filter/filter.component";
+import {ActiveFilterComponent} from "./shared/active-filter/active-filter.component";
+import {PhylogenyFilterComponent} from "./shared/phylogeny-filter/phylogeny-filter.component";
 import { BulkDownloadsComponent } from './bulk-downloads/bulk-downloads.component';
 
 @NgModule({
@@ -46,7 +53,11 @@ import { BulkDownloadsComponent } from './bulk-downloads/bulk-downloads.componen
     BytesPipe,
     ConfirmationDialogComponent,
     GisComponent,
+    FilterComponent,
+    ActiveFilterComponent,
+    PhylogenyFilterComponent,
     BulkDownloadsComponent
+
   ],
   imports: [
     BrowserModule,
@@ -68,10 +79,13 @@ import { BulkDownloadsComponent } from './bulk-downloads/bulk-downloads.componen
     NgxSpinnerModule,
     MatFormFieldModule,
     MatAutocompleteModule,
-    MatSlideToggleModule
+    MatSlideToggleModule,
+    DashboardModule,
+    MatInputModule
   ],
-  providers: [BytesPipe, GisService],
-  bootstrap: [AppComponent]
+  providers: [BytesPipe, GisService, FilterService],
+  bootstrap: [AppComponent],
+
 })
 export class AppModule { }
 

@@ -1,0 +1,12 @@
+
+<h1 *ngIf="aggs.length > 0">Filters: </h1>
+    <span *ngIf="(aggs.length > 0)">
+    <ng-container *ngFor="let field of aggs" >
+            <span *ngIf="phylSelectedRank != field">
+                 <button type="button" class="btn btn-success">
+                    {{field}} <span class="badge badge-light" (click)="clearFilter(field)">X</span>
+                </button>
+            </span>
+    </ng-container>
+    </span>
+

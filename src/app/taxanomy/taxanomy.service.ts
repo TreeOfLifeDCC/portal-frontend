@@ -8,7 +8,7 @@ import { Observable } from 'rxjs';
 export class TaxanomyService {
 
   private API_BASE_URL = 'https://portal.darwintreeoflife.org/api';
-  // private API_BASE_URL = 'http://45.88.81.118/api';
+  // private API_BASE_URL = 'http://45.88.81.15';
   // private API_BASE_URL = 'http://localhost:8080';
 
   constructor(private http: HttpClient) { }

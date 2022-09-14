@@ -1,0 +1,286 @@
+.filter-top {
+    margin-top: 1rem !important;
+}
+
+.jumbotron {
+    background: url("../../../assets/dtol banner thin.jpg") center center no-repeat;
+    background-size: cover;
+    padding-top: 20px !important;
+    padding-bottom: 20px !important;
+}
+
+table {
+    width: 100%;
+}
+
+.mat-form-field {
+    font-size: 14px;
+    width: 100%;
+}
+
+button {
+    margin-left: 5px;
+}
+
+.card-header,
+.card-header{
+    background-color: #8FBC45;
+    width: 107%;
+}
+.btn-success,
+.badge-success {
+    background-color: #8FBC45;
+}
+.material-icons {
+    vertical-align: after-edge;
+    font-size: 22px;
+    line-height: 1.2;
+    padding-right: 5px;
+}
+.btn-primary,
+.active {
+    background-color: #4BBEFD;
+}
+
+.page-header {
+    color: #4BBEFD;
+}
+
+.display-2 {
+    color: ghostwhite;
+}
+
+.txt-center {
+    text-align: center;
+    /* justify-content: center; */
+}
+
+.mat-header-cell {
+    text-align: center;
+    /* justify-content: center; */
+}
+
+i {
+    cursor: pointer;
+}
+
+.disp {
+    display: block !important;
+}
+
+.non-disp {
+    display: none !important;
+}
+
+ul.long-list {
+    max-height: 300px;
+    overflow: scroll;
+}
+
+.filter-heading {
+    font-size: unset;
+    font-weight: 400;
+    line-height: 2;
+    margin: auto;
+    padding-right: 5px;
+}
+
+.inactiveFilter {
+    pointer-events: none;
+    cursor: default;
+}
+
+
+/* Remove default bullets */
+
+ul,
+#myUL {
+    list-style-type: none;
+}
+
+
+/* Remove margins and padding from the parent ul */
+
+#myUL {
+    margin: 0;
+    padding: 0;
+}
+
+
+/* Style the caret/arrow */
+
+.caret {
+    cursor: pointer;
+    user-select: none;
+    /* Prevent text selection */
+}
+
+
+/* Create the caret/arrow with a unicode, and style it */
+
+.caret::before {
+    /* content: "\25B6"; */
+    color: black;
+    display: inline-block;
+    margin-right: 6px;
+}
+
+
+/* Rotate the caret/arrow icon when clicked on (using JavaScript) */
+
+.fas {
+    padding-right: 1px;
+}
+
+
+/* Hide the nested list */
+
+
+/* .nested {
+    display: none;
+} */
+
+
+/* Show the nested list when the user clicks on the caret/arrow (with JavaScript) */
+
+.active {
+    display: block;
+    background-color: white;
+}
+
+#myUL li .caret {
+    padding: 0px 0px;
+    margin-right: 0px;
+    background: #fff;
+    /* font-size: smaller; */
+}
+
+.nested li .caret {
+    padding: 0px 0px;
+    margin-right: 0px;
+    background: #fff
+}
+
+.badge-success {
+    float: right;
+}
+
+hr {
+    margin-top: 2px !important;
+    margin-bottom: 2px !important;
+}
+
+.modal-heading {
+    width: 100%;
+    text-align: center;
+}
+
+.active-filter {
+    background-color: #4BBEFD;
+}
+
+.rank-heading {
+    text-align: center;
+    font-size: large;
+    width: 107%;
+}
+
+
+
+.left {
+    float: left;
+}
+
+.fas {
+    padding-right: 5px;
+}
+
+ul[class*="Other-"] {
+    padding: 0;
+}
+
+ul[class*="other-"] {
+    padding: 0;
+}
+
+.mat-header-row,
+.mat-row {
+    min-height: 30px;
+}
+
+.list-group-item {
+    padding: 0.25rem;
+    width: 107%;
+}
+
+.goat-padding {
+    padding-left: 35px;
+}
+
+.goat-color {
+    color: #fff;
+    background-color: #4BBEFD;
+    margin-left: 3px;
+}
+
+.goat-color2 {
+    color: #fff;
+    background-color: #5cc45e;
+    margin-left: 3px;
+}
+
+.genome {
+    color: #fff;
+    background-color: grey;
+    margin-left: 3px;
+}
+
+mat-cell:nth-child(5),
+mat-header-cell:nth-child(5) {
+    flex: 1 0 5%;
+}
+
+.th-center {
+    text-align: center;
+}
+
+.th-left {
+    text-align: left;
+}
+
+.th-right {
+    text-align: right;
+}
+
+.w-75 {
+    max-width: 75px !important;
+}
+
+.w-80 {
+    max-width: 80px !important;
+}
+
+.w-85 {
+    max-width: 85px !important;
+}
+
+.w-90 {
+    max-width: 90px !important;
+}
+
+.w-100 {
+    max-width: 100px !important;
+}
+
+.w-120 {
+    max-width: 120px !important;
+}
+
+.w-150 {
+    max-width: 150px !important;
+}
+
+.badge-primary-cns {
+    color: #fff;
+    background-color: #4BBEFD;
+}

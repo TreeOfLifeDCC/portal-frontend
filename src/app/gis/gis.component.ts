@@ -1,4 +1,4 @@
-import { Component, AfterViewInit, Input, ViewChild } from '@angular/core';
+import {Component, AfterViewInit, Input, ViewChild, OnDestroy} from '@angular/core';
 import * as L from 'leaflet';
 import 'leaflet.markercluster';
 import { GisService } from './gis.service';
@@ -9,7 +9,8 @@ import { Observable } from 'rxjs';
 import {control} from 'leaflet';
 import layers = control.layers;
 import {MatRadioChange} from '@angular/material/radio';
-
+import {FilterService} from '../services/filter-service';
+import {ActivatedRoute, Params, Router} from '@angular/router';
 
 const iconRetinaUrl = 'assets/marker-icon-2x.png';
 const iconUrl = 'assets/marker-icon.png';
@@ -32,31 +33,68 @@ L.Marker.prototype.options.icon = iconDefault;
   templateUrl: './gis.component.html',
   styleUrls: ['./gis.component.css']
 })
-export class GisComponent implements AfterViewInit {
+export class GisComponent implements AfterViewInit , OnDestroy {
   private map;
   private tiles;
   private markers;
   toggleSpecimen = new FormControl();
-
+  selectedPhylogenyFilter;
   unpackedData;
 
   myControl = new FormControl('');
   filteredOptions: string[];
   radioOptions = 1;
-  constructor(private gisService: GisService, private spinner: NgxSpinnerService) { }
+  constructor(private gisService: GisService, private spinner: NgxSpinnerService, private activatedRoute: ActivatedRoute,
+              private router: Router, public filterService: FilterService) { }
 
   ngOnInit(): void {
     this.toggleSpecimen.setValue(false);
     this.radioOptions = 1;
+    const queryParamMap = this.activatedRoute.snapshot['queryParamMap'];
+    const params = queryParamMap['params'];
+    // tslint:disable-next-line:triple-equals
+    if (Object.keys(params).length != 0) {
+
+      this.resetFilter();
+      // tslint:disable-next-line:forin
+      for (const key in params) {
+        this.filterService.urlAppendFilterArray.push({name: key, value: params[key]});
+        if (key === 'experiment-type') {
+          const list = params[key].split(',');
+          list.forEach((param: any) => {
+            this.filterService.activeFilters.push(param);
+          });
+        } else if (key == 'phylogeny') {
+          this.filterService.isFilterSelected = true;
+          this.filterService.phylSelectedRank = params[key];
+          this.filterService.activeFilters.push(params[key]);
+
+        } else {
+          this.filterService.activeFilters.push(params[key]);
+        }
+      }
+    }
     this.getGisData();
+  }
+  hasActiveFilters() {
+    if (typeof this.filterService.activeFilters === 'undefined') {
+      return false;
+    }
+    for (const key of Object.keys(this.filterService.activeFilters)) {
+      if (this.filterService.activeFilters[key].length !== 0) {
+        return true;
+      }
+    }
+    return false;
   }
 
   ngAfterViewInit(): void {
   }
 
-  filterSearchResults(value: string) {
-    if (value != '' && value.length > 1) {
-      const filterValue = value.toLowerCase();
+  filterSearchResults() {
+
+    if (this.filterService.searchText != '' && this.filterService.searchText.length > 1) {
+      const filterValue = this.filterService.searchText.toLowerCase();
       this.filteredOptions = this.unpackedData.filter(option => {
         if (option.id != undefined) {
           if (option.id.toLowerCase().includes(filterValue)) {
@@ -69,7 +107,18 @@ export class GisComponent implements AfterViewInit {
       this.filteredOptions = [];
     }
   }
-
+  // tslint:disable-next-line:typedef
+  removeFilter() {
+    this.resetFilter();
+    const currentUrl = this.router.url;
+    this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
+      this.router.navigate([currentUrl.split('?')[0]] );
+      this.spinner.show();
+      setTimeout(() => {
+        this.spinner.hide();
+      }, 800);
+    });
+  }
   toggleSpecimens(event: MatRadioChange) {
     if (event.value === 3) {
       // this.radioOptions = 3;
@@ -102,11 +151,12 @@ export class GisComponent implements AfterViewInit {
 
   getGisData() {
     this.spinner.show();
-    this.gisService.getgisData()
+    this.gisService.getGisData(this.filterService.activeFilters.join(','), this.filterService.searchText)
       .subscribe(
         data => {
           const unpackedData = [];
-          for (const item of data) {
+          this.filterService.getFilters(data);
+          for (const item of  data.hits.hits) {
             unpackedData.push(this.unpackData(item));
           }
           this.unpackedData = unpackedData;
@@ -169,9 +219,12 @@ export class GisComponent implements AfterViewInit {
   getSpecicesLatLong(): any {
     const orgGeoSize = this.unpackedData.length;
     for (let i = 0; i < orgGeoSize; i++) {
-      if (Object.keys(this.unpackedData[i]).length != 0) {
+      if (Object.keys(this.unpackedData[i]).length !== 0) {
+
         const tempArr = this.unpackedData[i].organisms;
-        const tempArrSize = tempArr.length;
+
+        const tempArrSize = tempArr === undefined ? 0 : tempArr.length;
+        console.log(tempArrSize);
         for (let j = 0; j < tempArrSize; j++) {
           if (tempArr[j].lat != 'not collected' && tempArr[j].lat != 'not provided') {
             let llat: any;
@@ -220,9 +273,10 @@ export class GisComponent implements AfterViewInit {
     const orgGeoSize = this.unpackedData.length;
 
     for (let i = 0; i < orgGeoSize; i++) {
-      if (Object.keys(this.unpackedData[i]).length != 0) {
+      if (Object.keys(this.unpackedData[i]).length !== 0) {
         const tempArr = this.unpackedData[i].organisms;
-        const tempArrSize = tempArr.length;
+
+        const tempArrSize = tempArr === undefined ? 0 : tempArr.length;
         for (let j = 0; j < tempArrSize; j++) {
           if (tempArr[j].lat != 'not collected' && tempArr[j].lat != 'not provided') {
             let llat: any;
@@ -236,33 +290,23 @@ export class GisComponent implements AfterViewInit {
               llng = tempArr[j].lng;
             }
             const latlng = L.latLng(llat, llng);
-
-            let alreadyExists = false;
-            if ((this.markers !== undefined && this.markers.getLayers() !== undefined)) {
-              this.markers.getLayers().forEach((layer) => {
-                if (!alreadyExists && layer instanceof L.Marker && (layer.getLatLng().equals(latlng)) && layer.options.title === tempArr[j].organism) {
-                  alreadyExists = true;
-                }
-              });
-            }
             let popupcontent = '';
-            if (!alreadyExists) {
-              const m = L.marker(latlng);
-              const organismString = encodeURIComponent(tempArr[j].organism.toString());
-              const organism = `<div><a target="_blank" href=/data/root/details/${organismString}>${tempArr[j].organism}</a></div>`;
-              const commonName = tempArr[j].commonName != null ? `<div>${tempArr[j].commonName}</div>` : '';
-              popupcontent = organism + commonName ;
-              const popup = L.popup({
-                closeOnClick: false,
-                autoClose: true,
-                closeButton: false
-              }).setContent(popupcontent);
-              m.options.title = tempArr[j].organism;
-              m.bindPopup(popup);
-              this.markers.addLayer(m);
-              // }
-              // });
-            }
+            const m = L.marker(latlng);
+            const organismString = encodeURIComponent(tempArr[j].organism.toString());
+            const organism = `<div><a target="_blank" href=/data/root/details/${organismString}>${tempArr[j].organism}</a></div>`;
+            const commonName = tempArr[j].commonName != null ? `<div>${tempArr[j].commonName}</div>` : '';
+            popupcontent = organism + commonName ;
+            const popup = L.popup({
+              closeOnClick: false,
+              autoClose: true,
+              closeButton: false
+            }).setContent(popupcontent);
+            m.options.title = tempArr[j].organism;
+            m.bindPopup(popup);
+            this.markers.addLayer(m);
+            // }
+            // });
+
           }
         }
       }
@@ -270,9 +314,9 @@ export class GisComponent implements AfterViewInit {
 
     const specGeoSize = this.unpackedData.length;
     for (let i = 0; i < specGeoSize; i++) {
-      if (Object.keys(this.unpackedData[i]).length != 0) {
+      if (Object.keys(this.unpackedData[i]).length != 0 ) {
         const tempspecArr = this.unpackedData[i].specimens;
-        const tempspecArrSize = tempspecArr.length;
+        const tempspecArrSize = tempspecArr === undefined ? 0 : tempspecArr.length;
         for (let j = 0; j < tempspecArrSize; j++) {
           if (tempspecArr[j].lat != 'not collected' && tempspecArr[j].lat != 'not provided') {
             let llat: any;
@@ -326,51 +370,49 @@ export class GisComponent implements AfterViewInit {
     this.map.addLayer(this.tiles);
   }
 
-  resetMapView() {
+  resetMapView = () => {
     this.map.setView([53.4862, -1.8904], 6);
   }
 
-  searchGisData(searchText) {
-    this.getSearchData(searchText);
+  searchGisData = () => {
+    this.getSearchData(this.filterService.searchText);
   }
 
   getSearchData(search: any) {
     this.toggleSpecimen.setValue(false);
     this.radioOptions = 1;
-    if (search.length > 0) {
-      this.spinner.show();
-      this.gisService.getGisSearchData(search)
-        .subscribe(
-          data => {
-            const unpackedData = [];
-            this.unpackedData = [];
-            for (const item of data) {
-              unpackedData.push(this.unpackData(item));
-            }
-            this.unpackedData = unpackedData;
-            this.refreshMapLayers();
-            setTimeout(() => {
-              this.populateMap();
-              if (this.unpackedData.length > 0) {
-                const lat = this.unpackedData[0].organisms[0].lat;
-                const lng = this.unpackedData[0].organisms[0].lng;
-                this.map.setView([lat, lng], 6);
-              }
-              else {
-                this.resetMapView();
-              }
-              this.spinner.hide();
-            }, 100);
-          },
-          err => {
-            console.log(err);
-            this.spinner.hide();
+    this.spinner.show();
+    this.gisService.getGisData(this.filterService.activeFilters.join(','), search)
+      .subscribe(
+        data => {
+          this.filterService.getFilters(data);
+          this.filterService.updateActiveRouteParams();
+          const unpackedData = [];
+          this.unpackedData = [];
+          for (const item of data.hits.hits) {
+            unpackedData.push(this.unpackData(item));
           }
-        );
-    }
-    else {
-      this.getAllData();
-    }
+          this.unpackedData = unpackedData;
+          this.refreshMapLayers();
+          setTimeout(() => {
+            this.populateMap();
+            if (this.unpackedData.length > 0) {
+              const lat = this.unpackedData[0].organisms[0].lat;
+              const lng = this.unpackedData[0].organisms[0].lng;
+              this.map.setView([lat, lng], 6);
+            }
+            else {
+              this.resetMapView();
+            }
+            this.spinner.hide();
+          }, 100);
+        },
+        err => {
+          console.log(err);
+          this.spinner.hide();
+        }
+      );
+
   }
 
   removeInputAndGetAllData() {
@@ -383,12 +425,13 @@ export class GisComponent implements AfterViewInit {
     this.filteredOptions = [];
     this.myControl.reset();
     this.spinner.show();
-    this.gisService.getgisData()
+    this.gisService.getGisData(this.filterService.activeFilters.join(','), this.filterService.searchText)
       .subscribe(
         data => {
+          this.filterService.getFilters(data);
           const unpackedData = [];
           this.unpackedData = [];
-          for (const item of data) {
+          for (const item of data.hits.hits) {
             unpackedData.push(this.unpackData(item));
           }
           this.unpackedData = unpackedData;
@@ -405,5 +448,18 @@ export class GisComponent implements AfterViewInit {
         }
       );
   }
+  resetFilter = () => {
+    for (const key of Object.keys(this.filterService.activeFilters)) {
+      this.filterService.activeFilters[key] = [];
+    }
+    this.filterService.activeFilters = [];
+    this.filterService.urlAppendFilterArray = [];
+    this.filterService.isFilterSelected = false;
+    this.filterService.phylSelectedRank = '';
+    this.filterService.selectedFilterValue = '';
+  }
 
+  ngOnDestroy() {
+    this.resetFilter();
+  }
 }
