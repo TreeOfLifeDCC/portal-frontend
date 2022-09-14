@@ -1,4 +1,4 @@
-var url = "https://portal.darwintreeoflife.org/api/taxonomy/rank/tree";
+var url = "https://portal.darwintreeoflife.org/api/taxonomy/tree";
 
 function drawTree(url) {
     d3.json(url, function(error, treeData) {
@@ -795,13 +795,15 @@ function drawTree(url) {
         d3.select('#zoom_out').on('click', zoomClick);
     });
 }
-drawTree(url)
-$('input[type="radio"]').on('change', function(e) {
-    d3.select('#tree-container').select("svg").remove();
-    if (document.getElementById('default-tree-input').checked) {
-        url = "https://portal.darwintreeoflife.org/api/taxonomy/rank/tree";
-    } else if (document.getElementById('toggle-tree-input').checked) {
-        url = "https://portal.darwintreeoflife.org/api/taxonomy/tree";
-    }
-    drawTree(url);
-});
+
+url = "https://portal.darwintreeoflife.org/api/taxonomy/tree";
+drawTree(url);
+// $('input[type="radio"]').on('change', function(e) {
+//     d3.select('#tree-container').select("svg").remove();
+//     if (document.getElementById('default-tree-input').checked) {
+//         url = "https://portal.darwintreeoflife.org/api/taxonomy/rank/tree";
+//     } else if (document.getElementById('toggle-tree-input').checked) {
+//         url = "https://portal.darwintreeoflife.org/api/taxonomy/tree";
+//     }
+//     drawTree(url);
+// });

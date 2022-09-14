@@ -26,7 +26,7 @@
         <label class="custom-control-label" for="commonName">Common name </label>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
         &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
     </div>
-    <div class="col-md-2" id="tree-switch">
+    <!-- <div class="col-md-2" id="tree-switch">
         <div class="toggle">
             <mat-radio-group aria-label="Select an option" [(ngModel)]="radioOptions">
                 <mat-radio-button id="default-tree" [value]=1 name="toggleSpecimen" checked>Specialised Tree</mat-radio-button>
@@ -34,11 +34,11 @@
                 <mat-radio-button id="toggle-tree" name="toggleSpecimen" [value]=2>Full Tree</mat-radio-button>
             </mat-radio-group>
         </div>
-    </div>
-    <div class="col-md-10 zoom" style=" font-weight: lighter; background: none; font-size: initial;">
+    </div> -->
+    <div class="col-md-12 zoom" style=" font-weight: lighter; background: none; font-size: initial;">
 
-        <div class="col-md-3 search-bar">
-            <mat-form-field appearance="fill">
+        <div class="col-md-3">
+            <mat-form-field appearance="fill" class="search-bar">
                 <mat-label>Search</mat-label>
                 <input #searchInput matInput id="search">
             </mat-form-field>
