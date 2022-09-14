@@ -8,6 +8,7 @@ export class GisService {
 
   private API_BASE_URL = 'https://portal.darwintreeoflife.org/api';
   // private API_BASE_URL = 'http://localhost:8080';
+  //    private API_BASE_URL = 'http://45.88.81.15';
 
   constructor(private http: HttpClient) { }
 

@@ -219,9 +219,12 @@ export class GisComponent implements AfterViewInit , OnDestroy {
   getSpecicesLatLong(): any {
     const orgGeoSize = this.unpackedData.length;
     for (let i = 0; i < orgGeoSize; i++) {
-      if (Object.keys(this.unpackedData[i]).length !== 0 && this.unpackedData[i].organisms !== undefined) {
+      if (Object.keys(this.unpackedData[i]).length !== 0) {
+
         const tempArr = this.unpackedData[i].organisms;
-        const tempArrSize = tempArr.length;
+
+        const tempArrSize = tempArr === undefined ? 0 : tempArr.length;
+        console.log(tempArrSize);
         for (let j = 0; j < tempArrSize; j++) {
           if (tempArr[j].lat != 'not collected' && tempArr[j].lat != 'not provided') {
             let llat: any;
@@ -270,9 +273,10 @@ export class GisComponent implements AfterViewInit , OnDestroy {
     const orgGeoSize = this.unpackedData.length;
 
     for (let i = 0; i < orgGeoSize; i++) {
-      if (Object.keys(this.unpackedData[i]).length !== 0 && this.unpackedData[i].organisms !== undefined) {
+      if (Object.keys(this.unpackedData[i]).length !== 0) {
         const tempArr = this.unpackedData[i].organisms;
-        const tempArrSize = tempArr.length;
+
+        const tempArrSize = tempArr === undefined ? 0 : tempArr.length;
         for (let j = 0; j < tempArrSize; j++) {
           if (tempArr[j].lat != 'not collected' && tempArr[j].lat != 'not provided') {
             let llat: any;
@@ -286,33 +290,23 @@ export class GisComponent implements AfterViewInit , OnDestroy {
               llng = tempArr[j].lng;
             }
             const latlng = L.latLng(llat, llng);
-
-            let alreadyExists = false;
-            if ((this.markers !== undefined && this.markers.getLayers() !== undefined)) {
-              this.markers.getLayers().forEach((layer) => {
-                if (!alreadyExists && layer instanceof L.Marker && (layer.getLatLng().equals(latlng)) && layer.options.title === tempArr[j].organism) {
-                  alreadyExists = true;
-                }
-              });
-            }
             let popupcontent = '';
-            if (!alreadyExists) {
-              const m = L.marker(latlng);
-              const organismString = encodeURIComponent(tempArr[j].organism.toString());
-              const organism = `<div><a target="_blank" href=/data/root/details/${organismString}>${tempArr[j].organism}</a></div>`;
-              const commonName = tempArr[j].commonName != null ? `<div>${tempArr[j].commonName}</div>` : '';
-              popupcontent = organism + commonName ;
-              const popup = L.popup({
-                closeOnClick: false,
-                autoClose: true,
-                closeButton: false
-              }).setContent(popupcontent);
-              m.options.title = tempArr[j].organism;
-              m.bindPopup(popup);
-              this.markers.addLayer(m);
-              // }
-              // });
-            }
+            const m = L.marker(latlng);
+            const organismString = encodeURIComponent(tempArr[j].organism.toString());
+            const organism = `<div><a target="_blank" href=/data/root/details/${organismString}>${tempArr[j].organism}</a></div>`;
+            const commonName = tempArr[j].commonName != null ? `<div>${tempArr[j].commonName}</div>` : '';
+            popupcontent = organism + commonName ;
+            const popup = L.popup({
+              closeOnClick: false,
+              autoClose: true,
+              closeButton: false
+            }).setContent(popupcontent);
+            m.options.title = tempArr[j].organism;
+            m.bindPopup(popup);
+            this.markers.addLayer(m);
+            // }
+            // });
+
           }
         }
       }
@@ -320,9 +314,9 @@ export class GisComponent implements AfterViewInit , OnDestroy {
 
     const specGeoSize = this.unpackedData.length;
     for (let i = 0; i < specGeoSize; i++) {
-      if (Object.keys(this.unpackedData[i]).length != 0 && this.unpackedData[i].specimens !== undefined) {
+      if (Object.keys(this.unpackedData[i]).length != 0 ) {
         const tempspecArr = this.unpackedData[i].specimens;
-        const tempspecArrSize = tempspecArr.length;
+        const tempspecArrSize = tempspecArr === undefined ? 0 : tempspecArr.length;
         for (let j = 0; j < tempspecArrSize; j++) {
           if (tempspecArr[j].lat != 'not collected' && tempspecArr[j].lat != 'not provided') {
             let llat: any;

@@ -21,7 +21,7 @@
                 </mat-radio-group>
             </div>
 
-            <app-filter title="Data Status" filterSize="4"></app-filter>
+            <app-filter title="Data Status"></app-filter>
             <br>
             <app-phylogeny-filter></app-phylogeny-filter>
 
@@ -30,14 +30,19 @@
         </div>
         <div class="col-lg-8 ">
             <h1 class="page-header">Sampling Map</h1>
+            
+<!--            <span *ngIf="hasActiveFilters()" class="orgLabel">Note: Count can be different because single species can exist on different locations.</span>-->
+            <br>
             <div *ngIf="hasActiveFilters()">
                 <app-active-filter true></app-active-filter>
+
                 <span *ngIf="(filterService.selectedFilterValue!= undefined && filterService.selectedFilterValue != '')">
                     <button type="button" class="btn btn-success">{{filterService.selectedFilterValue.taxonomy}}
                         <span class="badge badge-light" (click)="filterService.removeTaxaFilter(filterService.selectedFilterValue.taxonomy)">X</span>
                     </button>
                 </span>
                 <button class="btn btn-primary" type = "button" (click)="removeFilter()">Remove all filters</button>
+
             </div>
                 <div class="search">
                     <mat-form-field>

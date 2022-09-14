@@ -9,16 +9,16 @@
         <ng-container *ngFor="let filter of filterService.experimentTypeFilters; let i = index">
             <li   *ngIf="i<itemLimit" class="biosample list-group-item d-flex justify-content-between align-items-center biosamples-inactive" id="{{filter.key}}-Experiment Type"  [ngClass]="checkFilterIsActive(filter.key)" (click)="onFilterClick($event, 'experiment-type', filter.key)" style="cursor: pointer" >
                 <span>{{filter.key}}</span>
-                <span class="badge badge-pill badge-info">{{filter.organism_count.doc_count}}</span>
+<!--                <span class="badge badge-pill badge-info">{{filter.organism_count.doc_count}}</span>-->
             </li>
         </ng-container>
 
     </ul>
     <ul  class="list-group" *ngIf="title === 'Data Status'">
             <ng-container *ngFor="let filter of filterService.filterArray; let i = index">
-                <li *ngIf="i<itemLimit && filter.count > 0" class="biosample list-group-item d-flex justify-content-between align-items-center biosamples-inactive" [ngClass]="checkFilterIsActive(filter.key)" (click)="onFilterClick($event, filter.label, filter.key)" style="cursor: pointer" >
+                <li *ngIf="filter.count > 0" class="biosample list-group-item d-flex justify-content-between align-items-center biosamples-inactive" [ngClass]="checkFilterIsActive(filter.key)" (click)="onFilterClick($event, filter.label, filter.key)" style="cursor: pointer" >
                     <span>{{filter.title}}</span>
-                    <span class="badge badge-pill badge-info">{{filter.count}}</span>
+<!--                    <span class="badge badge-pill badge-info">{{filter.count}}</span>-->
                 </li>
             </ng-container>
         </ul>
