@@ -11,7 +11,7 @@
             <dd class="col-md-9">{{bioSampleObj?.organism}}</dd>
 
             <dt class="col-md-3" *ngIf="bioSampleObj?.tolid != null">ToL ID:</dt>
-            <dd class="col-md-3" *ngIf="bioSampleObj?.tolid != null">{{bioSampleObj?.tolid}}</dd>
+            <dd class="col-md-3" *ngIf="bioSampleObj?.tolid != null">{{typeofTol(bioSampleObj.tolid)}}</dd>
             <dd class="col-md-6" *ngIf="checkTolidExists(bioSampleObj)">
                 <ng-container *ngIf="checkTolidExists(bioSampleObj)">
                     <a class="no-underline badge badge-pill goat-color2" target="_blank" href="{{generateTolidLink(bioSampleObj)}}">ToL QC</a>

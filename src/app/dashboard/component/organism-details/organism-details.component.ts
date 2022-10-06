@@ -229,6 +229,7 @@ export class OrganismDetailsComponent implements OnInit, AfterViewInit {
           if (data.goat_info) {
             this.dataSourceGoatInfo = data.goat_info.attributes;
           }
+
           if (data.experiment?.length > 0) {
             this.INSDC_ID = data.experiment[0].study_accession;
           }
@@ -577,8 +578,17 @@ export class OrganismDetailsComponent implements OnInit, AfterViewInit {
 
   generateTolidLink(data) {
     const organismName = data.organism.split(' ').join('_');
-    const clade = this.codes[data.tolid.charAt(0)];
-    return `https://tolqc.cog.sanger.ac.uk/darwin/${clade}/${organismName}`;
+    if (typeof(data.tolid) === 'string'){
+      const clade = this.codes[data.tolid.charAt(0)];
+      return `https://tolqc.cog.sanger.ac.uk/darwin/${clade}/${organismName}`;
+
+    }else {
+      const clade = this.codes[data.tolid[0].charAt(0)];
+      return `https://tolqc.cog.sanger.ac.uk/darwin/${clade}/${organismName}`;
+
+    }
+    // const clade = data.tolId.length > 1 ? this.codes[data.tolId[0].charAt(0)] : this.codes[data.tolId.charAt(0)];
+    // return `https://tolqc.cog.sanger.ac.uk/darwin/${clade}/${organismName}`;
   }
 
   checkGenomeExists(data) {
@@ -638,4 +648,11 @@ export class OrganismDetailsComponent implements OnInit, AfterViewInit {
     download_next(0);
   }
 
+  typeofTol(tolid: any) {
+    if (typeof(tolid) === 'string'){
+      return tolid;
+    }else{
+      return tolid.join(', ');
+    }
+  }
 }

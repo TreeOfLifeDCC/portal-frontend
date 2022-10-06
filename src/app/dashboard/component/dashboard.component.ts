@@ -1098,8 +1098,15 @@ export class DashboardComponent implements OnInit, AfterViewInit {
 
   generateTolidLink(data) {
     const organismName = data.organism.split(' ').join('_');
-    const clade = this.codes[data.tolid.charAt(0)];
-    return `https://tolqc.cog.sanger.ac.uk/darwin/${clade}/${organismName}`;
+    if (typeof(data.tolid) === 'string'){
+      const clade = this.codes[data.tolid.charAt(0)];
+      return `https://tolqc.cog.sanger.ac.uk/darwin/${clade}/${organismName}`;
+
+    }else {
+      const clade = this.codes[data.tolid[0].charAt(0)];
+      return `https://tolqc.cog.sanger.ac.uk/darwin/${clade}/${organismName}`;
+
+    }
   }
 
   getGenomeURL(data) {
@@ -1210,6 +1217,13 @@ export class DashboardComponent implements OnInit, AfterViewInit {
     } else {
       this.itemLimit = 5;
       this.isCollapsed = true;
+    }
+  }
+  typeofTol(tolid: any) {
+    if (typeof(tolid) === 'string'){
+      return tolid;
+    }else{
+      return tolid.join(', ');
     }
   }
 }

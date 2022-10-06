@@ -176,7 +176,7 @@
 
                     <ng-container matColumnDef="tolid">
                         <mat-header-cell *matHeaderCellDef [ngClass]="'w-80 th-left'"> ToL ID </mat-header-cell>
-                        <mat-cell *matCellDef="let element" [ngClass]="'w-80 th-left'"> {{element?.tolid}}</mat-cell>
+                        <mat-cell *matCellDef="let element" [ngClass]="'w-80 th-left'"> {{typeofTol(element?.tolid)}}</mat-cell>
                     </ng-container>
 
                     <ng-container matColumnDef="INSDC_ID">
