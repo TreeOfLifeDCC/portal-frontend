@@ -26,12 +26,12 @@
                                         <span class="badge badge-pill badge-info">{{filter.doc_count}}</span>
                                     </li>
                                 </ng-container>
-                                <ng-container *ngFor="let filter of MappedReadsFilters; let i = index">
-                                    <li class="list-group-item d-flex justify-content-between align-items-center mapped-reads-inactive" [ngClass]="checkFilterIsActive(filter.key)" (click)="onFilterClick($event, 'mapped-reads' , filter.key)" style="cursor: pointer" *ngIf="filter.key === 'Mapped reads - Done'">
-                                        <span>Mapped Reads - Submitted</span>
-                                        <span class="badge badge-pill badge-info">{{filter.doc_count}}</span>
-                                    </li>
-                                </ng-container>
+<!--                                <ng-container *ngFor="let filter of MappedReadsFilters; let i = index">-->
+<!--                                    <li class="list-group-item d-flex justify-content-between align-items-center mapped-reads-inactive" [ngClass]="checkFilterIsActive(filter.key)" (click)="onFilterClick($event, 'mapped-reads' , filter.key)" style="cursor: pointer" *ngIf="filter.key === 'Mapped reads - Done'">-->
+<!--                                        <span>Mapped Reads - Submitted</span>-->
+<!--                                        <span class="badge badge-pill badge-info">{{filter.doc_count}}</span>-->
+<!--                                    </li>-->
+<!--                                </ng-container>-->
 
                                 <ng-container *ngFor="let filter of AssembliesFilters; let i = index">
                                     <li class="list-group-item d-flex justify-content-between align-items-center assemblies-inactive" [ngClass]="checkFilterIsActive(filter.key)" (click)="onFilterClick($event, 'assemblies' , filter.key)" style="cursor: pointer" *ngIf="filter.key === 'Assemblies - Done'">

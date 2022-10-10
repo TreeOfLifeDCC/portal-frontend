@@ -224,7 +224,7 @@ export class GisComponent implements AfterViewInit , OnDestroy {
         const tempArr = this.unpackedData[i].organisms;
 
         const tempArrSize = tempArr === undefined ? 0 : tempArr.length;
-        console.log(tempArrSize);
+
         for (let j = 0; j < tempArrSize; j++) {
           if (tempArr[j].lat != 'not collected' && tempArr[j].lat != 'not provided') {
             let llat: any;

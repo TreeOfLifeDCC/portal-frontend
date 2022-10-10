@@ -19,7 +19,7 @@ import 'jquery';
 })
 export class TrackingSystemComponent implements OnInit, AfterViewInit {
   displayedColumns = ['organism', 'commonName', 'metadata_submitted_to_biosamples',
-    'raw_data_submitted_to_ena', 'mapped_reads_submitted_to_ena', 'assemblies_submitted_to_ena',
+    'raw_data_submitted_to_ena',  'assemblies_submitted_to_ena',
     'annotation_complete', 'annotation_submitted_to_ena'];
   orgDisplayedColumns = ['accession', 'organism', 'commonName', 'sex', 'organismPart', 'trackingSystem'];
   loading = true;
@@ -42,7 +42,7 @@ export class TrackingSystemComponent implements OnInit, AfterViewInit {
   activeFilters = [];
   BiosamplesFilters = [];
   RawDataFilters = [];
-  MappedReadsFilters = [];
+
   AssembliesFilters = [];
   AnnotationFilters = [];
   AnnotationCompleteFilters = [];
@@ -326,9 +326,7 @@ export class TrackingSystemComponent implements OnInit, AfterViewInit {
       const ena_filters = filters[0].split(' - ');
       if (ena_filters[0] === 'Raw Data') {
         return data.raw_data === ena_filters[1];
-      } else if (ena_filters[0] === 'Mapped Reads') {
-        return data.mapped_reads === ena_filters[1];
-      } else if (ena_filters[0] === 'Assemblies') {
+      }  else if (ena_filters[0] === 'Assemblies') {
         return data.assemblies === ena_filters[1];
       } else if (ena_filters[0] === 'Annotation complete') {
         return data.annotation_complete === ena_filters[1];
@@ -399,10 +397,7 @@ export class TrackingSystemComponent implements OnInit, AfterViewInit {
     } else if (key.toLowerCase() == "raw-data") {
       jsonObj = { "name": "raw_data", "value": value };
       this.urlAppendFilterArray.push(jsonObj);
-    } else if (key.toLowerCase() == "mapped-reads") {
-      jsonObj = { "name": "mapped_reads", "value": value };
-      this.urlAppendFilterArray.push(jsonObj);
-    } else if (key.toLowerCase() == "assemblies") {
+    }  else if (key.toLowerCase() == "assemblies") {
       jsonObj = { "name": "assemblies", "value": value };
       this.urlAppendFilterArray.push(jsonObj);
     } else if (key.toLowerCase() == "annotation-complete") {
@@ -546,7 +541,7 @@ export class TrackingSystemComponent implements OnInit, AfterViewInit {
         this.filtersMap = data;
         this.BiosamplesFilters = this.filtersMap.biosamples.filter(i => i !== "");
         this.RawDataFilters = this.filtersMap.raw_data.filter(i => i !== "");
-        this.MappedReadsFilters = this.filtersMap.mapped_reads.filter(i => i !== "");
+
         this.AssembliesFilters = this.filtersMap.assemblies.filter(i => i !== "");
         this.AnnotationCompleteFilters = this.filtersMap.annotation_complete.filter(i => i !== "");
         this.AnnotationFilters = this.filtersMap.annotation.filter(i => i !== "");
@@ -690,13 +685,7 @@ export class TrackingSystemComponent implements OnInit, AfterViewInit {
         return obj;
       }
     });
-    this.MappedReadsFilters = this.filtersMap.aggregations.mapped_reads.buckets.filter(i => {
-      if (i !== "" && i.key.toLowerCase() === "done") {
-        let obj = i;
-        obj.key = "Mapped reads - " + obj.key;
-        return obj;
-      }
-    });
+
     this.AssembliesFilters = this.filtersMap.aggregations.assemblies.buckets.filter(i => {
       if (i !== "" && i.key.toLowerCase() === "done") {
         let obj = i;
