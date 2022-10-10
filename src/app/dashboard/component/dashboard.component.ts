@@ -1098,9 +1098,10 @@ export class DashboardComponent implements OnInit, AfterViewInit {
       return `https://tolqc.cog.sanger.ac.uk/darwin/${clade}/${organismName}`;
 
     }else {
-      const clade = this.codes[data.tolid[0].charAt(0)];
-      return `https://tolqc.cog.sanger.ac.uk/darwin/${clade}/${organismName}`;
-
+      if (data.tolid.length > 0) {
+        const clade = this.codes[data.tolid[0].charAt(0)];
+        return `https://tolqc.cog.sanger.ac.uk/darwin/${clade}/${organismName}`;
+    }
     }
   }
 

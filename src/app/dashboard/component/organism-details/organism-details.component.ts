@@ -215,7 +215,7 @@ export class OrganismDetailsComponent implements OnInit, AfterViewInit {
           this.bioSampleObj = data;
           this.orgGeoList = data.orgGeoList;
           this.specGeoList = data.specGeoList;
-          if (this.orgGeoList.length != 0) {
+          if (this.orgGeoList !== undefined && this.orgGeoList.length != 0) {
             this.geoLocation = true;
             setTimeout(() => {
               const tabGroup = this.tabgroup;
@@ -583,9 +583,10 @@ export class OrganismDetailsComponent implements OnInit, AfterViewInit {
       return `https://tolqc.cog.sanger.ac.uk/darwin/${clade}/${organismName}`;
 
     }else {
-      const clade = this.codes[data.tolid[0].charAt(0)];
-      return `https://tolqc.cog.sanger.ac.uk/darwin/${clade}/${organismName}`;
-
+      if (data.tolid.length > 0) {
+        const clade = this.codes[data.tolid[0].charAt(0)];
+        return `https://tolqc.cog.sanger.ac.uk/darwin/${clade}/${organismName}`;
+      }
     }
     // const clade = data.tolId.length > 1 ? this.codes[data.tolId[0].charAt(0)] : this.codes[data.tolId.charAt(0)];
     // return `https://tolqc.cog.sanger.ac.uk/darwin/${clade}/${organismName}`;
