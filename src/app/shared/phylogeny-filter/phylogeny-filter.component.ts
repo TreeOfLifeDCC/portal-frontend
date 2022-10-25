@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, Input, OnInit} from '@angular/core';
 import {FilterService} from '../../services/filter-service';
 import {ActivatedRoute, Router} from "@angular/router";
 import {NgxSpinnerService} from "ngx-spinner";
@@ -27,7 +27,7 @@ export class PhylogenyFilterComponent implements OnInit {
 
   selectedFilterValue;
   currentTaxaOnExpand;
-
+  @Input() isShowCount: boolean;
   showElement: Boolean = true;
   // Ontology aware filter
   initTaxonomyObject() {
@@ -88,16 +88,10 @@ export class PhylogenyFilterComponent implements OnInit {
   ngOnInit(): void {
 
     this.isFilterSelected = this.filterService.isFilterSelected;
-    // this.childTaxanomy = this.filterService.childTaxanomy;
     this.selectedFilterValue = this.filterService.selectedFilterValue;
     this.currentTaxonomyTree = [];
     this.resetTaxaTree();
     this.getChildTaxonomyRank('superkingdom', 'Eukaryota', 'kingdom');
-    // const treeLength = this.filterService.currentTaxonomyTree.length;
-    // this.filterService.selectedTaxnomyFilter = this.filterService.currentTaxonomyTree[treeLength - 1];
-    // console.log(this.filterService.selectedTaxnomyFilter);
-    // this.filterService.isFilterSelected = true;
-    // this.filterService.selectedTaxonomy = this.filterService.currentTaxonomyTree[treeLength - 1];
     this.filterService.urlAppendFilterArray.forEach(item => {
       setTimeout(() => {
         const inactiveClassName = '.' + item.name + '-inactive';
@@ -113,24 +107,8 @@ export class PhylogenyFilterComponent implements OnInit {
     this.resetTaxaTree();
     this.getChildTaxonomyRank('superkingdom', 'Eukaryota', 'kingdom');
     $('.kingdom, .subkingdom').removeClass('active-filter');
-    // setTimeout(() => {
-    //   if (this.filterService.activeFilters.length !== 0 || this.filterService.currentTaxonomyTree.length != 0) {
-    //     const taxa = [this.currentTaxonomyTree];
-    //     // this.filterService.getFilterResults(this.filterService.activeFilters.toString(), this.filterService.sort.active, this.filterService.sort.direction, 0, this.filterService.pagesize, taxa);
-    //   }
-    //   else {
-    //     this.router.navigate(['gis'], {});
-    //     // this.dataSource.filter = undefined;
-    //     // this.getFilters();
-    //     // this.getAllBiosamples(0, this.pagesize, this.sort.active, this.sort.direction);
-    //     this.getChildTaxonomyRank('superkingdom', 'Eukaryota', 'kingdom');
-    //   }
-    //   this.spinner.hide();
-    // }, 250);
   }
   showTaxonomyModal(event: any, rank: string, taxonomy: string, childRank: string) {
-    // this.paginator.pageIndex = 0;
-    // this.searchText = "";
     this.isDoubleClick = false;
     setTimeout(() => {
       if (!this.isDoubleClick) {

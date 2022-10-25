@@ -14,7 +14,7 @@
                     id="{{filterService.selectedFilterValue.taxonomy}}-kingdom"
                     (click)="showTaxonomyModal($event, currentTaxonomy.rank, currentTaxonomy.taxonomy, 'subkingdom')">
                     {{filterService.selectedFilterValue.taxonomy}} ({{filterService.selectedFilterValue.commonName}})
-<!--                    <span class="badge badge-pill badge-info">{{filterService.bioSampleTotalCount}}</span>-->
+                    <span  *ngIf="isShowCount === 'true'" class="badge badge-pill badge-info">{{filterService.bioSampleTotalCount}}</span>
                 </li>
                 <li *ngIf="!isFilterSelected" class="rank-heading list-group-item"> KINGDOM </li>
                 <ng-container *ngIf="!this.isFilterSelected">
@@ -25,7 +25,7 @@
                             (click)="showTaxonomyModal($event, super.rank, superchild.key, 'phylum')"
                             (dblclick)="filterTaxonomy(super.rank, superchild.key, 'phylum',superchild.commonName.buckets[0].key, superchild.taxId.buckets[0].key)">
                             {{superchild.key}} ({{superchild.commonName.buckets[0].key}})
-
+                            <span  *ngIf="isShowCount === 'true'" class="badge badge-pill badge-info">{{superchild.doc_count}}</span>
                         </li>
                     </ng-container>
                 </ng-container>
@@ -58,7 +58,7 @@
                                     <span *ngIf="((king.childData.length == 1 && kingchild.key != 'Other') || (king.childData.length > 1 ))" class="caret {{kingchild.key}}-{{king.rank}}" id="{{kingchild.key}}-{{king.rank}}" (dblclick)="filterTaxonomy(king.rank, kingchild.key, 'class',kingchild.commonName.buckets[0].key, kingchild.taxId.buckets[0].key)">
                                             {{kingchild.key}} ({{kingchild.commonName.buckets[0].key}})
                                         </span>
-                                    <span *ngIf="((king.childData.length == 1 && kingchild.key != 'Other') || (king.childData.length > 1 ))" class="badge badge-pill badge-info {{kingchild.key}}-{{king.rank}}"></span>
+                                    <span *ngIf="((king.childData.length == 1 && kingchild.key != 'Other') || (king.childData.length > 1 ))" class="badge badge-pill badge-info {{kingchild.key}}-{{king.rank}}"><span  *ngIf="isShowCount === 'true'" >{{kingchild.doc_count}}</span></span>
                                     <hr *ngIf="((king.childData.length == 1 && kingchild.key != 'Other') || (king.childData.length > 1 ))"
                                         class="{{kingchild.key}}-{{king.rank}}">
                                     <!-- class level -->
@@ -71,7 +71,7 @@
                                                             {{phylumchild.key}}
                                                         ({{phylumchild.commonName.buckets[0].key}})
                                                         </span>
-                                                    <span *ngIf="((phylum.childData.length == 1 && phylumchild.key != 'Other') || (phylum.childData.length > 1 ))" class="badge badge-pill badge-info {{phylumchild.key}}-{{phylum.rank}}"></span>
+                                                    <span *ngIf="((phylum.childData.length == 1 && phylumchild.key != 'Other') || (phylum.childData.length > 1 ))" class="badge badge-pill badge-info {{phylumchild.key}}-{{phylum.rank}}"><span  *ngIf="isShowCount === 'true'" >{{phylumchild.doc_count}}</span></span>
                                                     <hr *ngIf="((phylum.childData.length == 1 && phylumchild.key != 'Other') || (phylum.childData.length > 1 ))"
                                                         class="{{phylumchild.key}}-{{phylum.rank}}">
                                                     <!-- order level -->
@@ -86,7 +86,7 @@
                                                                             {{classchild.key}}
                                                                         ({{classchild.commonName.buckets[0].key}})
                                                                         </span>
-                                                                    <span *ngIf="((class.childData.length == 1 && classchild.key != 'Other') || (class.childData.length > 1 ))" class="badge badge-pill badge-info"></span>
+                                                                    <span *ngIf="((class.childData.length == 1 && classchild.key != 'Other') || (class.childData.length > 1 ))" class="badge badge-pill badge-info"><span  *ngIf="isShowCount === 'true'" >{{classchild.doc_count}}</span></span>
                                                                     <hr
                                                                             *ngIf="((class.childData.length == 1 && classchild.key != 'Other') || (class.childData.length > 1 ))">
                                                                     <!-- family level -->
@@ -103,7 +103,7 @@
                                                                                             {{orderChild.key}}
                                                                                         ({{orderChild.commonName.buckets[0].key}})
                                                                                         </span>
-                                                                                    <span *ngIf="((order.childData.length == 1 && orderChild.key != 'Other') || (order.childData.length > 1 ))" class="badge badge-pill badge-info"></span>
+                                                                                    <span *ngIf="((order.childData.length == 1 && orderChild.key != 'Other') || (order.childData.length > 1 ))" class="badge badge-pill badge-info"><span  *ngIf="isDisShowCountashboard === 'true'" >{{orderChild.doc_count}}</span></span>
                                                                                     <hr
                                                                                             *ngIf="((order.childData.length == 1 && orderChild.key != 'Other') || (order.childData.length > 1 ))">
                                                                                     <!-- genus level -->
@@ -120,7 +120,7 @@
                                                                                                             {{familyChild.key}}
                                                                                                         ({{familyChild.commonName.buckets[0].key}})
                                                                                                         </span>
-                                                                                                    <span *ngIf="((family.childData.length == 1 && familyChild.key != 'Other') || (family.childData.length > 1 ))" class="badge badge-pill badge-info"></span>
+                                                                                                    <span *ngIf="((family.childData.length == 1 && familyChild.key != 'Other') || (family.childData.length > 1 ))" class="badge badge-pill badge-info"><span  *ngIf="isShowCount === 'true'" >{{familyChild.doc_count}}</span></span>
                                                                                                     <hr
                                                                                                             *ngIf="((family.childData.length == 1 && familyChild.key != 'Other') || (family.childData.length > 1 ))">
                                                                                                     <!-- species level -->
@@ -137,7 +137,7 @@
                                                                                                                             {{genusChild.key}}
                                                                                                                         ({{genusChild.commonName.buckets[0].key}})
                                                                                                                         </span>
-                                                                                                                    <span *ngIf="((genus.childData.length == 1 && genusChild.key != 'Other') || (genus.childData.length > 1 ))" class="badge badge-pill badge-info"></span>
+                                                                                                                    <span *ngIf="((genus.childData.length == 1 && genusChild.key != 'Other') || (genus.childData.length > 1 ))" class="badge badge-pill badge-info"><span  *ngIf="isShowCount === 'true'" >{{genusChild.doc_count}}</span></span>
                                                                                                                     <hr
                                                                                                                             *ngIf="((genus.childData.length == 1 && genusChild.key != 'Other') || (genus.childData.length > 1 ))">
                                                                                                                 </li>

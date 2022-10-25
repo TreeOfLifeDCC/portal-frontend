@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import {CUSTOM_ELEMENTS_SCHEMA, NgModule} from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 import { DashboardRoutingModule } from './dashboard-routing.module';
@@ -15,21 +15,29 @@ import {MatTooltipModule} from '@angular/material/tooltip';
 import {MatPaginatorModule} from '@angular/material/paginator';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatInputModule} from '@angular/material/input';
-import { NgxSpinnerModule } from "ngx-spinner";
+import { NgxSpinnerModule } from 'ngx-spinner';
 import { MatTableExporterModule } from 'mat-table-exporter';
 import {MatExpansionModule} from '@angular/material/expansion';
 import {MatCheckboxModule} from '@angular/material/checkbox';
 
 import { DashboardService } from '../dashboard/services/dashboard.service';
-import { OrganismDetailsComponent } from './component/organism-details/organism-details.component'
+import { OrganismDetailsComponent } from './component/organism-details/organism-details.component';
 import { TaxanomyComponent } from '../taxanomy/taxanomy.component';
 import { TaxanomyService } from '../taxanomy/taxanomy.service';
 import {MatTabsModule} from '@angular/material/tabs';
 import { MapComponent } from './map/map.component';
 import { MapClusterComponent } from './map-cluster/map-cluster.component';
+import {FilterComponent} from '../shared/filter/filter.component';
+import {PhylogenyFilterComponent} from "../shared/phylogeny-filter/phylogeny-filter.component";
+import {ActiveFilterComponent} from "../shared/active-filter/active-filter.component";
+
+
+
+
 
 @NgModule({
-  declarations: [DashboardComponent, SpecimensComponent, DetailsComponent, OrganismDetailsComponent, TaxanomyComponent, MapComponent, MapClusterComponent],
+  declarations: [DashboardComponent, SpecimensComponent, DetailsComponent, OrganismDetailsComponent, TaxanomyComponent, MapComponent,
+    MapClusterComponent, FilterComponent, PhylogenyFilterComponent, ActiveFilterComponent ],
   imports: [
     CommonModule,
     DashboardRoutingModule,
@@ -48,8 +56,11 @@ import { MapClusterComponent } from './map-cluster/map-cluster.component';
     MatCheckboxModule,
     MatTabsModule,
     MatCheckboxModule,
-    MatTooltipModule
+    MatTooltipModule,
   ],
-  providers: [DashboardService, TaxanomyService]
+  exports: [
+    FilterComponent, PhylogenyFilterComponent, ActiveFilterComponent
+  ],
+  providers: [DashboardService, TaxanomyService],
 })
 export class DashboardModule { }

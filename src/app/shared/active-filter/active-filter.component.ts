@@ -16,7 +16,6 @@ export class ActiveFilterComponent {
   ngOnInit() {
     this.aggs = this.filterService.activeFilters;
     this.data = this.filterService.data;
-    console.log(this.filterService.phylSelectedRank);
     this.phylSelectedRank = this.filterService.phylSelectedRank;
     this.filterService.field.subscribe(data => {
       this.aggs = this.filterService.activeFilters;
