@@ -12,7 +12,7 @@ import {FilterService} from '../../services/filter-service';
 })
 export class FilterComponent implements OnInit, AfterViewInit {
   @Input() title: string;
-
+  @Input() isShowCount: boolean;
   @Input() filterSize: number;
 
   isCollapsed = true;
@@ -20,7 +20,8 @@ export class FilterComponent implements OnInit, AfterViewInit {
 
 
   constructor(public filterService: FilterService
-            ) { }
+            ) {
+  }
 
   ngOnInit(): void {
     this.itemLimit = this.filterSize;
