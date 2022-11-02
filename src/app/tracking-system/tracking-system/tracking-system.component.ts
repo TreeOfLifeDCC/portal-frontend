@@ -20,7 +20,7 @@ import 'jquery';
 export class TrackingSystemComponent implements OnInit, AfterViewInit {
   displayedColumns = ['organism', 'commonName', 'metadata_submitted_to_biosamples',
     'raw_data_submitted_to_ena',  'assemblies_submitted_to_ena',
-    'annotation_complete', 'annotation_submitted_to_ena'];
+    'annotation_complete'];
   orgDisplayedColumns = ['accession', 'organism', 'commonName', 'sex', 'organismPart', 'trackingSystem'];
   loading = true;
   dataSource = new MatTableDataSource<any>();
