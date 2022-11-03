@@ -255,3 +255,25 @@ ul[class*="Other-"] {
 .list-group-item {
     padding: 0.25rem;
 }
+
+
+/* mat-header-cell {
+    display: inline-table;
+} */
+
+.mat-column-metadata_submitted_to_biosamples {
+    flex: 0 0 15%;
+}
+
+.mat-column-raw_data_submitted_to_ena {
+    flex: 0 0 15%;
+    /* margin-left: -8px; */
+}
+
+.mat-column-assemblies_submitted_to_ena {
+    flex: 0 0 15%;
+}
+
+.mat-column-annotation_complete {
+    flex: 0 0 15%;
+}
