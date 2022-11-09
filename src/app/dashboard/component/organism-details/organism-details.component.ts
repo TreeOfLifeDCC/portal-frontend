@@ -48,7 +48,9 @@ export class OrganismDetailsComponent implements OnInit, AfterViewInit {
   bioSampleId: string;
   bioSampleObj;
   dataSourceRecords;
+  dataSourceSymbiontsRecords;
   specBioSampleTotalCount;
+  specSymbiontsTotalCount;
   specDisplayedColumns = ['accession', 'organism', 'commonName', 'sex', 'organismPart', 'trackingSystem'];
 
   private ENA_PORTAL_API_BASE_URL_FASTA = "https://www.ebi.ac.uk/ena/browser/api/fasta/"
@@ -71,6 +73,7 @@ export class OrganismDetailsComponent implements OnInit, AfterViewInit {
   trackingSystemFilters = [];
   organismPartFilters = [];
   unpackedData;
+  unpackedSymbiontsData;
   organismName;
   relatedRecords;
   filterJson = {
@@ -83,6 +86,8 @@ export class OrganismDetailsComponent implements OnInit, AfterViewInit {
   dataSourceFilesCount;
   dataSourceAssemblies;
   dataSourceAssembliesCount;
+  dataSourceSymbiontsAssemblies;
+  dataSourceSymbiontsAssembliesCount;
   dataSourceAnnotation;
   dataSourceAnnotationCount;
   dataSourceRelatedAnnotation;
@@ -212,6 +217,7 @@ export class OrganismDetailsComponent implements OnInit, AfterViewInit {
       .subscribe(
         data => {
           const unpackedData = [];
+          const unpackedSymbiontsData = [];
           this.bioSampleObj = data;
           this.orgGeoList = data.orgGeoList;
           this.specGeoList = data.specGeoList;
@@ -219,8 +225,8 @@ export class OrganismDetailsComponent implements OnInit, AfterViewInit {
             this.geoLocation = true;
             setTimeout(() => {
               const tabGroup = this.tabgroup;
-              const selected = this.tabgroup.selectedIndex
-              tabGroup.selectedIndex = 4
+              const selected = this.tabgroup.selectedIndex;
+              tabGroup.selectedIndex = 4;
               setTimeout(() => {
                 tabGroup.selectedIndex = selected;
               }, 1);
@@ -236,14 +242,21 @@ export class OrganismDetailsComponent implements OnInit, AfterViewInit {
           for (const item of data.records) {
             unpackedData.push(this.unpackData(item));
           }
+          if (data.symbionts_records && data.symbionts_records.length) {
+            for (const item of data.symbionts_records) {
+              unpackedSymbiontsData.push(this.unpackData(item));
+            }
+          }
           if (unpackedData.length > 0) {
             this.getFilters(data.organism);
           }
           setTimeout(() => {
             this.organismName = data.organism;
             this.dataSourceRecords = new MatTableDataSource<any>(unpackedData);
+            this.dataSourceSymbiontsRecords = new MatTableDataSource<any>(unpackedSymbiontsData);
             this.specBioSampleTotalCount = unpackedData?.length;
-            this.genomeNotes = data.genome_notes
+            this.specSymbiontsTotalCount = unpackedSymbiontsData?.length;
+            this.genomeNotes = data.genome_notes;
             if (data.experiment != null) {
               this.dataSourceFiles = new MatTableDataSource<Sample>(data.experiment);
               this.dataSourceFilesCount = data.experiment?.length;
@@ -262,6 +275,14 @@ export class OrganismDetailsComponent implements OnInit, AfterViewInit {
             else {
               this.dataSourceAssemblies = new MatTableDataSource<Sample>();
               this.dataSourceAssembliesCount = 0;
+            }
+            if (data.symbionts_assemblies != null) {
+              console.log('here');
+              this.dataSourceSymbiontsAssemblies = new MatTableDataSource<any>(data.symbionts_assemblies);
+              this.dataSourceSymbiontsAssembliesCount = data.symbionts_assemblies?.length;
+            } else {
+              this.dataSourceSymbiontsAssemblies = new MatTableDataSource<Sample>();
+              this.dataSourceSymbiontsAssembliesCount = 0;
             }
             if (data.annotation != null) {
               this.dataSourceAnnotation = new MatTableDataSource<any>(data.annotation);

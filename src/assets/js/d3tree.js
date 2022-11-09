@@ -325,7 +325,7 @@ function drawTree(url) {
 
                             if (record.tolid != null) {
                                 const organismName = organism.split(' ').join('_');
-                                const clade = codes[record.tolid.charAt(0)];
+                                const clade = codes[record.tolid[0].charAt(0)];
 
                                 if (record.genomeNotes != null && record.genomeNotes != undefined && record.genome_notes.length > 0) {
                                     const genomeLink = record.genome_notes[0].url;
