@@ -17,6 +17,8 @@ import {DownloadConfirmationDialogComponent} from '../../download-confirmation-d
 import {MatDialog} from '@angular/material/dialog';
 import {MatSnackBar} from '@angular/material/snack-bar';
 import {FilterService} from '../../services/filter-service';
+import {Subject} from "rxjs";
+import {debounceTime, distinctUntilChanged} from "rxjs/operators";
 
 
 @Component({
@@ -25,6 +27,7 @@ import {FilterService} from '../../services/filter-service';
   styleUrls: ['./dashboard.component.css']
 })
 export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
+
   codes = {
     m: 'mammals',
     d: 'dicots',
@@ -74,9 +77,21 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
   dataColumnsDefination = [{ name: 'Organism', column: 'organism', selected: true }, { name: 'ToL ID', column: 'tolid', selected: true }, { name: 'INSDC ID', column: 'INSDC_ID', selected: true }, { name: 'Common Name', column: 'commonName', selected: true }, { name: 'Common Name Source', column: 'commonNameSource', selected: true }, { name: 'Current Status', column: 'currentStatus', selected: true }, { name: 'External references', column: 'goatInfo', selected: true }, { name: 'Submitted to Biosamples', column: 'biosamples', selected: false }, { name: 'Raw data submitted to ENA', column: 'raw_data', selected: false },  { name: 'Assemblies submitted to ENA', column: 'assemblies', selected: false }, { name: 'Annotation complete', column: 'annotation_complete', selected: false }, { name: 'Annotation submitted to ENA', column: 'annotation', selected: false }];
   displayedColumns = [];
   phylSelectedRank = '';
+  searchUpdate = new Subject<string>();
   constructor(private titleService: Title, private dashboardService: DashboardService,
               private activatedRoute: ActivatedRoute, private router: Router, private spinner: NgxSpinnerService, private taxanomyService: TaxanomyService
-  ,           private dialog: MatDialog, private snackBar: MatSnackBar, public filterService: FilterService) { }
+  ,           private dialog: MatDialog, private snackBar: MatSnackBar, public filterService: FilterService) {
+    this.searchUpdate.pipe(
+        debounceTime(500),
+        distinctUntilChanged()).subscribe(
+            value => {
+              this.spinner.show();
+              this.resetFilter();
+              this.getAllBiosamples(0, this.pagesize, this.sort.active, this.sort.direction);
+              this.filterService.updateActiveRouteParams();
+            }
+    );
+  }
 
   ngOnInit(): void {
     this.getDisplayedColumns();

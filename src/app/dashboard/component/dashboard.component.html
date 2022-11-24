@@ -57,7 +57,7 @@
                 </div>
                 <mat-form-field class="column-header">
                     <mat-label>Search</mat-label>
-                    <input #searchInput matInput [(ngModel)]='filterService.searchText' (keyup)="getSearchResults()" placeholder="Ex. lutra" #input>
+                    <input  #searchInput matInput [(ngModel)]='filterService.searchText' (ngModelChange)="this.searchUpdate.next($event)" placeholder="Ex. lutra" #input>
                 </mat-form-field>
                 <table mat-table  matTableExporter #exporter="matTableExporter" #table [dataSource]="dataSource" matSort (matSortChange)="customSort($event)">
                     <ng-container matColumnDef="organism">
