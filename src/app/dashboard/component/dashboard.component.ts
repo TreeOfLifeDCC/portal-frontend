@@ -402,7 +402,8 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
   }
   // tslint:disable-next-line:typedef
   checkTolidExists(data) {
-    return data != undefined && data.tolid != undefined && data.tolid != null && data.tolid.length > 0;
+    return data != undefined && data.tolid != undefined && data.tolid != null && data.tolid.length > 0 &&
+        data.show_tolqc === true;
   }
   // tslint:disable-next-line:typedef
   checkGenomeExists(data) {
