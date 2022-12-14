@@ -594,7 +594,8 @@ export class OrganismDetailsComponent implements OnInit, AfterViewInit {
   }
 
   checkTolidExists(data) {
-    return data != undefined && data.tolid != undefined && data.tolid != null && data.tolid.length > 0;
+    return data != undefined && data.tolid != undefined && data.tolid != null && data.tolid.length > 0 &&
+        data.show_tolqc === true;
   }
 
   generateTolidLink(data) {
