@@ -107,6 +107,7 @@ export class PhylogenyFilterComponent implements OnInit {
     this.resetTaxaTree();
     this.getChildTaxonomyRank('superkingdom', 'Eukaryota', 'kingdom');
     $('.kingdom, .subkingdom').removeClass('active-filter');
+    this.spinner.hide();
   }
   showTaxonomyModal(event: any, rank: string, taxonomy: string, childRank: string) {
     this.isDoubleClick = false;
