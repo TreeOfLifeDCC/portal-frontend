@@ -1,0 +1,171 @@
+<div>
+    <ngx-spinner bdColor="rgba(0,0,0,0.9)" [fullScreen]="true" size="large" color="#fff" type="ball-clip-rotate-pulse">
+    </ngx-spinner>
+
+    <div class="jumbotron jumbotron-fluid">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-3">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container" style="padding-top: 20px;">
+        <div class="row">
+            <div class="col-md-2">
+                <div class="row">
+                    <div class="col-md-12 col-sm-6">
+                        <app-filter title="Data Status" isShowCount=true></app-filter>
+                    </div>
+                </div>
+
+                <app-phylogeny-filter isShowCount=true></app-phylogeny-filter>
+                <app-filter title="Experiment Type" isShowCount="true" filterSize="5"></app-filter>
+            </div>
+
+            <div class="col-md-10" >
+                <h1 class="page-header">Publications</h1>
+
+                <mat-expansion-panel (opened)="expanded()" class="column-header">
+                    <mat-expansion-panel-header class="page-header">
+                        Column Selection
+                    </mat-expansion-panel-header>
+                    <div class="col-md-12">
+                        <div class="row">
+                            <mat-checkbox *ngFor="let data of dataColumnsDefination" class="col-md-4" color="primary" (click)="$event.stopPropagation()" (keydown)="$event.stopPropagation()" [checked]="data.selected" (change)="showSelectedColumn(data, $event.checked)">
+                                {{data.name}}
+                            </mat-checkbox>
+                        </div>
+                    </div>
+                </mat-expansion-panel>
+                <br />
+                <div class="column-header" >
+                    <button *ngIf="filterService.activeFilters.length > 0 || filterService.selectedFilterValue != '' && (filterService.AnnotationFilters.length > 0 || filterService.AnnotationCompleteFilters.length > 0 || filterService.AssembliesFilters.length > 0 || filterService.RawDataFilters.length > 0)" type="button" style="float: right;"
+                            class="btn btn-primary" mat-raised-button (click)="openDialog()">Download</button>
+
+                    <button type="button" style="float: right;" class="btn btn-primary" mat-raised-button (click)="downloadCSV()">Download metadata</button>
+                    <div *ngIf="hasActiveFilters()">
+                        <app-active-filter true></app-active-filter>
+
+                        <span *ngIf="(filterService.selectedFilterValue!= undefined && filterService.selectedFilterValue != '')">
+                    <button type="button" class="btn btn-success">{{filterService.selectedFilterValue.taxonomy}}
+                        <span class="badge badge-light" (click)="filterService.removeTaxaFilter(filterService.selectedFilterValue.taxonomy)">X</span>
+                    </button>
+                </span>
+                        <button class="btn btn-primary" type = "button" (click)="removeFilter()">Remove all filters</button>
+
+                    </div>
+                </div>
+                <mat-form-field class="column-header">
+                    <mat-label>Search</mat-label>
+                    <input  #searchInput matInput [(ngModel)]='filterService.searchText' (ngModelChange)="this.searchUpdate.next($event)" placeholder="Ex. lutra" #input>
+                </mat-form-field>
+                <table mat-table  matTableExporter #exporter="matTableExporter" #table [dataSource]="dataSource" matSort (matSortChange)="customSort($event)">
+                    <ng-container matColumnDef="organism">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header [ngClass]="'w-150 th-left'"> Organism </mat-header-cell>
+                        <mat-cell *matCellDef="let element" [ngClass]="'w-150 th-left'">
+                            <a [routerLink]="['/data/root/details/', element.id]">
+                                {{element.organism}} </a>
+                        </mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="tolid">
+                        <mat-header-cell *matHeaderCellDef [ngClass]="'w-80 th-left'"> ToL ID </mat-header-cell>
+                        <mat-cell *matCellDef="let element" [ngClass]="'w-80 th-left'"> {{typeofTol(element?.tolid)}}</mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="INSDC_ID">
+                        <mat-header-cell *matHeaderCellDef [ngClass]="'w-90 th-left'"> INSDC ID </mat-header-cell>
+                        <mat-cell *matCellDef="let element" [ngClass]="'w-90 th-left'"> {{element?.INSDC_ID}}</mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="commonName">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header [ngClass]="'w-120 th-left'">Common Name </mat-header-cell>
+                        <mat-cell *matCellDef="let element" [ngClass]="'w-120 th-left'">
+                            {{element?.commonName}}
+                        </mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="commonNameSource">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header [ngClass]="'w-75 th-center'">Common Name Source</mat-header-cell>
+                        <mat-cell *matCellDef="let element" [ngClass]="'w-75 th-center'">
+                            <span *ngIf="checkElement(element)" [ngClass]="commonNameSourceStyle(element)" style="width: 65px;text-align: center;">{{element.commonNameSource}}</span>
+                        </mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="currentStatus">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header [ngClass]="'w-150 th-left'"> Current status </mat-header-cell>
+                        <mat-cell *matCellDef="let element" [ngClass]="'w-150 th-left'">
+                            <span [ngClass]="getStatusClass(element.currentStatus)">{{element.currentStatus}}</span>
+                        </mat-cell>
+                    </ng-container>
+                    <ng-container matColumnDef="goatInfo">
+                        <mat-header-cell *matHeaderCellDef style=" padding-right: 0px;" [ngClass]="'w-200 th-left'">External references
+                        </mat-header-cell>
+                        <mat-cell *matCellDef="let element" style=" padding-right: 0px; " [ngClass]="'w-200 th-left'">
+                            <span>
+                                <a class="no-underline badge badge-pill goat-color" target="_blank"
+                                   href="{{element?.goatInfo}}">GoaT info</a>
+                                <ng-container *ngIf="checkTolidExists(element)">
+                                    <a class="no-underline badge badge-pill goat-color2" target="_blank"
+                                       href="{{generateTolidLink(element)}}">ToL QC</a>
+                                </ng-container>
+                                <ng-container *ngIf="checkGenomeExists(element)">
+                                    <a class="no-underline badge badge-pill genome" target="_blank"
+                                       href="{{getGenomeURL(element)}}">Genome Note</a>
+                                </ng-container>
+                            </span>
+                        </mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="biosamples">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header> Metadata submitted to BioSamples </mat-header-cell>
+                        <mat-cell *matCellDef="let element">
+                            <span [ngClass]="getStatusClass(element.biosamples)">{{element.biosamples}}</span>
+                        </mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="raw_data">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header> Raw data submitted to ENA </mat-header-cell>
+                        <mat-cell *matCellDef="let element">
+                            <span [ngClass]="getStatusClass(element.raw_data)">{{element.raw_data}}</span>
+                        </mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="mapped_reads">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header> Mapped reads submitted to ENA </mat-header-cell>
+                        <mat-cell *matCellDef="let element">
+                            <span [ngClass]="getStatusClass(element.mapped_reads)">{{element.mapped_reads}}</span>
+                        </mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="assemblies">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header> Assemblies submitted to ENA </mat-header-cell>
+                        <mat-cell *matCellDef="let element">
+                            <span [ngClass]="getStatusClass(element.assemblies_status)">{{element.assemblies_status}}</span>
+                        </mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="annotation_complete">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header> Annotation complete </mat-header-cell>
+                        <mat-cell *matCellDef="let element">
+                            <span [ngClass]="getStatusClass(element.annotation_complete)">{{element.annotation_complete}}</span>
+                        </mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="annotation">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header> Annotation submitted to ENA </mat-header-cell>
+                        <mat-cell *matCellDef="let element">
+                            <span [ngClass]="getStatusClass(element.annotation_status)">{{element.annotation_status}}</span>
+                        </mat-cell>
+                    </ng-container>
+
+                    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+                    <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+                </table>
+                <mat-paginator [pageSizeOptions]="[20, 40, 60, 100]" showFirstLastButtons [length]="bioSampleTotalCount" (page)="pageChanged($event)"></mat-paginator>
+            </div>
+        </div>
+    </div>
+</div>
