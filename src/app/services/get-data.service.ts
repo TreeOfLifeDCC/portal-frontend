@@ -13,7 +13,20 @@ export class GetDataService {
 
   // @ts-ignore
   public getAllPublications(offset, limit, filter?): Observable<any> {
-    console.log(filter);
-    return this.http.get(`${this.API_BASE_URL}articles?offset=${offset}&limit=${limit}`);
+    const filters = [];
+    let url = `${this.API_BASE_URL}articles?offset=${offset}&limit=${limit}`;
+    for (const key of filter) {
+      if (['Genome Note', 'Research Article'].indexOf(key) !== -1) {
+        filters.push(`articleType=${key}`);
+      } else if (['2020', '2021', '2022'].indexOf(key) !== -1) {
+        filters.push(`pubYear=${key}`);
+      } else {
+        filters.push(`journalTitle=${key}`);
+      }
+    }
+    for (const key of filters) {
+      url = `${url}&${key}`;
+    }
+    return this.http.get(url);
   }
 }

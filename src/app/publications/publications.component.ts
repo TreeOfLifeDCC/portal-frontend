@@ -13,7 +13,7 @@ import {ActivatedRoute, Router} from "@angular/router";
   templateUrl: './publications.component.html',
   styleUrls: ['./publications.component.css']
 })
-export class PublicationsComponent implements OnInit, AfterViewInit {
+export class PublicationsComponent implements OnInit, AfterViewInit, OnDestroy {
 
   dataSource = new MatTableDataSource<any>();
   @ViewChild(MatPaginator) paginator: MatPaginator;
@@ -23,7 +23,7 @@ export class PublicationsComponent implements OnInit, AfterViewInit {
 
   pagesize = 20;
 
-  columns = ['title', 'study_id', 'organism_name', 'journal_name', 'year'];
+  columns = ['title', 'journal_name', 'year', 'organism_name', 'study_id'];
 
   constructor(private titleService: Title,
               private spinner: NgxSpinnerService,
@@ -34,6 +34,15 @@ export class PublicationsComponent implements OnInit, AfterViewInit {
 
   ngOnInit(): void {
     this.titleService.setTitle('Publications');
+    const queryParamMap = this.activatedRoute.snapshot.queryParamMap;
+    const params = queryParamMap['params'];
+    if (Object.keys(params).length !== 0) {
+      this.resetFilter();
+      for (const key in params) {
+        this.filterService.urlAppendFilterArray.push({name: key, value: params[key]});
+        this.filterService.activeFilters.push(params[key]);
+      }
+    }
     this.getAllPublications(0, this.pagesize, this.sort.active, this.sort.direction);
   }
 
@@ -92,14 +101,14 @@ export class PublicationsComponent implements OnInit, AfterViewInit {
 
   removeFilter(): void {
     this.resetFilter();
-    // const currentUrl = this.router.url;
-    // this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
-    //   this.router.navigate([currentUrl.split('?')[0]] );
-    //   this.spinner.show();
-    //   setTimeout(() => {
-    //     this.spinner.hide();
-    //   }, 800);
-    // });
+    const currentUrl = this.router.url;
+    this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
+      this.router.navigate([currentUrl.split('?')[0]] );
+      this.spinner.show();
+      setTimeout(() => {
+        this.spinner.hide();
+      }, 800);
+    });
   }
 
   resetFilter(): void {
@@ -111,6 +120,10 @@ export class PublicationsComponent implements OnInit, AfterViewInit {
     this.filterService.isFilterSelected = false;
     this.filterService.phylSelectedRank = '';
     this.filterService.selectedFilterValue = '';
+  }
+
+  ngOnDestroy(): void {
+    this.resetFilter();
   }
 
 }

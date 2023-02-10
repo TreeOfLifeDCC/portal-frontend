@@ -71,22 +71,6 @@
                         </mat-cell>
                     </ng-container>
 
-                    <ng-container matColumnDef="study_id">
-                        <mat-header-cell *matHeaderCellDef [ngClass]="'w-120 th-left'">Study ID</mat-header-cell>
-                        <mat-cell *matCellDef="let element"
-                                  [ngClass]="'w-120 th-left'">{{element['_source']['study_id']}}</mat-cell>
-                    </ng-container>
-
-                    <ng-container matColumnDef="organism_name">
-                        <mat-header-cell *matHeaderCellDef [ngClass]="'w-150 th-left'">Organism Name</mat-header-cell>
-                        <mat-cell *matCellDef="let element"
-                                  [ngClass]="'w-150 th-left'">
-                            <a [routerLink]="['/data/root/details/', element['_source']['organism_name']]">
-                                {{element['_source']['organism_name']}}
-                            </a>
-                        </mat-cell>
-                    </ng-container>
-
                     <ng-container matColumnDef="journal_name">
                         <mat-header-cell *matHeaderCellDef [ngClass]="'w-150 th-left'">Journal</mat-header-cell>
                         <mat-cell *matCellDef="let element"
@@ -99,6 +83,26 @@
                         <mat-cell *matCellDef="let element"
                                   [ngClass]="'w-120 th-center'">{{getYear(element['_source'])}}</mat-cell>
                     </ng-container>
+
+                    <ng-container matColumnDef="study_id">
+                        <mat-header-cell *matHeaderCellDef [ngClass]="'w-120 th-left'">Study ID</mat-header-cell>
+                        <mat-cell *matCellDef="let element" [ngClass]="'w-120 th-left'">
+                            <a href="https://www.ebi.ac.uk/ena/browser/view/{{element['_source']['study_id']}}">
+                                {{element['_source']['study_id']}}
+                            </a>
+                        </mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="organism_name">
+                        <mat-header-cell *matHeaderCellDef [ngClass]="'w-150 th-left'">Organism Name</mat-header-cell>
+                        <mat-cell *matCellDef="let element"
+                                  [ngClass]="'w-150 th-left'">
+                            <a [routerLink]="['/data/root/details/', element['_source']['organism_name']]">
+                                {{element['_source']['organism_name']}}
+                            </a>
+                        </mat-cell>
+                    </ng-container>
+
 
                     <mat-header-row *matHeaderRowDef="columns"></mat-header-row>
                     <mat-row *matRowDef="let row; columns: columns;"></mat-row>

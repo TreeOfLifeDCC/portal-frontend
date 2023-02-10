@@ -201,6 +201,15 @@ export class FilterService {
             };
             this.urlAppendFilterArray.push(jsonObj);
 
+        } else if (key.toLowerCase() === 'journal-name') {
+            jsonObj = {name: 'journalTitle', value};
+            this.urlAppendFilterArray.push(jsonObj);
+        } else if (key.toLowerCase() === 'publication-year') {
+            jsonObj = {name: 'pubYear', value};
+            this.urlAppendFilterArray.push(jsonObj);
+        } else if (key.toLowerCase() === 'article-type') {
+            jsonObj = {name: 'articleType', value};
+            this.urlAppendFilterArray.push(jsonObj);
         }
 
     }
