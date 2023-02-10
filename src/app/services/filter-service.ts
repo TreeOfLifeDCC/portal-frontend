@@ -76,6 +76,7 @@ export class FilterService {
     experimentTypeFilters = [];
     journalNameFilters = [];
     publicationYearFilters = [];
+    articleTypeFilters = [];
     phylSelectedRank = '';
     filterArray = [];
 
@@ -368,6 +369,7 @@ export class FilterService {
         this.experimentTypeFilters = experiement;
         this.publicationYearFilters = this.filtersMap.aggregations.pubYear?.buckets;
         this.journalNameFilters = this.filtersMap.aggregations.journalTitle?.buckets;
+        this.articleTypeFilters = this.filtersMap.aggregations.articleType?.buckets;
         this.bioSampleTotalCount = data.hits?.total.value;
         if (data.aggregations.childRank !== undefined) {
             this.selectedTaxonomy.push(data.aggregations.childRank.scientificName.buckets[0]);

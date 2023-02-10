@@ -1,4 +1,4 @@
-import {Component, OnInit, ViewChild} from '@angular/core';
+import {AfterViewInit, Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {MatTableDataSource} from '@angular/material/table';
 import {MatPaginator} from '@angular/material/paginator';
 import {MatSort} from '@angular/material/sort';
@@ -6,13 +6,14 @@ import {Title} from '@angular/platform-browser';
 import {NgxSpinnerService} from 'ngx-spinner';
 import {GetDataService} from '../services/get-data.service';
 import {FilterService} from '../services/filter-service';
+import {ActivatedRoute, Router} from "@angular/router";
 
 @Component({
   selector: 'app-publications',
   templateUrl: './publications.component.html',
   styleUrls: ['./publications.component.css']
 })
-export class PublicationsComponent implements OnInit {
+export class PublicationsComponent implements OnInit, AfterViewInit {
 
   dataSource = new MatTableDataSource<any>();
   @ViewChild(MatPaginator) paginator: MatPaginator;
@@ -27,11 +28,17 @@ export class PublicationsComponent implements OnInit {
   constructor(private titleService: Title,
               private spinner: NgxSpinnerService,
               private getDataService: GetDataService,
-              private filterService: FilterService) { }
+              private filterService: FilterService,
+              private activatedRoute: ActivatedRoute,
+              private router: Router) { }
 
   ngOnInit(): void {
     this.titleService.setTitle('Publications');
     this.getAllPublications(0, this.pagesize, this.sort.active, this.sort.direction);
+  }
+
+  ngAfterViewInit(): void {
+    this.dataSource.paginator = this.paginator;
   }
 
   getAllPublications(offset, limit, sortColumn?, sortOrder?): void {

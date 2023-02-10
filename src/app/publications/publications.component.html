@@ -16,6 +16,9 @@
             <div class="col-md-2">
                 <div class="row">
                     <div class="col-md-12 col-sm-6">
+                        <app-filter title="Article Type" isShowCount="true"></app-filter>
+                    </div>
+                    <div class="col-md-12 col-sm-6">
                         <app-filter title="Journal" isShowCount=true></app-filter>
                     </div>
                     <div class="col-md-12 col-sm-6">
@@ -75,15 +78,19 @@
                     </ng-container>
 
                     <ng-container matColumnDef="organism_name">
-                        <mat-header-cell *matHeaderCellDef [ngClass]="'w-120 th-left'">Organism Name</mat-header-cell>
+                        <mat-header-cell *matHeaderCellDef [ngClass]="'w-150 th-left'">Organism Name</mat-header-cell>
                         <mat-cell *matCellDef="let element"
-                                  [ngClass]="'w-120 th-left'">{{element['_source']['organism_name']}}</mat-cell>
+                                  [ngClass]="'w-150 th-left'">
+                            <a [routerLink]="['/data/root/details/', element['_source']['organism_name']]">
+                                {{element['_source']['organism_name']}}
+                            </a>
+                        </mat-cell>
                     </ng-container>
 
                     <ng-container matColumnDef="journal_name">
-                        <mat-header-cell *matHeaderCellDef [ngClass]="'w-120 th-left'">Journal</mat-header-cell>
+                        <mat-header-cell *matHeaderCellDef [ngClass]="'w-150 th-left'">Journal</mat-header-cell>
                         <mat-cell *matCellDef="let element"
-                                  [ngClass]="'w-120 th-left'">{{getJournalName(element['_source'])}}</mat-cell>
+                                  [ngClass]="'w-150 th-left'">{{getJournalName(element['_source'])}}</mat-cell>
                     </ng-container>
 
                     <ng-container matColumnDef="year">
