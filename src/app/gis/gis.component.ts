@@ -1,16 +1,14 @@
-import {Component, AfterViewInit, Input, ViewChild, OnDestroy} from '@angular/core';
+import {Component, AfterViewInit, OnDestroy} from '@angular/core';
 import * as L from 'leaflet';
 import 'leaflet.markercluster';
 import { GisService } from './gis.service';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { FormControl } from '@angular/forms';
-import { map, startWith } from 'rxjs/operators';
-import { Observable } from 'rxjs';
 import {control} from 'leaflet';
 import layers = control.layers;
 import {MatRadioChange} from '@angular/material/radio';
 import {FilterService} from '../services/filter-service';
-import {ActivatedRoute, Params, Router} from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 
 const iconRetinaUrl = 'assets/marker-icon-2x.png';
 const iconUrl = 'assets/marker-icon.png';
