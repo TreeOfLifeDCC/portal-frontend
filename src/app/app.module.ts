@@ -23,19 +23,25 @@ import {MatDialogModule} from '@angular/material/dialog';
 import {MatSnackBarModule} from '@angular/material/snack-bar';
 import {MatRadioModule} from '@angular/material/radio';
 import {ConfirmationDialogComponent} from './confirmation-dialog-component/confirmation-dialog.component';
-import {MatTooltipModule} from "@angular/material/tooltip";
-import {ClipboardModule} from "@angular/cdk/clipboard";
+import {MatTooltipModule} from '@angular/material/tooltip';
+import {ClipboardModule} from '@angular/cdk/clipboard';
 import { GisComponent } from './gis/gis.component';
 import { GisService } from './gis/gis.service';
 
-import { NgxSpinnerModule } from "ngx-spinner";
+import { NgxSpinnerModule } from 'ngx-spinner';
 import {MatAutocompleteModule} from '@angular/material/autocomplete';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
-import {DashboardModule} from "./dashboard/dashboard.module";
-import {MatInputModule} from "@angular/material/input";
-import {FilterService} from "./services/filter-service";
+import {DashboardModule} from './dashboard/dashboard.module';
+import {MatInputModule} from '@angular/material/input';
+import {FilterService} from './services/filter-service';
 import { BulkDownloadsComponent } from './bulk-downloads/bulk-downloads.component';
+import {PublicationsComponent} from './publications/publications.component';
+import {MatExpansionModule} from '@angular/material/expansion';
+import {MatTableModule} from '@angular/material/table';
+import {MatPaginatorModule} from '@angular/material/paginator';
+import {MatSortModule} from '@angular/material/sort';
+import {GetDataService} from "./services/get-data.service";
 
 @NgModule({
   declarations: [
@@ -49,8 +55,8 @@ import { BulkDownloadsComponent } from './bulk-downloads/bulk-downloads.componen
     BytesPipe,
     ConfirmationDialogComponent,
     GisComponent,
-    BulkDownloadsComponent
-
+    BulkDownloadsComponent,
+    PublicationsComponent
   ],
   imports: [
     BrowserModule,
@@ -74,9 +80,14 @@ import { BulkDownloadsComponent } from './bulk-downloads/bulk-downloads.componen
     MatAutocompleteModule,
     MatSlideToggleModule,
     DashboardModule,
-    MatInputModule
+    MatInputModule,
+    NgxSpinnerModule,
+    MatExpansionModule,
+    MatTableModule,
+    MatPaginatorModule,
+    MatSortModule
   ],
-  providers: [BytesPipe, GisService, FilterService],
+  providers: [BytesPipe, GisService, FilterService, GetDataService],
   bootstrap: [AppComponent],
 
 })

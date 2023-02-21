@@ -7,7 +7,11 @@
     </h3>
     <ul  class="list-group" *ngIf="title === 'Experiment Type'">
         <ng-container *ngFor="let filter of filterService.experimentTypeFilters; let i = index">
-            <li   *ngIf="i<itemLimit" class="biosample list-group-item d-flex justify-content-between align-items-center biosamples-inactive" id="{{filter.key}}-Experiment Type"  [ngClass]="checkFilterIsActive(filter.key)" (click)="onFilterClick($event, 'experiment-type', filter.key)" style="cursor: pointer" >
+            <li   *ngIf="i<itemLimit" class="biosample list-group-item d-flex justify-content-between
+            align-items-center biosamples-inactive"
+                  id="{{filter.key}}-Experiment Type"
+                  [ngClass]="checkFilterIsActive(filter.key)"
+                  (click)="onFilterClick($event, 'experiment-type', filter.key)" style="cursor: pointer" >
                 <span>{{filter.key}}</span>
                 <span *ngIf="isShowCount === 'true'" class="badge badge-pill badge-info">{{filter.organism_count.doc_count}}</span>
             </li>
@@ -21,6 +25,39 @@
                     <span *ngIf="isShowCount === 'true'" class="badge badge-pill badge-info">{{filter.count}}</span>
                 </li>
             </ng-container>
-        </ul>
+    </ul>
+
+    <ul class="list-group" *ngIf="title === 'Journal'">
+        <ng-container *ngFor="let filter of filterService.journalNameFilters">
+            <li class="biosample list-group-item d-flex justify-content-between align-items-center
+                    biosamples-inactive" [ngClass]="checkFilterIsActive(filter.key)"
+                (click)="onFilterClick($event, 'journal-name', filter.key)" style="cursor: pointer">
+                <span>{{filter.key}}</span>
+                <span class="badge badge-pill badge-info">{{filter.doc_count}}</span>
+            </li>
+        </ng-container>
+    </ul>
+
+    <ul class="list-group" *ngIf="title === 'Publication Year'">
+        <ng-container *ngFor="let filter of filterService.publicationYearFilters">
+            <li class="biosample list-group-item d-flex justify-content-between align-items-center
+                    biosamples-inactive" [ngClass]="checkFilterIsActive(filter.key)"
+                (click)="onFilterClick($event, 'publication-year', filter.key)" style="cursor: pointer">
+                <span>{{filter.key}}</span>
+                <span class="badge badge-pill badge-info">{{filter.doc_count}}</span>
+            </li>
+        </ng-container>
+    </ul>
+
+    <ul class="list-group" *ngIf="title === 'Article Type'">
+        <ng-container *ngFor="let filter of filterService.articleTypeFilters">
+            <li class="biosample list-group-item d-flex justify-content-between align-items-center
+                    biosamples-inactive" [ngClass]="checkFilterIsActive(filter.key)"
+                (click)="onFilterClick($event, 'article-type', filter.key)" style="cursor: pointer">
+                <span>{{filter.key}}</span>
+                <span class="badge badge-pill badge-info">{{filter.doc_count}}</span>
+            </li>
+        </ng-container>
+    </ul>
 
 </div>

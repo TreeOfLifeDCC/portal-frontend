@@ -74,6 +74,9 @@ export class FilterService {
     selectedTaxnomyFilter = '';
     taxonomies = [];
     experimentTypeFilters = [];
+    journalNameFilters = [];
+    publicationYearFilters = [];
+    articleTypeFilters = [];
     phylSelectedRank = '';
     filterArray = [];
 
@@ -198,6 +201,15 @@ export class FilterService {
             };
             this.urlAppendFilterArray.push(jsonObj);
 
+        } else if (key.toLowerCase() === 'journal-name') {
+            jsonObj = {name: 'journalTitle', value};
+            this.urlAppendFilterArray.push(jsonObj);
+        } else if (key.toLowerCase() === 'publication-year') {
+            jsonObj = {name: 'pubYear', value};
+            this.urlAppendFilterArray.push(jsonObj);
+        } else if (key.toLowerCase() === 'article-type') {
+            jsonObj = {name: 'articleType', value};
+            this.urlAppendFilterArray.push(jsonObj);
         }
 
     }
@@ -275,7 +287,7 @@ export class FilterService {
         this.filterArray = [] ;
         this.filtersMap = data;
         let biosamplesFiltersCount = 0;
-        this.BiosamplesFilters = this.filtersMap.aggregations.biosamples.buckets.filter(i => {
+        this.BiosamplesFilters = this.filtersMap.aggregations.biosamples?.buckets.filter(i => {
             if (i !== '' && i.key.toLowerCase() === 'done') {
                 const obj = i;
                 obj.key = 'Biosamples - ' + obj.key;
@@ -291,7 +303,7 @@ export class FilterService {
             count:  biosamplesFiltersCount
         });
         let rawDataFiltersCount = 0;
-        this.RawDataFilters = this.filtersMap.aggregations.raw_data.buckets.filter(i => {
+        this.RawDataFilters = this.filtersMap.aggregations.raw_data?.buckets.filter(i => {
             if (i !== '' && i.key.toLowerCase() === 'done') {
                 const obj = i;
                 obj.key = 'Raw data - ' + obj.key;
@@ -307,7 +319,7 @@ export class FilterService {
             count:  rawDataFiltersCount
         });
         let assembliesFiltersCount = 0;
-        this.AssembliesFilters = this.filtersMap.aggregations.assemblies.buckets.filter(i => {
+        this.AssembliesFilters = this.filtersMap.aggregations.assemblies?.buckets.filter(i => {
             if (i !== '' && i.key.toLowerCase() === 'done') {
                 const obj = i;
                 obj.key = 'Assemblies - ' + obj.key;
@@ -322,7 +334,7 @@ export class FilterService {
             count:  assembliesFiltersCount
         });
         let annotationCompleteFiltersCount = 0;
-        this.AnnotationCompleteFilters = this.filtersMap.aggregations.annotation_complete.buckets.filter(i => {
+        this.AnnotationCompleteFilters = this.filtersMap.aggregations.annotation_complete?.buckets.filter(i => {
             if (i !== '' && i.key.toLowerCase() === 'done') {
                 const obj = i;
                 obj.key = 'Annotation complete - ' + obj.key;
@@ -337,7 +349,7 @@ export class FilterService {
             count: annotationCompleteFiltersCount
         });
         let annotationFiltersCount = 0;
-        this.AnnotationFilters = this.filtersMap.aggregations.annotation.buckets.filter(i => {
+        this.AnnotationFilters = this.filtersMap.aggregations.annotation?.buckets.filter(i => {
             if (i !== '' && i.key.toLowerCase() === 'done') {
                 const obj = i;
                 obj.key = 'Annotation - ' + obj.key;
@@ -354,7 +366,7 @@ export class FilterService {
             });
         }
 
-        const genome = this.filtersMap.aggregations.genome.doc_count;
+        const genome = this.filtersMap.aggregations.genome?.doc_count;
         this.GenomeFilters = [{key: 'Genome Notes - Submitted', doc_count: genome}];
         this.filterArray.push({
             title: 'Genome Notes - Submitted',
@@ -362,9 +374,12 @@ export class FilterService {
             label: 'genome',
             count:  genome
         });
-        const experiement = this.filtersMap.aggregations.experiment.library_construction_protocol.buckets;
+        const experiement = this.filtersMap.aggregations.experiment?.library_construction_protocol.buckets;
         this.experimentTypeFilters = experiement;
-        this.bioSampleTotalCount = data.hits.total.value;
+        this.publicationYearFilters = this.filtersMap.aggregations.pubYear?.buckets;
+        this.journalNameFilters = this.filtersMap.aggregations.journalTitle?.buckets;
+        this.articleTypeFilters = this.filtersMap.aggregations.articleType?.buckets;
+        this.bioSampleTotalCount = data.hits?.total.value;
         if (data.aggregations.childRank !== undefined) {
             this.selectedTaxonomy.push(data.aggregations.childRank.scientificName.buckets[0]);
         }
