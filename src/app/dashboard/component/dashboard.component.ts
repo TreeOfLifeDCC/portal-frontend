@@ -407,6 +407,10 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
   checkGenomeExists(data) {
     return data != undefined && data.genome_notes != undefined && data.genome_notes != null && data.genome_notes.length;
   }
+
+  checkNbnAtlasExists(data): boolean {
+    return data !== undefined && data.nbnatlas !== undefined && data.nbnatlas !== null;
+  }
   // tslint:disable-next-line:typedef
   generateTolidLink(data) {
     const organismName = data.organism.split(' ').join('_');

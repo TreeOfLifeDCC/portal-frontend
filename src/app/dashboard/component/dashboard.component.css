@@ -237,6 +237,10 @@ ul[class*="other-"] {
     margin-left: 3px;
 }
 
+.nbn {
+    margin-left: 3px;
+}
+
 mat-cell:nth-child(5),
 mat-header-cell:nth-child(5) {
     flex: 1 0 5%;

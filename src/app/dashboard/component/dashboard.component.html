@@ -113,6 +113,10 @@
                                     <a class="no-underline badge badge-pill genome" target="_blank"
                                         href="{{getGenomeURL(element)}}">Genome Note</a>
                                 </ng-container>
+                                <ng-container *ngIf="checkNbnAtlasExists(element)">
+                                    <a class="no-underline badge badge-pill badge-warning nbn" target="_blank"
+                                    href="{{element.nbnatlas}}">NBN Atlas</a>
+                                </ng-container>
                             </span>
                         </mat-cell>
                     </ng-container>
