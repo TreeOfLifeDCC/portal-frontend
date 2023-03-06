@@ -9,7 +9,7 @@ export class GisService {
   // private API_BASE_URL = 'https://portal.darwintreeoflife.org/api';
   // private API_BASE_URL = 'http://localhost:8080';
   private API_BASE_URL = 'https://dtol-portal-backend-vk4vfzpm7a-ew.a.run.app';
-  
+
   constructor(private http: HttpClient) { }
 
   public getGisData(filter: any, searchText?): Observable<any> {
