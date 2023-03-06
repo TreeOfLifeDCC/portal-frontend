@@ -1,33 +1,23 @@
-.filter-top {
-    margin-top: 1rem !important;
-}
-
-.jumbotron {
-    background: url("../../../assets/dtol banner thin.jpg") center center no-repeat;
-    background-size: cover;
-    padding-top: 20px !important;
-    padding-bottom: 20px !important;
-}
-
-table {
-    width: 100%;
-}
-
-.mat-form-field {
-    font-size: 14px;
-    width: 100%;
-}
 
 button {
     margin-left: 5px;
 }
 
 .card-header,
+.card-header{
+    background-color: #8FBC45;
+    width: 107%;
+}
 .btn-success,
 .badge-success {
     background-color: #8FBC45;
 }
-
+.material-icons {
+    vertical-align: after-edge;
+    font-size: 22px;
+    line-height: 1.2;
+    padding-right: 5px;
+}
 .btn-primary,
 .active {
     background-color: #4BBEFD;
@@ -71,45 +61,9 @@ ul.long-list {
 .filter-heading {
     font-size: unset;
     font-weight: 400;
-}
-
-.main-table {
-    position: relative;
-}
-
-.status-table {
-    z-index: 1;
-    left: 0;
-    top: 0;
-}
-
-.org-table {
-    position: absolute;
-    z-index: 2;
-    left: 160px;
-    top: 0px;
-}
-
-.round-border {
-    border: 1px solid #e0e0e0;
-}
-
-#overlay {
-    position: fixed;
-    display: none;
-    width: 100%;
-    height: 100%;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-color: rgba(0, 0, 0, 0.9);
-    z-index: 2;
-    cursor: pointer;
-}
-
-.zero-margin {
-    margin: 0px !important;
+    line-height: 2;
+    margin: auto;
+    padding-right: 5px;
 }
 
 .inactiveFilter {
@@ -162,9 +116,10 @@ ul,
 
 /* Hide the nested list */
 
-.nested {
+
+/* .nested {
     display: none;
-}
+} */
 
 
 /* Show the nested list when the user clicks on the caret/arrow (with JavaScript) */
@@ -208,11 +163,10 @@ hr {
 .rank-heading {
     text-align: center;
     font-size: large;
+    width: 107%;
 }
 
-.filter-heading {
-    margin: 0px !important;
-}
+
 
 .left {
     float: left;
@@ -222,58 +176,92 @@ hr {
     padding-right: 5px;
 }
 
-ul[class*="other-"] {
+ul[class*="Other-"] {
     padding: 0;
 }
 
-ul[class*="Other-"] {
+ul[class*="other-"] {
     padding: 0;
 }
 
 .mat-header-row,
 .mat-row {
-    min-height: 30px !important;
-}
-
-.mat-list-base {
-    padding: 0px !important;
-}
-
-.mat-column-organism {
-    flex: 0 0 25%;
-}
-
-.mat-column-commonName {
-    flex: 0 0 20%;
-}
-
-.mat-list-base .mat-list-item,
-.mat-list-base .mat-list-option {
-    height: unset;
+    min-height: 30px;
 }
 
 .list-group-item {
     padding: 0.25rem;
+    width: 107%;
 }
 
-
-/* mat-header-cell {
-    display: inline-table;
-} */
-
-.mat-column-metadata_submitted_to_biosamples {
-    flex: 0 0 15%;
+.goat-padding {
+    padding-left: 35px;
 }
 
-.mat-column-raw_data_submitted_to_ena {
-    flex: 0 0 15%;
-    /* margin-left: -8px; */
+.goat-color {
+    color: #fff;
+    background-color: #4BBEFD;
+    margin-left: 3px;
 }
 
-.mat-column-assemblies_submitted_to_ena {
-    flex: 0 0 15%;
+.goat-color2 {
+    color: #fff;
+    background-color: #5cc45e;
+    margin-left: 3px;
 }
 
-.mat-column-annotation_complete {
-    flex: 0 0 15%;
+.genome {
+    color: #fff;
+    background-color: grey;
+    margin-left: 3px;
+}
+
+mat-cell:nth-child(5),
+mat-header-cell:nth-child(5) {
+    flex: 1 0 5%;
+}
+
+.th-center {
+    text-align: center;
+}
+
+.th-left {
+    text-align: left;
+}
+
+.th-right {
+    text-align: right;
+}
+
+.w-75 {
+    max-width: 75px !important;
+}
+
+.w-80 {
+    max-width: 80px !important;
+}
+
+.w-85 {
+    max-width: 85px !important;
+}
+
+.w-90 {
+    max-width: 90px !important;
+}
+
+.w-100 {
+    max-width: 100px !important;
+}
+
+.w-120 {
+    max-width: 120px !important;
+}
+
+.w-150 {
+    max-width: 150px !important;
+}
+
+.badge-primary-cns {
+    color: #fff;
+    background-color: #4BBEFD;
 }

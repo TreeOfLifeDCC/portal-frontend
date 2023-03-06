@@ -13,16 +13,12 @@ import {tap} from "rxjs/operators";
 })
 export class DashboardService {
 
-  private API_BASE_URL = 'https://dtol-portal-backend-i735mz2iha-ew.a.run.app';
+  private API_BASE_URL = 'https://dtol-portal-backend-vk4vfzpm7a-ew.a.run.app';
   private ENA_PORTAL_API_BASE_URL = 'https://www.ebi.ac.uk/ena/portal/api/files';
-
-  // private API_BASE_URL = 'http://8000/TCP/api';
-  // private API_BASE_URL = 'http://45.88.81.118/api';
-  // private API_BASE_URL = 'http://localhost:8080';
 
   constructor(private http: HttpClient, private bytesPipe: BytesPipe,  private dialog: MatDialog) { }
 
-  public getAllBiosample(offset, limit, sortColumn?, sortOrder?, searchText?): Observable<any> {
+  public getAllBiosample(offset, limit, sortColumn?, sortOrder?, searchText?, filter?): Observable<any> {
     let requestParams = `?offset=${offset}&limit=${limit}`
     if (sortColumn != undefined) {
       requestParams = requestParams + `&sortColumn=${sortColumn}&sortOrder=${sortOrder}`
@@ -30,7 +26,7 @@ export class DashboardService {
     if(searchText) {
       requestParams = requestParams + `&searchText=${searchText}`
     }
-    return this.http.get(`${this.API_BASE_URL}/root_organisms${requestParams}`);
+    return this.http.post(`${this.API_BASE_URL}/root_organisms${requestParams}`, filter);
   }
 
   public getDistinctOrganisms(size, sortColumn?, sortOrder?, afterKey?): Observable<any> {

@@ -2,13 +2,23 @@
     display: block;
     margin-left: auto;
     margin-right: auto;
+    margin-top: -30px;
     /* width: 65%; */
 }
-
+.jumbotron {
+    background: url("../../assets/dtol banner thin.jpg") center center no-repeat;
+    background-size: cover;
+    padding-top: 20px !important;
+    padding-bottom: 20px !important;
+}
 #map {
+    margin-top: -8px;
     width: 1000px;
-    height: 600px;
+    height: 730px;
     border: 1px solid #ccc;
+}
+.page-header {
+    color: #4BBEFD;
 }
 
 .leaflet-popup-close-button {
@@ -20,43 +30,88 @@
 }
 
 .map-frame {
-    margin-top: 50px;
+    margin-top: 40px;
+    margin-left: 10px;
 }
 
 .search {
     position: relative;
-    box-shadow: 0 0 40px rgba(51, 51, 51, .1);
+    /*box-shadow: 0 0 40px rgba(51, 51, 51, .1);*/
+    width: 990px;
     margin-top: 30px;
+    margin-left: 0px;
+}
+.mat-form-field {
+    font-size: 14px;
+    width: 100%;
+    position: relative;
 }
 
-.search input {
-    height: 60px;
-    text-indent: 25px;
-    border: 2px solid #d6d4d4;
+.mat-form-field-infix {
+    display: block;
+    position: relative;
+    flex: auto;
+    min-width: 0;
+    width: 900px;
+}
+/*.search input {*/
+/*    height: 60px;*/
+/*    text-indent: 25px;*/
+/*    border: 2px solid #d6d4d4;*/
+/*}*/
+
+/*.search input:focus {*/
+/*    box-shadow: none;*/
+/*    border: 2px solid blue;*/
+/*}*/
+
+/*.search .fa-search {*/
+/*    position: absolute;*/
+/*    top: 20px;*/
+/*    left: 16px;*/
+/*}*/
+
+/*.search button {*/
+/*    position: absolute;*/
+/*    top: 5px;*/
+/*    right: 5px;*/
+/*    height: 50px;*/
+/*    width: 100px;*/
+/*    background: blue;*/
+/*}*/
+
+/*.search .fa-times {*/
+/*    position: absolute;*/
+/*    top: 20px;*/
+/*    left: 16px;*/
+/*}*/
+
+.toggle {
+    position: relative;
+    margin-top: 20px;
+    white-space: nowrap;
+
 }
 
-.search input:focus {
-    box-shadow: none;
-    border: 2px solid blue;
+.mat-slide-toggle {
+    max-width: none !important;
 }
 
-.search .fa-search {
-    position: absolute;
-    top: 20px;
-    left: 16px;
+.orgLabel {
+    padding-right: 10px;
 }
 
-.search button {
-    position: absolute;
-    top: 5px;
-    right: 5px;
-    height: 50px;
-    width: 110px;
-    background: blue;
+button {
+    margin: 2px;
 }
 
-.search .fa-times {
-    position: absolute;
-    top: 20px;
-    left: 16px;
+.card-header,
+.btn-success,
+.badge-success {
+    background-color: #8FBC45;
+}
+
+.btn-primary,
+.active {
+    background-color: #4BBEFD;
 }

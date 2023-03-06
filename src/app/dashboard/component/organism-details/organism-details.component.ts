@@ -48,7 +48,9 @@ export class OrganismDetailsComponent implements OnInit, AfterViewInit {
   bioSampleId: string;
   bioSampleObj;
   dataSourceRecords;
+  dataSourceSymbiontsRecords;
   specBioSampleTotalCount;
+  specSymbiontsTotalCount;
   specDisplayedColumns = ['accession', 'organism', 'commonName', 'sex', 'organismPart', 'trackingSystem'];
 
   private ENA_PORTAL_API_BASE_URL_FASTA = "https://www.ebi.ac.uk/ena/browser/api/fasta/"
@@ -71,6 +73,7 @@ export class OrganismDetailsComponent implements OnInit, AfterViewInit {
   trackingSystemFilters = [];
   organismPartFilters = [];
   unpackedData;
+  unpackedSymbiontsData;
   organismName;
   relatedRecords;
   filterJson = {
@@ -83,6 +86,8 @@ export class OrganismDetailsComponent implements OnInit, AfterViewInit {
   dataSourceFilesCount;
   dataSourceAssemblies;
   dataSourceAssembliesCount;
+  dataSourceSymbiontsAssemblies;
+  dataSourceSymbiontsAssembliesCount;
   dataSourceAnnotation;
   dataSourceAnnotationCount;
   dataSourceRelatedAnnotation;
@@ -212,15 +217,16 @@ export class OrganismDetailsComponent implements OnInit, AfterViewInit {
       .subscribe(
         data => {
           const unpackedData = [];
+          const unpackedSymbiontsData = [];
           this.bioSampleObj = data;
           this.orgGeoList = data.orgGeoList;
           this.specGeoList = data.specGeoList;
-          if (this.orgGeoList.length != 0) {
+          if (this.orgGeoList !== undefined && this.orgGeoList.length != 0) {
             this.geoLocation = true;
             setTimeout(() => {
               const tabGroup = this.tabgroup;
-              const selected = this.tabgroup.selectedIndex
-              tabGroup.selectedIndex = 4
+              const selected = this.tabgroup.selectedIndex;
+              tabGroup.selectedIndex = 4;
               setTimeout(() => {
                 tabGroup.selectedIndex = selected;
               }, 1);
@@ -229,11 +235,17 @@ export class OrganismDetailsComponent implements OnInit, AfterViewInit {
           if (data.goat_info) {
             this.dataSourceGoatInfo = data.goat_info.attributes;
           }
+
           if (data.experiment?.length > 0) {
             this.INSDC_ID = data.experiment[0].study_accession;
           }
           for (const item of data.records) {
             unpackedData.push(this.unpackData(item));
+          }
+          if (data.symbionts_records && data.symbionts_records.length) {
+            for (const item of data.symbionts_records) {
+              unpackedSymbiontsData.push(this.unpackData(item));
+            }
           }
           if (unpackedData.length > 0) {
             this.getFilters(data.organism);
@@ -241,8 +253,10 @@ export class OrganismDetailsComponent implements OnInit, AfterViewInit {
           setTimeout(() => {
             this.organismName = data.organism;
             this.dataSourceRecords = new MatTableDataSource<any>(unpackedData);
+            this.dataSourceSymbiontsRecords = new MatTableDataSource<any>(unpackedSymbiontsData);
             this.specBioSampleTotalCount = unpackedData?.length;
-            this.genomeNotes = data.genome_notes
+            this.specSymbiontsTotalCount = unpackedSymbiontsData?.length;
+            this.genomeNotes = data.genome_notes;
             if (data.experiment != null) {
               this.dataSourceFiles = new MatTableDataSource<Sample>(data.experiment);
               this.dataSourceFilesCount = data.experiment?.length;
@@ -261,6 +275,14 @@ export class OrganismDetailsComponent implements OnInit, AfterViewInit {
             else {
               this.dataSourceAssemblies = new MatTableDataSource<Sample>();
               this.dataSourceAssembliesCount = 0;
+            }
+            if (data.symbionts_assemblies != null) {
+              console.log('here');
+              this.dataSourceSymbiontsAssemblies = new MatTableDataSource<any>(data.symbionts_assemblies);
+              this.dataSourceSymbiontsAssembliesCount = data.symbionts_assemblies?.length;
+            } else {
+              this.dataSourceSymbiontsAssemblies = new MatTableDataSource<Sample>();
+              this.dataSourceSymbiontsAssembliesCount = 0;
             }
             if (data.annotation != null) {
               this.dataSourceAnnotation = new MatTableDataSource<any>(data.annotation);
@@ -572,13 +594,24 @@ export class OrganismDetailsComponent implements OnInit, AfterViewInit {
   }
 
   checkTolidExists(data) {
-    return data != undefined && data.tolid != undefined && data.tolid != null;
+    return data != undefined && data.tolid != undefined && data.tolid != null && data.tolid.length > 0 &&
+        data.show_tolqc === true;
   }
 
   generateTolidLink(data) {
     const organismName = data.organism.split(' ').join('_');
-    const clade = this.codes[data.tolid.charAt(0)];
-    return `https://tolqc.cog.sanger.ac.uk/darwin/${clade}/${organismName}`;
+    if (typeof(data.tolid) === 'string'){
+      const clade = this.codes[data.tolid.charAt(0)];
+      return `https://tolqc.cog.sanger.ac.uk/darwin/${clade}/${organismName}`;
+
+    }else {
+      if (data.tolid.length > 0) {
+        const clade = this.codes[data.tolid[0].charAt(0)];
+        return `https://tolqc.cog.sanger.ac.uk/darwin/${clade}/${organismName}`;
+      }
+    }
+    // const clade = data.tolId.length > 1 ? this.codes[data.tolId[0].charAt(0)] : this.codes[data.tolId.charAt(0)];
+    // return `https://tolqc.cog.sanger.ac.uk/darwin/${clade}/${organismName}`;
   }
 
   checkGenomeExists(data) {
@@ -638,4 +671,11 @@ export class OrganismDetailsComponent implements OnInit, AfterViewInit {
     download_next(0);
   }
 
+  typeofTol(tolid: any) {
+    if (typeof(tolid) === 'string'){
+      return tolid;
+    }else{
+      return tolid.join(', ');
+    }
+  }
 }

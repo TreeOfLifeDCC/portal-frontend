@@ -8,6 +8,7 @@ interface Scripts {
 export const ScriptStore: Scripts[] = [
   { name: 'd3min', src: '../../../assets/js/d3.v3.min.js' },
   { name: 'd3tree', src: '../../../assets/js/d3tree.js' },
+  { name: 'd3treerank', src: '../../../assets/js/d3treerank.js' },
   {name:  'autocomplete', src: '../../../assets/js/autocomplete.js'}
 ];
 

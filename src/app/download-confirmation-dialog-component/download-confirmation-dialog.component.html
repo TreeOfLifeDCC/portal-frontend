@@ -6,8 +6,10 @@
         <br *ngIf="!data.hideAnnotation;">
         <mat-radio-button *ngIf="!data.hideAnnotation;" class="radio-button" value="annotation"  name="download-label-annotation" >Annotation</mat-radio-button>
         <br>
-        <mat-radio-button *ngIf="!data.hideRawData;" class="radio-button" value="raw_files" name="download-label-files" >All raw data files (links)</mat-radio-button>
     </mat-radio-group>
+    <br>
+    To download data outside of the web interface, please see
+    <a target="_blank" [routerLink]="['/bulk-downloads/']">Bulk Downloads</a>
 <br>
 </div>
     <div  mat-dialog-actions class="confirmation-dialog-btn" mat-dialog-actions style="float: right;">
