@@ -141,9 +141,9 @@ export class OrganismDetailsComponent implements OnInit, AfterViewInit {
   @ViewChild('relatedOrganisms') relatedOrganismsTable: MatPaginator;
   @ViewChild('relatedAnnotationTable') relatedAnnotationTable: MatPaginator;
 
-  geoLocation: Boolean;
-  orgGeoList: any
-  specGeoList: any
+  geoLocation: boolean;
+  orgGeoList: any;
+  specGeoList: any;
   @ViewChild("tabgroup", { static: false }) tabgroup: MatTabGroup;
   private http: any;
 
@@ -221,7 +221,7 @@ export class OrganismDetailsComponent implements OnInit, AfterViewInit {
           this.bioSampleObj = data;
           this.orgGeoList = data.orgGeoList;
           this.specGeoList = data.specGeoList;
-          if (this.orgGeoList !== undefined && this.orgGeoList.length != 0) {
+          if (this.orgGeoList !== undefined && this.orgGeoList.length !== 0) {
             this.geoLocation = true;
             setTimeout(() => {
               const tabGroup = this.tabgroup;
