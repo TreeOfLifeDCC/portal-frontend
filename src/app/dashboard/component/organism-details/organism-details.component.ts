@@ -7,6 +7,7 @@ import { MatTableDataSource } from '@angular/material/table';
 import { DashboardService } from '../../services/dashboard.service';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { MatTabGroup } from '@angular/material/tabs';
+import {DomSanitizer, SafeResourceUrl} from "@angular/platform-browser";
 
 @Component({
   selector: 'dashboard-organism-details',
@@ -141,13 +142,21 @@ export class OrganismDetailsComponent implements OnInit, AfterViewInit {
   @ViewChild('relatedOrganisms') relatedOrganismsTable: MatPaginator;
   @ViewChild('relatedAnnotationTable') relatedAnnotationTable: MatPaginator;
 
+
   geoLocation: Boolean;
   orgGeoList: any
   specGeoList: any
+
+  geoLocation: boolean;
+  orgGeoList: any;
+  specGeoList: any;
+  nbnatlasMapUrl: string;
+  url: SafeResourceUrl;
+
   @ViewChild("tabgroup", { static: false }) tabgroup: MatTabGroup;
   private http: any;
 
-  constructor(private route: ActivatedRoute, private dashboardService: DashboardService, private spinner: NgxSpinnerService, private router: Router) {
+  constructor(private route: ActivatedRoute, private dashboardService: DashboardService, private spinner: NgxSpinnerService, private router: Router, private sanitizer: DomSanitizer) {
     this.route.params.subscribe(param => this.bioSampleId = param.id);
   }
 
@@ -219,6 +228,7 @@ export class OrganismDetailsComponent implements OnInit, AfterViewInit {
           const unpackedData = [];
           const unpackedSymbiontsData = [];
           this.bioSampleObj = data;
+
           this.orgGeoList = data.orgGeoList;
           this.specGeoList = data.specGeoList;
           if (this.orgGeoList !== undefined && this.orgGeoList.length != 0) {
@@ -238,6 +248,13 @@ export class OrganismDetailsComponent implements OnInit, AfterViewInit {
 
           if (data.experiment?.length > 0) {
             this.INSDC_ID = data.experiment[0].study_accession;
+          }
+          if (data.nbnatlas != null) {
+            // https://species.nbnatlas.org/species/['NHMSYS0000080159']
+
+            // tslint:disable-next-line:max-line-length
+            this.nbnatlasMapUrl = 'https://easymap.nbnatlas.org/EasyMap?tvk=' + data.nbnatlas.split('\'')[1] + '&ref=0&w=600&h=600&b0fill=6ecc39&title=0' ;
+            this.url = this.sanitizer.bypassSecurityTrustResourceUrl(this.nbnatlasMapUrl);
           }
           for (const item of data.records) {
             unpackedData.push(this.unpackData(item));
