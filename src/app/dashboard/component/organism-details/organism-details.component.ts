@@ -235,7 +235,7 @@ export class OrganismDetailsComponent implements OnInit, AfterViewInit {
             setTimeout(() => {
               const tabGroup = this.tabgroup;
               const selected = this.tabgroup.selectedIndex;
-              tabGroup.selectedIndex = 4;
+              tabGroup.selectedIndex = 5;
               setTimeout(() => {
                 tabGroup.selectedIndex = selected;
               }, 1);

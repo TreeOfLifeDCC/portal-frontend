@@ -1001,6 +1001,16 @@
                     </mat-expansion-panel>
                 </div>
             </mat-tab>
+            <mat-tab label="Occurrences Map" *ngIf="bioSampleObj?.nbnatlas">
+                <hr>
+                <div class="col-md-12">
+                    <div  *ngIf="url">
+                        <iframe Style="width: 75%; min-height: 710px; margin-left: 110px;" [src]='url'> </iframe>
+
+                    </div>
+                </div>
+                <hr>
+            </mat-tab>
             <mat-tab label="GoaT" *ngIf="bioSampleObj?.goat_info && (bioSampleObj?.goat_info | json) != '{}'">
                 <!-- Goat Info Section -->
                 <div class="tab-box" *ngIf="bioSampleObj?.goat_info">
@@ -1065,16 +1075,7 @@
                 <hr>
             </mat-tab>
 
-            <mat-tab label="Occurrences Map" *ngIf="url">
-                <hr>
-                <div class="col-md-12">
-                    <div  *ngIf="url">
-                        <iframe Style="width: 75%; min-height: 710px; margin-left: 110px;" [src]='url'> </iframe>
 
-                    </div>
-                </div>
-                <hr>
-            </mat-tab>
 
         </mat-tab-group>
     </div>
