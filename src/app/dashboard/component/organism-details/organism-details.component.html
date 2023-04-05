@@ -1082,6 +1082,7 @@
                         </mat-tab>
                         <mat-tab label="Occurrences Map" *ngIf="bioSampleObj?.nbnatlas">
                             <hr>
+                            <a style="margin-left: 330px;" href="{{nbnatlasMapUrl}}" class="btn btn-success" target="_blank">Open interactive map in new window</a>
 
                             <div class="col-md-12" style=" display: block; margin-left: 100px; margin-right: auto;">
                                 <div [ngStyle]="{height:height+'px',width:width+'px'}" *ngIf="isLoading" class="loading">
@@ -1097,7 +1098,6 @@
 
                                     <br>
                                     <br>
-                                    <a href="{{nbnatlasMapUrl}}" class="btn btn-success" target="_blank">Open interactive map in new window</a>
 
 
                                 </div>

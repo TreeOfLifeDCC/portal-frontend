@@ -268,7 +268,7 @@ export class OrganismDetailsComponent implements OnInit, AfterViewInit {
             // https://species.nbnatlas.org/species/['NHMSYS0000080159']
 
             // tslint:disable-next-line:max-line-length
-            this.nbnatlasMapUrl = 'https://easymap.nbnatlas.org/Image?tvk=' + data.nbnatlas.split('\'')[1] + '&ref=0&w=600&h=600&b0fill=6ecc39&title=0' ;
+            this.nbnatlasMapUrl = 'https://easymap.nbnatlas.org/Image?tvk=' + data.nbnatlas.split('\'')[1] + '&ref=0&w=400&h=600&b0fill=6ecc39&title=0' ;
             this.url = this.sanitizer.bypassSecurityTrustResourceUrl(this.nbnatlasMapUrl);
             // tslint:disable-next-line:no-unused-expression
             // @ts-ignore
