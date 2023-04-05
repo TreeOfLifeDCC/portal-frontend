@@ -251,7 +251,7 @@ export class OrganismDetailsComponent implements OnInit, AfterViewInit {
             setTimeout(() => {
               const tabGroup = this.tabgroup;
               const selected = this.tabgroup.selectedIndex;
-              tabGroup.selectedIndex = 5;
+              tabGroup.selectedIndex = 4;
               setTimeout(() => {
                 tabGroup.selectedIndex = selected;
               }, 1);
@@ -273,14 +273,6 @@ export class OrganismDetailsComponent implements OnInit, AfterViewInit {
             // tslint:disable-next-line:no-unused-expression
             // @ts-ignore
             this.nbnatlasMapUrl = 'https://records.nbnatlas.org/occurrences/search?q=lsid:' + data.nbnatlas.split('\'')[1] + '+&nbn_loading=true&fq=-occurrence_status%3A%22absent%22#tab_mapView';
-            setTimeout(() => {
-              const tabGroup = this.tabgroup;
-              const selected = this.tabgroup.selectedIndex;
-              tabGroup.selectedIndex = 3;
-              setTimeout(() => {
-                tabGroup.selectedIndex = selected;
-              }, 1);
-            }, 400);
           }
           for (const item of data.records) {
             unpackedData.push(this.unpackData(item));
