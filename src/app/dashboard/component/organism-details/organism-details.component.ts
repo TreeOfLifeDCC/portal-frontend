@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
+import {AfterViewInit, Component, Input, OnInit, ViewChild} from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Sample, samples } from '../../model/dashboard.model';
 import { MatSort } from '@angular/material/sort';
@@ -135,6 +135,14 @@ export class OrganismDetailsComponent implements OnInit, AfterViewInit {
   assembliesurls = [];
   annotationsurls = [];
   dataSourceGoatInfo;
+  @Input() loader = '../../assets/200.gif';
+  @Input() height = 200;
+  @Input() width = 200;
+  @Input() image: string;
+
+  isLoading: boolean;
+
+
   displayedColumnsGoatInfo = ['name', 'value', 'count', 'aggregation_method', 'aggregation_source'];
 
   @ViewChild('experimentsTable') exPaginator: MatPaginator;
@@ -151,14 +159,22 @@ export class OrganismDetailsComponent implements OnInit, AfterViewInit {
   specGeoList: any;
   nbnatlasMapUrl: string;
   url: SafeResourceUrl;
+  nbntalMapurl: string;
 
   @ViewChild('tabgroup', { static: false }) tabgroup: MatTabGroup;
   private http: any;
 
+  // tslint:disable-next-line:max-line-length
   constructor(private route: ActivatedRoute, private dashboardService: DashboardService, private spinner: NgxSpinnerService, private router: Router, private sanitizer: DomSanitizer) {
     this.route.params.subscribe(param => this.bioSampleId = param.id);
-  }
+    this.isLoading = true;
 
+
+  }
+  // tslint:disable-next-line:typedef
+  hideLoader(){
+    this.isLoading = false;
+  }
   ngOnInit(): void {
     this.geoLocation = false;
     this.dataSourceGoatInfo = {};
@@ -252,8 +268,19 @@ export class OrganismDetailsComponent implements OnInit, AfterViewInit {
             // https://species.nbnatlas.org/species/['NHMSYS0000080159']
 
             // tslint:disable-next-line:max-line-length
-            this.nbnatlasMapUrl = 'https://easymap.nbnatlas.org/EasyMap?tvk=' + data.nbnatlas.split('\'')[1] + '&ref=0&w=600&h=600&b0fill=6ecc39&title=0' ;
+            this.nbnatlasMapUrl = 'https://easymap.nbnatlas.org/Image?tvk=' + data.nbnatlas.split('\'')[1] + '&ref=0&w=600&h=600&b0fill=6ecc39&title=0' ;
             this.url = this.sanitizer.bypassSecurityTrustResourceUrl(this.nbnatlasMapUrl);
+            // tslint:disable-next-line:no-unused-expression
+            // @ts-ignore
+            this.nbnatlasMapUrl = 'https://records.nbnatlas.org/occurrences/search?q=lsid:' + data.nbnatlas.split('\'')[1] + '+&nbn_loading=true&fq=-occurrence_status%3A%22absent%22#tab_mapView';
+            setTimeout(() => {
+              const tabGroup = this.tabgroup;
+              const selected = this.tabgroup.selectedIndex;
+              tabGroup.selectedIndex = 3;
+              setTimeout(() => {
+                tabGroup.selectedIndex = selected;
+              }, 1);
+            }, 400);
           }
           for (const item of data.records) {
             unpackedData.push(this.unpackData(item));

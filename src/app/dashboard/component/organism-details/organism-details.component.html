@@ -1001,16 +1001,7 @@
                     </mat-expansion-panel>
                 </div>
             </mat-tab>
-            <mat-tab label="Occurrences Map" *ngIf="bioSampleObj?.nbnatlas">
-                <hr>
-                <div class="col-md-12">
-                    <div  *ngIf="url">
-                        <iframe Style="width: 75%; min-height: 710px; margin-left: 110px;" [src]='url'> </iframe>
 
-                    </div>
-                </div>
-                <hr>
-            </mat-tab>
             <mat-tab label="GoaT" *ngIf="bioSampleObj?.goat_info && (bioSampleObj?.goat_info | json) != '{}'">
                 <!-- Goat Info Section -->
                 <div class="tab-box" *ngIf="bioSampleObj?.goat_info">
@@ -1066,16 +1057,56 @@
                     <hr>
                 </div>
             </mat-tab>
-            <mat-tab label="Geo Location" *ngIf="geoLocation">
-                <!-- Geo Section -->
-                <hr>
-                <div class="col-md-12" *ngIf="geoLocation">
-                    <app-mapcluster [orgGeoList]="orgGeoList" [specGeoList]="specGeoList"></app-mapcluster>
-                </div>
-                <hr>
+<!--            <mat-tab label="Geo Location" *ngIf="geoLocation">-->
+<!--                &lt;!&ndash; Geo Section &ndash;&gt;-->
+<!--                <hr>-->
+<!--                <div class="col-md-12" *ngIf="geoLocation">-->
+<!--                    <app-mapcluster [orgGeoList]="orgGeoList" [specGeoList]="specGeoList"></app-mapcluster>-->
+<!--                </div>-->
+<!--                <hr>-->
+<!--            </mat-tab>-->
+
+            <mat-tab label="Geo Location">
+                <ng-template matTabContent>
+                    <mat-tab-group>
+<!--                        <mat-tab *ngFor="let tab of asyncTabs | async" label="{{tab.label}}">-->
+<!--                            {{tab.content}}-->
+<!--                        </mat-tab>-->
+                        <mat-tab label="Sampling Map" *ngIf="geoLocation">
+                            <!-- Geo Section -->
+                            <hr>
+                            <div class="col-md-12" *ngIf="geoLocation">
+                                <app-mapcluster [orgGeoList]="orgGeoList" [specGeoList]="specGeoList"></app-mapcluster>
+                            </div>
+                            <hr>
+                        </mat-tab>
+                        <mat-tab label="Occurrences Map" *ngIf="bioSampleObj?.nbnatlas">
+                            <hr>
+
+                            <div class="col-md-12" style=" display: block; margin-left: 100px; margin-right: auto;">
+                                <div [ngStyle]="{height:height+'px',width:width+'px'}" *ngIf="isLoading" class="loading">
+                                    <img [src]="loader" />
+                                </div>
+                                <div  *ngIf="url">
+                                      <br>
+                                    <img  [src]='url'
+                                          (load)="hideLoader()">
+                                    <br>
+
+                                    The National Biodiversity Network records are shown on the map below.(See <a href="https://nbnatlas.org/help/nbn-atlas-terms-use/" target="_blank">terms and conditions</a>)
+
+                                    <br>
+                                    <br>
+                                    <a href="{{nbnatlasMapUrl}}" class="btn btn-success" target="_blank">Open interactive map in new window</a>
+
+
+                                </div>
+                            </div>
+                            <hr>
+                        </mat-tab>
+                    </mat-tab-group>
+                </ng-template>
             </mat-tab>
-
-
 
         </mat-tab-group>
     </div>
