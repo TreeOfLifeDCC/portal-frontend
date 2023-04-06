@@ -28,8 +28,10 @@ import {MatTabsModule} from '@angular/material/tabs';
 import { MapComponent } from './map/map.component';
 import { MapClusterComponent } from './map-cluster/map-cluster.component';
 import {FilterComponent} from '../shared/filter/filter.component';
-import {PhylogenyFilterComponent} from "../shared/phylogeny-filter/phylogeny-filter.component";
-import {ActiveFilterComponent} from "../shared/active-filter/active-filter.component";
+import {PhylogenyFilterComponent} from '../shared/phylogeny-filter/phylogeny-filter.component';
+import {ActiveFilterComponent} from '../shared/active-filter/active-filter.component';
+import {MatCardModule} from '@angular/material/card';
+import { MatCarouselModule } from 'ng-mat-carousel';
 
 
 
@@ -57,6 +59,8 @@ import {ActiveFilterComponent} from "../shared/active-filter/active-filter.compo
     MatTabsModule,
     MatCheckboxModule,
     MatTooltipModule,
+    MatCardModule,
+    MatCarouselModule.forRoot()
   ],
   exports: [
     FilterComponent, PhylogenyFilterComponent, ActiveFilterComponent

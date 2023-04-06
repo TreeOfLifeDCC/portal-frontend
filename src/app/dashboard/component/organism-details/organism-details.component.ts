@@ -152,15 +152,12 @@ export class OrganismDetailsComponent implements OnInit, AfterViewInit {
   @ViewChild('relatedAnnotationTable') relatedAnnotationTable: MatPaginator;
 
 
-
-
   geoLocation: boolean;
   orgGeoList: any;
   specGeoList: any;
   nbnatlasMapUrl: string;
   url: SafeResourceUrl;
   nbntalMapurl: string;
-
   @ViewChild('tabgroup', { static: false }) tabgroup: MatTabGroup;
   private http: any;
 
@@ -249,7 +246,7 @@ export class OrganismDetailsComponent implements OnInit, AfterViewInit {
 
           this.orgGeoList = data.orgGeoList;
           this.specGeoList = data.specGeoList;
-          if (this.orgGeoList !== undefined && this.orgGeoList.length != 0) {
+          if (this.orgGeoList !== undefined && this.orgGeoList.length !== 0) {
             this.geoLocation = true;
             setTimeout(() => {
               const tabGroup = this.tabgroup;
@@ -712,6 +709,7 @@ export class OrganismDetailsComponent implements OnInit, AfterViewInit {
   }
 
   // tslint:disable-next-line:typedef
+
   typeofTol(tolid: any) {
     if (typeof(tolid) === 'string'){
       return tolid;
