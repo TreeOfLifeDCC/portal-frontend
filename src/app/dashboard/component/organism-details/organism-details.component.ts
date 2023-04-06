@@ -233,6 +233,9 @@ export class OrganismDetailsComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit(): void {
+    setTimeout(() => {
+      this.tabgroup.selectedIndex = 0;
+    }, 400);
   }
 
   getBiosampleById() {
@@ -253,9 +256,10 @@ export class OrganismDetailsComponent implements OnInit, AfterViewInit {
               const selected = this.tabgroup.selectedIndex;
               tabGroup.selectedIndex = 4;
               setTimeout(() => {
-                tabGroup.selectedIndex = selected;
+                this.tabgroup.selectedIndex = selected;
               }, 1);
             }, 400);
+
           }
           if (data.goat_info) {
             this.dataSourceGoatInfo = data.goat_info.attributes;
