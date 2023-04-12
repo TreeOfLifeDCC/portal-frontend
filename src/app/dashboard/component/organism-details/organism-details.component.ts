@@ -7,7 +7,9 @@ import { MatTableDataSource } from '@angular/material/table';
 import { DashboardService } from '../../services/dashboard.service';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { MatTabGroup } from '@angular/material/tabs';
-import {DomSanitizer, SafeResourceUrl} from '@angular/platform-browser';
+
+import {DomSanitizer, SafeResourceUrl} from "@angular/platform-browser";
+
 
 @Component({
   selector: 'dashboard-organism-details',
@@ -150,7 +152,12 @@ export class OrganismDetailsComponent implements OnInit, AfterViewInit {
   @ViewChild('annotationTable') anPaginator: MatPaginator;
   @ViewChild('relatedOrganisms') relatedOrganismsTable: MatPaginator;
   @ViewChild('relatedAnnotationTable') relatedAnnotationTable: MatPaginator;
+  @Input() loader = '../../assets/200.gif';
+  @Input() height = 200;
+  @Input() width = 200;
+  @Input() image: string;
 
+  isLoading: boolean;
 
   geoLocation: boolean;
   orgGeoList: any;
@@ -158,17 +165,16 @@ export class OrganismDetailsComponent implements OnInit, AfterViewInit {
   nbnatlasMapUrl: string;
   url: SafeResourceUrl;
   nbntalMapurl: string;
-  @ViewChild('tabgroup', { static: false }) tabgroup: MatTabGroup;
+
+
+  @ViewChild("tabgroup", { static: false }) tabgroup: MatTabGroup;
   private http: any;
 
-  // tslint:disable-next-line:max-line-length
   constructor(private route: ActivatedRoute, private dashboardService: DashboardService, private spinner: NgxSpinnerService, private router: Router, private sanitizer: DomSanitizer) {
     this.route.params.subscribe(param => this.bioSampleId = param.id);
     this.isLoading = true;
-
-
   }
-  // tslint:disable-next-line:typedef
+
   hideLoader(){
     this.isLoading = false;
   }
@@ -266,14 +272,14 @@ export class OrganismDetailsComponent implements OnInit, AfterViewInit {
             this.INSDC_ID = data.experiment[0].study_accession;
           }
           if (data.nbnatlas != null) {
-            // https://species.nbnatlas.org/species/['NHMSYS0000080159']
-
+            // https://species.nbnatlas.org/species/NHMSYS0000080159
             // tslint:disable-next-line:max-line-length
-            this.nbnatlasMapUrl = 'https://easymap.nbnatlas.org/Image?tvk=' + data.nbnatlas.split('\'')[1] + '&ref=0&w=400&h=600&b0fill=6ecc39&title=0' ;
+            this.nbnatlasMapUrl = 'https://easymap.nbnatlas.org/Image?tvk=' + data.nbnatlas.split('/')[4] + '&ref=0&w=400&h=600&b0fill=6ecc39&title=0' ;
             this.url = this.sanitizer.bypassSecurityTrustResourceUrl(this.nbnatlasMapUrl);
             // tslint:disable-next-line:no-unused-expression
             // @ts-ignore
-            this.nbnatlasMapUrl = 'https://records.nbnatlas.org/occurrences/search?q=lsid:' + data.nbnatlas.split('\'')[1] + '+&nbn_loading=true&fq=-occurrence_status%3A%22absent%22#tab_mapView';
+            this.nbnatlasMapUrl = 'https://records.nbnatlas.org/occurrences/search?q=lsid:' + data.nbnatlas.split('/')[4] + '+&nbn_loading=true&fq=-occurrence_status%3A%22absent%22#tab_mapView';
+
           }
           for (const item of data.records) {
             unpackedData.push(this.unpackData(item));

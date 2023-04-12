@@ -863,7 +863,6 @@
                     <mat-paginator #experimentsTable [pageSizeOptions]="[10, 20, 30]" showFirstLastButtons [length]="dataSourceFilesCount"></mat-paginator>
                 </div>
             </mat-tab>
-
             <mat-tab label = "Images" *ngIf="bioSampleObj?.images">
                 <hr>
                 <div class="row">
@@ -1092,6 +1091,7 @@
                     <hr>
                 </div>
             </mat-tab>
+
 <!--            <mat-tab label="Geo Location" *ngIf="geoLocation">-->
 <!--                &lt;!&ndash; Geo Section &ndash;&gt;-->
 <!--                <hr>-->
@@ -1100,6 +1100,7 @@
 <!--                </div>-->
 <!--                <hr>-->
 <!--            </mat-tab>-->
+
 
             <mat-tab label="Geo Location Maps">
                 <ng-template matTabContent>
@@ -1121,8 +1122,9 @@
                                     <img style="margin-left: 280px;" [src]="loader" />
                                 </div>
                                 <div  *ngIf="url">
+
                                       <br>
-                                    <img  [src]='url'
+                   <img  [src]='url'
                                           (load)="hideLoader()">
                                     <br>
 
