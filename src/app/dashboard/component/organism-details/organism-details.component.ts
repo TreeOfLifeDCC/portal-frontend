@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
+import {AfterViewInit, Component, Input, OnInit, ViewChild} from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Sample, samples } from '../../model/dashboard.model';
 import { MatSort } from '@angular/material/sort';
@@ -7,6 +7,7 @@ import { MatTableDataSource } from '@angular/material/table';
 import { DashboardService } from '../../services/dashboard.service';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { MatTabGroup } from '@angular/material/tabs';
+import {DomSanitizer, SafeResourceUrl} from "@angular/platform-browser";
 
 @Component({
   selector: 'dashboard-organism-details',
@@ -140,17 +141,28 @@ export class OrganismDetailsComponent implements OnInit, AfterViewInit {
   @ViewChild('annotationTable') anPaginator: MatPaginator;
   @ViewChild('relatedOrganisms') relatedOrganismsTable: MatPaginator;
   @ViewChild('relatedAnnotationTable') relatedAnnotationTable: MatPaginator;
+  @Input() loader = '../../assets/200.gif';
+  @Input() height = 200;
+  @Input() width = 200;
+  @Input() image: string;
 
+  isLoading: boolean;
   geoLocation: boolean;
   orgGeoList: any;
   specGeoList: any;
+  nbnatlasMapUrl: string;
+  url: SafeResourceUrl;
+  nbntalMapurl: string;
   @ViewChild("tabgroup", { static: false }) tabgroup: MatTabGroup;
   private http: any;
 
-  constructor(private route: ActivatedRoute, private dashboardService: DashboardService, private spinner: NgxSpinnerService, private router: Router) {
+  constructor(private route: ActivatedRoute, private dashboardService: DashboardService, private spinner: NgxSpinnerService, private router: Router, private sanitizer: DomSanitizer) {
     this.route.params.subscribe(param => this.bioSampleId = param.id);
+    this.isLoading = true;
   }
-
+  hideLoader(){
+    this.isLoading = false;
+  }
   ngOnInit(): void {
     this.geoLocation = false;
     this.dataSourceGoatInfo = {};
@@ -209,6 +221,9 @@ export class OrganismDetailsComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit(): void {
+    setTimeout(() => {
+      this.tabgroup.selectedIndex = 0;
+    }, 400);
   }
 
   getBiosampleById() {
@@ -238,6 +253,18 @@ export class OrganismDetailsComponent implements OnInit, AfterViewInit {
 
           if (data.experiment?.length > 0) {
             this.INSDC_ID = data.experiment[0].study_accession;
+          }
+          if (data.nbnatlas != null) {
+            // https://species.nbnatlas.org/species/['NHMSYS0000080159']
+            // https://species.nbnatlas.org/species/NHMSYS0000080159
+            console.log(data.nbnatlas);
+            console.log(data.nbnatlas.split('/')[4]);
+            // tslint:disable-next-line:max-line-length
+            this.nbnatlasMapUrl = 'https://easymap.nbnatlas.org/Image?tvk=' + data.nbnatlas.split('/')[4] + '&ref=0&w=400&h=600&b0fill=6ecc39&title=0' ;
+            this.url = this.sanitizer.bypassSecurityTrustResourceUrl(this.nbnatlasMapUrl);
+            // tslint:disable-next-line:no-unused-expression
+            // @ts-ignore
+            this.nbnatlasMapUrl = 'https://records.nbnatlas.org/occurrences/search?q=lsid:' + data.nbnatlas.split('/')[4] + '+&nbn_loading=true&fq=-occurrence_status%3A%22absent%22#tab_mapView';
           }
           for (const item of data.records) {
             unpackedData.push(this.unpackData(item));
