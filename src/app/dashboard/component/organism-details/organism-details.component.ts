@@ -152,12 +152,7 @@ export class OrganismDetailsComponent implements OnInit, AfterViewInit {
   @ViewChild('annotationTable') anPaginator: MatPaginator;
   @ViewChild('relatedOrganisms') relatedOrganismsTable: MatPaginator;
   @ViewChild('relatedAnnotationTable') relatedAnnotationTable: MatPaginator;
-  @Input() loader = '../../assets/200.gif';
-  @Input() height = 200;
-  @Input() width = 200;
-  @Input() image: string;
 
-  isLoading: boolean;
 
   geoLocation: boolean;
   orgGeoList: any;
