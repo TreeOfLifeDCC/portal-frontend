@@ -28,25 +28,23 @@
         <br>
         <p style="text-align: left;">There are two ways to run this utility:</p>
         <h3><strong>1. Run the python script by providing parameters:</strong></h3>
-        <h4><strong>Requirment:</strong></h4>
+        <h4><strong>Requirement:</strong></h4>
         <ul style="list-style-type: disc;">
             <li>Python installed:</li>
-            <li>Run requirnment.txt using command <code>pip install -r requirnment.txt </code></li>
+            <li>Run requirement.txt using command <code>pip install -r requirement.txt </code></li>
         </ul>
         <h4><strong>Run script using command:</strong></h4>
 
         Enter below command in terminal:
         <br>
         <br>
-        <code>python  app/downloader-utility.py --phylogeny "Dikarya"   --data_status "Mapped reads - Done"
-            --experiment_type "Chromium genome"  --download_location "/Users/Documents"
-            --download_option "assemblies"</code>
+        <code>python  app/downloader-utility.py --phylogeny "Chordata"   --data_status "Mapped Reads - Done"  --experiment_type "Chromium genome"  --download_location "/Users/raheela/Documents" --download_option "assemblies" --species_list "Apamea sordens,Bufo bufo"</code>
         <br />
         <br>
         Where:
         <br>
         <br />
-        <code> <strong>--phylogeny</strong> (Required) The name of the Taxnomy for the download (`eg : Dikarya`)</code>
+        <code> <strong>--phylogeny</strong> (Optional/Required)  The name of the Taxonomy for the download (`eg : Dikarya`)</code>
         <br />
         <br />
         <code> <strong>--data_status</strong> (Optional) The filter of data status for the download (`eg : Biosamples - Submitted,Mapped Reads - Submitted,Assemblies - Submitted,Raw Data - Submitted,Annotation Complete - Done,Genome Notes - Submitted`)</code>
@@ -59,23 +57,29 @@
         <br />
         <br />
         <code> <strong>--download_option</strong> (Required) The type of data(`annotations,assemblies, experiments`) that you want to download.</code>
+        <br />
+        <br />
+        <code> <strong>--species_list</strong> (Optional/Required) The List of species that you want to download.</code>
+        <br />
+        <br />
+        <h4><strong>Note:</strong> phylogeny and species_list both parameters are not optional you need to must provide one of them.</h4>
         <br>
-        <br>
+
         <h3><strong>2. Build Docker Image: </strong></h3>
-        <h4><strong>Requirment:</strong></h4>
+        <h4><strong>Requirement:</strong></h4>
         <ul style="list-style-type: disc;">
             <li>Docker is installed and running</li>
         </ul>
-        <h4>Create docker buid using command:</h4>
+        <h4>Create docker build using command:</h4>
         <ul>
             <li><code>docker build -t downloader-utility:latest .</code></li>
         </ul>
         <br>
         <h4><strong>Run docker image by providing parameters:</strong><br /></h4>
-        <p><code>docker run --rm -v "$PWD/download_location:/code/app/download_option" downloader-utility:latest --phylogeny Amphipyrinae --experiment_type "Hi-C - Arima v1" --download_option annotations</code></p>
+        <p><code>docker run --rm -v "$PWD/download_location:/code/app/download_option" downloader-utility:latest  --phylogeny Chordata  --experiment_type "Chromium genome" --download_option annotations --species_list "Apamea sordens,Bufo bufo"</code></p>
         <br>
         <h4><strong>Note:</strong></h4>
-        <p>Using docker image data is downloaded into download_location e.g <code>/Users/downloads </code>  and <code>download_option</code> is (<code>"annotations,assemblies"</code>).</p>
+        <p>Using docker image data is downloaded into download_location e.g <code>/Users/downloads </code>  and <code>download_option</code> is (<code>"annotations,assemblies","experiments"</code>).</p>
 
  <br>
         <h2><strong>Support</strong></h2>
