@@ -1,17 +1,14 @@
-FROM node:16.14.0 as build
-
-WORKDIR /source
-
-# Copy the package lock file into the container
-COPY package*.json ./
-# Run ci only for the production dependencies
-RUN npm ci
-
-# Copy the rest of the files into the container and build
-COPY . .
-RUN npm run build --prod
-
-FROM nginx:alpine
-COPY --from=build /source/dist/tree-of-life-portal /usr/share/nginx/html
-COPY --from=build /source/nginx.conf /etc/nginx/conf.d/
-EXPOSE 8080
+# Stage 0, "build-stage", based on Node.js, to build and compile Angular
+FROM dockerhub.ebi.ac.uk/treeoflifedcc/portal-frontend:node-base as build-stage
+WORKDIR /app
+COPY package*.json /app/
+RUN npm install
+COPY ./ /app/
+ARG configuration=production
+# RUN npm run test -- --browsers ChromeHeadlessNoSandbox --watch=false
+# RUN npm run e2e
+RUN npm run build -- --prod --aot --outputHashing=all --output-path=./dist/out --configuration $configuration
+# Stage 1, based on Nginx, to have only the compiled app, ready for production with Nginx
+FROM dockerhub.ebi.ac.uk/treeoflifedcc/portal-frontend:nginx
+COPY --from=build-stage /app/dist/out/ /usr/share/nginx/html
+COPY --from=build-stage /nginx.conf /etc/nginx/conf.d/default.conf
