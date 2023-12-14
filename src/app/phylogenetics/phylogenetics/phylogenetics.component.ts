@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { DynamicScriptLoaderService } from './services/dynamic-script-loader.service';
 import { UntypedFormControl } from '@angular/forms';
-import {MatRadioChange} from '@angular/material/radio';
+import {MatLegacyRadioChange as MatRadioChange} from '@angular/material/legacy-radio';
 import { NgxSpinnerService } from 'ngx-spinner';
 
 @Component({

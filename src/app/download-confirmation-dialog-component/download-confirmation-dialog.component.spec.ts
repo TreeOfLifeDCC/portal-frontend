@@ -1,6 +1,6 @@
 // @ts-ignore
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
-import { MatDialogModule, MatDialogRef, MatDialog } from '@angular/material/dialog';
+import { MatLegacyDialogModule as MatDialogModule, MatLegacyDialogRef as MatDialogRef, MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog';
 
 // @ts-ignore
 import { AppModule } from '../../app.module';

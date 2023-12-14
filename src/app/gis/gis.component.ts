@@ -6,7 +6,7 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import { UntypedFormControl } from '@angular/forms';
 import {control} from 'leaflet';
 import layers = control.layers;
-import {MatRadioChange} from '@angular/material/radio';
+import {MatLegacyRadioChange as MatRadioChange} from '@angular/material/legacy-radio';
 import {FilterService} from '../services/filter-service';
 import {ActivatedRoute, Router} from '@angular/router';
 

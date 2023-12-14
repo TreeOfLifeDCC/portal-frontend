@@ -2,11 +2,11 @@ import {AfterViewInit, Component, Input, OnInit, ViewChild} from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router';
 import { Sample, samples } from '../../model/dashboard.model';
 import { MatSort } from '@angular/material/sort';
-import { MatPaginator } from '@angular/material/paginator';
-import { MatTableDataSource } from '@angular/material/table';
+import { MatLegacyPaginator as MatPaginator } from '@angular/material/legacy-paginator';
+import { MatLegacyTableDataSource as MatTableDataSource } from '@angular/material/legacy-table';
 import { DashboardService } from '../../services/dashboard.service';
 import { NgxSpinnerService } from 'ngx-spinner';
-import { MatTabGroup } from '@angular/material/tabs';
+import { MatLegacyTabGroup as MatTabGroup } from '@angular/material/legacy-tabs';
 
 import {DomSanitizer, SafeResourceUrl} from "@angular/platform-browser";
 
