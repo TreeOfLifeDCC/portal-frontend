@@ -5,58 +5,58 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { CookieLawModule } from 'angular2-cookie-law';
+// import { CookieLawModule } from 'angular2-cookie-law';
 import { HttpClientModule } from '@angular/common/http';
 
-import { MatTreeModule } from '@angular/material/tree';
-import { MatIconModule } from '@angular/material/icon';
-import { MatLegacyButtonModule as MatButtonModule } from '@angular/material/legacy-button';
-import { MatTableExporterModule } from 'mat-table-exporter';
-import { BytesPipe } from './shared/bytes-pipe';
-import { HeaderComponent } from './shared/header/header.component';
-import { AboutComponent } from './about/about.component';
-import { HelpComponent } from './help/help.component';
-import { HomeComponent } from './home/home.component';
-import { ApiComponent } from './api/api.component';
-import {DownloadConfirmationDialogComponent} from './download-confirmation-dialog-component/download-confirmation-dialog.component';
-import {MatLegacyDialogModule as MatDialogModule} from '@angular/material/legacy-dialog';
-import {MatLegacySnackBarModule as MatSnackBarModule} from '@angular/material/legacy-snack-bar';
-import {MatLegacyRadioModule as MatRadioModule} from '@angular/material/legacy-radio';
-import {ConfirmationDialogComponent} from './confirmation-dialog-component/confirmation-dialog.component';
-import {MatLegacyTooltipModule as MatTooltipModule} from '@angular/material/legacy-tooltip';
-import {ClipboardModule} from '@angular/cdk/clipboard';
-import { GisComponent } from './gis/gis.component';
-import { GisService } from './gis/gis.service';
-
-import { NgxSpinnerModule } from 'ngx-spinner';
-import {MatLegacyAutocompleteModule as MatAutocompleteModule} from '@angular/material/legacy-autocomplete';
-import { MatLegacyFormFieldModule as MatFormFieldModule } from '@angular/material/legacy-form-field';
-import { MatLegacySlideToggleModule as MatSlideToggleModule } from '@angular/material/legacy-slide-toggle';
-import {DashboardModule} from './dashboard/dashboard.module';
-import {MatLegacyInputModule as MatInputModule} from '@angular/material/legacy-input';
-import {FilterService} from './services/filter-service';
-import { BulkDownloadsComponent } from './bulk-downloads/bulk-downloads.component';
-import {PublicationsComponent} from './publications/publications.component';
-import {MatExpansionModule} from '@angular/material/expansion';
-import {MatLegacyTableModule as MatTableModule} from '@angular/material/legacy-table';
-import {MatLegacyPaginatorModule as MatPaginatorModule} from '@angular/material/legacy-paginator';
-import {MatSortModule} from '@angular/material/sort';
-import {GetDataService} from "./services/get-data.service";
+// import { MatTreeModule } from '@angular/material/tree';
+// import { MatIconModule } from '@angular/material/icon';
+// import { MatButtonModule as MatButtonModule } from '@angular/material/button';
+// import { MatTableExporterModule } from 'mat-table-exporter';
+// import { BytesPipe } from './shared/bytes-pipe';
+// import { HeaderComponent } from './shared/header/header.component';
+// import { AboutComponent } from './about/about.component';
+// import { HelpComponent } from './help/help.component';
+// import { HomeComponent } from './home/home.component';
+// import { ApiComponent } from './api/api.component';
+// import {DownloadConfirmationDialogComponent} from './download-confirmation-dialog-component/download-confirmation-dialog.component';
+// import {MatDialogModule as MatDialogModule} from '@angular/material/dialog';
+// import {MatSnackBarModule as MatSnackBarModule} from '@angular/material/snack-bar';
+// import {MatRadioModule as MatRadioModule} from '@angular/material/radio';
+// import {ConfirmationDialogComponent} from './confirmation-dialog-component/confirmation-dialog.component';
+// import {MatTooltipModule as MatTooltipModule} from '@angular/material/tooltip';
+// import {ClipboardModule} from '@angular/cdk/clipboard';
+// import { GisComponent } from './gis/gis.component';
+// import { GisService } from './gis/gis.service';
+//
+// import { NgxSpinnerModule } from 'ngx-spinner';
+// import {MatAutocompleteModule as MatAutocompleteModule} from '@angular/material/autocomplete';
+// import { MatFormFieldModule as MatFormFieldModule } from '@angular/material/form-field';
+// import { MatSlideToggleModule as MatSlideToggleModule } from '@angular/material/slide-toggle';
+// import {DashboardModule} from './dashboard/dashboard.module';
+// import {MatInputModule as MatInputModule} from '@angular/material/input';
+// import {FilterService} from './services/filter-service';
+// import { BulkDownloadsComponent } from './bulk-downloads/bulk-downloads.component';
+// import {PublicationsComponent} from './publications/publications.component';
+// import {MatExpansionModule} from '@angular/material/expansion';
+// import {MatTableModule as MatTableModule} from '@angular/material/table';
+// import {MatPaginatorModule as MatPaginatorModule} from '@angular/material/paginator';
+// import {MatSortModule} from '@angular/material/sort';
+// import {GetDataService} from "./services/get-data.service";
 
 @NgModule({
   declarations: [
     AppComponent,
-    HeaderComponent,
-    AboutComponent,
-    HelpComponent,
-    HomeComponent,
-    ApiComponent,
-    DownloadConfirmationDialogComponent,
-    BytesPipe,
-    ConfirmationDialogComponent,
-    GisComponent,
-    BulkDownloadsComponent,
-    PublicationsComponent
+    // HeaderComponent,
+    // AboutComponent,
+    // HelpComponent,
+    // HomeComponent,
+    // ApiComponent,
+    // DownloadConfirmationDialogComponent,
+    // BytesPipe,
+    // ConfirmationDialogComponent,
+    // GisComponent,
+    // BulkDownloadsComponent,
+    // PublicationsComponent
   ],
   imports: [
     BrowserModule,
@@ -64,30 +64,31 @@ import {GetDataService} from "./services/get-data.service";
     BrowserAnimationsModule,
     FormsModule,
     ReactiveFormsModule,
-    CookieLawModule,
+    // CookieLawModule,
     HttpClientModule,
-    MatTreeModule,
-    MatIconModule,
-    MatButtonModule,
-    MatTableExporterModule,
-    MatDialogModule,
-    MatSnackBarModule,
-    MatRadioModule,
-    MatTooltipModule,
-    ClipboardModule,
-    NgxSpinnerModule,
-    MatFormFieldModule,
-    MatAutocompleteModule,
-    MatSlideToggleModule,
-    DashboardModule,
-    MatInputModule,
-    NgxSpinnerModule,
-    MatExpansionModule,
-    MatTableModule,
-    MatPaginatorModule,
-    MatSortModule
+    // MatTreeModule,
+    // MatIconModule,
+    // MatButtonModule,
+    // MatTableExporterModule,
+    // MatDialogModule,
+    // MatSnackBarModule,
+    // MatRadioModule,
+    // MatTooltipModule,
+    // ClipboardModule,
+    // NgxSpinnerModule,
+    // MatFormFieldModule,
+    // MatAutocompleteModule,
+    // MatSlideToggleModule,
+    // DashboardModule,
+    // MatInputModule,
+    // NgxSpinnerModule,
+    // MatExpansionModule,
+    // MatTableModule,
+    // MatPaginatorModule,
+    // MatSortModule
   ],
-  providers: [BytesPipe, GisService, FilterService, GetDataService],
+  providers: [],
+  // providers: [BytesPipe, GisService, FilterService, GetDataService],
   bootstrap: [AppComponent],
 
 })

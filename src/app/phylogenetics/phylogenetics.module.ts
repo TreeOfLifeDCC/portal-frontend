@@ -4,11 +4,11 @@ import { PhylogeneticsComponent } from './phylogenetics/phylogenetics.component'
 import { PhylogeneticsRoutingModule } from './phylogenetics-routing.module';
 import { DynamicScriptLoaderService } from './phylogenetics/services/dynamic-script-loader.service';
 import { LOADERS } from 'ngx-spinner/lib/ngx-spinner.enum';
-import {MatLegacyFormFieldModule as MatFormFieldModule} from '@angular/material/legacy-form-field';
+import {MatFormFieldModule as MatFormFieldModule} from '@angular/material/form-field';
 import {FormsModule} from '@angular/forms';
-import {MatLegacyInputModule as MatInputModule} from '@angular/material/legacy-input';
+import {MatInputModule as MatInputModule} from '@angular/material/input';
 import { NgxSpinnerModule } from "ngx-spinner";
-import {MatLegacyRadioModule as MatRadioModule} from '@angular/material/legacy-radio';
+import {MatRadioModule as MatRadioModule} from '@angular/material/radio';
 
 
 
