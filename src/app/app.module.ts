@@ -13,15 +13,15 @@ import { HttpClientModule } from '@angular/common/http';
 // import { MatButtonModule as MatButtonModule } from '@angular/material/button';
 // import { MatTableExporterModule } from 'mat-table-exporter';
 // import { BytesPipe } from './shared/bytes-pipe';
-// import { HeaderComponent } from './shared/header/header.component';
+import { HeaderComponent } from './shared/header/header.component';
 // import { AboutComponent } from './about/about.component';
 // import { HelpComponent } from './help/help.component';
-// import { HomeComponent } from './home/home.component';
+import { HomeComponent } from './home/home.component';
 // import { ApiComponent } from './api/api.component';
 // import {DownloadConfirmationDialogComponent} from './download-confirmation-dialog-component/download-confirmation-dialog.component';
 // import {MatDialogModule as MatDialogModule} from '@angular/material/dialog';
 // import {MatSnackBarModule as MatSnackBarModule} from '@angular/material/snack-bar';
-// import {MatRadioModule as MatRadioModule} from '@angular/material/radio';
+// import { MatRadioModule } from '@angular/material/radio';
 // import {ConfirmationDialogComponent} from './confirmation-dialog-component/confirmation-dialog.component';
 // import {MatTooltipModule as MatTooltipModule} from '@angular/material/tooltip';
 // import {ClipboardModule} from '@angular/cdk/clipboard';
@@ -38,18 +38,19 @@ import { HttpClientModule } from '@angular/common/http';
 // import { BulkDownloadsComponent } from './bulk-downloads/bulk-downloads.component';
 // import {PublicationsComponent} from './publications/publications.component';
 // import {MatExpansionModule} from '@angular/material/expansion';
-// import {MatTableModule as MatTableModule} from '@angular/material/table';
-// import {MatPaginatorModule as MatPaginatorModule} from '@angular/material/paginator';
+
+// import { MatTableModule } from '@angular/material/table';
+// import { MatPaginatorModule } from '@angular/material/paginator';
 // import {MatSortModule} from '@angular/material/sort';
 // import {GetDataService} from "./services/get-data.service";
 
 @NgModule({
   declarations: [
     AppComponent,
-    // HeaderComponent,
+    HeaderComponent,
     // AboutComponent,
     // HelpComponent,
-    // HomeComponent,
+    HomeComponent,
     // ApiComponent,
     // DownloadConfirmationDialogComponent,
     // BytesPipe,
