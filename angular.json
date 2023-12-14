@@ -132,7 +132,6 @@
             }
         }
     },
-    "defaultProject": "tree-of-life-portal",
     "cli": {
         "analytics": false
     }
