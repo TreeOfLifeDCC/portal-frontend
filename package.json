@@ -31,7 +31,7 @@
     "leaflet": "^1.8.0",
     "leaflet.markercluster": "^1.5.3",
     "mat-table-exporter": "^10.2.3",
-    "ngx-spinner": "^10.0.1",
+    "ngx-spinner": "^16.0.2",
     "path": "^0.12.7",
     "popper.js": "^1.16.1",
     "rxjs": "~6.5.5",
