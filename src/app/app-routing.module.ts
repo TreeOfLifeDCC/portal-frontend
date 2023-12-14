@@ -33,12 +33,12 @@ const routes: Routes = [
   // {
   //   path: 'bulk-downloads' , component: BulkDownloadsComponent
   // },
-  // {
-  //   path: '',
-  //   children: [
-  //     { path: 'data', loadChildren: () => import('./dashboard/dashboard.module').then(m => m.DashboardModule) }
-  //   ]
-  // },
+  {
+    path: '',
+    children: [
+      { path: 'data', loadChildren: () => import('./dashboard/dashboard.module').then(m => m.DashboardModule) }
+    ]
+  },
   // {
   //   path: '',
   //   children: [

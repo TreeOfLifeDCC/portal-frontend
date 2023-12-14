@@ -5,6 +5,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { MatFormFieldModule } from '@angular/material/form-field';
 // import { CookieLawModule } from 'angular2-cookie-law';
 import { HttpClientModule } from '@angular/common/http';
 
@@ -12,7 +13,7 @@ import { HttpClientModule } from '@angular/common/http';
 // import { MatIconModule } from '@angular/material/icon';
 // import { MatButtonModule as MatButtonModule } from '@angular/material/button';
 // import { MatTableExporterModule } from 'mat-table-exporter';
-// import { BytesPipe } from './shared/bytes-pipe';
+import { BytesPipe } from './shared/bytes-pipe';
 import { HeaderComponent } from './shared/header/header.component';
 // import { AboutComponent } from './about/about.component';
 // import { HelpComponent } from './help/help.component';
@@ -21,7 +22,7 @@ import { HomeComponent } from './home/home.component';
 // import {DownloadConfirmationDialogComponent} from './download-confirmation-dialog-component/download-confirmation-dialog.component';
 // import {MatDialogModule as MatDialogModule} from '@angular/material/dialog';
 // import {MatSnackBarModule as MatSnackBarModule} from '@angular/material/snack-bar';
-// import { MatRadioModule } from '@angular/material/radio';
+import { MatRadioModule } from '@angular/material/radio';
 // import {ConfirmationDialogComponent} from './confirmation-dialog-component/confirmation-dialog.component';
 // import {MatTooltipModule as MatTooltipModule} from '@angular/material/tooltip';
 // import {ClipboardModule} from '@angular/cdk/clipboard';
@@ -37,12 +38,15 @@ import { HomeComponent } from './home/home.component';
 // import {FilterService} from './services/filter-service';
 // import { BulkDownloadsComponent } from './bulk-downloads/bulk-downloads.component';
 // import {PublicationsComponent} from './publications/publications.component';
-// import {MatExpansionModule} from '@angular/material/expansion';
+import {MatExpansionModule} from '@angular/material/expansion';
+import {MatTabsModule} from '@angular/material/tabs';
 
-// import { MatTableModule } from '@angular/material/table';
-// import { MatPaginatorModule } from '@angular/material/paginator';
+import { MatTableModule } from '@angular/material/table';
+import { MatPaginatorModule } from '@angular/material/paginator';
 // import {MatSortModule} from '@angular/material/sort';
 // import {GetDataService} from "./services/get-data.service";
+
+import {RouterModule} from '@angular/router';
 
 @NgModule({
   declarations: [
@@ -53,7 +57,7 @@ import { HomeComponent } from './home/home.component';
     HomeComponent,
     // ApiComponent,
     // DownloadConfirmationDialogComponent,
-    // BytesPipe,
+    BytesPipe,
     // ConfirmationDialogComponent,
     // GisComponent,
     // BulkDownloadsComponent,
@@ -65,6 +69,7 @@ import { HomeComponent } from './home/home.component';
     BrowserAnimationsModule,
     FormsModule,
     ReactiveFormsModule,
+    MatFormFieldModule,
     // CookieLawModule,
     HttpClientModule,
     // MatTreeModule,
@@ -73,7 +78,7 @@ import { HomeComponent } from './home/home.component';
     // MatTableExporterModule,
     // MatDialogModule,
     // MatSnackBarModule,
-    // MatRadioModule,
+    MatRadioModule,
     // MatTooltipModule,
     // ClipboardModule,
     // NgxSpinnerModule,
@@ -83,12 +88,14 @@ import { HomeComponent } from './home/home.component';
     // DashboardModule,
     // MatInputModule,
     // NgxSpinnerModule,
-    // MatExpansionModule,
-    // MatTableModule,
-    // MatPaginatorModule,
-    // MatSortModule
+    MatExpansionModule,
+    MatTabsModule,
+    MatTableModule,
+    MatPaginatorModule,
+    // MatSortModule,
+    RouterModule
   ],
-  providers: [],
+  providers: [BytesPipe],
   // providers: [BytesPipe, GisService, FilterService, GetDataService],
   bootstrap: [AppComponent],
 

@@ -15,28 +15,28 @@
             <div class="col-md-2">
                 <div class="row">
                     <div class="col-md-12 col-sm-6">
-                        <app-filter title="Data Status" isShowCount=true></app-filter>
+<!--                        <app-filter title="Data Status" isShowCount=true></app-filter>-->
                     </div>
                 </div>
 
-                <app-phylogeny-filter isShowCount=true></app-phylogeny-filter>
-                <app-filter title="Experiment Type" isShowCount="true" filterSize="5"></app-filter>
+<!--                <app-phylogeny-filter isShowCount=true></app-phylogeny-filter>-->
+<!--                <app-filter title="Experiment Type" isShowCount="true" filterSize="5"></app-filter>-->
             </div>
             <div class="col-md-10" >
                 <h1 class="page-header">Organisms</h1>
 
-                <mat-expansion-panel (opened)="expanded()" class="column-header">
-                    <mat-expansion-panel-header class="page-header">
-                        Column Selection
-                    </mat-expansion-panel-header>
-                    <div class="col-md-12">
-                        <div class="row">
-                            <mat-checkbox *ngFor="let data of dataColumnsDefination" class="col-md-4" color="primary" (click)="$event.stopPropagation()" (keydown)="$event.stopPropagation()" [checked]="data.selected" (change)="showSelectedColumn(data, $event.checked)">
-                                {{data.name}}
-                            </mat-checkbox>
-                        </div>
-                    </div>
-                </mat-expansion-panel>
+<!--                <mat-expansion-panel (opened)="expanded()" class="column-header">-->
+<!--                    <mat-expansion-panel-header class="page-header">-->
+<!--                        Column Selection-->
+<!--                    </mat-expansion-panel-header>-->
+<!--                    <div class="col-md-12">-->
+<!--                        <div class="row">-->
+<!--                            <mat-checkbox *ngFor="let data of dataColumnsDefination" class="col-md-4" color="primary" (click)="$event.stopPropagation()" (keydown)="$event.stopPropagation()" [checked]="data.selected" (change)="showSelectedColumn(data, $event.checked)">-->
+<!--                                {{data.name}}-->
+<!--                            </mat-checkbox>-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                </mat-expansion-panel>-->
                 <br />
                 <div class="column-header" >
                 <button *ngIf="filterService.activeFilters.length > 0 || filterService.selectedFilterValue != '' && (filterService.AnnotationFilters.length > 0 || filterService.AnnotationCompleteFilters.length > 0 || filterService.AssembliesFilters.length > 0 || filterService.RawDataFilters.length > 0)" type="button" style="float: right;"
@@ -55,11 +55,13 @@
 
                     </div>
                 </div>
-                <mat-form-field class="column-header">
-                    <mat-label>Search</mat-label>
-                    <input  #searchInput matInput [(ngModel)]='filterService.searchText' (ngModelChange)="this.searchUpdate.next($event)" placeholder="Ex. lutra" #input>
-                </mat-form-field>
-                <table mat-table  matTableExporter #exporter="matTableExporter" #table [dataSource]="dataSource" matSort (matSortChange)="customSort($event)">
+<!--                <mat-form-field class="column-header">-->
+<!--                    <mat-label>Search</mat-label>-->
+<!--                    <input  #searchInput matInput [(ngModel)]='filterService.searchText' (ngModelChange)="this.searchUpdate.next($event)" placeholder="Ex. lutra" #input>-->
+<!--                </mat-form-field>-->
+<!--                <table mat-table  matTableExporter #exporter="matTableExporter" #table [dataSource]="dataSource" matSort (matSortChange)="customSort($event)">-->
+                dataSource: {{dataSource}}
+                    <table mat-table  #table [dataSource]="dataSource" matSort (matSortChange)="customSort($event)">
                     <ng-container matColumnDef="organism">
                         <mat-header-cell *matHeaderCellDef mat-sort-header [ngClass]="'w-150 th-left'"> Organism </mat-header-cell>
                         <mat-cell *matCellDef="let element" [ngClass]="'w-150 th-left'">
@@ -166,7 +168,7 @@
                     <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
                     <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
                 </table>
-                <mat-paginator [pageSizeOptions]="[20, 40, 60, 100]" showFirstLastButtons [length]="bioSampleTotalCount" (page)="pageChanged($event)"></mat-paginator>
+<!--                <mat-paginator [pageSizeOptions]="[20, 40, 60, 100]" showFirstLastButtons [length]="bioSampleTotalCount" (page)="pageChanged($event)"></mat-paginator>-->
             </div>
         </div>
     </div>

@@ -52,7 +52,7 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   // tslint:disable-next-line:typedef
   ngOnDestroy() {
-    this.twitter.unsubscribe();
+    // this.twitter.unsubscribe();
   }
 
 }

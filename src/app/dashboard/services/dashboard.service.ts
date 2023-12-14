@@ -13,7 +13,7 @@ import {tap} from "rxjs/operators";
 })
 export class DashboardService {
 
-  private API_BASE_URL = 'https://dtol-portal-backend-vk4vfzpm7a-ew.a.run.app';
+  private API_BASE_URL = 'https://portal.darwintreeoflife.org/api';
   private ENA_PORTAL_API_BASE_URL = 'https://www.ebi.ac.uk/ena/portal/api/files';
 
   constructor(private http: HttpClient, private bytesPipe: BytesPipe,  private dialog: MatDialog) { }

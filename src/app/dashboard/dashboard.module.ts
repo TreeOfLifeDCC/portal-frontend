@@ -16,7 +16,7 @@ import {MatPaginatorModule as MatPaginatorModule} from '@angular/material/pagina
 import {MatFormFieldModule as MatFormFieldModule} from '@angular/material/form-field';
 import {MatInputModule as MatInputModule} from '@angular/material/input';
 import { NgxSpinnerModule } from 'ngx-spinner';
-import { MatTableExporterModule } from 'mat-table-exporter';
+// import { MatTableExporterModule } from 'mat-table-exporter';
 import {MatExpansionModule} from '@angular/material/expansion';
 import {MatCheckboxModule as MatCheckboxModule} from '@angular/material/checkbox';
 
@@ -31,7 +31,7 @@ import {FilterComponent} from '../shared/filter/filter.component';
 import {PhylogenyFilterComponent} from '../shared/phylogeny-filter/phylogeny-filter.component';
 import {ActiveFilterComponent} from '../shared/active-filter/active-filter.component';
 import {MatCardModule as MatCardModule} from '@angular/material/card';
-import { MatCarouselModule } from 'ng-mat-carousel';
+// import { MatCarouselModule } from 'ng-mat-carousel';
 
 
 
@@ -53,14 +53,14 @@ import { MatCarouselModule } from 'ng-mat-carousel';
     MatFormFieldModule,
     MatInputModule,
     NgxSpinnerModule,
-    MatTableExporterModule,
+    // MatTableExporterModule,
     MatExpansionModule,
     MatCheckboxModule,
     MatTabsModule,
     MatCheckboxModule,
     MatTooltipModule,
     MatCardModule,
-    MatCarouselModule.forRoot()
+    // MatCarouselModule.forRoot()
   ],
   exports: [
     FilterComponent, PhylogenyFilterComponent, ActiveFilterComponent
