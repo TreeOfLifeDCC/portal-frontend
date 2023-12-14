@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { DynamicScriptLoaderService } from './services/dynamic-script-loader.service';
-import { FormControl } from '@angular/forms';
+import { UntypedFormControl } from '@angular/forms';
 import {MatRadioChange} from '@angular/material/radio';
 import { NgxSpinnerService } from 'ngx-spinner';
 
@@ -12,7 +12,7 @@ import { NgxSpinnerService } from 'ngx-spinner';
 })
 export class PhylogeneticsComponent implements OnInit {
 
-  toggleSpecimen = new FormControl();
+  toggleSpecimen = new UntypedFormControl();
   radioOptions = 1;
 
 

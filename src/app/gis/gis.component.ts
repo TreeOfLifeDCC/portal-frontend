@@ -3,7 +3,7 @@ import * as L from 'leaflet';
 import 'leaflet.markercluster';
 import { GisService } from './gis.service';
 import { NgxSpinnerService } from 'ngx-spinner';
-import { FormControl } from '@angular/forms';
+import { UntypedFormControl } from '@angular/forms';
 import {control} from 'leaflet';
 import layers = control.layers;
 import {MatRadioChange} from '@angular/material/radio';
@@ -35,11 +35,11 @@ export class GisComponent implements AfterViewInit , OnDestroy {
   private map;
   private tiles;
   private markers;
-  toggleSpecimen = new FormControl();
+  toggleSpecimen = new UntypedFormControl();
   selectedPhylogenyFilter;
   unpackedData;
 
-  myControl = new FormControl('');
+  myControl = new UntypedFormControl('');
   filteredOptions: string[];
   radioOptions = 1;
   constructor(private gisService: GisService, private spinner: NgxSpinnerService, private activatedRoute: ActivatedRoute,
