@@ -32,7 +32,8 @@
                             "src/assets/css/jquery.dataTables.css",
                             "./node_modules/leaflet/dist/leaflet.css",
                             "src/assets/css/MarkerCluster.css",
-                            "src/assets/css/MarkerCluster.Default.css"
+                            "src/assets/css/MarkerCluster.Default.css",
+                            "./node_modules/ngx-spinner/animations/ball-clip-rotate-pulse.css"
 
                         ],
                         "scripts": [

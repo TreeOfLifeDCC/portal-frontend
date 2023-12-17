@@ -1,6 +1,6 @@
 <div>
-<!--    <ngx-spinner bdColor="rgba(0,0,0,0.9)" [fullScreen]="true" size="large" color="#fff" type="ball-clip-rotate-pulse">-->
-<!--    </ngx-spinner>-->
+    <ngx-spinner bdColor="rgba(0,0,0,0.9)" [fullScreen]="true" size="large" color="#fff" type="ball-clip-rotate-pulse">
+    </ngx-spinner>
     <div class="jumbotron jumbotron-fluid">
         <div class="container">
             <div class="row">
@@ -10,62 +10,62 @@
         </div>
     </div>
 
-<!--    <div class="container" style="padding-top: 10px;">-->
-<!--    <div class="row">-->
-<!--        <div class="col-lg-2">-->
-<!--             <div class="toggle">-->
-<!--                <mat-radio-group aria-label="Select an option" [(ngModel)]="this.radioOptions" >-->
-<!--                    <mat-radio-button class="orgLabel" id="default"  [value]=1  name="toggleSpecies"   (change)="toggleSpecimens($event)" checked>Species</mat-radio-button><br>-->
-<!--                    <mat-radio-button class="orgLabel" id="toggle" name="toggleSpecimen" (change)="toggleSpecimens($event)" [value]=3>Species and Specimens</mat-radio-button>-->
+    <div class="container" style="padding-top: 10px;">
+    <div class="row">
+        <div class="col-lg-2">
+             <div class="toggle">
+                <mat-radio-group aria-label="Select an option" [(ngModel)]="this.radioOptions" >
+                    <mat-radio-button class="orgLabel" id="default"  [value]=1  name="toggleSpecies"   (change)="toggleSpecimens($event)" checked>Species</mat-radio-button><br>
+                    <mat-radio-button class="orgLabel" id="toggle" name="toggleSpecimen" (change)="toggleSpecimens($event)" [value]=3>Species and Specimens</mat-radio-button>
 
-<!--                </mat-radio-group>-->
-<!--            </div>-->
+                </mat-radio-group>
+            </div>
 
-<!--            <app-filter title="Data Status"></app-filter>-->
-<!--            <br>-->
-<!--            <app-phylogeny-filter></app-phylogeny-filter>-->
+            <app-filter title="Data Status"></app-filter>
+            <br>
+            <app-phylogeny-filter></app-phylogeny-filter>
 
-<!--            <app-filter title="Experiment Type" filterSize="5"></app-filter>-->
+            <app-filter title="Experiment Type" filterSize="5"></app-filter>
 
-<!--        </div>-->
-<!--        <div class="col-lg-8 ">-->
-<!--            <h1 class="page-header">Sampling Map</h1>-->
-<!--            -->
-<!--&lt;!&ndash;            <span *ngIf="hasActiveFilters()" class="orgLabel">Note: Count can be different because single species can exist on different locations.</span>&ndash;&gt;-->
-<!--            <br>-->
-<!--            <div *ngIf="hasActiveFilters()">-->
-<!--                <app-active-filter true></app-active-filter>-->
+        </div>
+        <div class="col-lg-8 ">
+            <h1 class="page-header">Sampling Map</h1>
 
-<!--                <span *ngIf="(filterService.selectedFilterValue!= undefined && filterService.selectedFilterValue != '')">-->
-<!--                    <button type="button" class="btn btn-success">{{filterService.selectedFilterValue.taxonomy}}-->
-<!--                        <span class="badge badge-light" (click)="filterService.removeTaxaFilter(filterService.selectedFilterValue.taxonomy)">X</span>-->
-<!--                    </button>-->
-<!--                </span>-->
-<!--                <button class="btn btn-primary" type = "button" (click)="removeFilter()">Remove all filters</button>-->
+<!--            <span *ngIf="hasActiveFilters()" class="orgLabel">Note: Count can be different because single species can exist on different locations.</span>-->
+            <br>
+            <div *ngIf="hasActiveFilters()">
+                <app-active-filter true></app-active-filter>
 
-<!--            </div>-->
-<!--                <div class="search">-->
-<!--                    <mat-form-field>-->
-<!--                        <mat-label>Search</mat-label>-->
-<!--                        <input #searchInput matInput (keyup.enter)="searchGisData()" [(ngModel)]='filterService.searchText' (keyup)="filterSearchResults()" placeholder="Search for species"  #matInput [matAutocomplete]="auto">-->
-<!--                    </mat-form-field>-->
-<!--                <mat-autocomplete #auto="matAutocomplete">-->
-<!--                    <mat-option *ngFor="let option of filteredOptions" [value]="option.id" (click)="searchGisData()">-->
-<!--                        {{option.id}}-->
-<!--                    </mat-option>-->
-<!--                </mat-autocomplete>-->
-<!--                </div>-->
-<!--                <br>-->
-<!--            <div class="row">-->
-<!--                <div class="map-container">-->
-<!--                    <div class="map-frame">-->
-<!--                        <div id="map"></div>-->
-<!--                    </div>-->
-<!--                </div>-->
-<!--            </div>-->
-<!--        </div>-->
+                <span *ngIf="(filterService.selectedFilterValue!= undefined && filterService.selectedFilterValue != '')">
+                    <button type="button" class="btn btn-success">{{filterService.selectedFilterValue.taxonomy}}
+                        <span class="badge badge-light" (click)="filterService.removeTaxaFilter(filterService.selectedFilterValue.taxonomy)">X</span>
+                    </button>
+                </span>
+                <button class="btn btn-primary" type = "button" (click)="removeFilter()">Remove all filters</button>
 
-<!--    </div>-->
+            </div>
+                <div class="search">
+                    <mat-form-field>
+                        <mat-label>Search</mat-label>
+                        <input #searchInput matInput (keyup.enter)="searchGisData()" [(ngModel)]='filterService.searchText' (keyup)="filterSearchResults()" placeholder="Search for species"  #matInput [matAutocomplete]="auto">
+                    </mat-form-field>
+                <mat-autocomplete #auto="matAutocomplete">
+                    <mat-option *ngFor="let option of filteredOptions" [value]="option.id" (click)="searchGisData()">
+                        {{option.id}}
+                    </mat-option>
+                </mat-autocomplete>
+                </div>
+                <br>
+            <div class="row">
+                <div class="map-container">
+                    <div class="map-frame">
+                        <div id="map"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
 
-<!--    </div>-->
+    </div>
+
+    </div>
 </div>

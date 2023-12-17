@@ -1,15 +1,15 @@
 <h1 mat-dialog-title>Download data</h1>
 <div mat-dialog-content>
-<!--    <mat-radio-group aria-labelledby="download-label" [(ngModel)]="this.radioOptions" id="download" name="download"-->
-<!--                     class="radio-group">-->
-<!--        <mat-radio-button  *ngIf="!data.hideAssemblies;" class="radio-button" value="assemblies" name="download-label-assemblies" >All assemblies</mat-radio-button>-->
-<!--        <br *ngIf="!data.hideAnnotation;">-->
-<!--        <mat-radio-button *ngIf="!data.hideAnnotation;" class="radio-button" value="annotation"  name="download-label-annotation" >Annotation</mat-radio-button>-->
-<!--        <br>-->
-<!--    </mat-radio-group>-->
+    <mat-radio-group aria-labelledby="download-label" [(ngModel)]="this.radioOptions" id="download" name="download"
+                     class="radio-group">
+        <mat-radio-button  *ngIf="!data.hideAssemblies;" class="radio-button" value="assemblies" name="download-label-assemblies" >All assemblies</mat-radio-button>
+        <br *ngIf="!data.hideAnnotation;">
+        <mat-radio-button *ngIf="!data.hideAnnotation;" class="radio-button" value="annotation"  name="download-label-annotation" >Annotation</mat-radio-button>
+        <br>
+    </mat-radio-group>
     <br>
     To download data outside of the web interface, please see
-<!--    <a target="_blank" [routerLink]="['/bulk-downloads/']">Bulk Downloads</a>-->
+    <a target="_blank" [routerLink]="['/bulk-downloads/']">Bulk Downloads</a>
 <br>
 </div>
     <div  mat-dialog-actions class="confirmation-dialog-btn" mat-dialog-actions style="float: right;">

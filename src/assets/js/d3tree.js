@@ -1,6 +1,5 @@
 var url = "https://portal.darwintreeoflife.org/api/taxonomy/tree";
 
-
 function drawTree(url) {
     d3.json(url, function(error, treeData) {
         // Calculate total nodes, max label length
@@ -801,7 +800,7 @@ function drawTree(url) {
     });
 }
 
-url = "https://dtol-portal-backend-vk4vfzpm7a-ew.a.run.app/taxonomy/tree";
+url = "https://portal.darwintreeoflife.org/api/taxonomy/tree";
 drawTree(url);
 // $('input[type="radio"]').on('change', function(e) {
 //     d3.select('#tree-container').select("svg").remove();
@@ -812,4 +811,3 @@ drawTree(url);
 //     }
 //     drawTree(url);
 // });
-
