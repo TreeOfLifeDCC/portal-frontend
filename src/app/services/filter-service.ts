@@ -1,6 +1,6 @@
 import {Injectable, ViewChild} from '@angular/core';
-import {MatTableDataSource as MatTableDataSource} from '@angular/material/table';
-import {MatPaginator as MatPaginator} from '@angular/material/paginator';
+import {MatTableDataSource} from '@angular/material/table';
+import {MatPaginator} from '@angular/material/paginator';
 import {MatSort} from '@angular/material/sort';
 import {ActivatedRoute, Router} from '@angular/router';
 

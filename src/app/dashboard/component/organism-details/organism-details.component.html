@@ -1,6 +1,6 @@
 <div>
-<!--    <ngx-spinner bdColor="rgba(0,0,0,0.9)" [fullScreen]="true" size="large" color="#fff" type="ball-clip-rotate-pulse">-->
-<!--    </ngx-spinner>-->
+    <ngx-spinner bdColor="rgba(0,0,0,0.9)" [fullScreen]="true" size="large" color="#fff" type="ball-clip-rotate-pulse">
+    </ngx-spinner>
     <div class="container" style="padding-top: 65px;">
         <h1 class="text-center page-header">{{bioSampleObj?.organism}}</h1>
         <dl class="row">
@@ -36,7 +36,6 @@
 
 
         <mat-tab-group dynamicHeight #tabgroup>
-
             <mat-tab label="Metadata" *ngIf="bioSampleObj?.records && bioSampleObj?.records.length">
                 <!-- Related Organisms -->
                 <div class="col-md-12" *ngIf="bioSampleObj?.records.length">
@@ -895,7 +894,6 @@
                 </div>
                 <hr>
             </mat-tab>
-
             <mat-tab label="Symbionts" *ngIf="bioSampleObj?.symbionts_records && bioSampleObj?.symbionts_records.length">
                 <div class="col-md-12" *ngIf="bioSampleObj?.symbionts_records.length">
                     <hr>
@@ -1035,7 +1033,6 @@
                     </mat-expansion-panel>
                 </div>
             </mat-tab>
-
             <mat-tab label="Genome Stats (GoAT)" *ngIf="bioSampleObj?.goat_info && (bioSampleObj?.goat_info | json) != '{}'">
                 <!-- Goat Info Section -->
                 <div class="tab-box" *ngIf="bioSampleObj?.goat_info">
@@ -1091,17 +1088,6 @@
                     <hr>
                 </div>
             </mat-tab>
-
-<!--            <mat-tab label="Geo Location" *ngIf="geoLocation">-->
-<!--                &lt;!&ndash; Geo Section &ndash;&gt;-->
-<!--                <hr>-->
-<!--                <div class="col-md-12" *ngIf="geoLocation">-->
-<!--                    <app-mapcluster [orgGeoList]="orgGeoList" [specGeoList]="specGeoList"></app-mapcluster>-->
-<!--                </div>-->
-<!--                <hr>-->
-<!--            </mat-tab>-->
-
-
             <mat-tab label="Geo Location Maps">
                 <ng-template matTabContent>
                     <mat-tab-group>
@@ -1122,9 +1108,8 @@
                                     <img style="margin-left: 280px;" [src]="loader" />
                                 </div>
                                 <div  *ngIf="url">
-
-                                      <br>
-                   <img  [src]='url'
+                                    <br>
+                                    <img  [src]='url'
                                           (load)="hideLoader()">
                                     <br>
 

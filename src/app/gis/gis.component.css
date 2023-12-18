@@ -98,8 +98,20 @@
 }
 
 .orgLabel {
-    padding-right: 10px;
+    /*padding-right: 5px;*/
+    margin-left: -10px;
+    height: 20px;
 }
+
+.orgLabel span {
+    vertical-align: center;
+    margin-left: -10px;
+    top:50%;
+    height: 20px;
+    margin-top:10px;
+    display: block;
+}
+
 
 button {
     margin: 2px;
@@ -114,4 +126,18 @@ button {
 .btn-primary,
 .active {
     background-color: #4BBEFD;
+}
+
+
+
+/*.mat-mdc-radio-button ~ .mat-mdc-radio-button {*/
+/*    !*margin-left: 16px;*!*/
+/*    background-color: #4BBEFD;*/
+/*}*/
+
+
+.mat-mdc-radio-button.mdc-form-field{
+    background-color: red;
+    margin-left: 0px;
+    padding: 0px;
 }

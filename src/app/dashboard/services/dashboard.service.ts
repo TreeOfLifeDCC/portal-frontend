@@ -3,10 +3,10 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
 import { Sample } from '../model/dashboard.model';
-import {ConfirmationDialogComponent} from '../../confirmation-dialog-component/confirmation-dialog.component';
-import {BytesPipe} from '../../shared/bytes-pipe';
-import {MatDialog as MatDialog} from '@angular/material/dialog';
-import {tap} from 'rxjs/operators';
+import {ConfirmationDialogComponent} from "../../confirmation-dialog-component/confirmation-dialog.component";
+import {BytesPipe} from "../../shared/bytes-pipe";
+import {MatDialog} from "@angular/material/dialog";
+import {tap} from "rxjs/operators";
 
 @Injectable({
   providedIn: 'root'

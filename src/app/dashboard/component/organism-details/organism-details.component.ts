@@ -2,14 +2,12 @@ import {AfterViewInit, Component, Input, OnInit, ViewChild} from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router';
 import { Sample, samples } from '../../model/dashboard.model';
 import { MatSort } from '@angular/material/sort';
-import { MatPaginator as MatPaginator } from '@angular/material/paginator';
-import { MatTableDataSource as MatTableDataSource } from '@angular/material/table';
+import { MatPaginator } from '@angular/material/paginator';
+import { MatTableDataSource } from '@angular/material/table';
 import { DashboardService } from '../../services/dashboard.service';
 import { NgxSpinnerService } from 'ngx-spinner';
-import { MatTabGroup as MatTabGroup } from '@angular/material/tabs';
-
+import { MatTabGroup } from '@angular/material/tabs';
 import {DomSanitizer, SafeResourceUrl} from "@angular/platform-browser";
-
 
 @Component({
   selector: 'dashboard-organism-details',
@@ -56,7 +54,7 @@ export class OrganismDetailsComponent implements OnInit, AfterViewInit {
   specSymbiontsTotalCount;
   specDisplayedColumns = ['accession', 'organism', 'commonName', 'sex', 'organismPart', 'trackingSystem'];
 
-  private ENA_PORTAL_API_BASE_URL_FASTA = 'https://www.ebi.ac.uk/ena/browser/api/fasta/';
+  private ENA_PORTAL_API_BASE_URL_FASTA = "https://www.ebi.ac.uk/ena/browser/api/fasta/"
   isSexFilterCollapsed = true;
   isTrackCollapsed = true;
   isOrganismPartCollapsed = true;
@@ -80,9 +78,9 @@ export class OrganismDetailsComponent implements OnInit, AfterViewInit {
   organismName;
   relatedRecords;
   filterJson = {
-    sex: '',
-    organismPart: '',
-    trackingSystem: ''
+    sex: "",
+    organismPart: "",
+    trackingSystem: ""
   };
 
   dataSourceFiles;
@@ -96,55 +94,46 @@ export class OrganismDetailsComponent implements OnInit, AfterViewInit {
   dataSourceRelatedAnnotation;
   dataSourceRelatedAnnotationCount;
 
-  // tslint:disable-next-line:max-line-length
-  experimentColumnsDefination = [{ column: 'study_accession', selected: true }, { column: 'secondary_study_accession', selected: false }, { column: 'sample_accession', selected: true }, { column: 'secondary_sample_accession', selected: false }, { column: 'experiment_accession', selected: true }, { column: 'run_accession', selected: true }, { column: 'submission_accession', selected: false }, { column: 'tax_id', selected: true }, { column: 'scientific_name', selected: true }, { column: 'instrument_platform', selected: false }, { column: 'instrument_model', selected: false }, { column: 'library_name', selected: false }, { column: 'nominal_length', selected: false }, { column: 'library_layout', selected: false }, { column: 'library_strategy', selected: false }, { column: 'library_source', selected: false }, { column: 'library_selection', selected: false }, { column: 'read_count', selected: false }, { column: 'base_count', selected: false }, { column: 'center_name', selected: false }, { column: 'first_public', selected: false }, { column: 'last_updated', selected: false }, { column: 'experiment_title', selected: false }, { column: 'study_title', selected: false }, { column: 'study_alias', selected: false }, { column: 'experiment_alias', selected: false }, { column: 'run_alias', selected: false }, { column: 'fastq_bytes', selected: false }, { column: 'fastq_md5', selected: false }, { column: 'fastq_ftp', selected: true }, { column: 'fastq_aspera', selected: false }, { column: 'fastq_galaxy', selected: false }, { column: 'submitted_bytes', selected: false }, { column: 'submitted_md5', selected: false }, { column: 'submitted_ftp', selected: true }, { column: 'submitted_aspera', selected: false }, { column: 'submitted_galaxy', selected: false }, { column: 'submitted_format', selected: false }, { column: 'sra_bytes', selected: false }, { column: 'sra_md5', selected: false }, { column: 'sra_ftp', selected: true }, { column: 'sra_aspera', selected: false }, { column: 'sra_galaxy', selected: false }, { column: 'cram_index_ftp', selected: false }, { column: 'cram_index_aspera', selected: false }, { column: 'cram_index_galaxy', selected: false }, { column: 'sample_alias', selected: false }, { column: 'broker_name', selected: false }, { column: 'sample_title', selected: false }, { column: 'nominal_sdev', selected: false }, { column: 'first_created', selected: false }, { column: 'library_construction_protocol', selected: true }];
+  experimentColumnsDefination = [{ column: "study_accession", selected: true }, { column: "secondary_study_accession", selected: false }, { column: "sample_accession", selected: true }, { column: "secondary_sample_accession", selected: false }, { column: "experiment_accession", selected: true }, { column: "run_accession", selected: true }, { column: "submission_accession", selected: false }, { column: "tax_id", selected: true }, { column: "scientific_name", selected: true }, { column: "instrument_platform", selected: false }, { column: "instrument_model", selected: false }, { column: "library_name", selected: false }, { column: "nominal_length", selected: false }, { column: "library_layout", selected: false }, { column: "library_strategy", selected: false }, { column: "library_source", selected: false }, { column: "library_selection", selected: false }, { column: "read_count", selected: false }, { column: "base_count", selected: false }, { column: "center_name", selected: false }, { column: "first_public", selected: false }, { column: "last_updated", selected: false }, { column: "experiment_title", selected: false }, { column: "study_title", selected: false }, { column: "study_alias", selected: false }, { column: "experiment_alias", selected: false }, { column: "run_alias", selected: false }, { column: "fastq_bytes", selected: false }, { column: "fastq_md5", selected: false }, { column: "fastq_ftp", selected: true }, { column: "fastq_aspera", selected: false }, { column: "fastq_galaxy", selected: false }, { column: "submitted_bytes", selected: false }, { column: "submitted_md5", selected: false }, { column: "submitted_ftp", selected: true }, { column: "submitted_aspera", selected: false }, { column: "submitted_galaxy", selected: false }, { column: "submitted_format", selected: false }, { column: "sra_bytes", selected: false }, { column: "sra_md5", selected: false }, { column: "sra_ftp", selected: true }, { column: "sra_aspera", selected: false }, { column: "sra_galaxy", selected: false }, { column: "cram_index_ftp", selected: false }, { column: "cram_index_aspera", selected: false }, { column: "cram_index_galaxy", selected: false }, { column: "sample_alias", selected: false }, { column: "broker_name", selected: false }, { column: "sample_title", selected: false }, { column: "nominal_sdev", selected: false }, { column: "first_created", selected: false }, { column: "library_construction_protocol", selected: true }]
 
   displayedColumnsFiles = [];
   displayedColumnsAnnotations = [];
   displayedColumnsAssemblies = ['accession', 'assembly_name', 'description', 'version'];
   displayedColumnsAnnotation = ['accession', 'annotation', 'proteins', 'transcripts', 'softmasked_genome', 'other_data', 'view_in_browser'];
   displayedColumnsRelatedAnnotation = [
-    { name: 'Study Accession', column: 'study_accession', selected: true },
-    { name: 'Sample Accession', column: 'sample_accession', selected: true },
-    { name: 'Secondary Sample Accession', column: 'secondary_sample_accession', selected: true },
-    { name: 'Tax Id', column: 'tax_id', selected: true },
-    { name: 'Study Alias', column: 'study_alias', selected: true },
-    { name: 'Submitted files: FTP', column: 'submitted_ftp', selected: true },
-    { name: 'Submitted files: Aspera', column: 'submitted_aspera', selected: true },
-    { name: 'Broker Name', column: 'broker_name', selected: true },
-    { name: 'Analysis Accession', column: 'analysis_accession', selected: false },
-    { name: 'Anaylsis Type', column: 'analysis_type', selected: false },
-    { name: 'Center Name', column: 'center_name', selected: false },
-    { name: 'Generated Bytes', column: 'generated_bytes', selected: false },
-    { name: 'Generated MD5', column: 'generated_md5', selected: false },
-    { name: 'Sample Alias', column: 'sample_alias', selected: false },
-    { name: 'Submitted Bytes', column: 'submitted_bytes', selected: false },
-    { name: 'Submitted MD5', column: 'submitted_md5', selected: false },
-    { name: 'Anaylsis Alias', column: 'analysis_alias', selected: false },
-    { name: 'Assembly Type', column: 'assembly_type', selected: false },
-    { name: 'First Public', column: 'first_public', selected: false },
-    { name: 'Generated FTP', column: 'generated_ftp', selected: false },
-    { name: 'Last Updated', column: 'last_updated', selected: false },
-    { name: 'Sample Title', column: 'sample_title', selected: false },
-    { name: 'Study Title', column: 'study_title', selected: false },
-    { name: 'Analysis Title', column: 'analysis_title', selected: false },
-    { name: 'Generated Aspera', column: 'generated_aspera', selected: false },
-    { name: 'Generated Galaxy', column: 'generated_galaxy', selected: false }
-  ];
+    { name: "Study Accession", column: "study_accession", selected: true },
+    { name: "Sample Accession", column: "sample_accession", selected: true },
+    { name: "Secondary Sample Accession", column: "secondary_sample_accession", selected: true },
+    { name: "Tax Id", column: "tax_id", selected: true },
+    { name: "Study Alias", column: "study_alias", selected: true },
+    { name: "Submitted files: FTP", column: "submitted_ftp", selected: true },
+    { name: "Submitted files: Aspera", column: "submitted_aspera", selected: true },
+    { name: "Broker Name", column: "broker_name", selected: true },
+    { name: "Analysis Accession", column: "analysis_accession", selected: false },
+    { name: "Anaylsis Type", column: "analysis_type", selected: false },
+    { name: "Center Name", column: "center_name", selected: false },
+    { name: "Generated Bytes", column: "generated_bytes", selected: false },
+    { name: "Generated MD5", column: "generated_md5", selected: false },
+    { name: "Sample Alias", column: "sample_alias", selected: false },
+    { name: "Submitted Bytes", column: "submitted_bytes", selected: false },
+    { name: "Submitted MD5", column: "submitted_md5", selected: false },
+    { name: "Anaylsis Alias", column: "analysis_alias", selected: false },
+    { name: "Assembly Type", column: "assembly_type", selected: false },
+    { name: "First Public", column: "first_public", selected: false },
+    { name: "Generated FTP", column: "generated_ftp", selected: false },
+    { name: "Last Updated", column: "last_updated", selected: false },
+    { name: "Sample Title", column: "sample_title", selected: false },
+    { name: "Study Title", column: "study_title", selected: false },
+    { name: "Analysis Title", column: "analysis_title", selected: false },
+    { name: "Generated Aspera", column: "generated_aspera", selected: false },
+    { name: "Generated Galaxy", column: "generated_galaxy", selected: false }
+  ]
 
   genomeNotes = [];
   INSDC_ID = null;
-  assembliesurls = [];
-  annotationsurls = [];
+  assembliesurls =[]
+  annotationsurls =[]
   dataSourceGoatInfo;
-  @Input() loader = '../../assets/200.gif';
-  @Input() height = 200;
-  @Input() width = 200;
-  @Input() image: string;
-
-  isLoading: boolean;
-
-
   displayedColumnsGoatInfo = ['name', 'value', 'count', 'aggregation_method', 'aggregation_source'];
 
   @ViewChild('experimentsTable') exPaginator: MatPaginator;
@@ -152,16 +141,18 @@ export class OrganismDetailsComponent implements OnInit, AfterViewInit {
   @ViewChild('annotationTable') anPaginator: MatPaginator;
   @ViewChild('relatedOrganisms') relatedOrganismsTable: MatPaginator;
   @ViewChild('relatedAnnotationTable') relatedAnnotationTable: MatPaginator;
+  @Input() loader = '../../assets/200.gif';
+  @Input() height = 200;
+  @Input() width = 200;
+  @Input() image: string;
 
-
+  isLoading: boolean;
   geoLocation: boolean;
   orgGeoList: any;
   specGeoList: any;
   nbnatlasMapUrl: string;
   url: SafeResourceUrl;
   nbntalMapurl: string;
-
-
   @ViewChild("tabgroup", { static: false }) tabgroup: MatTabGroup;
   private http: any;
 
@@ -169,7 +160,6 @@ export class OrganismDetailsComponent implements OnInit, AfterViewInit {
     this.route.params.subscribe(param => this.bioSampleId = param.id);
     this.isLoading = true;
   }
-
   hideLoader(){
     this.isLoading = false;
   }
@@ -182,9 +172,9 @@ export class OrganismDetailsComponent implements OnInit, AfterViewInit {
     this.itemLimitOrgFilter = this.filterSize;
     this.itemLimitTrackFilter = this.filterSize;
     this.relatedRecords = [];
-    this.filterJson.sex = '';
-    this.filterJson.organismPart = '';
-    this.filterJson.trackingSystem = '';
+    this.filterJson['sex'] = '';
+    this.filterJson['organismPart'] = '';
+    this.filterJson['trackingSystem'] = '';
     this.getDisplayedColumns();
     this.getAnnotationDisplayedColumns();
     this.getBiosampleById();
@@ -195,7 +185,7 @@ export class OrganismDetailsComponent implements OnInit, AfterViewInit {
     this.displayedColumnsAnnotations = [];
     this.displayedColumnsRelatedAnnotation.forEach(obj => {
       if (obj.selected) {
-        this.displayedColumnsAnnotations.push(obj.column);
+        this.displayedColumnsAnnotations.push(obj.column)
       }
     });
   }
@@ -204,7 +194,7 @@ export class OrganismDetailsComponent implements OnInit, AfterViewInit {
     this.displayedColumnsFiles = [];
     this.experimentColumnsDefination.forEach(obj => {
       if (obj.selected) {
-        this.displayedColumnsFiles.push(obj.column);
+        this.displayedColumnsFiles.push(obj.column)
       }
     });
   }
@@ -213,8 +203,8 @@ export class OrganismDetailsComponent implements OnInit, AfterViewInit {
   }
 
   showSelectedColumn(selectedColumn, checked) {
-    const index = this.experimentColumnsDefination.indexOf(selectedColumn);
-    const item = this.experimentColumnsDefination[index];
+    let index = this.experimentColumnsDefination.indexOf(selectedColumn);
+    let item = this.experimentColumnsDefination[index];
     item.selected = checked;
     this.experimentColumnsDefination[index] = item;
     this.getDisplayedColumns();
@@ -222,8 +212,8 @@ export class OrganismDetailsComponent implements OnInit, AfterViewInit {
   }
 
   showSelectedAnnotationsColumn(selectedColumn, checked) {
-    const index = this.displayedColumnsRelatedAnnotation.indexOf(selectedColumn);
-    const item = this.displayedColumnsRelatedAnnotation[index];
+    let index = this.displayedColumnsRelatedAnnotation.indexOf(selectedColumn);
+    let item = this.displayedColumnsRelatedAnnotation[index];
     item.selected = checked;
     this.displayedColumnsRelatedAnnotation[index] = item;
     this.getAnnotationDisplayedColumns();
@@ -244,7 +234,6 @@ export class OrganismDetailsComponent implements OnInit, AfterViewInit {
           const unpackedData = [];
           const unpackedSymbiontsData = [];
           this.bioSampleObj = data;
-
           this.orgGeoList = data.orgGeoList;
           this.specGeoList = data.specGeoList;
           if (this.orgGeoList !== undefined && this.orgGeoList.length !== 0) {
@@ -254,10 +243,9 @@ export class OrganismDetailsComponent implements OnInit, AfterViewInit {
               const selected = this.tabgroup.selectedIndex;
               tabGroup.selectedIndex = 4;
               setTimeout(() => {
-                this.tabgroup.selectedIndex = selected;
+                tabGroup.selectedIndex = selected;
               }, 1);
             }, 400);
-
           }
           if (data.goat_info) {
             this.dataSourceGoatInfo = data.goat_info.attributes;
@@ -267,6 +255,7 @@ export class OrganismDetailsComponent implements OnInit, AfterViewInit {
             this.INSDC_ID = data.experiment[0].study_accession;
           }
           if (data.nbnatlas != null) {
+            // https://species.nbnatlas.org/species/['NHMSYS0000080159']
             // https://species.nbnatlas.org/species/NHMSYS0000080159
             // tslint:disable-next-line:max-line-length
             this.nbnatlasMapUrl = 'https://easymap.nbnatlas.org/Image?tvk=' + data.nbnatlas.split('/')[4] + '&ref=0&w=400&h=600&b0fill=6ecc39&title=0' ;
@@ -274,7 +263,6 @@ export class OrganismDetailsComponent implements OnInit, AfterViewInit {
             // tslint:disable-next-line:no-unused-expression
             // @ts-ignore
             this.nbnatlasMapUrl = 'https://records.nbnatlas.org/occurrences/search?q=lsid:' + data.nbnatlas.split('/')[4] + '+&nbn_loading=true&fq=-occurrence_status%3A%22absent%22#tab_mapView';
-
           }
           for (const item of data.records) {
             unpackedData.push(this.unpackData(item));
@@ -306,7 +294,7 @@ export class OrganismDetailsComponent implements OnInit, AfterViewInit {
               this.dataSourceAssemblies = new MatTableDataSource<any>(data.assemblies);
               this.dataSourceAssembliesCount = data.assemblies?.length;
               for (let i = 0; i < data.assemblies.length ; i++) {
-                this.assembliesurls.push(this.ENA_PORTAL_API_BASE_URL_FASTA + data.assemblies[i].accession + '?download=true&gzip=true');
+                this.assembliesurls.push(this.ENA_PORTAL_API_BASE_URL_FASTA+data.assemblies[i].accession+"?download=true&gzip=true");
               }
             }
             else {
@@ -325,7 +313,7 @@ export class OrganismDetailsComponent implements OnInit, AfterViewInit {
               this.dataSourceAnnotation = new MatTableDataSource<any>(data.annotation);
               this.dataSourceAnnotationCount = data.annotation?.length;
               for (let i = 0; i < data.annotation.length ; i++) {
-                this.annotationsurls.push(this.ENA_PORTAL_API_BASE_URL_FASTA + data.annotation[i].accession + '?download=true&gzip=true');
+                this.annotationsurls.push(this.ENA_PORTAL_API_BASE_URL_FASTA+data.annotation[i].accession+"?download=true&gzip=true");
               }
             }
             else {

@@ -1,7 +1,7 @@
 <div id="overlay"></div>
 <div>
-<!--    <ngx-spinner bdColor="rgba(0,0,0,0.9)" [fullScreen]="true" size="large" color="#fff" type="ball-clip-rotate-pulse">-->
-<!--    </ngx-spinner>-->
+    <ngx-spinner bdColor="rgba(0,0,0,0.9)" [fullScreen]="true" size="large" color="#fff" type="ball-clip-rotate-pulse">
+    </ngx-spinner>
     <div class="jumbotron jumbotron-fluid">
         <div class="container">
             <div class="row">
@@ -95,7 +95,7 @@
             </div>
             <div class="col-md-10 status-table">
                 <h1 class="page-header">Statuses</h1>
-                <button type="button" style="float: right;" class="btn btn-primary" mat-raised-button (click)="downloadCSV()">Download metadata</button>
+                <button type="button" style="float: right; background-color: #4BBEFD; color: #ffffff;" class="btn btn-primary" mat-raised-button (click)="downloadCSV()">Download metadata</button>
                 <h1 *ngIf="activeFilters.length !== 0">Filters:
                     <button type="button" class="btn btn-success" *ngFor="let filter of activeFilters">
                         {{filter}}
@@ -105,7 +105,7 @@
                         Remove all filters
                     </button>
                 </h1>
-                <mat-form-field>
+                <mat-form-field style="width: 100%; margin-top: 15px;">
                     <mat-label>Search</mat-label>
                     <input #searchInput matInput [(ngModel)]='searchText' (keyup)="getSearchResults()" placeholder="Ex. lutra" #input>
                 </mat-form-field>

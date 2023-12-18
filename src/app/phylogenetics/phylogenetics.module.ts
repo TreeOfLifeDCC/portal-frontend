@@ -7,7 +7,7 @@ import { LOADERS } from 'ngx-spinner/lib/ngx-spinner.enum';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import {FormsModule} from '@angular/forms';
 import {MatInputModule} from '@angular/material/input';
-import { NgxSpinnerModule } from 'ngx-spinner';
+import { NgxSpinnerModule } from "ngx-spinner";
 import {MatRadioModule} from '@angular/material/radio';
 
 
