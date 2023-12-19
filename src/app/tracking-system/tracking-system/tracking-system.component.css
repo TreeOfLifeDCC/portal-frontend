@@ -277,3 +277,8 @@ ul[class*="Other-"] {
 .mat-column-annotation_complete {
     flex: 0 0 15%;
 }
+
+.searchField {
+    width: 100%;
+    margin-top: 15px;
+}

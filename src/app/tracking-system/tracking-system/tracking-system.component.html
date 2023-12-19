@@ -105,7 +105,7 @@
                         Remove all filters
                     </button>
                 </h1>
-                <mat-form-field style="width: 100%; margin-top: 15px;">
+                <mat-form-field class="searchField">
                     <mat-label>Search</mat-label>
                     <input #searchInput matInput [(ngModel)]='searchText' (keyup)="getSearchResults()" placeholder="Ex. lutra" #input>
                 </mat-form-field>

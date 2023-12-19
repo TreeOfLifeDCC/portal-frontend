@@ -41,6 +41,11 @@
     margin-top: 30px;
     margin-left: 0px;
 }
+
+.searchField {
+    width: 100%;
+    margin-top: 20px;
+}
 .mat-form-field {
     font-size: 14px;
     width: 100%;

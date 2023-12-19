@@ -5,12 +5,9 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-// import { CookieLawModule } from 'angular2-cookie-law';
 import { NgcCookieConsentModule } from 'ngx-cookieconsent';
 import { cookieConfig } from './app.component';
-
 import { HttpClientModule } from '@angular/common/http';
-
 import { MatTreeModule } from '@angular/material/tree';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
@@ -30,7 +27,6 @@ import {MatTooltipModule} from '@angular/material/tooltip';
 import {ClipboardModule} from '@angular/cdk/clipboard';
 import { GisComponent } from './gis/gis.component';
 import { GisService } from './gis/gis.service';
-
 import { NgxSpinnerModule } from 'ngx-spinner';
 import {MatAutocompleteModule} from '@angular/material/autocomplete';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -68,7 +64,6 @@ import {MatTabsModule} from '@angular/material/tabs';
     BrowserAnimationsModule,
     FormsModule,
     ReactiveFormsModule,
-    // CookieLawModule,
     HttpClientModule,
     MatTreeModule,
     MatIconModule,
