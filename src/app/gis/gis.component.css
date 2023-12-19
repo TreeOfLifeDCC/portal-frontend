@@ -127,17 +127,3 @@ button {
 .active {
     background-color: #4BBEFD;
 }
-
-
-
-/*.mat-mdc-radio-button ~ .mat-mdc-radio-button {*/
-/*    !*margin-left: 16px;*!*/
-/*    background-color: #4BBEFD;*/
-/*}*/
-
-
-.mat-mdc-radio-button.mdc-form-field{
-    background-color: red;
-    margin-left: 0px;
-    padding: 0px;
-}

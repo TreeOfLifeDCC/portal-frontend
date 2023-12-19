@@ -6,6 +6,9 @@ import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 // import { CookieLawModule } from 'angular2-cookie-law';
+import { NgcCookieConsentModule } from 'ngx-cookieconsent';
+import { cookieConfig } from './app.component';
+
 import { HttpClientModule } from '@angular/common/http';
 
 import { MatTreeModule } from '@angular/material/tree';
@@ -87,7 +90,8 @@ import {MatTabsModule} from '@angular/material/tabs';
     MatTabsModule,
     MatTableModule,
     MatPaginatorModule,
-    MatSortModule
+    MatSortModule,
+    NgcCookieConsentModule.forRoot(cookieConfig),
   ],
   providers: [BytesPipe, GisService, FilterService, GetDataService],
   bootstrap: [AppComponent],

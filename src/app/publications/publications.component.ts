@@ -6,7 +6,7 @@ import {Title} from '@angular/platform-browser';
 import {NgxSpinnerService} from 'ngx-spinner';
 import {GetDataService} from '../services/get-data.service';
 import {FilterService} from '../services/filter-service';
-import {ActivatedRoute, Router} from '@angular/router';
+import {ActivatedRoute, Router} from "@angular/router";
 
 @Component({
   selector: 'app-publications',
