@@ -159,6 +159,7 @@ export class OrganismDetailsComponent implements OnInit, AfterViewInit {
   nbntalMapurl: string;
   @ViewChild("tabgroup", { static: false }) tabgroup: MatTabGroup;
   private http: any;
+  slides: any[];
 
   constructor(private route: ActivatedRoute, private dashboardService: DashboardService, private spinner: NgxSpinnerService, private router: Router, private sanitizer: DomSanitizer) {
     this.route.params.subscribe(param => this.bioSampleId = param.id);
@@ -230,6 +231,19 @@ export class OrganismDetailsComponent implements OnInit, AfterViewInit {
     }, 400);
   }
 
+  generateSlides(bioSampleObj){
+    const output = [];
+    const arr = bioSampleObj.images;
+    for (let i = 0; i < arr.length; i++) {
+      const obj = {url: encodeURI(arr[i])
+            .replace('(', '%28')
+            .replace(')', '%29')};
+      output.push(obj);
+    }
+    console.log(output);
+    return output;
+  }
+
   getBiosampleById() {
     this.spinner.show();
     this.dashboardService.getRootOrganismById(this.bioSampleId)
@@ -238,6 +252,9 @@ export class OrganismDetailsComponent implements OnInit, AfterViewInit {
           const unpackedData = [];
           const unpackedSymbiontsData = [];
           this.bioSampleObj = data;
+          // slide images
+          this.slides = this.generateSlides(this.bioSampleObj);
+
           this.orgGeoList = data.orgGeoList;
           this.specGeoList = data.specGeoList;
           if (this.orgGeoList !== undefined && this.orgGeoList.length !== 0) {
