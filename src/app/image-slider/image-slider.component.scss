@@ -12,7 +12,7 @@
     .slide {
       width: 100%;
       height: 100%;
-      background-size: cover;
+      background-size: contain;
       background-position: center;
       background-repeat: no-repeat;
       position: relative;
@@ -40,12 +40,13 @@
       right: 0px;
       margin: auto;
       bottom: 20px;
-      width: 200px;
+      width: 100%;
+      text-align: center;
       .indicator {
         width: 20px;
         height: 20px;
         border-radius: 50%;
-        background-color: #fff;
+        background-color: #ccc;
         display: inline-block;
         margin: 0px 5px;
         cursor: pointer;
