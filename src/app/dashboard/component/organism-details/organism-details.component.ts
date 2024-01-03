@@ -240,7 +240,6 @@ export class OrganismDetailsComponent implements OnInit, AfterViewInit {
             .replace(')', '%29')};
       output.push(obj);
     }
-    console.log(output);
     return output;
   }
 
