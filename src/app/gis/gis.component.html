@@ -15,9 +15,13 @@
         <div class="col-lg-2">
              <div class="toggle">
                 <mat-radio-group aria-label="Select an option" [(ngModel)]="this.radioOptions" >
-                    <mat-radio-button class="orgLabel" id="default"  [value]=1  name="toggleSpecies"   (change)="toggleSpecimens($event)" checked>Species</mat-radio-button><br>
-                    <mat-radio-button class="orgLabel" id="toggle" name="toggleSpecimen" (change)="toggleSpecimens($event)" [value]=3>Species and Specimens</mat-radio-button>
-
+                    <mat-radio-button class="orgLabel" id="default"  [value]=1  name="toggleSpecies"  (change)="toggleSpecimens($event)" checked>
+                        <span>Species</span>
+                    </mat-radio-button>
+                    <br>
+                    <mat-radio-button class="orgLabel" id="toggle" name="toggleSpecimen" (change)="toggleSpecimens($event)" [value]=3>
+                        <span> Species and Specimens </span>
+                    </mat-radio-button>
                 </mat-radio-group>
             </div>
 
@@ -30,7 +34,7 @@
         </div>
         <div class="col-lg-8 ">
             <h1 class="page-header">Sampling Map</h1>
-            
+
 <!--            <span *ngIf="hasActiveFilters()" class="orgLabel">Note: Count can be different because single species can exist on different locations.</span>-->
             <br>
             <div *ngIf="hasActiveFilters()">
@@ -45,7 +49,7 @@
 
             </div>
                 <div class="search">
-                    <mat-form-field>
+                    <mat-form-field class="searchField">
                         <mat-label>Search</mat-label>
                         <input #searchInput matInput (keyup.enter)="searchGisData()" [(ngModel)]='filterService.searchText' (keyup)="filterSearchResults()" placeholder="Search for species"  #matInput [matAutocomplete]="auto">
                     </mat-form-field>

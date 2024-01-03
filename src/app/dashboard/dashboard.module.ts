@@ -31,7 +31,8 @@ import {FilterComponent} from '../shared/filter/filter.component';
 import {PhylogenyFilterComponent} from '../shared/phylogeny-filter/phylogeny-filter.component';
 import {ActiveFilterComponent} from '../shared/active-filter/active-filter.component';
 import {MatCardModule} from '@angular/material/card';
-import { MatCarouselModule } from 'ng-mat-carousel';
+import {MatRadioModule} from '@angular/material/radio';
+import { ImageSliderComponent } from '../image-slider/image-slider.component';
 
 
 
@@ -39,7 +40,7 @@ import { MatCarouselModule } from 'ng-mat-carousel';
 
 @NgModule({
   declarations: [DashboardComponent, SpecimensComponent, DetailsComponent, OrganismDetailsComponent, TaxanomyComponent, MapComponent,
-    MapClusterComponent, FilterComponent, PhylogenyFilterComponent, ActiveFilterComponent ],
+    MapClusterComponent, FilterComponent, PhylogenyFilterComponent, ActiveFilterComponent],
   imports: [
     CommonModule,
     DashboardRoutingModule,
@@ -60,7 +61,8 @@ import { MatCarouselModule } from 'ng-mat-carousel';
     MatCheckboxModule,
     MatTooltipModule,
     MatCardModule,
-    MatCarouselModule.forRoot()
+    MatRadioModule,
+    ImageSliderComponent
   ],
   exports: [
     FilterComponent, PhylogenyFilterComponent, ActiveFilterComponent

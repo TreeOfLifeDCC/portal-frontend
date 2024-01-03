@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { GisComponent } from './gis.component';
 
@@ -6,7 +6,7 @@ describe('GisComponent', () => {
   let component: GisComponent;
   let fixture: ComponentFixture<GisComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [ GisComponent ]
     })

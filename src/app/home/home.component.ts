@@ -1,6 +1,6 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import {Title} from "@angular/platform-browser";
-import {NavigationEnd, Router} from "@angular/router";
+import {Title} from '@angular/platform-browser';
+import {NavigationEnd, Router} from '@angular/router';
 
 @Component({
   selector: 'app-home',

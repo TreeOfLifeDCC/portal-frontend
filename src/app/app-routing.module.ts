@@ -5,8 +5,8 @@ import { HelpComponent } from './help/help.component';
 import { HomeComponent } from './home/home.component';
 import { ApiComponent } from './api/api.component';
 import { GisComponent } from './gis/gis.component';
-import {BulkDownloadsComponent} from "./bulk-downloads/bulk-downloads.component";
-import {PublicationsComponent} from "./publications/publications.component";
+import {BulkDownloadsComponent} from './bulk-downloads/bulk-downloads.component';
+import {PublicationsComponent} from './publications/publications.component';
 
 const routes: Routes = [
   {
@@ -67,7 +67,7 @@ const routes: Routes = [
 ];
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes)],
+  imports: [RouterModule.forRoot(routes, {})],
   exports: [RouterModule]
 })
 export class AppRoutingModule { }

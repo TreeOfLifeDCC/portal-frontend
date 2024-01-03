@@ -867,29 +867,14 @@
                 <div class="row">
                     <div class="col-md-2"></div>
                     <div class="col-md-8">
-                        <mat-carousel
-                                timings="250ms ease-in"
-                                [autoplay]="true"
-                                interval="5000"
-                                color="accent"
-                                maxWidth="auto"
-                                proportion="85"
-                                slides="{{bioSampleObj?.images.length}}"
-                                [loop]="true"
-                                [hideArrows]="false"
-                                [hideIndicators]="false"
-                                [useKeyboard]="true"
-                                [useMouseWheel]="false"
-                                orientation="ltr">
-                            <mat-carousel-slide
-                                #matCarouselSlide
-                                *ngFor="let slide of bioSampleObj?.images; let i = index"
-                                [image]="slide"
-                                overlayColor="#00000040"
-                                [hideOverlay]="false">
-                            </mat-carousel-slide>
-                        </mat-carousel>
-                    </div>
+                            <app-image-slider
+                                    [indicatorsVisible]="true"
+                                    [animationSpeed]="400"
+                                    [slides]="slides"
+                                    [autoPlay]="false"
+                                    [autoPlaySpeed]="5000"
+                            ></app-image-slider>
+                        </div>
                     <div class="col-md-2"></div>
                 </div>
                 <hr>

@@ -41,6 +41,11 @@
     margin-top: 30px;
     margin-left: 0px;
 }
+
+.searchField {
+    width: 100%;
+    margin-top: 20px;
+}
 .mat-form-field {
     font-size: 14px;
     width: 100%;
@@ -98,8 +103,20 @@
 }
 
 .orgLabel {
-    padding-right: 10px;
+    /*padding-right: 5px;*/
+    margin-left: -10px;
+    height: 20px;
 }
+
+.orgLabel span {
+    vertical-align: center;
+    margin-left: -10px;
+    top:50%;
+    height: 20px;
+    margin-top:10px;
+    display: block;
+}
+
 
 button {
     margin: 2px;
