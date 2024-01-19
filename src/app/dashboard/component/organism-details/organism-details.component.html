@@ -534,8 +534,7 @@
 
                             <ng-container matColumnDef="sample_accession">
                                 <mat-header-cell *matHeaderCellDef> Sample Accession </mat-header-cell>
-                                <mat-cell *matCellDef="let element" class="assemblies-font" style="word-wrap: break-word;"
-                                          > <a class="no-underline" target="_blank" href="https://www.ebi.ac.uk/ena/browser/view/{{element.sample_accession}}">{{element.sample_accession}}</a>
+                                <mat-cell *matCellDef="let element" class="assemblies-font"> <a class="no-underline" target="_blank" href="https://www.ebi.ac.uk/ena/browser/view/{{element.sample_accession}}">{{element.sample_accession}}</a>
                                 </mat-cell>
                             </ng-container>
 

@@ -17,6 +17,8 @@ export class SpecimensComponent implements OnInit {
   bioSampleId;
   bioSampleObj;
 
+  slides: any[];
+
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
   dataSourceRecords;
@@ -75,6 +77,7 @@ export class SpecimensComponent implements OnInit {
             unpackedData.push(this.unpackData(item));
           }
           this.bioSampleObj = unpackedData[0];
+          this.slides = this.generateSlides(this.bioSampleObj);
           this.organismName = this.bioSampleObj.organism;
           this.lat = this.bioSampleObj.geographicLocationLatitude?.text;
           this.lng = this.bioSampleObj.geographicLocationLongitude?.text;
@@ -108,6 +111,19 @@ export class SpecimensComponent implements OnInit {
       }
     }
     return dataToReturn;
+  }
+
+  generateSlides(bioSampleObj){
+    const output = [];
+    const arr = bioSampleObj.images;
+    for (let i = 0; i < arr.length; i++) {
+      const obj = {url: encodeURI(arr[i])
+            .replace('(', '%28')
+            .replace(')', '%29')};
+      output.push(obj);
+    }
+    console.log(output);
+    return output;
   }
 
 }
