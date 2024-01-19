@@ -220,19 +220,4 @@
             </ul>
         </div>
     </dl>
-
-    <hr>
-    <div class="row" *ngIf="bioSampleObj?.images">
-        <div class="col-md-2"></div>
-        <div class="col-md-8">
-            <app-image-slider
-                    [indicatorsVisible]="true"
-                    [animationSpeed]="400"
-                    [slides]="slides"
-                    [autoPlay]="false"
-                    [autoPlaySpeed]="5000"
-            ></app-image-slider>
-        </div>
-        <div class="col-md-2"></div>
-    </div>
 </div>
