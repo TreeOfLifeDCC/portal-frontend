@@ -17,6 +17,8 @@ export class DetailsComponent implements OnInit {
   bioSampleId;
   bioSampleObj;
 
+  slides: any[];
+
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
   dataSourceRecords;
@@ -71,6 +73,7 @@ export class DetailsComponent implements OnInit {
             unpackedData.push(this.unpackData(item));
           }
           this.bioSampleObj = unpackedData[0];
+          this.slides = this.generateSlides(this.bioSampleObj);
           if (this.bioSampleObj.specimens.length > 0) {
             this.bioSampleObj.specimens.filter(obj => {
               if (obj.commonName == null) {
@@ -89,6 +92,19 @@ export class DetailsComponent implements OnInit {
         },
         err => console.log(err)
       );
+  }
+
+  generateSlides(bioSampleObj){
+    const output = [];
+    const arr = bioSampleObj.images;
+    for (let i = 0; i < arr.length; i++) {
+      const obj = {url: encodeURI(arr[i])
+            .replace('(', '%28')
+            .replace(')', '%29')};
+      output.push(obj);
+    }
+    console.log(output);
+    return output;
   }
 
   applyFilter(event: Event) {
