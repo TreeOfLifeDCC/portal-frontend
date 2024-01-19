@@ -32,7 +32,7 @@
 
 .txt-center {
     text-align: center;
-    /* justify-content: center; */
+    justify-content: center;
 }
 button {
     margin-left: 5px;
@@ -48,7 +48,7 @@ button {
 }
 
 .assemblies-font {
-    font-size: 13.5px;
+    font-size: 13px;
 }
 
 .mat-header-row,
@@ -80,7 +80,7 @@ table {
 }
 
 .table-container {
-    overflow: auto;
+    overflow: scroll;
 }
 
 .goat-color2 {
@@ -117,4 +117,68 @@ table {
 
 .org-filter {
     padding-left: 6px;
+}
+
+.search-bar {
+    margin-top: 15px;
+    width: 100%;
+}
+
+.download-metadata-btn {
+    float: right;
+    background-color: #4BBEFD;
+    color: #ffffff;
+}
+
+.relatedOrganismsTable mat-header-cell {
+    text-align: center;
+    justify-content: center;
+}
+
+.relatedOrganismsTable mat-cell {
+    padding: 8px 8px 8px 0;
+    word-break: break-word;
+}
+
+.annotationTable mat-header-cell {
+    text-align: left;
+    padding: 8px 8px 8px 8px;
+}
+
+.annotationTable mat-cell {
+    padding: 8px 8px 8px 8px;
+    word-break: break-word;
+}
+
+.relatedAssembliesTable mat-header-cell {
+    text-align: left;
+    padding: 8px 8px 8px 8px;
+}
+
+.relatedAssembliesTable mat-cell {
+    padding: 8px 8px 8px 8px;
+    word-break: break-word;
+}
+
+.relatedFilesTable mat-header-cell {
+    text-align: center;
+    justify-content: center;
+}
+
+.relatedFilesTable mat-cell {
+    padding: 8px 8px 8px 0;
+    word-break: break-word;
+    text-align: center;
+    justify-content: center;
+}
+
+
+.genomeStatsTable mat-header-cell {
+    text-align: left;
+    padding: 8px 8px 8px 8px;
+}
+
+.genomeStatsTable mat-cell {
+    padding: 8px 8px 8px 8px;
+    word-break: break-word;
 }

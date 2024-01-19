@@ -252,8 +252,9 @@ export class OrganismDetailsComponent implements OnInit, AfterViewInit {
           const unpackedSymbiontsData = [];
           this.bioSampleObj = data;
           // slide images
-          this.slides = this.generateSlides(this.bioSampleObj);
-
+          if (this.bioSampleObj?.images) {
+            this.slides = this.generateSlides(this.bioSampleObj);
+          }
           this.orgGeoList = data.orgGeoList;
           this.specGeoList = data.specGeoList;
           if (this.orgGeoList !== undefined && this.orgGeoList.length !== 0) {

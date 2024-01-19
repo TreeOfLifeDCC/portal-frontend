@@ -41,9 +41,9 @@
                 <div class="col-md-12" *ngIf="bioSampleObj?.records.length">
                     <hr>
                     <h1 class="col-md-12 page-header">Related Organisms</h1>
-                    <button type="button" style="float: right;" class="btn btn-primary" mat-raised-button (click)="exporter.exportTable('csv', {fileName:'related-organisms-metadata'})">Download
+                    <button type="button" style="float: right; background-color: #4BBEFD; color: #ffffff;" class="btn btn-primary" mat-raised-button (click)="exporter.exportTable('csv', {fileName:'related-organisms-metadata'})">Download
                         metadata</button>
-                    <mat-form-field>
+                    <mat-form-field class="search-bar">
                         <mat-label>Search</mat-label>
                         <input matInput [(ngModel)]='searchText' (keyup)="getSearchResults()" placeholder="Ex. Salmo Trutta" #input>
                     </mat-form-field>
@@ -119,7 +119,7 @@
                                         Remove all filters
                                     </button>
                                 </h1>
-                                <table matTableExporter #exporter="matTableExporter" mat-table [dataSource]="dataSourceRecords" matSort style="width: 100%;">
+                                <table matTableExporter #exporter="matTableExporter" mat-table [dataSource]="dataSourceRecords" matSort style="width: 100%;" class="relatedOrganismsTable">
                                     <ng-container matColumnDef="accession">
                                         <mat-header-cell *matHeaderCellDef mat-sort-header> BioSample ID
                                         </mat-header-cell>
@@ -191,9 +191,9 @@
                         </div>
                     </mat-expansion-panel>
                     <br />
-                    <button type="button" style="float: right;" class="btn btn-primary" mat-raised-button (click)="exporter.exportTable('csv', {fileName:'related-annotation-metadata'})">Download
+                    <button type="button" style="float: right; background-color: #4BBEFD; color: #ffffff;" class="btn btn-primary" mat-raised-button (click)="exporter.exportTable('csv', {fileName:'related-annotation-metadata'})">Download
                         metadata</button>
-                    <mat-form-field>
+                    <mat-form-field class="search-bar">
                         <mat-label>Search</mat-label>
                         <input matInput (keyup)="relatedAnnotationSearch($event)" #input>
                     </mat-form-field>
@@ -390,23 +390,23 @@
                 <div class="col-md-12" *ngIf="dataSourceAnnotationCount != 0">
                     <hr>
                     <h1 class="col-md-12 page-header">Annotation</h1>
-                    <button type="button" style="float: right;" class="btn btn-primary" mat-raised-button (click)="exporter.exportTable('csv', {fileName:'annotation-metadata'})">Download
+                    <button type="button" style="float: right; background-color: #4BBEFD; color: #ffffff;" class="btn btn-primary" mat-raised-button (click)="exporter.exportTable('csv', {fileName:'annotation-metadata'})">Download
                         metadata</button>
-                    <button type="button" style="float: right;" class="btn btn-success" mat-raised-button (click)="downloadAnnotation()">Download all Annotations</button>
-                    <mat-form-field>
+                    <button type="button" style="float: right; background-color: #4BBEFD; color: #ffffff;" class="btn btn-success" mat-raised-button (click)="downloadAnnotation()">Download all Annotations</button>
+                    <mat-form-field class="search-bar">
                         <mat-label>Search</mat-label>
                         <input matInput (keyup)="annotationSearch($event)" #input>
                     </mat-form-field>
-                    <table mat-table matTableExporter #exporter="matTableExporter" [dataSource]="dataSourceAnnotation" matSort style="width: 100%;">
+                    <table mat-table matTableExporter #exporter="matTableExporter" [dataSource]="dataSourceAnnotation" matSort style="width: 100%;" class="annotationTable">
                         <ng-container matColumnDef="accession">
                             <mat-header-cell *matHeaderCellDef> Accession </mat-header-cell>
-                            <mat-cell *matCellDef="let element" class="txt-center">
+                            <mat-cell *matCellDef="let element">
                                 {{element.accession}}
                             </mat-cell>
                         </ng-container>
                         <ng-container matColumnDef="annotation">
                             <mat-header-cell *matHeaderCellDef> Annotation </mat-header-cell>
-                            <mat-cell *matCellDef="let element" class="txt-center">
+                            <mat-cell *matCellDef="let element">
                                 <span>
                                     <a class="no-underline" target="_blank" href="{{element.annotation.GTF}}">GTF</a>,
                                 </span>
@@ -417,28 +417,28 @@
                         </ng-container>
                         <ng-container matColumnDef="proteins">
                             <mat-header-cell *matHeaderCellDef> Proteins </mat-header-cell>
-                            <mat-cell *matCellDef="let element" class="txt-center">
+                            <mat-cell *matCellDef="let element">
                                 <a class="no-underline" target="_blank" href="{{element.proteins.FASTA}}">FASTA</a>
                             </mat-cell>
                         </ng-container>
 
                         <ng-container matColumnDef="transcripts">
                             <mat-header-cell *matHeaderCellDef> Transcripts </mat-header-cell>
-                            <mat-cell *matCellDef="let element" class="txt-center">
+                            <mat-cell *matCellDef="let element">
                                 <a class="no-underline" target="_blank" href="{{element.transcripts.FASTA}}">FASTA</a>
                             </mat-cell>
                         </ng-container>
 
                         <ng-container matColumnDef="softmasked_genome">
                             <mat-header-cell *matHeaderCellDef> Softmasked genome </mat-header-cell>
-                            <mat-cell *matCellDef="let element" class="txt-center">
+                            <mat-cell *matCellDef="let element">
                                 <a class="no-underline" target="_blank" href="{{element.softmasked_genome.FASTA}}">FASTA</a>
                             </mat-cell>
                         </ng-container>
 
                         <ng-container matColumnDef="other_data">
                             <mat-header-cell *matHeaderCellDef> Other data </mat-header-cell>
-                            <mat-cell *matCellDef="let element" class="txt-center">
+                            <mat-cell *matCellDef="let element">
                                 <a class="no-underline" target="_blank" href="{{element.other_data.ftp_dumps}}">FTP
                                     dumps</a>
                             </mat-cell>
@@ -446,7 +446,7 @@
 
                         <ng-container matColumnDef="view_in_browser">
                             <mat-header-cell *matHeaderCellDef> View in browser </mat-header-cell>
-                            <mat-cell *matCellDef="let element" class="txt-center">
+                            <mat-cell *matCellDef="let element">
                                 <a class="no-underline" target="_blank" href="{{element.view_in_browser}}">ensembl.org</a>
                             </mat-cell>
                         </ng-container>
@@ -461,33 +461,33 @@
                 <div class="col-md-12" *ngIf="dataSourceAssembliesCount != 0">
                     <hr>
                     <h1 class="col-md-12 page-header">Related assemblies</h1>
-                    <button type="button" style="float: right;" class="btn btn-primary" mat-raised-button (click)="exporter.exportTable('csv', {fileName:'assemblies-metadata'})">Download
+                    <button type="button" style="float: right; background-color: #4BBEFD; color: #ffffff;" class="btn btn-primary" mat-raised-button (click)="exporter.exportTable('csv', {fileName:'assemblies-metadata'})">Download
                         metadata</button>
-                    <button type="button" style="float: right;" class="btn btn-success" mat-raised-button (click)="downloadAssemblies()">Download all Assemblies</button>
-                    <mat-form-field>
+                    <button type="button" style="float: right; background-color: #4BBEFD; color: #ffffff;" class="btn btn-success" mat-raised-button (click)="downloadAssemblies()">Download all Assemblies</button>
+                    <mat-form-field class="search-bar">
                         <mat-label>Search</mat-label>
                         <input matInput (keyup)="assembliesSearch($event)" placeholder="Ex. ILLUMINA" #input>
                     </mat-form-field>
-                    <table mat-table matTableExporter #exporter="matTableExporter" [dataSource]="dataSourceAssemblies" matSort style="width: 100%;">
+                    <table mat-table matTableExporter #exporter="matTableExporter" [dataSource]="dataSourceAssemblies" matSort style="width: 100%;" class="relatedAssembliesTable">
                         <ng-container matColumnDef="accession">
                             <mat-header-cell *matHeaderCellDef> Accession </mat-header-cell>
-                            <mat-cell *matCellDef="let element" class="txt-center">
+                            <mat-cell *matCellDef="let element">
                                 <a class="no-underline" target="_blank" href="https://www.ebi.ac.uk/ena/browser/view/{{element.accession}}">{{element.accession}}</a>
                             </mat-cell>
                         </ng-container>
                         <ng-container matColumnDef="assembly_name">
                             <mat-header-cell *matHeaderCellDef> Assembly Name </mat-header-cell>
-                            <mat-cell *matCellDef="let element" class="txt-center"> {{element.assembly_name}}
+                            <mat-cell *matCellDef="let element"> {{element.assembly_name}}
                             </mat-cell>
                         </ng-container>
                         <ng-container matColumnDef="description">
                             <mat-header-cell *matHeaderCellDef> Description </mat-header-cell>
-                            <mat-cell *matCellDef="let element" class="txt-center"> {{element.description}} </mat-cell>
+                            <mat-cell *matCellDef="let element"> {{element.description}} </mat-cell>
                         </ng-container>
 
                         <ng-container matColumnDef="version">
                             <mat-header-cell *matHeaderCellDef> Version </mat-header-cell>
-                            <mat-cell *matCellDef="let element" class="txt-center"> {{element.version}} </mat-cell>
+                            <mat-cell *matCellDef="let element"> {{element.version}} </mat-cell>
                         </ng-container>
 
                         <mat-header-row *matHeaderRowDef="displayedColumnsAssemblies"></mat-header-row>
@@ -513,15 +513,19 @@
                         </div>
                     </mat-expansion-panel>
                     <br />
-                    <button type="button" style="float: right;" class="btn btn-primary" mat-raised-button (click)="exporter.exportTable('csv', {fileName:'experiments-metadata'})">Download
-                        metadata</button>
-                    <button type="button" style="float: right;" class="btn btn-success" mat-raised-button (click)="downloadRawFiles()">Download all FASTQ files</button>
-                    <mat-form-field>
+                    <button type="button" style="float: right; background-color: #4BBEFD; color: #ffffff;"
+                            class="btn btn-primary" mat-raised-button
+                            (click)="exporter.exportTable('csv', {fileName:'experiments-metadata'})">
+                        Download metadata</button>
+                    <button type="button" style="float: right; background-color: #4BBEFD; color: #ffffff;"
+                            class="btn btn-success" mat-raised-button (click)="downloadRawFiles()">
+                        Download all FASTQ files</button>
+                    <mat-form-field class="search-bar">
                         <mat-label>Search</mat-label>
                         <input matInput (keyup)="filesSearch($event)" placeholder="Ex. ILLUMINA" #input>
                     </mat-form-field>
                     <div class="table-container">
-                        <table mat-table matTableExporter #exporter="matTableExporter" [dataSource]="dataSourceFiles">
+                        <table mat-table matTableExporter #exporter="matTableExporter" [dataSource]="dataSourceFiles" class="relatedFilesTable">
                             <ng-container matColumnDef="study_accession">
                                 <mat-header-cell *matHeaderCellDef> Study Accession </mat-header-cell>
                                 <mat-cell *matCellDef="let element" class="assemblies-font"> <a class="no-underline" target="_blank" href="https://www.ebi.ac.uk/ena/browser/view/{{element.study_accession}}">{{element.study_accession}}</a>
@@ -561,7 +565,7 @@
                             <ng-container matColumnDef="fastq_ftp">
                                 <mat-header-cell *matHeaderCellDef> FASTQ FTP </mat-header-cell>
                                 <mat-cell *matCellDef="let element" class="assemblies-font">
-                                    <ul class="list-group ">
+                                    <ul class="list-group" style="list-style-type:none;">
                                         <li *ngFor="let fastq of element.fastq_ftp">
                                             <a href="ftp://{{fastq}}">{{element.run_accession}}</a>
                                         </li>
@@ -572,7 +576,7 @@
                             <ng-container matColumnDef="submitted_ftp">
                                 <mat-header-cell *matHeaderCellDef> Submitted FTP </mat-header-cell>
                                 <mat-cell *matCellDef="let element" class="assemblies-font">
-                                    <ul class="list-group ">
+                                    <ul class="list-group" style="list-style-type:none;">
                                         <li *ngFor="let submitted_ftp of element.submitted_ftp">
                                             <a href="ftp://{{submitted_ftp}}">{{element.study_accession}}</a>
                                         </li>
@@ -583,7 +587,7 @@
                             <ng-container matColumnDef="sra_ftp">
                                 <mat-header-cell *matHeaderCellDef> SRA FTP </mat-header-cell>
                                 <mat-cell *matCellDef="let element" class="assemblies-font">
-                                    <ul class="list-group ">
+                                    <ul class="list-group" style="list-style-type:none;">
                                         <li *ngFor="let sra_ftp of element.sra_ftp">
                                             <a href="ftp://{{sra_ftp}}">{{element.sra_ftp}}</a>
                                         </li>
@@ -1028,33 +1032,33 @@
                         </mat-expansion-panel-header>
                         <div class="figpanel">
                             <div class="row">
-                                <table mat-table matTableExporter #exporter="matTableExporter" [dataSource]="dataSourceGoatInfo" matSort style="width: 100%;">
+                                <table mat-table matTableExporter #exporter="matTableExporter" [dataSource]="dataSourceGoatInfo" matSort style="width: 100%;" class="genomeStatsTable">
                                     <ng-container matColumnDef="name">
                                         <mat-header-cell *matHeaderCellDef> Attribute </mat-header-cell>
-                                        <mat-cell *matCellDef="let element" class="txt-center"> {{element.name}}
+                                        <mat-cell *matCellDef="let element"> {{element.name}}
                                         </mat-cell>
                                     </ng-container>
                                     <ng-container matColumnDef="value">
                                         <mat-header-cell *matHeaderCellDef> Value </mat-header-cell>
-                                        <mat-cell *matCellDef="let element" class="txt-center"> {{element.value}}
+                                        <mat-cell *matCellDef="let element"> {{element.value}}
                                         </mat-cell>
                                     </ng-container>
                                     <ng-container matColumnDef="count">
                                         <mat-header-cell *matHeaderCellDef> Count </mat-header-cell>
-                                        <mat-cell *matCellDef="let element" class="txt-center"> {{element.count}}
+                                        <mat-cell *matCellDef="let element"> {{element.count}}
                                         </mat-cell>
                                     </ng-container>
 
                                     <ng-container matColumnDef="aggregation_method">
                                         <mat-header-cell *matHeaderCellDef> Summary </mat-header-cell>
-                                        <mat-cell *matCellDef="let element" class="txt-center">
+                                        <mat-cell *matCellDef="let element">
                                             {{element.aggregation_method}}
                                         </mat-cell>
                                     </ng-container>
 
                                     <ng-container matColumnDef="aggregation_source">
                                         <mat-header-cell *matHeaderCellDef> Source </mat-header-cell>
-                                        <mat-cell *matCellDef="let element" class="txt-center">
+                                        <mat-cell *matCellDef="let element">
                                             {{element.aggregation_source}}
                                         </mat-cell>
                                     </ng-container>

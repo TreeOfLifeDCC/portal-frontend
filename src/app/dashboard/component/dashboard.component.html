@@ -62,7 +62,7 @@
                     <mat-label>Search</mat-label>
                     <input  #searchInput matInput [(ngModel)]='filterService.searchText' (ngModelChange)="this.searchUpdate.next($event)" placeholder="Ex. lutra" #input>
                 </mat-form-field>
-                <table mat-table  matTableExporter #exporter="matTableExporter" #table [dataSource]="dataSource" matSort (matSortChange)="customSort($event)">
+                <table mat-table  matTableExporter #exporter="matTableExporter" #table [dataSource]="dataSource" matSort (matSortChange)="customSort($event)" class="organismsMainTable">
                     <ng-container matColumnDef="organism">
                         <mat-header-cell *matHeaderCellDef mat-sort-header [ngClass]="'w-150 th-left'"> Organism </mat-header-cell>
                         <mat-cell *matCellDef="let element" [ngClass]="'w-150 th-left'">
@@ -77,8 +77,8 @@
                     </ng-container>
 
                     <ng-container matColumnDef="INSDC_ID">
-                        <mat-header-cell *matHeaderCellDef [ngClass]="'w-90 th-left'"> INSDC ID </mat-header-cell>
-                        <mat-cell *matCellDef="let element" [ngClass]="'w-90 th-left'"> {{element?.INSDC_ID}}</mat-cell>
+                        <mat-header-cell *matHeaderCellDef [ngClass]="'w-100 th-left'"> INSDC ID </mat-header-cell>
+                        <mat-cell *matCellDef="let element" [ngClass]="'w-100 th-left'"> {{element?.INSDC_ID}}</mat-cell>
                     </ng-container>
 
                     <ng-container matColumnDef="commonName">
