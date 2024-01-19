@@ -11,19 +11,30 @@
   @if (indicatorsVisible) {
   <div id="indicators">
     @for(slide of slides; track $index; ){
+  <ng-container *ngIf="displayArrows; else noIndicator">
     <div
-      (click)="jumpToSlide($index)"
-      class="indicator"
-      [ngClass]="{ active: $index == currentSlide }"
-    ></div>
+            (click)="jumpToSlide($index)"
+            class="indicator"
+            [ngClass]="{ active: $index == currentSlide }"></div>
+  </ng-container>
+  <ng-template #noIndicator>
+    <div
+            (click)="jumpToSlide($index)"
+            class="indicator"
+            [ngClass]="{ onlyOneImage: $index == currentSlide }"></div>
+  </ng-template>
+
     }
   </div>
   }
 
-  <button (click)="next()" class="nextButton">
-    <fa-icon [icon]="faArrowRight"></fa-icon>
-  </button>
-  <button (click)="previous()" class="previousButton">
-    <fa-icon [icon]="faArrowLeft"></fa-icon>
-  </button>
+  <ng-container *ngIf="displayArrows">
+    <button (click)="next()" class="nextButton">
+      <fa-icon [icon]="faArrowRight"></fa-icon>
+    </button>
+    <button (click)="previous()" class="previousButton">
+      <fa-icon [icon]="faArrowLeft"></fa-icon>
+    </button>
+  </ng-container>
+
 </div>

@@ -55,6 +55,10 @@
         &.active {
           background-color: #4f4f4f;
         }
+
+        &.onlyOneImage {
+          background-color: #fff;
+        }
       }
     }
   }
