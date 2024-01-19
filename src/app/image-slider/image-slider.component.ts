@@ -20,6 +20,7 @@ export class ImageSliderComponent implements OnInit {
   faArrowRight = faArrowRight;
   faArrowLeft = faArrowLeft;
   hidden = false;
+  displayArrows = true;
 
   next() {
     const currentSlide = (this.currentSlide + 1) % this.slides.length;
@@ -46,5 +47,8 @@ export class ImageSliderComponent implements OnInit {
         this.next();
       }, this.autoPlaySpeed);
     }
+    this.displayArrows = this.slides.length > 1 ? true : false;
   }
+
+
 }

@@ -866,23 +866,7 @@
                     <mat-paginator #experimentsTable [pageSizeOptions]="[10, 20, 30]" showFirstLastButtons [length]="dataSourceFilesCount"></mat-paginator>
                 </div>
             </mat-tab>
-            <mat-tab label = "Images" *ngIf="bioSampleObj?.images">
-                <hr>
-                <div class="row">
-                    <div class="col-md-2"></div>
-                    <div class="col-md-8">
-                            <app-image-slider
-                                    [indicatorsVisible]="true"
-                                    [animationSpeed]="400"
-                                    [slides]="slides"
-                                    [autoPlay]="false"
-                                    [autoPlaySpeed]="5000"
-                            ></app-image-slider>
-                        </div>
-                    <div class="col-md-2"></div>
-                </div>
-                <hr>
-            </mat-tab>
+
             <mat-tab label="Symbionts" *ngIf="bioSampleObj?.symbionts_records && bioSampleObj?.symbionts_records.length">
                 <div class="col-md-12" *ngIf="bioSampleObj?.symbionts_records.length">
                     <hr>
