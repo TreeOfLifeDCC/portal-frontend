@@ -111,8 +111,8 @@
         <div class="col-sm-12" *ngIf="bioSampleObj?.specimens?.length">
             <hr>
             <h1 class="col-sm-12 page-header">Related Specimens</h1>
-            <button type="button" style="float: right;" class="btn btn-primary" mat-raised-button (click)="exporter.exportTable('csv', {fileName:'related-specimens-metadata'})">Download metadata</button>
-            <mat-form-field>
+            <button type="button" style="float: right; background-color: #4BBEFD; color: #ffffff;" class="btn btn-primary" mat-raised-button (click)="exporter.exportTable('csv', {fileName:'related-specimens-metadata'})">Download metadata</button>
+            <mat-form-field class="search-bar">
                 <mat-label>Search</mat-label>
                 <input matInput [(ngModel)]='searchText' (keyup)="getSearchResults()" placeholder="Ex. ILLUMINA" #input>
             </mat-form-field>
