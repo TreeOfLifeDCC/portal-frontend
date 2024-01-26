@@ -59,7 +59,7 @@
         <div class="col-sm-12" *ngIf="bioSampleObj.experiment.length != 0">
             <hr>
             <h1 class="col-sm-12 page-header">Related files</h1>
-            <mat-form-field>
+            <mat-form-field class="search-bar">
                 <mat-label>Search</mat-label>
                 <input matInput (keyup)="applyFilter($event)" placeholder="Ex. ILLUMINA" #input>
             </mat-form-field>

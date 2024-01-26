@@ -58,7 +58,7 @@
 
                     </div>
                 </div>
-                <mat-form-field class="column-header" style="margin-top: 15px;">
+                <mat-form-field class="column-header" class="search-bar">
                     <mat-label>Search</mat-label>
                     <input  #searchInput matInput [(ngModel)]='filterService.searchText' (ngModelChange)="this.searchUpdate.next($event)" placeholder="Ex. lutra" #input>
                 </mat-form-field>
