@@ -2,7 +2,6 @@
 {
   "compileOnSave": false,
   "compilerOptions": {
-    "skipLibCheck": true,
     "resolveJsonModule": true,
     "esModuleInterop": true,
     "baseUrl": "./",
