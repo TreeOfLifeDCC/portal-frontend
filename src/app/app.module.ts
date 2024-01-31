@@ -42,11 +42,13 @@ import {MatPaginatorModule} from '@angular/material/paginator';
 import {MatSortModule} from '@angular/material/sort';
 import {GetDataService} from './services/get-data.service';
 import {MatTabsModule} from '@angular/material/tabs';
+import {FooterComponent} from './shared/footer/footer.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     HeaderComponent,
+    FooterComponent,
     AboutComponent,
     HelpComponent,
     HomeComponent,
