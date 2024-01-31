@@ -5,3 +5,8 @@
 .page-header {
     color: #4BBEFD;
 }
+
+.search-bar {
+    margin-top: 15px;
+    width: 100%;
+}
