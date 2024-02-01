@@ -132,7 +132,9 @@
                         <mat-cell *matCellDef="let element">
                             <mat-list>
                                 <mat-list-item>
-                                    <span class="badge badge-pill badge-success">{{element.biosamples}} </span>
+                                    <mat-chip [ngStyle]="{'background-color': '#8FBC45'}">
+                                        <span class="white_text">{{element.biosamples}}</span>
+                                    </mat-chip>
                                 </mat-list-item>
                                 <mat-list-item *ngIf="element.biosamples_date">
                                     {{element.biosamples_date}}
@@ -146,7 +148,9 @@
                         <mat-cell *matCellDef="let element">
                             <mat-list>
                                 <mat-list-item>
-                                    <span [ngClass]="getStatusClass(element.raw_data)">{{element.raw_data }}</span>
+                                    <mat-chip [ngStyle]="{'background-color': getStatusStyle(element.raw_data)[0]}">
+                                        <span [ngClass]="getStatusStyle(element.raw_data)[1]">{{element.raw_data}}</span>
+                                    </mat-chip>
                                 </mat-list-item>
                                 <mat-list-item *ngIf="element.ena_date">
                                     {{element.ena_date}}
@@ -177,7 +181,9 @@
                         <mat-cell *matCellDef="let element">
                             <mat-list>
                                 <mat-list-item>
-                                    <span [ngClass]="getStatusClass(element.assemblies)">{{element.assemblies }} </span>
+                                    <mat-chip [ngStyle]="{'background-color': getStatusStyle(element.assemblies)[0]}">
+                                        <span [ngClass]="getStatusStyle(element.assemblies)[1]">{{element.assemblies}}</span>
+                                    </mat-chip>
                                 </mat-list-item>
                                 <mat-list-item *ngIf="element.ena_date">
                                     {{element.ena_date}}
@@ -191,8 +197,9 @@
                         <mat-cell *matCellDef="let element">
                             <mat-list>
                                 <mat-list-item>
-                                    <span [ngClass]="getStatusClass(element.annotation_complete)">
-                                        {{ element.annotation_complete }} </span>
+                                    <mat-chip [ngStyle]="{'background-color': getStatusStyle(element.annotation_complete)[0]}">
+                                        <span [ngClass]="getStatusStyle(element.annotation_complete)[1]">{{element.annotation_complete}}</span>
+                                    </mat-chip>
                                 </mat-list-item>
                                 <mat-list-item *ngIf="element.annotation_date">
                                     {{element.annotation_date}}

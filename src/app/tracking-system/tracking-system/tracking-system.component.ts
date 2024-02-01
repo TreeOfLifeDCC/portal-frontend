@@ -562,6 +562,17 @@ export class TrackingSystemComponent implements OnInit, AfterViewInit {
     }
   }
 
+  getStatusStyle(status: string) {
+    if (status !== undefined) {
+      if (status.toLowerCase().includes('waiting')) {
+        return ['#FFC107', 'dark_text_chip'];
+      } else {
+        return ['#8FBC45', 'white_text_chip'];
+      }
+    }
+  }
+
+
   getFilterResults(filter, sortColumn?, sortOrder?, from?, size?, taxonomyFilter?) {
     this.spinner.show();
     this.statusesService.getFilterResults(filter, this.sort.active, this.sort.direction, from, size, taxonomyFilter, this.searchText)

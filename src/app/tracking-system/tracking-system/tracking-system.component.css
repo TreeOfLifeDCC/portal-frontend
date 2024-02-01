@@ -292,3 +292,15 @@ ul[class*="Other-"] {
     padding: 8px 8px 8px 8px;
     word-break: break-word;
 }
+
+.white_text{
+    color: #fff;
+}
+
+.dark_text_chip {
+    color: #212529;
+}
+
+.white_text_chip {
+    color: #fff;
+}

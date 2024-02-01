@@ -398,6 +398,17 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
       return 'badge badge-pill badge-warning';
     }
   }
+
+  getCurrentStatusColour(status: string) {
+    if (['Annotation Complete', 'Done', 'Submitted'].includes(status.trim())) {
+      return ['#8FBc45', 'white_text_chip'];
+    }
+    else {
+      return ['#ffc107', 'dark_text_chip'];
+    }
+  }
+
+
   // tslint:disable-next-line:typedef
   checkTolidExists(data) {
     return data != undefined && data.tolid != undefined && data.tolid != null && data.tolid.length > 0 &&
@@ -452,13 +463,14 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
     return element.commonName != '-';
   }
   // tslint:disable-next-line:typedef
-  commonNameSourceStyle(element: any) {
+  getCommonNameSourceColour(element: any) {
     if (element.commonNameSource === 'UKSI') {
-      return 'badge badge-pill badge-warning';
+      return ['#ffc107', 'common_name_source_uksi'];
     } else {
-      return 'badge badge-pill badge-primary-cns';
+      return ['#4BBEFD', 'common_name_source_other'];
     }
- }
+  }
+
   // tslint:disable-next-line:typedef
   openDialog() {
     const dialogRef = this.dialog.open(DownloadConfirmationDialogComponent, {

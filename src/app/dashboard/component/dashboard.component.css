@@ -10,7 +10,7 @@
 }
 
 table {
-    width: 100%;
+    width: 1059px;
 }
 
 .mat-form-field {
@@ -223,22 +223,27 @@ ul[class*="other-"] {
     color: #fff;
     background-color: #4BBEFD;
     margin-left: 3px;
+    font-size: 12px;
 }
 
 .goat-color2 {
     color: #fff;
     background-color: #5cc45e;
     margin-left: 3px;
+    font-size: 12px;
 }
 
 .genome {
     color: #fff;
     background-color: grey;
     margin-left: 3px;
+    font-size: 12px;
 }
 
 .nbn {
     margin-left: 3px;
+    color: #212529;
+    font-size: 12px;
 }
 
 mat-cell:nth-child(5),
@@ -263,7 +268,7 @@ mat-header-cell:nth-child(5) {
 }
 
 .w-80 {
-    width: 560px;
+    width: 530px;
 }
 
 .w-85 {
@@ -290,6 +295,10 @@ mat-header-cell:nth-child(5) {
     max-width: 200px !important;
 }
 
+.w-219 {
+    max-width: 219px !important;
+}
+
 .badge-primary-cns {
     color: #fff;
     background-color: #4BBEFD;
@@ -308,4 +317,49 @@ mat-header-cell:nth-child(5) {
 .search-bar {
     margin-top: 15px;
     width: 100%;
+}
+
+.tol_qc {
+    margin-left: 3px;
+    margin-top: 2px;
+}
+
+mat-chip {
+    padding: 0px !important;
+}
+
+.current_status_text {
+    color: #fff;
+    font-size: 11px;
+}
+
+.dark_text_chip {
+    color: #212529;
+    font-size: 10px;
+}
+
+.white_text_chip {
+    color: #fff;
+    font-size: 10.5px;
+}
+
+.common_name_source_uksi {
+    color: #212529;
+    font-size: 12px;
+}
+
+.common_name_source_other {
+    color: #fff;
+    font-size: 11px;
+}
+
+.table-header {
+    background-color: rgba(0, 0, 0, 0.07);
+    font-size: 14px;
+    color: black;
+    font-weight: 600;
+}
+
+.table-cell-data {
+    font-size: 16px;
 }
