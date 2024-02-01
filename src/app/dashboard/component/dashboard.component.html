@@ -72,66 +72,67 @@
                            (ngModelChange)="this.searchUpdate.next($event)" placeholder="Ex. lutra" #input>
                 </mat-form-field>
 
+                    <table mat-table matTableExporter #exporter="matTableExporter" #table [dataSource]="dataSource"
+                           matSort
+                           (matSortChange)="customSort($event)" class="organismsMainTable">
+                        <ng-container matColumnDef="organism">
+                            <mat-header-cell *matHeaderCellDef mat-sort-header [ngClass]="'w-150 th-left'"> Organism
+                            </mat-header-cell>
+                            <mat-cell *matCellDef="let element" [ngClass]="'w-150 th-left'">
+                                <a [routerLink]="['/data/root/details/', element.id]">
+                                    {{element.organism}} </a>
+                            </mat-cell>
+                        </ng-container>
 
-                <table mat-table matTableExporter #exporter="matTableExporter" #table [dataSource]="dataSource" matSort
-                       (matSortChange)="customSort($event)" class="organismsMainTable">
-                    <ng-container matColumnDef="organism">
-                        <mat-header-cell *matHeaderCellDef mat-sort-header [ngClass]="'w-150 th-left'"> Organism
-                        </mat-header-cell>
-                        <mat-cell *matCellDef="let element" [ngClass]="'w-150 th-left'">
-                            <a [routerLink]="['/data/root/details/', element.id]">
-                                {{element.organism}} </a>
-                        </mat-cell>
-                    </ng-container>
+                        <ng-container matColumnDef="tolid">
+                            <mat-header-cell *matHeaderCellDef [ngClass]="'w-200 th-left'"> ToL ID</mat-header-cell>
+                            <mat-cell *matCellDef="let element"
+                                      [ngClass]="'w-200 th-left'"> {{typeofTol(element?.tolid)}}</mat-cell>
+                        </ng-container>
 
-                    <ng-container matColumnDef="tolid">
-                        <mat-header-cell *matHeaderCellDef [ngClass]="'w-200 th-left'"> ToL ID</mat-header-cell>
-                        <mat-cell *matCellDef="let element"
-                                  [ngClass]="'w-200 th-left'"> {{typeofTol(element?.tolid)}}</mat-cell>
-                    </ng-container>
+                        <ng-container matColumnDef="INSDC_ID">
+                            <mat-header-cell *matHeaderCellDef [ngClass]="'w-100 th-left'"> INSDC ID</mat-header-cell>
+                            <mat-cell *matCellDef="let element"
+                                      [ngClass]="'w-100 th-left'"> {{element?.INSDC_ID}}</mat-cell>
+                        </ng-container>
 
-                    <ng-container matColumnDef="INSDC_ID">
-                        <mat-header-cell *matHeaderCellDef [ngClass]="'w-100 th-left'"> INSDC ID</mat-header-cell>
-                        <mat-cell *matCellDef="let element"
-                                  [ngClass]="'w-100 th-left'"> {{element?.INSDC_ID}}</mat-cell>
-                    </ng-container>
+                        <ng-container matColumnDef="commonName">
+                            <mat-header-cell *matHeaderCellDef mat-sort-header [ngClass]="'w-120 th-left'">Common Name
+                            </mat-header-cell>
+                            <mat-cell *matCellDef="let element" [ngClass]="'w-120 th-left'">
+                                {{element?.commonName}}
+                            </mat-cell>
+                        </ng-container>
 
-                    <ng-container matColumnDef="commonName">
-                        <mat-header-cell *matHeaderCellDef mat-sort-header [ngClass]="'w-120 th-left'">Common Name
-                        </mat-header-cell>
-                        <mat-cell *matCellDef="let element" [ngClass]="'w-120 th-left'">
-                            {{element?.commonName}}
-                        </mat-cell>
-                    </ng-container>
+                        <ng-container matColumnDef="commonNameSource">
+                            <mat-header-cell *matHeaderCellDef mat-sort-header [ngClass]="'w-120 th-center'">Common Name
+                                Source
+                            </mat-header-cell>
+                            <mat-cell *matCellDef="let element" style="justify-content: center;"
+                                      [ngClass]="'w-120 th-center'">
+                                <mat-chip *ngIf="checkElement(element)"
+                                          [ngStyle]="{'background-color': getCommonNameSourceColour(element)[0]}">
+                                    <span [ngClass]="getCommonNameSourceColour(element)[1]">{{element.commonNameSource}}</span>
+                                </mat-chip>
+                            </mat-cell>
+                        </ng-container>
 
-                    <ng-container matColumnDef="commonNameSource">
-                        <mat-header-cell *matHeaderCellDef mat-sort-header [ngClass]="'w-120 th-center'">Common Name
-                            Source
-                        </mat-header-cell>
-                        <mat-cell *matCellDef="let element" style="justify-content: center;"
-                                  [ngClass]="'w-120 th-center'">
-                            <mat-chip *ngIf="checkElement(element)"
-                                      [ngStyle]="{'background-color': getCommonNameSourceColour(element)[0]}">
-                                <span [ngClass]="getCommonNameSourceColour(element)[1]">{{element.commonNameSource}}</span>
-                            </mat-chip>
-                        </mat-cell>
-                    </ng-container>
-
-                    <ng-container matColumnDef="currentStatus">
-                        <mat-header-cell *matHeaderCellDef mat-sort-header [ngClass]="'w-150 th-left'"> Current status
-                        </mat-header-cell>
-                        <mat-cell *matCellDef="let element" [ngClass]="'w-150 th-left'">
-                            <mat-chip
-                                    [ngStyle]="{'background-color': getCurrentStatusColour(element.currentStatus)[0]}">
-                                <span [ngClass]="getCurrentStatusColour(element.currentStatus)[1]">{{element.currentStatus}}</span>
-                            </mat-chip>
-                        </mat-cell>
-                    </ng-container>
-                    <ng-container matColumnDef="goatInfo">
-                        <mat-header-cell *matHeaderCellDef style=" padding-right: 0px;" [ngClass]="'w-219 th-left'">
-                            External references
-                        </mat-header-cell>
-                        <mat-cell *matCellDef="let element" style="padding-right: 0px;" [ngClass]="'w-219 th-left'">
+                        <ng-container matColumnDef="currentStatus">
+                            <mat-header-cell *matHeaderCellDef mat-sort-header [ngClass]="'w-150 th-left'"> Current
+                                status
+                            </mat-header-cell>
+                            <mat-cell *matCellDef="let element" [ngClass]="'w-150 th-left current_status_chip'">
+                                <mat-chip
+                                        [ngStyle]="{'background-color': getCurrentStatusColour(element.currentStatus)[0]}">
+                                    <span [ngClass]="getCurrentStatusColour(element.currentStatus)[1]">{{element.currentStatus}}</span>
+                                </mat-chip>
+                            </mat-cell>
+                        </ng-container>
+                        <ng-container matColumnDef="goatInfo">
+                            <mat-header-cell *matHeaderCellDef style=" padding-right: 0px;" [ngClass]="'w-219 th-left'">
+                                External references
+                            </mat-header-cell>
+                            <mat-cell *matCellDef="let element" style="padding-right: 0px;" [ngClass]="'w-219 th-left external_references_class'">
                             <span>
                                     <mat-chip [ngStyle]="{'background-color': '#4BBEFD'}">
                                         <a class="goat-color" target="_blank" href="{{element?.goatInfo}}"
@@ -158,77 +159,81 @@
                                         </mat-chip>
                                 </ng-container>
                             </span>
-                        </mat-cell>
+                            </mat-cell>
 
 
-                    </ng-container>
+                        </ng-container>
 
-                    <ng-container matColumnDef="biosamples">
-                        <mat-header-cell *matHeaderCellDef mat-sort-header> Metadata submitted to BioSamples
-                        </mat-header-cell>
-                        <mat-cell *matCellDef="let element">
-                            <mat-chip [ngStyle]="{'background-color': getCurrentStatusColour(element.biosamples)[0]}">
-                                <span [ngClass]="getCurrentStatusColour(element.biosamples)[1]">{{element.biosamples}}</span>
-                            </mat-chip>
-                        </mat-cell>
-                    </ng-container>
+                        <ng-container matColumnDef="biosamples">
+                            <mat-header-cell *matHeaderCellDef mat-sort-header [ngClass]="'th-center'"> Metadata submitted to BioSamples
+                            </mat-header-cell>
+                            <mat-cell *matCellDef="let element">
+                                <mat-chip
+                                        [ngStyle]="{'background-color': getCurrentStatusColour(element.biosamples)[0]}">
+                                    <span [ngClass]="getCurrentStatusColour(element.biosamples)[1]">{{element.biosamples}}</span>
+                                </mat-chip>
+                            </mat-cell>
+                        </ng-container>
 
-                    <ng-container matColumnDef="raw_data">
-                        <mat-header-cell *matHeaderCellDef mat-sort-header> Raw data submitted to ENA</mat-header-cell>
-                        <mat-cell *matCellDef="let element">
-                            <mat-chip [ngStyle]="{'background-color': getCurrentStatusColour(element.raw_data)[0]}">
-                                <span [ngClass]="getCurrentStatusColour(element.raw_data)[1]">{{element.raw_data}}</span>
-                            </mat-chip>
-                        </mat-cell>
-                    </ng-container>
+                        <ng-container matColumnDef="raw_data">
+                            <mat-header-cell *matHeaderCellDef mat-sort-header [ngClass]="'th-center'"> Raw data submitted to ENA
+                            </mat-header-cell>
+                            <mat-cell *matCellDef="let element">
+                                <mat-chip [ngStyle]="{'background-color': getCurrentStatusColour(element.raw_data)[0]}">
+                                    <span [ngClass]="getCurrentStatusColour(element.raw_data)[1]">{{element.raw_data}}</span>
+                                </mat-chip>
+                            </mat-cell>
+                        </ng-container>
 
-                    <ng-container matColumnDef="mapped_reads">
-                        <mat-header-cell *matHeaderCellDef mat-sort-header> Mapped reads submitted to ENA
-                        </mat-header-cell>
-                        <mat-cell *matCellDef="let element">
-                            <mat-chip [ngStyle]="{'background-color': getCurrentStatusColour(element.mapped_reads)[0]}">
-                                <span [ngClass]="getCurrentStatusColour(element.mapped_reads)[1]">{{element.mapped_reads}}</span>
-                            </mat-chip>
-                        </mat-cell>
-                    </ng-container>
+                        <ng-container matColumnDef="mapped_reads">
+                            <mat-header-cell *matHeaderCellDef mat-sort-header [ngClass]="'th-center'"> Mapped reads submitted to ENA
+                            </mat-header-cell>
+                            <mat-cell *matCellDef="let element">
+                                <mat-chip
+                                        [ngStyle]="{'background-color': getCurrentStatusColour(element.mapped_reads)[0]}">
+                                    <span [ngClass]="getCurrentStatusColour(element.mapped_reads)[1]">{{element.mapped_reads}}</span>
+                                </mat-chip>
+                            </mat-cell>
+                        </ng-container>
 
-                    <ng-container matColumnDef="assemblies">
-                        <mat-header-cell *matHeaderCellDef mat-sort-header> Assemblies submitted to ENA
-                        </mat-header-cell>
-                        <mat-cell *matCellDef="let element">
-                            <mat-chip
-                                    [ngStyle]="{'background-color': getCurrentStatusColour(element.assemblies_status)[0]}">
-                                <span [ngClass]="getCurrentStatusColour(element.assemblies_status)[1]">{{element.assemblies_status}}</span>
-                            </mat-chip>
-                        </mat-cell>
-                    </ng-container>
+                        <ng-container matColumnDef="assemblies">
+                            <mat-header-cell *matHeaderCellDef mat-sort-header [ngClass]="'th-center'"> Assemblies submitted to ENA
+                            </mat-header-cell>
+                            <mat-cell *matCellDef="let element">
+                                <mat-chip
+                                        [ngStyle]="{'background-color': getCurrentStatusColour(element.assemblies_status)[0]}">
+                                    <span [ngClass]="getCurrentStatusColour(element.assemblies_status)[1]">{{element.assemblies_status}}</span>
+                                </mat-chip>
+                            </mat-cell>
+                        </ng-container>
 
-                    <ng-container matColumnDef="annotation_complete">
-                        <mat-header-cell *matHeaderCellDef mat-sort-header> Annotation complete</mat-header-cell>
-                        <mat-cell *matCellDef="let element">
-                            <mat-chip
-                                    [ngStyle]="{'background-color': getCurrentStatusColour(element.annotation_complete)[0]}">
-                                <span [ngClass]="getCurrentStatusColour(element.annotation_complete)[1]">{{element.annotation_complete}}</span>
-                            </mat-chip>
-                        </mat-cell>
-                    </ng-container>
+                        <ng-container matColumnDef="annotation_complete">
+                            <mat-header-cell *matHeaderCellDef mat-sort-header> Annotation complete</mat-header-cell>
+                            <mat-cell *matCellDef="let element">
+                                <mat-chip
+                                        [ngStyle]="{'background-color': getCurrentStatusColour(element.annotation_complete)[0]}">
+                                    <span [ngClass]="getCurrentStatusColour(element.annotation_complete)[1]">{{element.annotation_complete}}</span>
+                                </mat-chip>
+                            </mat-cell>
+                        </ng-container>
 
-                    <ng-container matColumnDef="annotation">
-                        <mat-header-cell *matHeaderCellDef mat-sort-header> Annotation submitted to ENA
-                        </mat-header-cell>
-                        <mat-cell *matCellDef="let element">
-                            <mat-chip
-                                    [ngStyle]="{'background-color': getCurrentStatusColour(element.annotation_status)[0]}">
-                                <span [ngClass]="getCurrentStatusColour(element.annotation_status)[1]">{{element.annotation_status}}</span>
-                            </mat-chip>
-                        </mat-cell>
-                    </ng-container>
+                        <ng-container matColumnDef="annotation">
+                            <mat-header-cell *matHeaderCellDef mat-sort-header> Annotation submitted to ENA
+                            </mat-header-cell>
+                            <mat-cell *matCellDef="let element">
+                                <mat-chip
+                                        [ngStyle]="{'background-color': getCurrentStatusColour(element.annotation_status)[0]}">
+                                    <span [ngClass]="getCurrentStatusColour(element.annotation_status)[1]">{{element.annotation_status}}</span>
+                                </mat-chip>
+                            </mat-cell>
+                        </ng-container>
 
-                    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-                    <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
-                </table>
-                <mat-paginator [pageSizeOptions]="[20, 40, 60, 100]" showFirstLastButtons [length]="bioSampleTotalCount"
-                               (page)="pageChanged($event)"></mat-paginator>
+                        <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+                        <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+                    </table>
+                    <mat-paginator [pageSizeOptions]="[20, 40, 60, 100]" showFirstLastButtons
+                                   [length]="bioSampleTotalCount"
+                                   (page)="pageChanged($event)"></mat-paginator>
             </div>
         </div>
     </div>
