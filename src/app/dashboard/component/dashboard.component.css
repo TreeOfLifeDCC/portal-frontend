@@ -314,29 +314,11 @@ mat-header-cell:nth-child(5) {
 .organismsMainTable mat-header-cell {
     text-align: left;
     padding: 8px 8px 8px 8px;
-
-    /*word-wrap: initial;*/
-    /*display: table-cell;*/
-    /*padding: 0px 10px;*/
-    /*line-break: unset;*/
-    /*width: 100%;*/
-    /*white-space: nowrap;*/
-    /*overflow: hidden;*/
-    /*vertical-align: middle;*/
 }
 
 .organismsMainTable mat-cell {
     padding: 8px 8px 8px 8px;
     word-break: break-word;
-
-    /*word-wrap: initial;*/
-    /*display: table-cell;*/
-    /*padding: 0px 10px;*/
-    /*line-break: unset;*/
-    /*width: 100%;*/
-    /*white-space: nowrap;*/
-    /*overflow: hidden;*/
-    /*vertical-align: middle;*/
 }
 
 .search-bar {
@@ -387,29 +369,4 @@ mat-chip {
 
 .table-cell-data {
     font-size: 16px;
-}
-
-
-
-
-
-
-
-
-
-.mat-cell,
-.mat-header-cell {
-    word-wrap: initial;
-    display: table-cell;
-    padding: 0px 10px;
-    line-break: unset;
-    width: 100%;
-    white-space: nowrap;
-    overflow: hidden;
-    vertical-align: middle;
-}
-
-.mat-row,
-.mat-header-row {
-    display: table-row;
 }
