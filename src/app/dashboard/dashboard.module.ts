@@ -32,6 +32,7 @@ import {PhylogenyFilterComponent} from '../shared/phylogeny-filter/phylogeny-fil
 import {ActiveFilterComponent} from '../shared/active-filter/active-filter.component';
 import {MatCardModule} from '@angular/material/card';
 import {MatRadioModule} from '@angular/material/radio';
+import {MatChipsModule} from '@angular/material/chips';
 import { ImageSliderComponent } from '../image-slider/image-slider.component';
 
 
@@ -62,6 +63,7 @@ import { ImageSliderComponent } from '../image-slider/image-slider.component';
     MatTooltipModule,
     MatCardModule,
     MatRadioModule,
+    MatChipsModule,
     ImageSliderComponent
   ],
   exports: [

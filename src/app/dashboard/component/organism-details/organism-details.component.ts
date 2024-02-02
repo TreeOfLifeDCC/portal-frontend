@@ -565,6 +565,14 @@ export class OrganismDetailsComponent implements OnInit, AfterViewInit {
     }
   }
 
+  getStatusStyle(status: string) {
+    if (status === 'Annotation Complete') {
+      return ['#8FBC45', 'white_text_chip'];
+    } else {
+      return ['#FFC107', 'dark_text_chip'];
+    }
+  }
+
   getSearchResults(from?, size?) {
     $('.sex-inactive').removeClass('non-disp active');
     $('.tracking-status-inactive').removeClass('non-disp active');

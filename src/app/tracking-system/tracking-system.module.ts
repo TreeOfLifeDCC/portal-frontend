@@ -15,6 +15,7 @@ import { DetailsComponent } from './tracking-system/details/details.component';
 import {MatListModule} from "@angular/material/list";
 import { NgxSpinnerModule } from "ngx-spinner";
 import { MatTableExporterModule } from 'mat-table-exporter';
+import {MatChipsModule} from '@angular/material/chips';
 
 
 
@@ -34,7 +35,8 @@ import { MatTableExporterModule } from 'mat-table-exporter';
     MatInputModule,
     MatListModule,
     NgxSpinnerModule,
-    MatTableExporterModule
+    MatTableExporterModule,
+    MatChipsModule
   ]
 })
 export class TrackingSystemModule { }
