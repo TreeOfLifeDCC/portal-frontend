@@ -30,7 +30,10 @@
             <dd class="col-md-9" *ngIf="bioSampleObj?.sex">{{bioSampleObj?.sex}}</dd>
 
             <dt class="col-md-3" *ngIf="bioSampleObj?.currentStatus">Current Status:</dt>
-            <dd class="col-md-9" *ngIf="bioSampleObj?.currentStatus"><span [ngClass]="getStatusClass(bioSampleObj?.currentStatus)">{{bioSampleObj?.currentStatus}}</span>
+            <dd class="col-md-9" *ngIf="bioSampleObj?.currentStatus">
+                <mat-chip [ngStyle]="{'background-color': getStatusStyle(bioSampleObj?.currentStatus)[0]}">
+                    <span [ngClass]="getStatusStyle(bioSampleObj?.currentStatus)[1]">{{bioSampleObj?.currentStatus}}</span>
+                </mat-chip>
             </dd>
         </dl>
 
@@ -160,7 +163,9 @@
                                         <mat-header-cell *matHeaderCellDef mat-sort-header> Tracking status
                                         </mat-header-cell>
                                         <mat-cell *matCellDef="let element">
-                                            <span [ngClass]="getStatusClass(element.trackingSystem)">{{element.trackingSystem}}</span>
+                                            <mat-chip [ngStyle]="{'background-color': getStatusStyle(element.trackingSystem)[0]}">
+                                                <span [ngClass]="getStatusStyle(element.trackingSystem)[1]">{{element.trackingSystem}}</span>
+                                            </mat-chip>
                                         </mat-cell>
                                     </ng-container>
 
@@ -915,7 +920,9 @@
                                         <mat-header-cell *matHeaderCellDef mat-sort-header> Tracking status
                                         </mat-header-cell>
                                         <mat-cell *matCellDef="let element">
-                                            <span [ngClass]="getStatusClass(element.trackingSystem)">{{element.trackingSystem}}</span>
+                                            <mat-chip [ngStyle]="{'background-color': getStatusStyle(element.trackingSystem)[0]}">
+                                                <span [ngClass]="getStatusStyle(element.trackingSystem)[1]">{{element.trackingSystem}}</span>
+                                            </mat-chip>
                                         </mat-cell>
                                     </ng-container>
 
