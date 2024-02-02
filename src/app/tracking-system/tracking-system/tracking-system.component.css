@@ -285,16 +285,12 @@ ul[class*="Other-"] {
 
 .statusesTable mat-header-cell {
     text-align: left;
-    padding: 8px 8px 8px 8px;
+    padding: 0px;
 }
 
 .statusesTable mat-cell {
-    padding: 8px 8px 8px 8px;
+    padding: 0px;
     word-break: break-word;
-}
-
-.white_text{
-    color: #fff;
 }
 
 .dark_text_chip {
