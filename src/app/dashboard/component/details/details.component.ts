@@ -97,12 +97,15 @@ export class DetailsComponent implements OnInit {
   generateSlides(bioSampleObj){
     const output = [];
     const arr = bioSampleObj.images;
-    for (let i = 0; i < arr.length; i++) {
-      const obj = {url: encodeURI(arr[i])
-            .replace('(', '%28')
-            .replace(')', '%29')};
-      output.push(obj);
+    if (arr!== undefined) {
+      for (let i = 0; i < arr.length; i++) {
+        const obj = {url: encodeURI(arr[i])
+              .replace('(', '%28')
+              .replace(')', '%29')};
+        output.push(obj);
+      }
     }
+
     console.log(output);
     return output;
   }
