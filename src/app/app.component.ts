@@ -3,7 +3,7 @@ import {NgcCookieConsentService, NgcCookieConsentConfig} from 'ngx-cookieconsent
 
 export const cookieConfig: NgcCookieConsentConfig = {
   cookie: {
-    domain: 'localhost'
+    domain: 'portal.darwintreeoflife.org'
   },
   position: 'bottom',
   theme: 'classic',
