@@ -60,9 +60,9 @@ export class GisComponent implements AfterViewInit , OnDestroy {
         if (key === 'experiment-type') {
           const list = params[key].split(',');
           list.forEach((param: any) => {
-            this.filterService.activeFilters.push(param);
+            this.filterService.activeFilters.push('experimentType-' + param);
           });
-        } else if (key == 'phylogeny') {
+        } else if (key === 'phylogeny') {
           this.filterService.isFilterSelected = true;
           this.filterService.phylSelectedRank = params[key];
           this.filterService.activeFilters.push(params[key]);

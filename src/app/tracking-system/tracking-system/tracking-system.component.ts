@@ -37,9 +37,8 @@ export class TrackingSystemComponent implements OnInit, AfterViewInit {
   filterSize: number;
   urlAppendFilterArray = [];
   searchText = '';
-
-
   activeFilters = [];
+  symbiontsFilters = [];
   BiosamplesFilters = [];
   RawDataFilters = [];
 
@@ -121,8 +120,22 @@ export class TrackingSystemComponent implements OnInit, AfterViewInit {
 
   appendActiveFilters(key, params) {
     setTimeout(() => {
-      this.urlAppendFilterArray.push({ "name": key, "value": params[key] });
-      this.activeFilters.push(params[key]);
+      let filterValue = params[key];
+      if (key === 'symbionts_biosamples_status'){
+        filterValue = 'symbiontsBioSamplesStatus-' + params[key];
+      } else if (key === 'symbionts_raw_data_status'){
+        filterValue = 'symbiontsRawDataStatus-' + params[key];
+      } else if (key === 'symbionts_assemblies_status'){
+        filterValue = 'symbiontsAssembliesStatus-' + params[key];
+      } else if (key === 'metagenomes_biosamples_status'){
+        filterValue = 'metagenomesBioSamplesStatus-' + params[key];
+      } else if (key === 'metagenomes_raw_data_status'){
+        filterValue = 'metagenomesRawDataStatus-' + params[key];
+      } else if (key === 'metagenomes_assemblies_status'){
+        filterValue = 'metagenomesAssembliesStatus-' + params[key];
+      }
+      this.urlAppendFilterArray.push({ name: key, value: filterValue });
+      this.activeFilters.push(filterValue);
     }, 10);
   }
 
@@ -367,6 +380,19 @@ export class TrackingSystemComponent implements OnInit, AfterViewInit {
 
   // tslint:disable-next-line:typedef
   onFilterClick(event, label: string, filter: string) {
+    if (label === 'symbionts_biosamples_status'){
+      filter = 'symbiontsBioSamplesStatus-' + filter;
+    } else if (label === 'symbionts_raw_data_status'){
+      filter = 'symbiontsRawDataStatus-' + filter;
+    } else if (label === 'symbionts_assemblies_status'){
+      filter = 'symbiontsAssembliesStatus-' + filter;
+    } else if (label === 'metagenomes_biosamples_status'){
+      filter = 'metagenomesBioSamplesStatus-' + filter;
+    } else if (label === 'metagenomes_raw_data_status'){
+      filter = 'metagenomesRawDataStatus-' + filter;
+    } else if (label === 'metagenomes_assemblies_status'){
+      filter = 'metagenomesAssembliesStatus-' + filter;
+    }
     this.paginator.pageIndex = 0;
     let taxonomy = [this.currentTaxonomyTree];
     // this.searchText = '';
@@ -389,26 +415,52 @@ export class TrackingSystemComponent implements OnInit, AfterViewInit {
 
   }
 
-  selectedFilterArray(key: string, value: string) {
+
+  selectedFilterArray(key: string, filterValue: string) {
     let jsonObj: {};
-    if (key.toLowerCase() == 'biosamples') {
-      jsonObj = { "name": "biosamples", "value": value };
-      this.urlAppendFilterArray.push(jsonObj);
-    } else if (key.toLowerCase() == "raw-data") {
-      jsonObj = { "name": "raw_data", "value": value };
-      this.urlAppendFilterArray.push(jsonObj);
-    }  else if (key.toLowerCase() == "assemblies") {
-      jsonObj = { "name": "assemblies", "value": value };
-      this.urlAppendFilterArray.push(jsonObj);
-    } else if (key.toLowerCase() == "annotation-complete") {
-      jsonObj = { "name": "annotation_complete", "value": value };
-      this.urlAppendFilterArray.push(jsonObj);
-    } else if (key.toLowerCase() == "annotation") {
-      jsonObj = { "name": "annotation", "value": value };
-      this.urlAppendFilterArray.push(jsonObj);
-    } else if (key.toLowerCase() == "phylogeny") {
-      jsonObj = { "name": "phylogeny", "value": value };
-      this.urlAppendFilterArray.push(jsonObj);
+
+    switch (key.toLowerCase()) {
+      case 'biosamples':
+        jsonObj = { name: 'biosamples', value: filterValue };
+        this.urlAppendFilterArray.push(jsonObj);
+        break;
+      case 'raw-data':
+        jsonObj = { name: 'raw_data', value: filterValue };
+        this.urlAppendFilterArray.push(jsonObj);
+        break;
+      case 'assemblies':
+        jsonObj = { name: 'assemblies', value: filterValue };
+        this.urlAppendFilterArray.push(jsonObj);
+        break;
+      case 'annotation-complete':
+        jsonObj = { name: 'annotation_complete', value: filterValue };
+        this.urlAppendFilterArray.push(jsonObj);
+        break;
+      case 'annotation':
+        jsonObj = { name: 'annotation', value: filterValue };
+        this.urlAppendFilterArray.push(jsonObj);
+        break;
+      case 'phylogeny':
+        jsonObj = { name: 'phylogeny', value: filterValue };
+        this.urlAppendFilterArray.push(jsonObj);
+        break;
+      case 'symbionts_biosamples_status':
+        filterValue = filterValue.replace(/^symbiontsBioSamplesStatus-/, '');
+        jsonObj = { name: 'symbionts_biosamples_status', value: filterValue };
+        this.urlAppendFilterArray.push(jsonObj);
+        break;
+      case 'symbionts_raw_data_status':
+        filterValue = filterValue.replace(/^symbiontsRawDataStatus-/, '');
+        jsonObj = { name: 'symbionts_raw_data_status', value: filterValue };
+        this.urlAppendFilterArray.push(jsonObj);
+        break;
+      case 'symbionts_assemblies_status':
+        filterValue = filterValue.replace(/^symbiontsAssembliesStatus-/, '');
+        jsonObj = { name: 'symbionts_assemblies_status', value: filterValue };
+        this.urlAppendFilterArray.push(jsonObj);
+        break;
+      default:
+        console.log(`Sorry, filter ${key} does not exist.`);
     }
 
   }
@@ -509,6 +561,16 @@ export class TrackingSystemComponent implements OnInit, AfterViewInit {
   }
 
   updateDomForRemovedFilter(filter: string) {
+    // update filter name for symbionts and metagenomes
+    if (filter.startsWith('symbiontsBioSamplesStatus-')){
+      filter = filter.replace(/^symbiontsBioSamplesStatus-/, '');
+    }
+    if (filter.startsWith('symbiontsRawDataStatus-')){
+      filter = filter.replace(/^symbiontsRawDataStatus-/, '');
+    }
+    if (filter.startsWith('symbiontsAssembliesStatus-')){
+      filter = filter.replace(/^symbiontsAssembliesStatus-/, '');
+    }
     if (this.urlAppendFilterArray.length != 0) {
       let inactiveClassName: string;
       this.urlAppendFilterArray.filter(obj => {
@@ -545,11 +607,40 @@ export class TrackingSystemComponent implements OnInit, AfterViewInit {
         this.AssembliesFilters = this.filtersMap.assemblies.filter(i => i !== "");
         this.AnnotationCompleteFilters = this.filtersMap.annotation_complete.filter(i => i !== "");
         this.AnnotationFilters = this.filtersMap.annotation.filter(i => i !== "");
+
+        // symbionts
+        this.symbiontsFilters = [];
+        if (this.filtersMap.symbionts_biosamples_status) {
+          this.symbiontsFilters = this.merge(this.symbiontsFilters,
+              this.filtersMap.symbionts_biosamples_status,
+              'symbionts_biosamples_status',
+              'symbiontsBioSamplesStatus');
+        }
+        if (this.filtersMap.symbionts_raw_data_status) {
+          this.symbiontsFilters = this.merge(this.symbiontsFilters,
+              this.filtersMap.symbionts_raw_data_status,
+              'symbionts_raw_data_status',
+              'symbiontsRawDataStatus');
+        }
+        if (this.filtersMap.symbionts_assemblies_status) {
+          this.symbiontsFilters = this.merge(this.symbiontsFilters,
+              this.filtersMap.symbionts_assemblies_status,
+              'symbionts_assemblies_status',
+              'symbiontsAssembliesStatus');
+        }
       },
       err => console.log(err)
     );
+  }
 
 
+  merge = (first: any[], second: any[], filterLabel, filterPrefix) => {
+    for (let i = 0; i < second.length; i++) {
+      second[i].label = filterLabel;
+      second[i].filterPrefix = filterPrefix;
+      first.push(second[i]);
+    }
+    return first;
   }
 
   getStatusClass(status: string) {
@@ -682,6 +773,7 @@ export class TrackingSystemComponent implements OnInit, AfterViewInit {
 
   parseFilterAggregation(data: any) {
     this.filtersMap = data;
+    this.symbiontsFilters = [];
     this.BiosamplesFilters = this.filtersMap.aggregations.biosamples.buckets.filter(i => {
       if (i !== "" && i.key.toLowerCase() === "done") {
         let obj = i;
@@ -718,6 +810,26 @@ export class TrackingSystemComponent implements OnInit, AfterViewInit {
         return obj;
       }
     });
+
+    // symbionts
+    if (this.filtersMap.aggregations.symbionts_biosamples_status) {
+      this.symbiontsFilters = this.merge(this.symbiontsFilters,
+          this.filtersMap.aggregations.symbionts_biosamples_status.buckets,
+          'symbionts_biosamples_status',
+          'symbiontsBioSamplesStatus');
+    }
+    if (this.filtersMap.aggregations.symbionts_raw_data_status) {
+      this.symbiontsFilters = this.merge(this.symbiontsFilters,
+          this.filtersMap.aggregations.symbionts_raw_data_status.buckets,
+          'symbionts_raw_data_status',
+          'symbiontsRawDataStatus');
+    }
+    if (this.filtersMap.aggregations.symbionts_assemblies_status) {
+      this.symbiontsFilters = this.merge(this.symbiontsFilters,
+          this.filtersMap.aggregations.symbionts_assemblies_status.buckets,
+          'symbionts_assemblies_status',
+          'symbiontsAssembliesStatus');
+    }
   }
 
 
@@ -1100,6 +1212,19 @@ export class TrackingSystemComponent implements OnInit, AfterViewInit {
       link.click();
 		}), error => console.log('Error downloading the file'),
                  () => console.info('File downloaded successfully');
+  }
+
+  displayActiveFilterName(filterName: string){
+    if (filterName.includes('symbiontsBioSamplesStatus-')){
+      return filterName.replace(/^symbiontsBioSamplesStatus-/, 'Symbionts-');
+    }
+    if (filterName.includes('symbiontsRawDataStatus-')){
+      return filterName.replace(/^symbiontsRawDataStatus-/, 'Symbionts-');
+    }
+    if (filterName.includes('symbiontsAssembliesStatus-')){
+      return filterName.replace(/^symbiontsAssembliesStatus-/, 'Symbionts-');
+    }
+    return filterName;
   }
 
 }

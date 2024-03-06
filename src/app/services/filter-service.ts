@@ -74,6 +74,7 @@ export class FilterService {
     selectedTaxnomyFilter = '';
     taxonomies = [];
     experimentTypeFilters = [];
+    symbiontsFilters = [];
     journalNameFilters = [];
     publicationYearFilters = [];
     articleTypeFilters = [];
@@ -160,85 +161,129 @@ export class FilterService {
         }
 
     }
-    selectedFilterArray = (key: string, value: string) => {
-        let jsonObj: {};
-        if (key.toLowerCase() === 'biosamples') {
-            jsonObj = { name: 'biosamples', value };
-            this.urlAppendFilterArray.push(jsonObj);
-        } else if (key.toLowerCase() === 'raw-data') {
-            jsonObj = { name: 'raw_data', value };
-            this.urlAppendFilterArray.push(jsonObj);
-        }  else if (key.toLowerCase() === 'assemblies') {
-            jsonObj = { name: 'assemblies', value };
-            this.urlAppendFilterArray.push(jsonObj);
-        } else if (key.toLowerCase() === 'annotation-complete') {
-            jsonObj = { name: 'annotation_complete', value };
-            this.urlAppendFilterArray.push(jsonObj);
-        } else if (key.toLowerCase() === 'annotation') {
-            jsonObj = { name: 'annotation', value };
-            this.urlAppendFilterArray.push(jsonObj);
-        }
-        else if (key.toLowerCase() === 'genome') {
-            jsonObj = { name: 'genome', value };
-            this.urlAppendFilterArray.push(jsonObj);
-        }
-        else if (key.toLowerCase() === 'phylogeny') {
-            jsonObj = { name: 'phylogeny', value };
-            this.urlAppendFilterArray.push(jsonObj);
-        } else if (key.toLowerCase() === 'experiment-type') {
-            const oldValue = [];
-            this.urlAppendFilterArray.forEach(item => {
-                if (item.name === 'experiment-type') {
-                    oldValue.push(item.value);
-                }
-            });
-            jsonObj = oldValue === undefined || oldValue.length === 0 ? {
-                name: 'experiment-type',
-                value
-            } : {
-                name: 'experiment-type',
-                value: oldValue[oldValue.length - 1] === undefined ? value : oldValue[oldValue.length - 1] + ',' + value
-            };
-            this.urlAppendFilterArray.push(jsonObj);
 
-        } else if (key.toLowerCase() === 'journal-name') {
-            jsonObj = {name: 'journalTitle', value};
-            this.urlAppendFilterArray.push(jsonObj);
-        } else if (key.toLowerCase() === 'publication-year') {
-            jsonObj = {name: 'pubYear', value};
-            this.urlAppendFilterArray.push(jsonObj);
-        } else if (key.toLowerCase() === 'article-type') {
-            jsonObj = {name: 'articleType', value};
-            this.urlAppendFilterArray.push(jsonObj);
+    selectedFilterArray = (key: string, filterValue: string) => {
+        let jsonObj: {};
+
+        switch (key.toLowerCase()) {
+            case 'biosamples':
+                jsonObj = { name: 'biosamples', value: filterValue };
+                this.urlAppendFilterArray.push(jsonObj);
+                break;
+            case 'raw-data':
+                jsonObj = { name: 'raw_data', value: filterValue };
+                this.urlAppendFilterArray.push(jsonObj);
+                break;
+            case 'assemblies':
+                jsonObj = { name: 'assemblies', value: filterValue };
+                this.urlAppendFilterArray.push(jsonObj);
+                break;
+            case 'annotation-complete':
+                jsonObj = { name: 'annotation_complete', value: filterValue };
+                this.urlAppendFilterArray.push(jsonObj);
+                break;
+            case 'annotation':
+                jsonObj = { name: 'annotation', value: filterValue };
+                this.urlAppendFilterArray.push(jsonObj);
+                break;
+            case 'genome':
+                jsonObj = { name: 'genome', value: filterValue };
+                this.urlAppendFilterArray.push(jsonObj);
+                break;
+            case 'phylogeny':
+                jsonObj = { name: 'phylogeny', value: filterValue };
+                this.urlAppendFilterArray.push(jsonObj);
+                break;
+            case 'journal-name':
+                jsonObj = { name: 'journalTitle', value: filterValue };
+                this.urlAppendFilterArray.push(jsonObj);
+                break;
+            case 'publication-year':
+                jsonObj = { name: 'pubYear', value: filterValue };
+                this.urlAppendFilterArray.push(jsonObj);
+                break;
+            case 'article-type':
+                jsonObj = { name: 'articleType', value: filterValue };
+                this.urlAppendFilterArray.push(jsonObj);
+                break;
+            case 'experiment-type':
+                filterValue = filterValue.replace(/^experimentType-/, '');
+                this.addSimpleFilter(filterValue, 'experiment-type', jsonObj);
+                break;
+            case 'symbionts_biosamples_status':
+                filterValue = filterValue.replace(/^symbiontsBioSamplesStatus-/, '');
+                this.addSimpleFilter(filterValue, key.toLowerCase(), jsonObj);
+                break;
+            case 'symbionts_raw_data_status':
+                filterValue = filterValue.replace(/^symbiontsRawDataStatus-/, '');
+                this.addSimpleFilter(filterValue, key.toLowerCase(), jsonObj);
+                break;
+            case 'symbionts_assemblies_status':
+                filterValue = filterValue.replace(/^symbiontsAssembliesStatus-/, '');
+                this.addSimpleFilter(filterValue, key.toLowerCase(), jsonObj);
+                break;
+            default:
+                console.log(`Sorry, filter ${key} does not exist.`);
         }
 
     }
 
-    // his.filterService.selectedFilterArray(label, filter);
-    // this.filterService.activeFilters.push(filter);
-    removeExperiemtntFilter = (filter: string) => {
-        const oldValue = [];
+
+    addSimpleFilter = (filterValue: string, filterTerm: string, jsonObj: object) => {
+        const retainedFilters = [];
+        this.urlAppendFilterArray.forEach(obj => {
+            if (obj.name === filterTerm) {
+                retainedFilters.push(obj.value);
+            }
+        });
+        jsonObj = retainedFilters === undefined || retainedFilters.length === 0 ? {
+            name: filterTerm,
+            value: filterValue
+        } : {
+            name: filterTerm,
+            value: retainedFilters[retainedFilters.length - 1] + ',' + filterValue
+        };
+        this.urlAppendFilterArray.push(jsonObj);
+    }
+
+
+
+    removeSimpleFilter = (filterTitle: string, filter: string) => {
+        const retainedFilters = [];
         let jsonObj: {};
         // tslint:disable-next-line:prefer-const
         let result = this.urlAppendFilterArray.filter(obj => {
             if (obj !== undefined) {
-                return obj.name === 'experiment-type';
+                return obj.name === filterTitle;
             }
         });
         result[0].value.split(',').forEach(item => {
+            if (filter.startsWith('symbiontsBioSamplesStatus-')){
+                filter = filter.replace(/^symbiontsBioSamplesStatus-/, '');
+            }
+            if (filter.startsWith('symbiontsRawDataStatus-')){
+                filter = filter.replace(/^symbiontsRawDataStatus-/, '');
+            }
+            if (filter.startsWith('symbiontsAssembliesStatus-')){
+                filter = filter.replace(/^symbiontsAssembliesStatus-/, '');
+            }
+            if (filter.startsWith('experimentType-')){
+                filter = filter.replace(/^experimentType-/, '');
+            }
+
             if (item !== filter) {
-                oldValue.push(item);
+                retainedFilters.push(item);
             }
         });
-        if (oldValue.length > 0 ){
+        if (retainedFilters.length > 0 ){
             jsonObj = {
-                name: 'experiment-type',
-                value:  oldValue.join(',')
+                name: filterTitle,
+                value:  retainedFilters.join(',')
             };
         }
         let inactiveClassName: string;
         this.urlAppendFilterArray.filter(obj => {
-            if (obj.name.toLowerCase() === 'experiment-type') {
+            if (obj.name.toLowerCase() === filterTitle) {
 
                 const filterIndex = this.urlAppendFilterArray.indexOf(obj);
                 this.urlAppendFilterArray.splice(filterIndex, 1);
@@ -248,7 +293,16 @@ export class FilterService {
                     this.urlAppendFilterArray.push(jsonObj);
                 }
 
-             }
+            }
+        });
+    }
+
+
+    filterUrlAppendFilterArray = (filterName: string, filter: string) => {
+        this.urlAppendFilterArray.filter(obj => {
+            if (obj.name.toLowerCase() === filterName) {
+                this.removeSimpleFilter(filterName, filter);
+            }
         });
     }
 
@@ -256,17 +310,32 @@ export class FilterService {
         // tslint:disable-next-line:triple-equals
         if (this.urlAppendFilterArray.length != 0) {
             let inactiveClassName: string;
-            this.urlAppendFilterArray.filter(obj => {
-                // tslint:disable-next-line:triple-equals
-                if (obj.name.toLowerCase() === 'experiment-type') {
-                    this.removeExperiemtntFilter(filter);
-                }else if(obj.value === filter){
-                    inactiveClassName = obj.name + '-inactive';
-                    $('.' + inactiveClassName).removeClass('active');
-                    const filterIndex = this.urlAppendFilterArray.indexOf(obj);
-                    this.urlAppendFilterArray.splice(filterIndex, 1);
-                }
-            });
+
+            if (filter.startsWith('symbiontsBioSamplesStatus-')) {
+                this.filterUrlAppendFilterArray('symbionts_biosamples_status', filter);
+            } else if (filter.startsWith('symbiontsRawDataStatus-')) {
+                this.filterUrlAppendFilterArray('symbionts_raw_data_status', filter);
+            } else if (filter.startsWith('symbiontsAssembliesStatus-')) {
+                this.filterUrlAppendFilterArray('symbionts_assemblies_status', filter);
+            } else    if (filter.startsWith('metagenomesBioSamplesStatus-')) {
+                this.filterUrlAppendFilterArray('metagenomes_biosamples_status', filter);
+            } else if (filter.startsWith('metagenomesRawDataStatus-')) {
+                this.filterUrlAppendFilterArray('metagenomes_raw_data_status', filter);
+            } else if (filter.startsWith('metagenomesAssembliesStatus-')) {
+                this.filterUrlAppendFilterArray('metagenomes_assemblies_status', filter);
+            } else  if (filter.startsWith('experimentType-')) {
+                this.filterUrlAppendFilterArray('experiment-type', filter);
+            } else {
+                this.urlAppendFilterArray.filter(obj => {
+                    if (obj.value === filter) {
+                        inactiveClassName = obj.name + '-inactive';
+                        $('.' + inactiveClassName).removeClass('active');
+                        const filterIndex = this.urlAppendFilterArray.indexOf(obj);
+                        this.urlAppendFilterArray.splice(filterIndex, 1);
+                    }
+                });
+            }
+
         }
     }
 
@@ -285,6 +354,7 @@ export class FilterService {
     }
     parseFilterAggregation = (data: any) => {
         this.filterArray = [] ;
+        this.symbiontsFilters = [];
         this.filtersMap = data;
         let biosamplesFiltersCount = 0;
         this.BiosamplesFilters = this.filtersMap.aggregations.biosamples?.buckets.filter(i => {
@@ -374,8 +444,27 @@ export class FilterService {
             label: 'genome',
             count:  genome
         });
-        const experiement = this.filtersMap.aggregations.experiment?.library_construction_protocol.buckets;
-        this.experimentTypeFilters = experiement;
+
+        this.experimentTypeFilters = this.filtersMap.aggregations.experiment?.library_construction_protocol.buckets;
+
+        if (this.filtersMap.aggregations.symbionts_biosamples_status) {
+            this.symbiontsFilters = this.merge(this.symbiontsFilters,
+                this.filtersMap.aggregations.symbionts_biosamples_status.buckets,
+                'symbionts_biosamples_status',
+                'symbiontsBioSamplesStatus');
+        }
+        if (this.filtersMap.aggregations.symbionts_raw_data_status) {
+            this.symbiontsFilters = this.merge(this.symbiontsFilters,
+                this.filtersMap.aggregations.symbionts_raw_data_status.buckets,
+                'symbionts_raw_data_status',
+                'symbiontsRawDataStatus');
+        }
+        if (this.filtersMap.aggregations.symbionts_assemblies_status) {
+            this.symbiontsFilters = this.merge(this.symbiontsFilters,
+                this.filtersMap.aggregations.symbionts_assemblies_status.buckets,
+                'symbionts_assemblies_status',
+                'symbiontsAssembliesStatus');
+        }
         this.publicationYearFilters = this.filtersMap.aggregations.pubYear?.buckets;
         this.journalNameFilters = this.filtersMap.aggregations.journalTitle?.buckets;
         this.articleTypeFilters = this.filtersMap.aggregations.articleType?.buckets;
@@ -386,7 +475,14 @@ export class FilterService {
     }
 
 
-
+    merge = (first: any[], second: any[], filterLabel, filterPrefix) => {
+        for (let i = 0; i < second.length; i++) {
+            second[i].label = filterLabel;
+            second[i].filterPrefix = filterPrefix;
+            first.push(second[i]);
+        }
+        return first;
+    }
 
     updateActiveRouteParams = () => {
         const params = {};
