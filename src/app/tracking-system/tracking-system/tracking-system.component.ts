@@ -127,12 +127,6 @@ export class TrackingSystemComponent implements OnInit, AfterViewInit {
         filterValue = 'symbiontsRawDataStatus-' + params[key];
       } else if (key === 'symbionts_assemblies_status'){
         filterValue = 'symbiontsAssembliesStatus-' + params[key];
-      } else if (key === 'metagenomes_biosamples_status'){
-        filterValue = 'metagenomesBioSamplesStatus-' + params[key];
-      } else if (key === 'metagenomes_raw_data_status'){
-        filterValue = 'metagenomesRawDataStatus-' + params[key];
-      } else if (key === 'metagenomes_assemblies_status'){
-        filterValue = 'metagenomesAssembliesStatus-' + params[key];
       }
       this.urlAppendFilterArray.push({ name: key, value: filterValue });
       this.activeFilters.push(filterValue);
@@ -386,12 +380,6 @@ export class TrackingSystemComponent implements OnInit, AfterViewInit {
       filter = 'symbiontsRawDataStatus-' + filter;
     } else if (label === 'symbionts_assemblies_status'){
       filter = 'symbiontsAssembliesStatus-' + filter;
-    } else if (label === 'metagenomes_biosamples_status'){
-      filter = 'metagenomesBioSamplesStatus-' + filter;
-    } else if (label === 'metagenomes_raw_data_status'){
-      filter = 'metagenomesRawDataStatus-' + filter;
-    } else if (label === 'metagenomes_assemblies_status'){
-      filter = 'metagenomesAssembliesStatus-' + filter;
     }
     this.paginator.pageIndex = 0;
     let taxonomy = [this.currentTaxonomyTree];
@@ -561,7 +549,7 @@ export class TrackingSystemComponent implements OnInit, AfterViewInit {
   }
 
   updateDomForRemovedFilter(filter: string) {
-    // update filter name for symbionts and metagenomes
+    // update filter name for symbionts
     if (filter.startsWith('symbiontsBioSamplesStatus-')){
       filter = filter.replace(/^symbiontsBioSamplesStatus-/, '');
     }

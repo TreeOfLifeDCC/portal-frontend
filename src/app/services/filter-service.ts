@@ -317,12 +317,6 @@ export class FilterService {
                 this.filterUrlAppendFilterArray('symbionts_raw_data_status', filter);
             } else if (filter.startsWith('symbiontsAssembliesStatus-')) {
                 this.filterUrlAppendFilterArray('symbionts_assemblies_status', filter);
-            } else    if (filter.startsWith('metagenomesBioSamplesStatus-')) {
-                this.filterUrlAppendFilterArray('metagenomes_biosamples_status', filter);
-            } else if (filter.startsWith('metagenomesRawDataStatus-')) {
-                this.filterUrlAppendFilterArray('metagenomes_raw_data_status', filter);
-            } else if (filter.startsWith('metagenomesAssembliesStatus-')) {
-                this.filterUrlAppendFilterArray('metagenomes_assemblies_status', filter);
             } else  if (filter.startsWith('experimentType-')) {
                 this.filterUrlAppendFilterArray('experiment-type', filter);
             } else {
