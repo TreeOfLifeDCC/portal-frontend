@@ -122,7 +122,7 @@
                                         Remove all filters
                                     </button>
                                 </h1>
-                                <table matTableExporter #exporter="matTableExporter" mat-table [dataSource]="dataSourceRecords" matSort style="width: 100%;" class="relatedOrganismsTable">
+                                <table matTableExporter  mat-table [dataSource]="dataSourceRecords" matSort style="width: 100%;" class="relatedOrganismsTable">
                                     <ng-container matColumnDef="accession">
                                         <mat-header-cell *matHeaderCellDef mat-sort-header> BioSample ID
                                         </mat-header-cell>
@@ -202,7 +202,7 @@
                         <mat-label>Search</mat-label>
                         <input matInput (keyup)="relatedAnnotationSearch($event)" #input>
                     </mat-form-field>
-                    <table mat-table matTableExporter #exporter="matTableExporter" [dataSource]="dataSourceRelatedAnnotation" matSort style="width: 100%;">
+                    <table mat-table matTableExporter  [dataSource]="dataSourceRelatedAnnotation" matSort style="width: 100%;">
                         <ng-container matColumnDef="study_accession">
                             <mat-header-cell *matHeaderCellDef> Study Accession </mat-header-cell>
                             <mat-cell *matCellDef="let element" class="txt-center">
@@ -402,7 +402,7 @@
                         <mat-label>Search</mat-label>
                         <input matInput (keyup)="annotationSearch($event)" #input>
                     </mat-form-field>
-                    <table mat-table matTableExporter #exporter="matTableExporter" [dataSource]="dataSourceAnnotation" matSort style="width: 100%;" class="annotationTable">
+                    <table mat-table matTableExporter  [dataSource]="dataSourceAnnotation" matSort style="width: 100%;" class="annotationTable">
                         <ng-container matColumnDef="accession">
                             <mat-header-cell *matHeaderCellDef> Accession </mat-header-cell>
                             <mat-cell *matCellDef="let element">
@@ -473,7 +473,7 @@
                         <mat-label>Search</mat-label>
                         <input matInput (keyup)="assembliesSearch($event)" placeholder="Ex. ILLUMINA" #input>
                     </mat-form-field>
-                    <table mat-table matTableExporter #exporter="matTableExporter" [dataSource]="dataSourceAssemblies" matSort style="width: 100%;" class="relatedAssembliesTable">
+                    <table mat-table matTableExporter  [dataSource]="dataSourceAssemblies" matSort style="width: 100%;" class="relatedAssembliesTable">
                         <ng-container matColumnDef="accession">
                             <mat-header-cell *matHeaderCellDef> Accession </mat-header-cell>
                             <mat-cell *matCellDef="let element">
@@ -530,7 +530,7 @@
                         <input matInput (keyup)="filesSearch($event)" placeholder="Ex. ILLUMINA" #input>
                     </mat-form-field>
                     <div class="table-container">
-                        <table mat-table matTableExporter #exporter="matTableExporter" [dataSource]="dataSourceFiles" class="relatedFilesTable">
+                        <table mat-table matTableExporter  [dataSource]="dataSourceFiles" class="relatedFilesTable">
                             <ng-container matColumnDef="study_accession">
                                 <mat-header-cell *matHeaderCellDef> Study Accession </mat-header-cell>
                                 <mat-cell *matCellDef="let element" class="assemblies-font"> <a class="no-underline" target="_blank" href="https://www.ebi.ac.uk/ena/browser/view/{{element.study_accession}}">{{element.study_accession}}</a>
@@ -879,7 +879,7 @@
                     <div class="row">
                         <div class="col-md-12">
                             <div class="row">
-                                <table matTableExporter #exporter="matTableExporter" mat-table [dataSource]="dataSourceSymbiontsRecords" matSort style="width: 100%;">
+                                <table matTableExporter  mat-table [dataSource]="dataSourceSymbiontsRecords" matSort style="width: 100%;">
                                     <ng-container matColumnDef="accession">
                                         <mat-header-cell *matHeaderCellDef mat-sort-header> BioSample ID
                                         </mat-header-cell>
@@ -1023,7 +1023,7 @@
                         </mat-expansion-panel-header>
                         <div class="figpanel">
                             <div class="row">
-                                <table mat-table matTableExporter #exporter="matTableExporter" [dataSource]="dataSourceGoatInfo" matSort style="width: 100%;" class="genomeStatsTable">
+                                <table mat-table matTableExporter  [dataSource]="dataSourceGoatInfo" matSort style="width: 100%;" class="genomeStatsTable">
                                     <ng-container matColumnDef="name">
                                         <mat-header-cell *matHeaderCellDef> Attribute </mat-header-cell>
                                         <mat-cell *matCellDef="let element"> {{element.name}}

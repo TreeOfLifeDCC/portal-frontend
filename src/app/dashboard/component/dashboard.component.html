@@ -42,7 +42,7 @@
                 </mat-expansion-panel>
                 <br/>
                 <div class="column-header">
-                    <button *ngIf="filterService.activeFilters.length > 0 || filterService.selectedFilterValue != '' && (filterService.AnnotationFilters.length > 0 || filterService.AnnotationCompleteFilters.length > 0 || filterService.AssembliesFilters.length > 0 || filterService.RawDataFilters.length > 0)"
+                   <button *ngIf="filterService.activeFilters.length > 0 || filterService.selectedFilterValue != '' && (filterService.AnnotationFilters.length > 0 || filterService.AnnotationCompleteFilters.length > 0 || filterService.AssembliesFilters.length > 0 || filterService.RawDataFilters.length > 0)"
                             type="button"
                             style="float: right; background-color: #4BBEFD; color: #ffffff;"
                             class="btn btn-primary" mat-raised-button (click)="openDialog()">Download
@@ -72,7 +72,7 @@
                            (ngModelChange)="this.searchUpdate.next($event)" placeholder="Ex. lutra" #input>
                 </mat-form-field>
 
-                    <table mat-table matTableExporter #exporter="matTableExporter" #table [dataSource]="dataSource"
+                    <table mat-table matTableExporter  #table [dataSource]="dataSource"
                            matSort
                            (matSortChange)="customSort($event)" class="organismsMainTable">
                         <ng-container matColumnDef="organism">

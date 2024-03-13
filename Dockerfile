@@ -5,10 +5,12 @@ WORKDIR /source
 # Copy the package lock file into the container
 COPY package*.json ./
 # Run ci only for the production dependencies
-RUN npm ci --legacy-peer-deps
+RUN npm cache clean --force
+RUN npm install
 
 # Copy the rest of the files into the container and build
 COPY . .
+
 RUN npm run build --prod
 
 FROM nginx:alpine

@@ -11,7 +11,6 @@ import { HttpClientModule } from '@angular/common/http';
 import { MatTreeModule } from '@angular/material/tree';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
-import { MatTableExporterModule } from 'mat-table-exporter';
 import { BytesPipe } from './shared/bytes-pipe';
 import { HeaderComponent } from './shared/header/header.component';
 import { AboutComponent } from './about/about.component';
@@ -70,7 +69,6 @@ import {FooterComponent} from './shared/footer/footer.component';
     MatTreeModule,
     MatIconModule,
     MatButtonModule,
-    MatTableExporterModule,
     MatDialogModule,
     MatSnackBarModule,
     MatRadioModule,

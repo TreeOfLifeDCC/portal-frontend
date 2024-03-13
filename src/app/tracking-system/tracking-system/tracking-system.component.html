@@ -109,7 +109,7 @@
                     <mat-label>Search</mat-label>
                     <input #searchInput matInput [(ngModel)]='searchText' (keyup)="getSearchResults()" placeholder="Ex. lutra" #input>
                 </mat-form-field>
-                <table mat-table #table matTableExporter #exporter="matTableExporter" [dataSource]="dataSource" matSort (matSortChange)="customSort($event)" class="statusesTable">
+                <table mat-table #table matTableExporter  [dataSource]="dataSource" matSort (matSortChange)="customSort($event)" class="statusesTable">
                     <!-- First Column -->
                     <ng-container matColumnDef="organism">
                         <mat-header-cell *matHeaderCellDef mat-sort-header> Organism </mat-header-cell>

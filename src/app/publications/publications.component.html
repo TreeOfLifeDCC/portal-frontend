@@ -60,7 +60,7 @@
 <!--                    <input  #searchInput matInput [(ngModel)]='filterService.searchText'-->
 <!--                            (ngModelChange)="this.searchUpdate.next($event)" placeholder="Ex. lutra" #input>-->
 <!--                </mat-form-field>-->
-                <table mat-table  matTableExporter #exporter="matTableExporter" #table
+                <table mat-table  matTableExporter  #table
                        [dataSource]="dataSource" matSort (matSortChange)="customSort($event)">
 
                     <ng-container matColumnDef="title">
