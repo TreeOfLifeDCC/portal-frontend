@@ -7,6 +7,7 @@ import { ApiComponent } from './api/api.component';
 import { GisComponent } from './gis/gis.component';
 import {BulkDownloadsComponent} from './bulk-downloads/bulk-downloads.component';
 import {PublicationsComponent} from './publications/publications.component';
+import {LookerDashboardsComponent} from './looker-dashboards/looker-dashboards.component';
 
 const routes: Routes = [
   {
@@ -26,6 +27,9 @@ const routes: Routes = [
   },
   {
     path: 'gis', component: GisComponent
+  },
+  {
+    path: 'dashboards', component: LookerDashboardsComponent
   },
   {
     path: 'publications', component: PublicationsComponent
