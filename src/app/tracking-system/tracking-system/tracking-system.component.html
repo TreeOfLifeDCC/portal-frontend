@@ -64,6 +64,29 @@
                         </div>
                     </div>
                 </div>
+
+                <div class="row">
+                    <div class="col-md-12 col-sm-6">
+                        <div class="card bg-lite mb-3 filter-top">
+                            <h3 class="card-header filter-heading">
+                                <span #lbltextENA>Symbionts</span>
+                            </h3>
+                            <ul class="list-group">
+                                <ng-container *ngFor="let filter of symbiontsFilters; let i = index">
+                                    <li class="biosample list-group-item d-flex justify-content-between align-items-center biosamples-inactive"
+                                        [ngClass]="checkFilterIsActive(filter.filterPrefix+'-'+filter.key)"
+                                        (click)="onFilterClick($event, filter.label, filter.key)"
+                                        style="cursor: pointer">
+                                        <span>{{filter.key}}</span>
+                                        <span class="badge badge-pill badge-info">{{filter.doc_count}}</span>
+                                    </li>
+                                </ng-container>
+
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
                 <!-- Ontalogy aware filters -->
                 <div class="row">
                     <div class="col-md-12 col-sm-6">
@@ -98,7 +121,7 @@
                 <button type="button" style="float: right; background-color: #4BBEFD; color: #ffffff;" class="btn btn-primary" mat-raised-button (click)="downloadCSV()">Download metadata</button>
                 <h1 *ngIf="activeFilters.length !== 0">Filters:
                     <button type="button" class="btn btn-success" *ngFor="let filter of activeFilters">
-                        {{filter}}
+                        {{displayActiveFilterName(filter)}}
                         <span class="badge badge-light" (click)="removeFilter(filter)">X</span>
                     </button>
                     <button *ngIf="activeFilters.length > 0 || selectedFilterValue != ''" type="button" class="btn btn-primary" (click)="removeAllFilters()">
