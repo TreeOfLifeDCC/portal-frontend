@@ -18,7 +18,7 @@ export class GetDataService {
     for (const key of filter) {
       if (['Genome Note', 'Research Article'].indexOf(key) !== -1) {
         filters.push(`articleType=${key}`);
-      } else if (['2020', '2021', '2022', '2023'].indexOf(key) !== -1) {
+      } else if (['2020', '2021', '2022', '2023', '2024'].indexOf(key) !== -1) {
         filters.push(`pubYear=${key}`);
       } else {
         filters.push(`journalTitle=${key}`);
