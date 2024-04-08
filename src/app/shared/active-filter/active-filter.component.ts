@@ -25,7 +25,7 @@ export class ActiveFilterComponent {
 
   // tslint:disable-next-line:typedef
   clearFilter(filter: string) {
-    if (filter != undefined) {
+    if (filter !== undefined) {
       this.filterService.updateDomForRemovedFilter(filter);
       const filterIndex = this.filterService.activeFilters.indexOf(filter);
       this.filterService.activeFilters.splice(filterIndex, 1);
@@ -33,6 +33,23 @@ export class ActiveFilterComponent {
       this.filterService.updateActiveRouteParams();
 
     }
+  }
+
+  // tslint:disable-next-line:typedef
+  displayActiveFilterName(filterName: string){
+    if (filterName.includes('symbiontsBioSamplesStatus-')){
+      return filterName.replace(/^symbiontsBioSamplesStatus-/, 'Symbionts-');
+    }
+    if (filterName.includes('symbiontsRawDataStatus-')){
+      return filterName.replace(/^symbiontsRawDataStatus-/, 'Symbionts-');
+    }
+    if (filterName.includes('symbiontsAssembliesStatus-')){
+      return filterName.replace(/^symbiontsAssembliesStatus-/, 'Symbionts-');
+    }
+    if (filterName.includes('experimentType-')){
+      return filterName.replace(/^experimentType-/, '');
+    }
+    return filterName;
   }
 
 }

@@ -106,22 +106,38 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
       // tslint:disable-next-line:forin
       for (const key in params) {
         this.filterService.urlAppendFilterArray.push({name: key, value: params[key]});
-        if (key === 'experiment-type') {
-          const list = params[key].split(',');
-          list.forEach((param: any) => {
-            this.filterService.activeFilters.push(param);
-          });
-        } else if (key === 'phylogeny') {
-          this.filterService.isFilterSelected = true;
-          this.filterService.phylSelectedRank = params[key];
-          this.filterService.activeFilters.push(params[key]);
 
-        } else {
-          this.filterService.activeFilters.push(params[key]);
+        switch (key) {
+          case 'experiment-type':
+            this.addToActiveFilters(params[key], 'experimentType');
+            break;
+          case 'symbionts_biosamples_status':
+            this.addToActiveFilters(params[key], 'symbiontsBioSamplesStatus');
+            break;
+          case 'symbionts_raw_data_status':
+            this.addToActiveFilters(params[key], 'symbiontsRawDataStatus');
+            break;
+          case 'symbionts_assemblies_status':
+            this.addToActiveFilters(params[key], 'symbiontsAssembliesStatus');
+            break;
+          case 'phylogeny':
+            this.filterService.isFilterSelected = true;
+            this.filterService.phylSelectedRank = params[key];
+            this.filterService.activeFilters.push(params[key]);
+            break;
+          default:
+            this.filterService.activeFilters.push(params[key]);
         }
       }
     }
     this.getAllBiosamples(0, this.pagesize, this.sort.active, this.sort.direction);
+  }
+
+  addToActiveFilters(filterArr, filterPrefix) {
+    const list = filterArr.split(',');
+    list.forEach((value: any) => {
+      this.filterService.activeFilters.push(filterPrefix + '-' + value);
+    });
   }
 
   // tslint:disable-next-line:typedef
