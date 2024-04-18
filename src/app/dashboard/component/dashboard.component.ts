@@ -17,6 +17,7 @@ import {MatSnackBar} from '@angular/material/snack-bar';
 import {FilterService} from '../../services/filter-service';
 import {Subject} from 'rxjs';
 import {debounceTime, distinctUntilChanged} from 'rxjs/operators';
+import {GenomeNoteListComponent} from "../genome-note-list-component/genome-note-list.component";
 
 
 @Component({
@@ -64,7 +65,7 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
     sex: {},
     trackingSystem: {}
   };
-
+  genomelength  = 0;
   bioSampleTotalCount = 0;
   unpackedData;
   isBiosampleFilterCollapsed = true;
@@ -432,6 +433,7 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
   }
   // tslint:disable-next-line:typedef
   checkGenomeExists(data) {
+    this.genomelength = data != undefined && data.genome_notes != undefined && data.genome_notes != null && data.genome_notes.length ? data.genome_notes.length :0;
     return data != undefined && data.genome_notes != undefined && data.genome_notes != null && data.genome_notes.length;
   }
 
@@ -525,5 +527,15 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
       }
     }
     return false;
+  }
+
+  openGenomeNoteDialog(element) {
+    const dialogRef = this.dialog.open(GenomeNoteListComponent, {
+      width: '550px',
+      autoFocus: false,
+      data: {
+        genomNotes: element.genome_notes,
+      }
+    });
   }
 }

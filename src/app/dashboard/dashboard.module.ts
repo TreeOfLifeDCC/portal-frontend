@@ -10,13 +10,13 @@ import {FormsModule} from '@angular/forms';
 import {MatButtonModule} from '@angular/material/button';
 import {MatIconModule} from '@angular/material/icon';
 import {MatSortModule} from '@angular/material/sort';
-import {MatTableModule} from '@angular/material/table';
+import { MatTableModule} from '@angular/material/table';
 import {MatTooltipModule} from '@angular/material/tooltip';
 import {MatPaginatorModule} from '@angular/material/paginator';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatInputModule} from '@angular/material/input';
 import { NgxSpinnerModule } from 'ngx-spinner';
-// import { MatTableExporterModule } from 'mat-table-exporter';
+
 import {MatExpansionModule} from '@angular/material/expansion';
 import {MatCheckboxModule} from '@angular/material/checkbox';
 
@@ -34,6 +34,7 @@ import {MatCardModule} from '@angular/material/card';
 import {MatRadioModule} from '@angular/material/radio';
 import {MatChipsModule} from '@angular/material/chips';
 import { ImageSliderComponent } from '../image-slider/image-slider.component';
+import {GenomeNoteListComponent} from "./genome-note-list-component/genome-note-list.component";
 
 
 
@@ -41,7 +42,7 @@ import { ImageSliderComponent } from '../image-slider/image-slider.component';
 
 @NgModule({
   declarations: [DashboardComponent, SpecimensComponent, DetailsComponent, OrganismDetailsComponent, TaxanomyComponent, MapComponent,
-    MapClusterComponent, FilterComponent, PhylogenyFilterComponent, ActiveFilterComponent],
+    MapClusterComponent, FilterComponent, PhylogenyFilterComponent, ActiveFilterComponent, GenomeNoteListComponent],
   imports: [
     CommonModule,
     DashboardRoutingModule,
@@ -66,7 +67,7 @@ import { ImageSliderComponent } from '../image-slider/image-slider.component';
     ImageSliderComponent
   ],
   exports: [
-    FilterComponent, PhylogenyFilterComponent, ActiveFilterComponent
+    FilterComponent, PhylogenyFilterComponent, ActiveFilterComponent, GenomeNoteListComponent
   ],
   providers: [DashboardService, TaxanomyService],
 })

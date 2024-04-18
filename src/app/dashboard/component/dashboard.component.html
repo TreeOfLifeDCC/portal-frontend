@@ -155,9 +155,12 @@
                                 </ng-container>
                                 <ng-container *ngIf="checkGenomeExists(element)">
                                         <mat-chip [ngStyle]="{'background-color': 'grey'}" class="tol_qc">
-                                            <a class="genome" target="_blank"
+                                            <a *ngIf="this.genomelength == 1" class="genome" target="_blank"
                                                href="{{getGenomeURL(element)}}">Genome Note</a>
+                                            <a *ngIf="this.genomelength > 1" class="genome" target="_blank" (click)="openGenomeNoteDialog(element)">
+                                                Genome Note</a>
                                         </mat-chip>
+
                                 </ng-container>
                                 <ng-container *ngIf="checkNbnAtlasExists(element)">
                                         <mat-chip [ngStyle]="{'background-color': '#FFc107'}" class="tol_qc">

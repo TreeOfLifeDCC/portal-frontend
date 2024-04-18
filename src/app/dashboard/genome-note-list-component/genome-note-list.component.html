@@ -1,0 +1,30 @@
+
+<div  id="genomeNotesModalId" tabindex="-1" role="dialog" aria-labelledby="genomeNotesModal"
+     aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-xl border-0" role="document">
+        <div class="modal-content" style="border:none">
+            <div class="modal-header">
+                <h1 class="modal-title modal-heading" id="genomeNotesModal" modal-heading>Genome Notes
+                </h1>
+        </div>
+            <div class="modal-body" ><h1 mat-dialog-title></h1>
+            <table mat-table   [dataSource]="dataSource">
+        <ng-container matColumnDef="title">
+            <mat-header-cell *matHeaderCellDef
+                             >Title</mat-header-cell>
+            <mat-cell *matCellDef="let element" >
+                <a target="_blank" href="{{element['url']}}">{{element['title']}}</a>
+            </mat-cell>
+        </ng-container>
+        <mat-header-row *matHeaderRowDef="columns"></mat-header-row>
+        <mat-row *matRowDef="let row; columns: columns;"></mat-row>
+    </table>
+        </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal" (click)="close()">Close</button>
+            </div>
+     </div>
+    </div>
+</div>
+
+
