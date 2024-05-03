@@ -940,7 +940,7 @@
                     <div class="row">
                         <div class="col-md-12">
                             <div class="row">
-                                <table mat-table matTableExporter #exporter="matTableExporter" [dataSource]="dataSourceSymbiontsAssemblies" matSort style="width: 100%;">
+                                <table mat-table matTableExporter [dataSource]="dataSourceSymbiontsAssemblies" matSort style="width: 100%;">
                                     <ng-container matColumnDef="accession">
                                         <mat-header-cell *matHeaderCellDef> Accession </mat-header-cell>
                                         <mat-cell *matCellDef="let element" class="txt-center">
