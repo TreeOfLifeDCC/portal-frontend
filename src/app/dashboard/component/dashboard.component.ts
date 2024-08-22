@@ -87,7 +87,7 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
               this.spinner.show();
               this.resetFilter();
               this.getAllBiosamples(0, this.pagesize, this.sort.active, this.sort.direction);
-              this.filterService.updateActiveRouteParams();
+              // this.filterService.updateActiveRouteParams();
             }
     );
   }

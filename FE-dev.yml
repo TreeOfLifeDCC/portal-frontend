@@ -1,0 +1,88 @@
+#apiVersion: v1
+#kind: Service
+#metadata:
+#  name: fe-download-svc
+#  namespace: downloads-dtol
+#spec:
+#  ports:
+#    - port: 80
+#      targetPort: 80
+#      protocol: TCP
+#      name: http
+#  selector:
+#    app: species-download-frontend
+#---
+#apiVersion: apps/v1
+#kind: Deployment
+#metadata:
+#  name: species-download-frontend
+#  namespace: downloads-dtol
+#  labels:
+#    app: species-download-frontend
+#spec:
+#  replicas: 1
+#  selector:
+#    matchLabels:
+#      app: species-download-frontend
+#  template:
+#    metadata:
+#      labels:
+#        app: species-download-frontend
+#    spec:
+#      containers:
+#        - name: test
+#          image: raheelaqw1024/species-frontend:latest
+#          imagePullPolicy: "Always"
+#          ports:
+#            - containerPort: 80
+#
+#---
+#apiVersion: extensions/v1beta1
+#kind: Ingress
+#metadata:
+#  name: ingress-portal-frontend-test
+#  annotations:
+#    nginx.ingress.kubernetes.io/rewrite-target: /
+#spec:
+#  rules:
+#    - host: portal.darwintreeoflife.org
+#      http:
+#        paths:
+#          - path: /dev-build
+#            backend:
+#              serviceName: fe-download-svc
+#              servicePort: 80
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: angular-frontend
+spec:
+  selector:
+    matchLabels:
+      app: angular-app
+  template:
+    metadata:
+      labels:
+        app: angular-app
+        tier: frontend
+    spec:
+      containers:
+        - name: angular-app
+          image: eu.gcr.io/prj-ext-prod-dtol-gcp-dr/portal-frontend/dtol-fe-master:latest
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 80
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: angular-frontend
+spec:
+  type: LoadBalancer
+  selector:
+    app: angular-app
+  ports:
+    - port: 80

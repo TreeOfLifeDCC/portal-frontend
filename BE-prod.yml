@@ -1,0 +1,74 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: portal-backend
+  namespace: portal-backend-2622-backend
+  labels:
+    app: portal-backend
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: portal-backend
+  template:
+    metadata:
+      labels:
+        app: portal-backend
+    spec:
+      containers:
+        - name: springbootapp
+          image: eu.gcr.io/prj-ext-prod-dtol-gcp-dr/portal-backend/dtol-be:latest
+          imagePullPolicy: "Always"
+          env:
+            - name: ES_CONNECTION_URL
+              valueFrom:
+                secretKeyRef:
+                  name: spring-security
+                  key: ES_CONNECTION_URL
+                  optional: false
+            - name: ES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: spring-security
+                  key: ES_PASSWORD
+                  optional: false
+            - name: ES_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: spring-security
+                  key: ES_USERNAME
+                  optional: false
+            - name: CONTEXT_PATH
+              valueFrom:
+                secretKeyRef:
+                  name: spring-security
+                  key: server.servlet.context-path
+                  optional: false
+            - name: NEO4J_URI
+              valueFrom:
+                secretKeyRef:
+                  name: spring-security
+                  key: org.neo4j.driver.uri
+                  optional: false
+            - name: NEO4J_USER
+              valueFrom:
+                secretKeyRef:
+                  name: spring-security
+                  key: org.neo4j.driver.authentication.username
+                  optional: false
+            - name: NEO4J_PASS
+              valueFrom:
+                secretKeyRef:
+                  name: spring-security
+                  key: org.neo4j.driver.authentication.password
+                  optional: false
+          ports:
+            - containerPort: 8080
+#      initContainers:
+#        - name: init-elasticsearch
+#          image: busybox
+#          command: ['sh', '-c', 'until nslookup elasticsearch.elasticsearch.svc.cluster.local; do echo waiting for myservice; sleep 2; done;']
+      imagePullSecrets:
+        - name: gcp-cloud
+
+

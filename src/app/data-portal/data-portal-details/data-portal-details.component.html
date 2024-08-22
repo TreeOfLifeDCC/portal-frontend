@@ -1,0 +1,688 @@
+<br>
+<div class="container">
+    <div class="item0"></div>
+    <!--  <div class="item1"></div>-->
+    <div class="item2">
+        <mat-card>
+            <mat-card-title
+                    style="text-align: center">{{ organismData?.organism }}
+            </mat-card-title>
+            <mat-card-actions style="width: 100%">
+                <dl class="card-contents">
+                    <ng-container *ngIf="organismData?.commonName">
+                        <dt><b>Common name:</b></dt>
+                        <dd>{{ organismData?.commonName }}</dd>
+                    </ng-container>
+                    <ng-container *ngIf="organismData?.tolid">
+                        <dt><b>ToL ID:</b></dt>
+                        <dd>{{ organismData?.tolid }}</dd>
+                    </ng-container>
+                    <ng-container *ngIf="organismData?.sex">
+                        <dt><b>Sex:</b></dt>
+                        <dd>{{ organismData?.sex }}</dd>
+                    </ng-container>
+                </dl>
+            </mat-card-actions>
+        </mat-card>
+        <br>
+        <mat-tab-group>
+            <mat-tab label="Metadata">
+                <div class="example-loading-shade"
+                     *ngIf="isLoadingResults || isRateLimitReached">
+                    <mat-spinner *ngIf="isLoadingResults"></mat-spinner>
+                    <div class="example-rate-limit-reached"
+                         *ngIf="isRateLimitReached">
+                        Something went wrong, please try again!
+                    </div>
+                </div>
+                <h1>Related Organism</h1>
+                <br>
+
+                <button mat-raised-button
+                        (click)="exporter.exportTable('csv', {fileName: 'related_organisms'})"
+                        color="accent">
+                    Download metadata
+                </button>
+
+                <mat-form-field class="searchField">
+                    <mat-label>Filter</mat-label>
+                    <input matInput (keyup)="applyFilter($event, 'metadata')"
+                           placeholder="Ex. Mia" #input>
+                </mat-form-field>
+                <table #exporter="matTableExporter" #metadataSort="matSort"
+                       [dataSource]="metadataData" mat-table
+                       matSort
+                       matTableExporter>
+
+                    <!-- ID Column -->
+                    <ng-container matColumnDef="accession">
+                        <th mat-header-cell *matHeaderCellDef> Accession</th>
+                        <td mat-cell *matCellDef="let row">
+                            <a mat-button
+                               [routerLink]="['/organism', row.accession]">{{ row.accession }}</a>
+                            <mat-chip
+                                    style="margin-bottom: 5px; background-color: yellow; color: black"
+                                    *ngIf="checkNagoyaProtocol(row)">
+                                <a mat-button
+                                   href="https://drive.google.com/file/d/1tkTdo-dI30YFokE2YpwmzP9onhrrEyhD/view?usp=drive_link">
+                                    Ethics and law</a>
+                            </mat-chip>
+                        </td>
+                    </ng-container>
+
+                    <!-- Progress Column -->
+                    <ng-container matColumnDef="organism">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                            Organism
+                        </th>
+                        <td mat-cell
+                            *matCellDef="let row"> {{ row.organism.text }}
+                        </td>
+                    </ng-container>
+
+                    <!-- Name Column -->
+                    <ng-container matColumnDef="commonName">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                            Common Name
+                        </th>
+                        <td mat-cell
+                            *matCellDef="let row"> {{ row.commonName }}
+                        </td>
+                    </ng-container>
+
+                    <!-- Fruit Column -->
+                    <ng-container matColumnDef="sex">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                            Sex
+                        </th>
+                        <td mat-cell *matCellDef="let row"> {{ row.sex }}</td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="organismPart">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                            Organism Part
+                        </th>
+                        <td mat-cell
+                            *matCellDef="let row"> {{ row.organismPart }}
+                        </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="trackingSystem">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                            Status
+                        </th>
+                        <td mat-cell *matCellDef="let row">
+                            <mat-chip selected
+                                      [style]="getStyle(row.trackingSystem)">
+                                {{ row.trackingSystem }}
+                            </mat-chip>
+                        </td>
+                    </ng-container>
+
+                    <tr mat-header-row
+                        *matHeaderRowDef="metadataDisplayedColumns"></tr>
+                    <tr mat-row
+                        *matRowDef="let row; columns: metadataDisplayedColumns;"></tr>
+
+                    <!-- Row shown when there is no matching metadataData. -->
+                    <tr class="mat-row" *matNoDataRow>
+                        <td class="mat-cell" colspan="4">No data matching the
+                            filter "{{ input.value }}"
+                        </td>
+                    </tr>
+                </table>
+
+                <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]"
+                               aria-label="Select page of users"
+                               #metadataPaginator
+                               [length]="metadataDataLength"></mat-paginator>
+
+            </mat-tab>
+            <mat-tab label="Data"
+                     *ngIf="annotationDataLength !== 0 || assembliesDataLength !== 0 || filesDataLength !== 0">
+                <div class="example-loading-shade"
+                     *ngIf="isLoadingResults || isRateLimitReached">
+                    <mat-spinner *ngIf="isLoadingResults"></mat-spinner>
+                    <div class="example-rate-limit-reached"
+                         *ngIf="isRateLimitReached">
+                        Something went wrong, please try again!
+                    </div>
+                </div>
+                <br>
+                <ng-container *ngIf="annotationDataLength !== 0">
+                    <h1>Annotation</h1>
+
+                    <button mat-raised-button
+                            (click)="annotationExporter.exportTable('csv', {fileName: 'related_annotations'})"
+                            color="accent">Download metadata
+                    </button>
+
+                    <mat-form-field class="searchField">
+                        <mat-label>Filter</mat-label>
+                        <input matInput
+                               (keyup)="applyFilter($event, 'annotation')"
+                               placeholder="Illumina" #input>
+                    </mat-form-field>
+                    <table mat-table [dataSource]="annotationData" matSort
+                           #annotationSort="matSort" matTableExporter
+                           #annotationExporter="matTableExporter">
+
+                        <!-- ID Column -->
+                        <ng-container matColumnDef="species">
+                            <th mat-header-cell *matHeaderCellDef
+                                mat-sort-header> Species
+                            </th>
+                            <td mat-cell
+                                *matCellDef="let row"> {{ row.species }}
+                            </td>
+                        </ng-container>
+
+                        <!-- Progress Column -->
+                        <ng-container matColumnDef="accession">
+                            <th mat-header-cell *matHeaderCellDef
+                                mat-sort-header> Accession
+                            </th>
+                            <td mat-cell
+                                *matCellDef="let row"> {{ row.accession }}
+                            </td>
+                        </ng-container>
+
+                        <!-- Name Column -->
+                        <ng-container matColumnDef="annotation_gtf">
+                            <th mat-header-cell *matHeaderCellDef
+                                mat-sort-header> Annotation GTF
+                            </th>
+                            <!--            <td mat-cell *matCellDef="let row"> {{row.annotation.GTF}} </td>-->
+                            <td mat-cell *matCellDef="let row">
+                                <a mat-button
+                                   href="{{row['annotation']['GTF']}}">GTF</a>
+                            </td>
+                        </ng-container>
+
+                        <!-- Fruit Column -->
+                        <ng-container matColumnDef="annotation_gff3">
+                            <th mat-header-cell *matHeaderCellDef
+                                mat-sort-header> annotation GTF3
+                            </th>
+                            <td mat-cell *matCellDef="let row">
+                                <a mat-button href="{{row.annotation.GFF3}}">GFF3</a>
+                            </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="proteins">
+                            <th mat-header-cell *matHeaderCellDef
+                                mat-sort-header> Proteins FASTA
+                            </th>
+                            <td mat-cell *matCellDef="let row">
+                                <a mat-button href="{{row.proteins.FASTA}}">FASTA</a>
+                            </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="transcripts">
+                            <th mat-header-cell *matHeaderCellDef
+                                mat-sort-header> Transcripts FASTA
+                            </th>
+                            <td mat-cell *matCellDef="let row">
+                                <a mat-button href="{{row.transcripts.FASTA}}">FASTA</a>
+                            </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="softmasked_genome">
+                            <th mat-header-cell *matHeaderCellDef
+                                mat-sort-header> Softmasked Genome FASTA
+                            </th>
+                            <td mat-cell *matCellDef="let row">
+                                <a mat-button
+                                   href="{{row.softmasked_genome.FASTA}}">FASTA</a>
+                            </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="repeat_library">
+                            <th mat-header-cell *matHeaderCellDef
+                                mat-sort-header> Repeat Library FASTA
+                            </th>
+                            <td mat-cell *matCellDef="let row">
+                                <a mat-button
+                                   href="{{row.repeat_library?.FASTA}}">FASTA</a>
+                            </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="other_data">
+                            <th mat-header-cell *matHeaderCellDef
+                                mat-sort-header> Other Data FTP Dumps
+                            </th>
+                            <td mat-cell *matCellDef="let row">
+                                <a mat-button
+                                   href="{{row.other_data.ftp_dumps}}">FTP
+                                    Dumps</a>
+                            </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="view_in_browser">
+                            <th mat-header-cell *matHeaderCellDef
+                                mat-sort-header> View in Browser
+                            </th>
+                            <!--            <td mat-cell *matCellDef="let row"> {{row.view_in_browser}} </td>-->
+                            <td mat-cell *matCellDef="let row">
+                                <a mat-button href="{{row.view_in_browser}}">Ensembl</a>
+                            </td>
+                        </ng-container>
+
+                        <tr mat-header-row
+                            *matHeaderRowDef="annotationsDisplayedColumns"></tr>
+                        <tr mat-row
+                            *matRowDef="let row; columns: annotationsDisplayedColumns;"></tr>
+
+                        <!-- Row shown when there is no matching metadataData. -->
+                        <tr class="mat-row" *matNoDataRow>
+                            <td class="mat-cell" colspan="4">No data matching
+                                the filter "{{ input.value }}"
+                            </td>
+                        </tr>
+                    </table>
+
+                    <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]"
+                                   aria-label="Select page of users"
+                                   #annotationPaginator
+                                   [length]="annotationDataLength">
+                    </mat-paginator>
+                </ng-container>
+
+                <br>
+
+                <ng-container *ngIf="assembliesDataLength !== 0">
+                    <h1>Related Assemblies</h1>
+                    <button mat-raised-button
+                            (click)="assembliesExporter.exportTable('csv', {fileName: 'related_assemblies'})"
+                            color="accent">Download metadata
+                    </button>
+
+
+                    <mat-form-field class="searchField">
+                        <mat-label>Filter</mat-label>
+                        <input matInput
+                               (keyup)="applyFilter($event, 'assemblies')"
+                               placeholder="Illumina" #input>
+                    </mat-form-field>
+                    <table mat-table [dataSource]="assembliesData" matSort
+                           #assembliesSort="matSort" matTableExporter
+                           #assembliesExporter="matTableExporter">
+
+                        <!-- ID Column -->
+                        <ng-container matColumnDef="accession">
+                            <th mat-header-cell *matHeaderCellDef
+                                mat-sort-header> Accession
+                            </th>
+                            <td mat-cell *matCellDef="let row">
+                                <a mat-button
+                                   href="https://www.ebi.ac.uk/ena/browser/view/{{row.accession}}">
+                                    {{ row.accession }}</a>
+                            </td>
+                        </ng-container>
+
+                        <!-- Progress Column -->
+                        <ng-container matColumnDef="version">
+                            <th mat-header-cell *matHeaderCellDef
+                                mat-sort-header> Version
+                            </th>
+                            <td mat-cell
+                                *matCellDef="let row"> {{ row.version }}
+                            </td>
+                        </ng-container>
+
+                        <!-- Name Column -->
+                        <ng-container matColumnDef="assembly_name">
+                            <th mat-header-cell *matHeaderCellDef
+                                mat-sort-header> Assembly Name
+                            </th>
+                            <!--            <td mat-cell *matCellDef="let row"> {{row.annotation.GTF}} </td>-->
+                            <td mat-cell
+                                *matCellDef="let row">{{ row.assembly_name }}
+                            </td>
+                        </ng-container>
+
+                        <!-- Fruit Column -->
+                        <ng-container matColumnDef="description">
+                            <th mat-header-cell *matHeaderCellDef
+                                mat-sort-header> Description
+                            </th>
+                            <td mat-cell
+                                *matCellDef="let row">{{ row.description }}
+                            </td>
+                        </ng-container>
+
+                        <tr mat-header-row
+                            *matHeaderRowDef="assembliesDisplayedColumns"></tr>
+                        <tr mat-row
+                            *matRowDef="let row; columns: assembliesDisplayedColumns;"></tr>
+
+                        <!-- Row shown when there is no matching metadataData. -->
+                        <tr class="mat-row" *matNoDataRow>
+                            <td class="mat-cell" colspan="4">No data matching
+                                the filter "{{ input.value }}"
+                            </td>
+                        </tr>
+                    </table>
+
+                    <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]"
+                                   aria-label="Select page of users"
+                                   #assembliesPaginator
+                                   [length]="assembliesDataLength">
+                    </mat-paginator>
+                </ng-container>
+
+                <br>
+                <ng-container *ngIf="filesDataLength !== 0">
+                    <h1>Related Files</h1>
+
+                    <button mat-raised-button
+                            (click)="filesExporter.exportTable('csv', {fileName: 'related_files'})"
+                            color="accent">Download metadata
+                    </button>
+
+                    <mat-form-field class="searchField">
+                        <mat-label>Filter</mat-label>
+                        <input matInput (keyup)="applyFilter($event, 'files')"
+                               placeholder="Illumina" #input>
+                    </mat-form-field>
+                    <table mat-table [dataSource]="filesData" matSort
+                           #filesSort="matSort" matTableExporter
+                           #filesExporter="matTableExporter">
+                        <ng-container [matColumnDef]="column"
+                                      *ngFor="let column of filesDisplayedColumns">
+                            <th mat-header-cell *matHeaderCellDef
+                                mat-sort-header> {{ getHumanReadableName(column) }}
+                            </th>
+                            <td mat-cell *matCellDef="let element">
+                                <ng-container
+                                        *ngIf="column === 'study_accession'">
+                                    <a mat-button
+                                       href="{{getStudyLink(element[column])}}">{{ element[column] }}</a>
+                                </ng-container>
+                                <ng-container
+                                        *ngIf="keyInSpecialColumns(column)">
+                                    <a mat-button
+                                       href="{{element.column}}">{{ getKeyFromSpecialColumns(element[column]) }}</a>
+                                </ng-container>
+                                <ng-container
+                                        *ngIf="!keyInSpecialColumns(column) && column !== 'study_accession'">
+                                    {{ element[column] }}
+                                </ng-container>
+                            </td>
+                        </ng-container>
+
+                        <tr mat-header-row
+                            *matHeaderRowDef="filesDisplayedColumns"></tr>
+                        <tr mat-row
+                            *matRowDef="let row; columns: filesDisplayedColumns;"></tr>
+                    </table>
+                    <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]"
+                                   aria-label="Select page" #filesPaginator
+                                   [length]="filesDataLength"
+                                   showFirstLastButtons>
+                    </mat-paginator>
+                </ng-container>
+
+            </mat-tab>
+            <mat-tab label="Genome Note" *ngIf="showGenomeNote">
+                <h1>Published Genome Note</h1>
+                <div class="example-loading-shade"
+                     *ngIf="isLoadingResults || isRateLimitReached">
+                    <mat-spinner *ngIf="isLoadingResults"></mat-spinner>
+                    <div class="example-rate-limit-reached"
+                         *ngIf="isRateLimitReached">
+                        Something went wrong, please try again!
+                    </div>
+                </div>
+                <br>
+
+                <mat-card class="example-card">
+                    <mat-card-header>
+                        <mat-card-title>{{ getGenomeNoteData(organismData.genome_notes, 'title') }}</mat-card-title>
+                    </mat-card-header>
+                    <img mat-card-image
+                         src="{{getGenomeNoteData(organismData.genome_notes, 'figureURI')}}"
+                         alt="Figure 1">
+                    <mat-card-content>
+                        <p>
+                            {{ getGenomeNoteData(organismData.genome_notes, 'caption') }}
+                        </p>
+                        <p>
+                            {{ getGenomeNoteData(organismData.genome_notes, 'abstract') }}
+                        </p>
+                    </mat-card-content>
+                    <mat-card-actions>
+                        <div fxLayout="column">
+                            <div>
+                                <a mat-button
+                                   href="{{getGenomeNoteData(organismData.genome_notes, 'url')}}"
+                                   style="background-color: limegreen; color: black; margin-bottom: 5px">
+                                    Read the Genome Note in full here
+                                </a>
+                            </div>
+                            <div>
+                                {{ getGenomeNoteData(organismData.genome_notes, 'citeURL') }}
+                            </div>
+                        </div>
+
+                    </mat-card-actions>
+                </mat-card>
+
+            </mat-tab>
+            <mat-tab label="Symbionts"
+                     *ngIf="organismData?.symbionts_records && organismData?.symbionts_records.length"
+                     class=tab-width>
+                <div *ngIf="organismData?.symbionts_records.length">
+
+                    <h1 class="page-header">Related Symbionts</h1>
+
+                    <div class="table-container">
+                        <table mat-table
+                               [dataSource]="dataSourceSymbiontsRecords"
+                               matSort
+                               #relatedSymbiontsSort="matSort">
+
+                            <ng-container matColumnDef="accession">
+                                <th mat-header-cell *matHeaderCellDef>
+                                    BioSample ID
+                                </th>
+                                <td mat-cell *matCellDef="let row"><a
+                                        mat-button
+                                        href="https://www.ebi.ac.uk/biosamples/samples/{{row.accession}}">
+                                    {{ row.accession }}</a></td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="organism">
+                                <th mat-header-cell *matHeaderCellDef>
+                                    Organism
+                                </th>
+                                <td mat-cell
+                                    *matCellDef="let row"> {{ row.organism.text }}
+                                </td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="commonName">
+                                <th mat-header-cell *matHeaderCellDef> Common
+                                    Name
+                                </th>
+                                <td mat-cell
+                                    *matCellDef="let row"> {{ row?.commonName }}
+                                </td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="sex">
+                                <th mat-header-cell *matHeaderCellDef> Sex</th>
+                                <td mat-cell
+                                    *matCellDef="let row"> {{ row?.sex }}
+                                </td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="organismPart">
+                                <th mat-header-cell *matHeaderCellDef> Organism
+                                    part
+                                </th>
+                                <td mat-cell
+                                    *matCellDef="let row"> {{ row?.organismPart }}
+                                </td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="trackingSystem">
+                                <th mat-header-cell *matHeaderCellDef> Tracking
+                                    status
+                                </th>
+                                <td mat-cell *matCellDef="let row">
+                                    <mat-chip
+                                            [ngStyle]="{'background-color': 'gold'}">{{ row.trackingSystem }}
+                                    </mat-chip>
+                                </td>
+                            </ng-container>
+
+                            <tr mat-header-row
+                                *matHeaderRowDef="specDisplayedColumns"></tr>
+                            <tr mat-row
+                                *matRowDef="let row; columns: specDisplayedColumns;"></tr>
+
+                        </table>
+                    </div>
+
+                    <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]"
+                                   aria-label="Select page of symbionts"
+                                   #relatedSymbiontsPaginator
+                                   [length]="specSymbiontsTotalCount"></mat-paginator>
+                </div>
+                <br>
+                <br>
+                <div *ngIf="dataSourceSymbiontsAssembliesCount != 0">
+                    <h1 class="page-header">Related assemblies</h1>
+
+                    <div class="table-container">
+                        <table mat-table
+                               [dataSource]="dataSourceSymbiontsAssemblies"
+                               matSort
+                               #assembliesSymbiontsSort="matSort">
+                            <ng-container matColumnDef="accession">
+                                <th mat-header-cell *matHeaderCellDef>
+                                    Accession
+                                </th>
+                                <td mat-cell *matCellDef="let row">
+                                    <a mat-button target="_blank"
+                                       href="https://www.ebi.ac.uk/ena/browser/view/{{row.accession}}">{{ row.accession }}</a>
+                                </td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="assembly_name">
+                                <th mat-header-cell *matHeaderCellDef> Assembly
+                                    Name
+                                </th>
+                                <td mat-cell *matCellDef="let row">
+                                    {{ row.assembly_name }}
+                                </td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="description">
+                                <th mat-header-cell *matHeaderCellDef>
+                                    Description
+                                </th>
+                                <td mat-cell *matCellDef="let row">
+                                    {{ row.description }}
+                                </td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="version"
+                                          class="column-width">
+                                <th mat-header-cell *matHeaderCellDef
+                                    class="column-width">
+                                    Version
+                                </th>
+                                <td mat-cell *matCellDef="let row">
+                                    {{ row.version }}
+                                </td>
+                            </ng-container>
+
+                            <tr mat-header-row
+                                *matHeaderRowDef="displayedColumnsAssemblies"></tr>
+                            <tr mat-row
+                                *matRowDef="let row; columns: displayedColumnsAssemblies;"></tr>
+
+                        </table>
+                    </div>
+                    <mat-paginator #assembliesSymbiontsPaginator
+                                   [pageSizeOptions]="[5,10, 20, 30]"
+                                   showFirstLastButtons
+                                   [length]="dataSourceSymbiontsAssembliesCount"
+                                   style="width: 100%;"></mat-paginator>
+                </div>
+
+            </mat-tab>
+
+            <mat-tab label="GoaT" *ngIf="goatDataLength !== 0">
+                <h1>Goat Info</h1>
+                <br>
+                <button mat-raised-button
+                        (click)="goatExporter.exportTable('csv', {fileName: 'goat_info'})"
+                        color="accent" style="margin-bottom: 10px">Download
+                    GoaT information
+                </button>
+
+                <table mat-table [dataSource]="goatData" matTableExporter
+                       #goatExporter="matTableExporter">
+
+                    <!-- ID Column -->
+                    <ng-container matColumnDef="name">
+                        <th mat-header-cell *matHeaderCellDef> Attribue</th>
+                        <td mat-cell *matCellDef="let row"> {{ row.name }}</td>
+                    </ng-container>
+
+                    <!-- Progress Column -->
+                    <ng-container matColumnDef="value">
+                        <th mat-header-cell *matHeaderCellDef> Value</th>
+                        <td mat-cell *matCellDef="let row"> {{ row.value }}
+                        </td>
+                    </ng-container>
+
+                    <!-- Name Column -->
+                    <ng-container matColumnDef="count">
+                        <th mat-header-cell *matHeaderCellDef> Count</th>
+                        <!--            <td mat-cell *matCellDef="let row"> {{row.annotation.GTF}} </td>-->
+                        <td mat-cell *matCellDef="let row">{{ row.count }}</td>
+                    </ng-container>
+
+                    <!-- Fruit Column -->
+                    <ng-container matColumnDef="aggregation_method">
+                        <th mat-header-cell *matHeaderCellDef> Aggregation
+                            Method
+                        </th>
+                        <td mat-cell
+                            *matCellDef="let row">{{ row.aggregation_method }}
+                        </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="aggregation_source">
+                        <th mat-header-cell *matHeaderCellDef> Aggregation
+                            Source
+                        </th>
+                        <td mat-cell
+                            *matCellDef="let row">{{ row.aggregation_source }}
+                        </td>
+                    </ng-container>
+
+                    <tr mat-header-row
+                        *matHeaderRowDef="goatDisplayedColumns"></tr>
+                    <tr mat-row
+                        *matRowDef="let row; columns: goatDisplayedColumns;"></tr>
+
+                    <!-- Row shown when there is no matching metadataData. -->
+                    <tr class="mat-row" *matNoDataRow>
+                        <td class="mat-cell" colspan="4">No data matching the
+                            filter "{{ input.value }}"
+                        </td>
+                    </tr>
+                </table>
+                <a mat-button href="{{goatDataLink}}"
+                   style="background-color: limegreen; color: black; margin-top: 5px">
+                    Read the GoaT info in full here</a>
+            </mat-tab>
+        </mat-tab-group>
+    </div>
+    <div class="item3"></div>
+</div>

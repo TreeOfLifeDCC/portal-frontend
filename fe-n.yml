@@ -1,0 +1,24 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: species-frontend
+  labels:
+    app: species-frontend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: species-frontend
+
+  # Pod template
+  template:
+    metadata:
+      labels:
+        app: species-frontend
+    spec:
+      containers:
+        - name: test
+          image: eu.gcr.io/prj-ext-prod-dtol-gcp-dr/portal-frontend/dtol-portal-frontend:latest
+          imagePullPolicy: "Always"
+          ports:
+            - containerPort: 80

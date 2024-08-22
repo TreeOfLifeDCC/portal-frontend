@@ -8,6 +8,7 @@ import { GisComponent } from './gis/gis.component';
 import {BulkDownloadsComponent} from './bulk-downloads/bulk-downloads.component';
 import {PublicationsComponent} from './publications/publications.component';
 import {LookerDashboardsComponent} from './looker-dashboards/looker-dashboards.component';
+import {DataPortalComponent} from "./data-portal/data-portal.component";
 
 const routes: Routes = [
   {
@@ -36,6 +37,9 @@ const routes: Routes = [
   },
   {
     path: 'bulk-downloads' , component: BulkDownloadsComponent
+  },
+  {
+    path: 'data-portal' , component: DataPortalComponent
   },
   {
     path: '',

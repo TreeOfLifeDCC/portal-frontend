@@ -1,0 +1,147 @@
+/* Structure */
+.example-container {
+    position: relative;
+}
+
+.container {
+    display: flex; /* or inline-flex */
+    flex-flow: row wrap;
+    justify-content: space-evenly;
+    gap: 5px 5px;
+}
+
+.container2 {
+    display: flex; /* or inline-flex */
+    flex-flow: row wrap;
+    justify-content: flex-start;
+}
+
+.item4 {
+    flex: 1 0 calc(75% - 5px);
+}
+
+.example-table-container {
+    position: relative;
+    min-height: 200px;
+    max-height: 800px;
+    overflow: auto;
+}
+
+table {
+    width: 100%;
+}
+
+.example-loading-shade {
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 56px;
+    right: 0;
+    background: rgba(0, 0, 0, 0.15);
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.example-rate-limit-reached {
+    max-width: 360px;
+    text-align: center;
+}
+
+/* Column Widths */
+.mat-column-number,
+.mat-column-state {
+    max-width: 64px;
+}
+
+.mat-column-created {
+    max-width: 124px;
+}
+
+.item1 {
+    flex-grow: 3;
+}
+
+.item2 {
+    flex-grow: 25;
+}
+
+.item3 {
+    flex-grow: 1;
+}
+
+.item0 {
+    flex-grow: 1;
+}
+
+.search_field {
+    width: 100%;
+    margin-top: 10px;
+}
+
+/*td {*/
+/*  text-align: center;*/
+/*}*/
+
+/*th.mat-header-cell {*/
+/*  text-align: center !important;*/
+/*}*/
+
+/*th.mat-sort-header {*/
+/*  text-align: center !important;*/
+/*}*/
+
+/*a {*/
+/*  color: white;*/
+/*}*/
+
+.mat-column-organism,
+.mat-column-commonName,
+.mat-column-commonNameSource,
+.mat-column-currentStatus,
+.mat-column-externalReferences {
+    max-width: 80px;
+}
+
+mat-chip {
+    padding: 4px 9px !important;
+}
+
+button {
+    margin-left: 15px;
+}
+
+mat-form-field {
+    margin-left: 15px;
+    margin-right: 15px;
+}
+
+.vertical-center {
+    margin: 0;
+    position: absolute;
+    top: 50%;
+    -ms-transform: translateY(-50%);
+    transform: translateY(-50%);
+}
+
+.data-table-div {
+    margin-left: 15px;
+}
+
+.data-table td {
+    padding: 0px;
+}
+
+.data-table th {
+    padding: 0px;
+}
+
+
+.card-title {
+    margin-left: 5px;
+}
+
+.main-card {
+    min-width: 300px;
+}

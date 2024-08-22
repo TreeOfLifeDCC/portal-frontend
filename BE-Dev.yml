@@ -1,0 +1,61 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: portal-backend
+  labels:
+    app: portal-backend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: portal-backend
+  template:
+    metadata:
+      labels:
+        app: portal-backend
+    spec:
+      containers:
+        - name: springbootapp
+          image: raheelaqw1024/species-backend:with-print-3
+          imagePullPolicy: "Always"
+          env:
+            - name: ES_CONNECTION_URL
+              valueFrom:
+                secretKeyRef:
+                  name: spring-security
+                  key: ES_CONNECTION_URL
+                  optional: false
+            - name: CONTEXT_PATH
+              valueFrom:
+                secretKeyRef:
+                  name: spring-security
+                  key: server.servlet.context-path
+                  optional: false
+            - name: NEO4J_URI
+              valueFrom:
+                secretKeyRef:
+                  name: spring-security
+                  key: org.neo4j.driver.uri
+                  optional: false
+            - name: NEO4J_USER
+              valueFrom:
+                secretKeyRef:
+                  name: spring-security
+                  key: org.neo4j.driver.authentication.username
+                  optional: false
+            - name: NEO4J_PASS
+              valueFrom:
+                secretKeyRef:
+                  name: spring-security
+                  key: org.neo4j.driver.authentication.password
+                  optional: false
+          ports:
+            - containerPort: 8080
+      initContainers:
+        - name: init-elasticsearch
+          image: busybox
+          command: ['sh', '-c', 'until nslookup elasticsearch.elasticsearch.svc.cluster.local; do echo waiting for myservice; sleep 2; done;']
+      imagePullSecrets:
+        - name: gitlab-registry
+
+

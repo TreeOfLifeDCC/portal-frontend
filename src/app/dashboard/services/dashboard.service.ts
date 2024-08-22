@@ -13,7 +13,9 @@ import {tap} from "rxjs/operators";
 })
 export class DashboardService {
 
-  private API_BASE_URL = 'https://portal.darwintreeoflife.org/api';
+  // private API_BASE_URL = 'https://portal.darwintreeoflife.org/api';
+
+  private API_BASE_URL = 'http://localhost:8000';
   private ENA_PORTAL_API_BASE_URL = 'https://www.ebi.ac.uk/ena/portal/api/files';
 
   constructor(private http: HttpClient, private bytesPipe: BytesPipe,  private dialog: MatDialog) { }
@@ -26,7 +28,7 @@ export class DashboardService {
     if(searchText) {
       requestParams = requestParams + `&searchText=${searchText}`
     }
-    return this.http.post(`${this.API_BASE_URL}/root_organisms${requestParams}`, filter);
+    return this.http.get(`${this.API_BASE_URL}/data_portal${requestParams}`, filter);
   }
 
   public getDistinctOrganisms(size, sortColumn?, sortOrder?, afterKey?): Observable<any> {
@@ -37,7 +39,7 @@ export class DashboardService {
     if (afterKey != undefined) {
       requestParams = requestParams + `&afterKey=${afterKey}`
     }
-    return this.http.get(`${this.API_BASE_URL}/root_organisms${requestParams}`);
+    return this.http.get(`${this.API_BASE_URL}/data_portal${requestParams}`);
   }
 
   public getBiosampleByAccession(accession: string): Observable<any> {
@@ -49,15 +51,15 @@ export class DashboardService {
   }
 
   public getRootOrganismByOrganism(organism: string): Observable<any> {
-    return this.http.get(`${this.API_BASE_URL}/root_organisms/${organism}`);
+    return this.http.get(`${this.API_BASE_URL}/data_portal/${organism}`);
   }
 
   public getRootOrganismById(id: string): Observable<any> {
-    return this.http.get(`${this.API_BASE_URL}/root_organisms/root?id=${id}`);
+    return this.http.get(`${this.API_BASE_URL}/data_portal/root?id=${id}`);
   }
 
   public getRootOrganismByAccession(accession: string): Observable<any> {
-    return this.http.get(`${this.API_BASE_URL}/root_organisms/accession/${accession}`);
+    return this.http.get(`${this.API_BASE_URL}/data_portal/accession/${accession}`);
   }
 
   public getOrganismFilters(): Observable<any> {
@@ -65,7 +67,7 @@ export class DashboardService {
   }
 
   public getRootOrganismFilters(organism): Observable<any> {
-    return this.http.get(`${this.API_BASE_URL}/root_organisms/filters?organism=${organism}`);
+    return this.http.get(`${this.API_BASE_URL}/data_portal/filters?organism=${organism}`);
   }
 
   public getDetailTableOrganismFilters(organism): Observable<any> {
@@ -77,7 +79,7 @@ export class DashboardService {
   }
 
   public getSearchResults(search: any, from?, size?): Observable<any> {
-    let requestURL = `${this.API_BASE_URL}/root_organisms/search?filter=${search}&from=${from}&size=${size}`;
+    let requestURL = `${this.API_BASE_URL}/data_portal/search?filter=${search}&from=${from}&size=${size}`;
     return this.http.get(`${requestURL}`);
   }
 
@@ -86,7 +88,7 @@ export class DashboardService {
     if (sortColumn != undefined) {
       requestParams = requestParams + `&sortColumn=${sortColumn}&sortOrder=${sortOrder}`
     }
-    let requestURL = `${this.API_BASE_URL}/root_organisms/search${requestParams}`;
+    let requestURL = `${this.API_BASE_URL}/data_portal/search${requestParams}`;
     return this.http.get(`${requestURL}`);
   }
 
@@ -118,7 +120,7 @@ export class DashboardService {
     if(searchText) {
       requestParams = requestParams + `&searchText=${searchText}`
     }
-    let requestURL = `${this.API_BASE_URL}/root_organisms/data/csv${requestParams}`;
+    let requestURL = `${this.API_BASE_URL}/data_portal/data/csv${requestParams}`;
 		return this.http.post(`${requestURL}`,filter, {responseType: 'blob'});
   }
 
@@ -134,7 +136,7 @@ export class DashboardService {
     if(searchText) {
       requestParams = requestParams + `&searchText=${searchText}`
     }
-    let requestURL = `${this.API_BASE_URL}/root_organisms/data-files/csv${requestParams}&downloadOption=` + downloadOption;
+    let requestURL = `${this.API_BASE_URL}/data_portal/data-files/csv${requestParams}&downloadOption=` + downloadOption;
     return this.http.post(`${requestURL}`, filter, {responseType: 'blob'});
   }
   public downloadFastaq(accession: any): any {
@@ -164,6 +166,6 @@ export class DashboardService {
     })).subscribe();
   }
   public getExperimentTypeFilters(): Observable<any> {
-    return this.http.get(`${this.API_BASE_URL}/root_organisms/root/experiment-type/filters`);
+    return this.http.get(`${this.API_BASE_URL}/data_portal/root/experiment-type/filters`);
   }
 }

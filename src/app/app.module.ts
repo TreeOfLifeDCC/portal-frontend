@@ -1,4 +1,4 @@
-import { BrowserModule } from '@angular/platform-browser';
+import { BrowserModule, provideClientHydration } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 
 import { AppRoutingModule } from './app-routing.module';
@@ -42,6 +42,7 @@ import {MatSortModule} from '@angular/material/sort';
 import {GetDataService} from './services/get-data.service';
 import {MatTabsModule} from '@angular/material/tabs';
 import {FooterComponent} from './shared/footer/footer.component';
+import {DataPortalComponent} from "./data-portal/data-portal.component";
 
 @NgModule({
   declarations: [
@@ -57,7 +58,8 @@ import {FooterComponent} from './shared/footer/footer.component';
     ConfirmationDialogComponent,
     GisComponent,
     BulkDownloadsComponent,
-    PublicationsComponent
+    PublicationsComponent,
+    DataPortalComponent
   ],
   imports: [
     BrowserModule,
@@ -88,7 +90,7 @@ import {FooterComponent} from './shared/footer/footer.component';
     MatSortModule,
     NgcCookieConsentModule.forRoot(cookieConfig),
   ],
-  providers: [BytesPipe, GisService, FilterService, GetDataService],
+  providers: [BytesPipe, GisService, FilterService, GetDataService, provideClientHydration()],
   bootstrap: [AppComponent],
 
 })
