@@ -5,23 +5,23 @@ import {
     ViewChild,
     EventEmitter
 } from '@angular/core';
-import {ApiService} from "../api.service";
-import {MatPaginator} from "@angular/material/paginator";
-import {MatSort, MatSortHeader} from "@angular/material/sort";
-import {catchError, map, startWith, switchMap} from "rxjs/operators";
-import {merge, of as observableOf} from "rxjs";
-import {MatDialog} from "@angular/material/dialog";
+import {ApiService} from '../api.service';
+import {MatPaginator} from '@angular/material/paginator';
+import {MatSort, MatSortHeader} from '@angular/material/sort';
+import {catchError, map, startWith, switchMap} from 'rxjs/operators';
+import {merge, of as observableOf} from 'rxjs';
+import {MatDialog} from '@angular/material/dialog';
 import {
     GenomeNoteListComponent
-} from "./genome-note-list-component/genome-note-list.component";
-import {Title} from "@angular/platform-browser";
-import {MatCard, MatCardActions, MatCardTitle} from "@angular/material/card";
-import {MatList, MatListItem} from "@angular/material/list";
+} from './genome-note-list-component/genome-note-list.component';
+import {Title} from '@angular/platform-browser';
+import {MatCard, MatCardActions, MatCardTitle} from '@angular/material/card';
+import {MatList, MatListItem} from '@angular/material/list';
 import {FlexLayoutModule} from "@angular/flex-layout";
-import {MatChip, MatChipSet} from "@angular/material/chips";
-import {MatLine} from "@angular/material/core";
-import {MatIcon} from "@angular/material/icon";
-import {MatProgressSpinner} from "@angular/material/progress-spinner";
+import {MatChip, MatChipSet} from '@angular/material/chips';
+import {MatLine} from '@angular/material/core';
+import {MatIcon} from '@angular/material/icon';
+import {MatProgressSpinner} from '@angular/material/progress-spinner';
 import {MatFormField, MatLabel} from '@angular/material/form-field';
 import {
     MatCell, MatCellDef,
@@ -30,14 +30,12 @@ import {
     MatHeaderCellDef,
     MatHeaderRow, MatHeaderRowDef, MatNoDataRow,
     MatRow, MatRowDef,
-    MatTable, MatTableDataSource
-} from "@angular/material/table";
-import {RouterLink} from "@angular/router";
-import {MatAnchor, MatButton} from "@angular/material/button";
-import {MatInput} from "@angular/material/input";
-import {NgForOf, NgIf} from "@angular/common";
-import {MatTableExporterModule} from "mat-table-exporter";
-
+    MatTable
+} from '@angular/material/table';
+import {RouterLink} from '@angular/router';
+import {MatAnchor, MatButton} from '@angular/material/button';
+import {MatInput} from '@angular/material/input';
+import {NgForOf, NgIf} from '@angular/common';
 
 @Component({
     selector: 'app-data-portal',
@@ -49,7 +47,6 @@ import {MatTableExporterModule} from "mat-table-exporter";
         MatCardActions,
         MatList,
         MatListItem,
-        FlexLayoutModule,
         MatChipSet,
         MatLine,
         MatChip,
@@ -77,7 +74,7 @@ import {MatTableExporterModule} from "mat-table-exporter";
         NgIf,
         NgForOf,
         MatSortHeader,
-        MatTableExporterModule
+        FlexLayoutModule
     ],
     styleUrls: ['./data-portal.component.css']
 })
@@ -126,10 +123,10 @@ export class DataPortalComponent implements OnInit, AfterViewInit {
 
     currentStyle: string;
     currentClass = 'kingdom';
-    classes = ["superkingdom", "kingdom", "subkingdom", "superphylum", "phylum", "subphylum", "superclass", "class",
-        "subclass", "infraclass", "cohort", "subcohort", "superorder", "order", "suborder", "infraorder", "parvorder",
-        "section", "subsection", "superfamily", "family", " subfamily", " tribe", "subtribe", "genus", "series", "subgenus",
-        "species_group", "species_subgroup", "species", "subspecies", "varietas", "forma"];
+    classes = ['superkingdom', 'kingdom', 'subkingdom', 'superphylum', 'phylum', 'subphylum', 'superclass', 'class',
+        'subclass', 'infraclass', 'cohort', 'subcohort', 'superorder', 'order', 'suborder', 'infraorder', 'parvorder',
+        'section', 'subsection', 'superfamily', 'family', ' subfamily', ' tribe', 'subtribe', 'genus', 'series', 'subgenus',
+        'species_group', 'species_subgroup', 'species', 'subspecies', 'varietas', 'forma'];
     timer: any;
     phylogenyFilters: string[] = [];
 
@@ -140,7 +137,7 @@ export class DataPortalComponent implements OnInit, AfterViewInit {
     @ViewChild(MatPaginator) paginator: MatPaginator;
     @ViewChild(MatSort) sort: MatSort;
 
-    constructor(private _apiService: ApiService, private dialog: MatDialog, private titleService: Title) {
+    constructor(private apiService: ApiService, private dialog: MatDialog, private titleService: Title) {
     }
 
     ngOnInit(): void {
@@ -158,7 +155,7 @@ export class DataPortalComponent implements OnInit, AfterViewInit {
                 startWith({}),
                 switchMap(() => {
                     this.isLoadingResults = true;
-                    return this._apiService.getData(this.paginator.pageIndex,
+                    return this.apiService.getData(this.paginator.pageIndex,
                         this.paginator.pageSize, this.searchValue, this.sort.active, this.sort.direction, this.activeFilters,
                         this.currentClass, this.phylogenyFilters, 'data_portal'
                     ).pipe(catchError(() => observableOf(null)));
@@ -216,8 +213,9 @@ export class DataPortalComponent implements OnInit, AfterViewInit {
     getStatusCount(data: any) {
         if (data) {
             for (let i = 0; i < data.length; ++i) {
-                if (data[i]['key'] === 'Done')
-                    return data[i]['doc_count'];
+                if (data[i].key === 'Done') {
+                    return data[i].doc_count;
+                }
             }
         }
     }
@@ -254,14 +252,14 @@ export class DataPortalComponent implements OnInit, AfterViewInit {
 
     displayActiveFilterName(filterName: string) {
         if (filterName.startsWith('symbionts_')) {
-            return 'Symbionts-' + filterName.split('-')[1]
+            return 'Symbionts-' + filterName.split('-')[1];
         }
         return filterName;
     }
 
     changeCurrentClass(filterValue: string) {
         console.log('single click');
-        let delay = 200;
+        const delay = 200;
         this.preventSimpleClick = false;
         this.timer = setTimeout(() => {
             if (!this.preventSimpleClick) {
@@ -306,11 +304,11 @@ export class DataPortalComponent implements OnInit, AfterViewInit {
     generateTolidLink(data: any) {
         const organismName = data.organism.split(' ').join('_');
         let clade;
-        let project_name;
+        let projectName;
         if (data.project_name === 'ERGA') {
-            project_name = 'erga'
+            projectName = 'erga';
         } else {
-            project_name = 'darwin'
+            projectName = 'darwin';
         }
         if (typeof (data.tolid) === 'string') {
             const firstChar: string = data.tolid.charAt(0);
@@ -323,7 +321,7 @@ export class DataPortalComponent implements OnInit, AfterViewInit {
 
             }
         }
-        return `https://tolqc.cog.sanger.ac.uk/${project_name}/${clade}/${organismName}`;
+        return `https://tolqc.cog.sanger.ac.uk/${projectName}/${clade}/${organismName}`;
     }
 
     checkShowTolQc(data: any) {
@@ -355,7 +353,7 @@ export class DataPortalComponent implements OnInit, AfterViewInit {
     }
 
     downloadFile(format: string) {
-        this._apiService.downloadRecords(this.paginator.pageIndex,
+        this.apiService.downloadRecords(this.paginator.pageIndex,
             this.paginator.pageSize, this.searchValue, this.sort.active, this.sort.direction, this.activeFilters,
             this.currentClass, this.phylogenyFilters, 'data_portal').subscribe((res: Blob) => {
             const a = document.createElement('a');

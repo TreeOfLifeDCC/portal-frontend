@@ -4,28 +4,22 @@
     </div>
     <div class="item1">
         <mat-card class="main-card">
-            <mat-card-title class="card-title">Data status</mat-card-title>
-            <mat-card-actions fxFlexAlign="center" style="width: 100%">
-                <mat-list role="list" style="width: 100%">
+            <mat-card-title class="card-header filter-heading">Data status</mat-card-title>
+            <mat-card-actions >
+                <mat-list role="list" >
                     @if (getStatusCount(aggregations?.biosamples.buckets)) {
                         <mat-list-item role="listitem"
                                        [style]="checkStyle('BioSamples - Submitted')"
                                        (click)="onFilterClick('BioSamples - Submitted')"
                                        style="cursor: pointer">
-                            <div fxLayout="row" fxFlexFill
-                                 fxFlexAlign="center center">
-                                <div>
-                                    <h4 matLine class="vertical-center">
-                                        BioSamples - Submitted</h4>
-                                </div>
-                                <div style="margin-left: auto">
-                                    <mat-chip-set>
-                                        <mat-chip style="font-size: 10px">
+
+                                    <span >
+                                        BioSamples - Submitted</span>
+
+                                <span>
                                             {{ getStatusCount(aggregations?.biosamples.buckets) }}
-                                        </mat-chip>
-                                    </mat-chip-set>
-                                </div>
-                            </div>
+                                        </span>
+
                         </mat-list-item>
                     }
                     @if (getStatusCount(aggregations?.raw_data.buckets)) {

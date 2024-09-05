@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {HttpClient} from "@angular/common/http";
+import { HttpClient } from "@angular/common/http";
 import {Observable, throwError} from 'rxjs';
 import {catchError, map, retry} from 'rxjs/operators';
 
@@ -17,7 +17,7 @@ export class ApiService {
 
         const project_names = ['DToL', '25 genomes', 'ERGA', 'CBP', 'ASG'];
         const offset = pageIndex * pageSize;
-        let url = `https://portal.erga-biodiversity.eu/api/${index_name}?limit=${pageSize}&offset=${offset}`;
+        let url = `http://localhost:8000/${index_name}?limit=${pageSize}&offset=${offset}`;
         if (searchValue) {
             url += `&search=${searchValue}`;
         }
@@ -114,7 +114,7 @@ export class ApiService {
             url += filterStr;
         }
         url += `&current_class=${currentClass}`;
-        return this.http.get(url, {responseType: 'blob' as 'blob'});
+        return this.http.get(url, {responseType: 'blob' as const});
 
 
     }

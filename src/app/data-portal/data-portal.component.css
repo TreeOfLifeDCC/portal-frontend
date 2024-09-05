@@ -19,6 +19,21 @@
 .item4 {
     flex: 1 0 calc(75% - 5px);
 }
+.item1 {
+    flex-grow: 3;
+}
+
+.item2 {
+    flex-grow: 25;
+}
+
+.item3 {
+    flex-grow: 1;
+}
+
+.item0 {
+    flex-grow: 1;
+}
 
 .example-table-container {
     position: relative;
@@ -59,21 +74,8 @@ table {
     max-width: 124px;
 }
 
-.item1 {
-    flex-grow: 3;
-}
 
-.item2 {
-    flex-grow: 25;
-}
 
-.item3 {
-    flex-grow: 1;
-}
-
-.item0 {
-    flex-grow: 1;
-}
 
 .search_field {
     width: 100%;
