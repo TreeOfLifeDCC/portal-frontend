@@ -249,8 +249,7 @@
 
                     <button  class="btn btn-primary" style="float: right;
                     background-color: #4BBEFD; color: #ffffff;" mat-raised-button
-                            (click)="downloadFile('csv')"
-                           >
+                            (click)="downloadFile('csv')">
                         Download metadata
                     </button>
 
@@ -265,66 +264,71 @@
                                placeholder="ex. Salmo trutta">
                     </mat-form-field>
 
-                    <div class="data-table-div">
-                        <table mat-table [dataSource]="this.data"
-                               class="data-table" matSort
+
+                        <table mat-table [dataSource]="this.data" class="organismsMainTable"
+                               matSort
                                matSortActive="currentStatus"
-
-                               matSortDirection="asc">
+                               matSortDirection="asc" >
                             <!-- Number Column -->
-                            <ng-container matColumnDef="organism">
+                            <ng-container matColumnDef="organism" style=" max-width: 200px !important;">
                                 <th mat-header-cell *matHeaderCellDef
-                                    mat-sort-header disableClear>Organism
+                                    mat-sort-header disableClear >Organism
                                 </th>
-                                <td mat-cell *matCellDef="let row">
-                                    <a mat-button
-                                       [routerLink]="['/data_portal', row._source.organism]">
-                                        {{ row._source.organism }}
+                                <td mat-cell *matCellDef="let row" >
+                                    <a [routerLink]="['/data_portal',row['_source']['organism']]">
+                                        {{ row['_source']['organism'] }}
                                     </a>
-
                                 </td>
                             </ng-container>
 
                             <!-- Title Column -->
                             <ng-container matColumnDef="tolid">
                                 <th mat-header-cell *matHeaderCellDef
-                                    mat-sort-header disableClear>ToL ID
+                                    disableClear >ToL ID
                                 </th>
                                 <td mat-cell
-                                    *matCellDef="let row"> {{typeofTol(row._source.tolid)}}
+                                    *matCellDef="let row"> {{typeofTol(row['_source']['tolid'])}}
                                 </td>
                             </ng-container>
 
                             <!-- Title Column -->
-                            <ng-container matColumnDef="INSDC_ID">
+                            <ng-container matColumnDef="INSDC_ID" >
                                 <th mat-header-cell *matHeaderCellDef
-                                    mat-sort-header disableClear>INSDC ID
+                                    disableClear
+                                   >INSDC ID
                                 </th>
-                                <td mat-cell
-                                    *matCellDef="let row"> {{row._source.INSDC_ID}}
+                                <td mat-cell *matCellDef="let row"
+                                  >
+                                    {{getINSDC_ID(row)}}
                                 </td>
+
                             </ng-container>
                             <!-- Title Column -->
                             <ng-container matColumnDef="commonName">
                                 <th mat-header-cell *matHeaderCellDef
-                                    mat-sort-header disableClear>Common Name
+                                    mat-sort-header disableClear
+                                   >Common Name
                                 </th>
                                 <td mat-cell
-                                    *matCellDef="let row">{{ row._source.commonName }}
+                                    *matCellDef="let row"
+
+                                >{{row['_source']['commonName']}}
                                 </td>
                             </ng-container>
 
                             <ng-container matColumnDef="commonNameSource">
-                                <th mat-header-cell *matHeaderCellDef>Common Name
+                                <th mat-header-cell *matHeaderCellDef
+                                >Common Name
                                     Source
                                 </th>
                                 <td mat-cell *matCellDef="let row" [ngClass]="'w-120 th-center'">
-                                    @if (row._source.commonNameSource && row._source.commonName) {
+                                    @if (row['_source']['commonNameSource'] &&
+                                    row['_source']['commonName']) {
                                         <mat-chip
                                                 style="{'background-color':getCommonNameSourceStyle(row._source.commonNameSource)}"
 
                                         >
-                                            {{ row._source.commonNameSource }}
+                                            {{row['_source']['commonNameSource']}}
                                         </mat-chip>
                                     }
 
@@ -334,11 +338,12 @@
 
                             <ng-container matColumnDef="currentStatus">
                                 <th mat-header-cell *matHeaderCellDef
-                                    mat-sort-header disableClear>Current Status
-                                </th>
-                                <td mat-cell *matCellDef="let row">
+                                    mat-sort-header disableClear >Current
+                                    Status </th>
+                                <td mat-cell *matCellDef="let row"  [ngClass]="'w-150 th-left current_status_chip'">
                                     <mat-chip
-                                            [style]="getStyle(row['_source']['currentStatus'])"
+                                            [style]="{'background-color':
+                                            getStyle(row['_source']['currentStatus'])}"
                                         [class]="getCurrentStatusColour(row['_source']['currentStatus'])">
                                         {{ row._source.currentStatus }}
                                     </mat-chip>
@@ -347,10 +352,10 @@
 
 
                             <ng-container matColumnDef="goatInfo">
-                                <th mat-header-cell *matHeaderCellDef>External
+                                <th mat-header-cell *matHeaderCellDef [ngClass]="'w-219 th-left'">External
                                     References
                                 </th>
-                                <td mat-cell *matCellDef="let row">
+                                <td mat-cell *matCellDef="let row" [ngClass]="'w-219 th-left external_references_class'">
 
                                     @if (row._source.goat_info && row._source.goat_info.length !== 0) {
                                         <mat-chip
@@ -364,7 +369,7 @@
                                         <mat-chip
                                                 style="background-color:
                                                 #5cc45e; color: black" class="tol_qc">
-                                            <a mat-button
+                                            <a mat-button class="goat-color2"
                                                href="{{generateTolidLink(row._source)}}">ToL
                                                 QC</a>
                                         </mat-chip>
@@ -372,7 +377,7 @@
                                     @if (checkGenomeNotes(row._source)) {
                                         <mat-chip
                                                 style="background-color:
-                                                grey" class="tol_qc">
+                                                grey" class="genome">
                                             @if (genomelength == 1) {
                                                 <a mat-button
                                                    href="{{generateTolidLink(row._source)}}">Genome
@@ -389,7 +394,7 @@
                                     @if (checkNbnAtlasExists(row._source)) {
                                         <mat-chip
                                                 style=" background-color: #FFc107;">
-                                            <a mat-button
+                                            <a mat-button class="nbn"
                                                href="{{row._source.nbnatlas}}">NBN
                                                 Atlas</a>
                                         </mat-chip>
@@ -493,7 +498,7 @@
                                 </td>
                             </tr>
                         </table>
-                    </div>
+
                 </div>
 
 

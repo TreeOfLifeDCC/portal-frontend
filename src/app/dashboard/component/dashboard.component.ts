@@ -121,7 +121,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
     z: 'archea'
   };
   symbiontsFilters: any[] = [];
-  displayedColumns: string[] = ['organism', 'commonName', 'commonNameSource', 'currentStatus', 'goatInfo'];
+  // displayedColumns: string[] = ['organism', 'commonName', 'commonNameSource', 'currentStatus', 'goatInfo'];
   data: any;
   searchValue: string;
   searchChanged = new EventEmitter<any>();
@@ -134,7 +134,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
 
   activeFilters = new Array<string>();
   dataColumnsDefination = [{ name: 'Organism', column: 'organism', selected: true }, { name: 'ToL ID', column: 'tolid', selected: true }, { name: 'INSDC ID', column: 'INSDC_ID', selected: true }, { name: 'Common Name', column: 'commonName', selected: true }, { name: 'Common Name Source', column: 'commonNameSource', selected: true }, { name: 'Current Status', column: 'currentStatus', selected: true }, { name: 'External references', column: 'goatInfo', selected: true }, { name: 'Submitted to Biosamples', column: 'biosamples', selected: false }, { name: 'Raw data submitted to ENA', column: 'raw_data', selected: false },  { name: 'Assemblies submitted to ENA', column: 'assemblies', selected: false }, { name: 'Annotation complete', column: 'annotation_complete', selected: false }, { name: 'Annotation submitted to ENA', column: 'annotation', selected: false }];
-
+  displayedColumns = [];
   currentStyle: string;
   currentClass = 'kingdom';
   classes = ['superkingdom', 'kingdom', 'subkingdom', 'superphylum', 'phylum', 'subphylum', 'superclass', 'class',
@@ -157,6 +157,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit(): void {
+    this.getDisplayedColumns();
     this.titleService.setTitle('Data Portal');
   }
 
@@ -326,6 +327,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
       return ['#4BBEFD', 'common_name_source_other'];
     }
   }
+
   getCommonNameSourceColour(element: any) {
     if (element.commonNameSource === 'UKSI') {
       return ['#ffc107', 'common_name_source_uksi'];
@@ -333,7 +335,6 @@ export class DashboardComponent implements OnInit, AfterViewInit {
       return ['#4BBEFD', 'common_name_source_other'];
     }
   }
-
   checkGenomeNotes(data: any) {
     if (data.genome_notes && data.genome_notes.length !== 0) {
       this.genomelength = data.genome_notes.length;
@@ -455,4 +456,17 @@ export class DashboardComponent implements OnInit, AfterViewInit {
       return tolid.join(', ');
     }
   }
+
+  getINSDC_ID(row: any) {
+    const exp = row._source.experiment;
+    console.log(exp);
+    if (exp !== undefined && exp.length > 0) {
+      return exp[0].study_accession;
+    } else {
+      return null;
+    }
+
+  }
+
+
 }

@@ -24,5 +24,9 @@ export class DashboardService {
     return this.http.post(`${this.API_BASE_URL}/root_organisms${requestParams}`, filter);
   }
 
+  public getRootOrganismById(id: string): Observable<any> {
+    return this.http.get(`${this.API_BASE_URL}/root_organisms/root?id=${id}`);
+  }
+
 
 }

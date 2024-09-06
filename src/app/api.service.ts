@@ -1,13 +1,20 @@
 import {Injectable} from '@angular/core';
 import { HttpClient } from "@angular/common/http";
-import {Observable, throwError} from 'rxjs';
-import {catchError, map, retry} from 'rxjs/operators';
+
+import {catchError, map, retry, tap} from 'rxjs/operators';
+import { ConfirmationDialogComponent } from './confirmation-dialog-component/confirmation-dialog.component';
+import { Observable } from 'rxjs';
 
 @Injectable({
     providedIn: 'root',
 
 })
 export class ApiService {
+
+    private ENA_PORTAL_API_BASE_URL = 'https://www.ebi.ac.uk/ena/portal/api/files';
+    private API_BASE_URL = 'https://portal.darwintreeoflife.org/api';
+    dialog: any;
+    bytesPipe: any;
 
     constructor(private http: HttpClient) {
     }
@@ -61,14 +68,15 @@ export class ApiService {
         return this.http.get<any>(url);
     }
 
-    getDetailsData(organismName: any, indexName = 'data_portal') {
-        const url = `https://portal.erga-biodiversity.eu/api/${indexName}/${organismName}`;
+    getRootOrganismById(organismName: any, indexName = 'data_portal') {
+        const url = `http://localhost:8000/${indexName}/${organismName}`;
         return this.http.get<any>(url);
     }
 
     getSummaryData() {
         return this.http.get<any>('https://portal.erga-biodiversity.eu/api/summary');
     }
+
 
     downloadRecords(pageIndex: number, pageSize: number, searchValue: string, sortActive: string, sortDirection: string,
                     filterValue: string[], currentClass: string, phylogeny_filters: string[], index_name: string,) {
@@ -119,5 +127,34 @@ export class ApiService {
 
     }
 
+    public downloadFastaq(accession: any): any {
+        const result = 'read_run';
+        const field = 'fastq_ftp';
+        const body = `result=${result}&accession=${accession}&field=${field}&count=true`;
+
+        const requestURL = this.ENA_PORTAL_API_BASE_URL;
+        return this.http.post(`${requestURL}`, body, {
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/x-www-form-urlencoded'
+            }
+        }).pipe(
+            tap((response: any) => {
+                this.dialog.open(ConfirmationDialogComponent, {
+                    width: '550px',
+                    autoFocus: false,
+                    data: {
+                        field: 'fastq_ftp',
+                        fileCount: response.totalFiles,
+                        fileSize: this.bytesPipe.transform(response.totalFileSize),
+                        accession,
+                        url: this.ENA_PORTAL_API_BASE_URL
+                    }
+                });
+            })).subscribe();
+    }
+    public getDetailTableOrganismFilters(organism): Observable<any> {
+        return this.http.get(`${this.API_BASE_URL}/root_organisms/secondary/filters?organism=${organism}`);
+    }
 
 }
