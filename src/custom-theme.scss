@@ -20,15 +20,15 @@
 // Define the palettes for your theme using the Material Design palettes available in palette.scss
 // (imported above). For each palette, you can optionally specify a default, lighter, and darker
 // hue. Available color palettes: https://material.io/design/color/
-$tree-of-life-portal-primary: mat.define-palette(mat.$indigo-palette);
-$tree-of-life-portal-accent: mat.define-palette(mat.$pink-palette, A200, A100, A400);
+$tree-of-life-portal-primary: mat.m2-define-palette(mat.$m2-indigo-palette);
+$tree-of-life-portal-accent: mat.m2-define-palette(mat.$m2-pink-palette, A200, A100, A400);
 
 // The warn palette is optional (defaults to red).
-$tree-of-life-portal-warn: mat.define-palette(mat.$red-palette);
+$tree-of-life-portal-warn: mat.m2-define-palette(mat.$m2-red-palette);
 
 // Create the theme object. A theme consists of configurations for individual
 // theming systems such as "color" or "typography".
-$tree-of-life-portal-theme: mat.define-light-theme((
+$tree-of-life-portal-theme: mat.m2-define-light-theme((
   color: (
     primary: $tree-of-life-portal-primary,
     accent: $tree-of-life-portal-accent,
