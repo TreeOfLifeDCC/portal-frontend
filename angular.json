@@ -15,7 +15,6 @@
           "options": {
             "outputPath": "dist/tree-of-life-portal/browser",
             "index": "src/index.html",
-            "main": "src/main.ts",
             "polyfills": "src/polyfills.ts",
             "tsConfig": "tsconfig.app.json",
             "assets": [
