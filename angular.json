@@ -11,7 +11,7 @@
       "prefix": "app",
       "architect": {
         "build": {
-          "builder": "@angular-devkit/build-angular:application",
+          "builder": "@@angular-devkit/build-angular:browser",
           "options": {
             "outputPath": "dist/tree-of-life-portal/browser",
             "index": "src/index.html",
@@ -45,7 +45,7 @@
               "src/assets/js/autocomplete.js",
               "./node_modules/cookieconsent/build/cookieconsent.min.js"
             ],
-            "browser": "src/main.ts",
+            "main": "src/main.ts",
             "vendorChunk": true,
             "extractLicenses": false,
             "buildOptimizer": false,
