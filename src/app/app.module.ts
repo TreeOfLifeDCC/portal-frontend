@@ -7,7 +7,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgcCookieConsentModule } from 'ngx-cookieconsent';
 import { cookieConfig } from './app.component';
-import { HttpClientModule } from '@angular/common/http';
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 import { MatTreeModule } from '@angular/material/tree';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
@@ -43,54 +43,46 @@ import {GetDataService} from './services/get-data.service';
 import {MatTabsModule} from '@angular/material/tabs';
 import {FooterComponent} from './shared/footer/footer.component';
 
-@NgModule({
-  declarations: [
-    AppComponent,
-    HeaderComponent,
-    FooterComponent,
-    AboutComponent,
-    HelpComponent,
-    HomeComponent,
-    ApiComponent,
-    DownloadConfirmationDialogComponent,
-    BytesPipe,
-    ConfirmationDialogComponent,
-    GisComponent,
-    BulkDownloadsComponent,
-    PublicationsComponent
-  ],
-  imports: [
-    BrowserModule,
-    AppRoutingModule,
-    BrowserAnimationsModule,
-    FormsModule,
-    ReactiveFormsModule,
-    HttpClientModule,
-    MatTreeModule,
-    MatIconModule,
-    MatButtonModule,
-    MatDialogModule,
-    MatSnackBarModule,
-    MatRadioModule,
-    MatTooltipModule,
-    ClipboardModule,
-    NgxSpinnerModule,
-    MatFormFieldModule,
-    MatAutocompleteModule,
-    MatSlideToggleModule,
-    DashboardModule,
-    MatInputModule,
-    NgxSpinnerModule,
-    MatExpansionModule,
-    MatTabsModule,
-    MatTableModule,
-    MatPaginatorModule,
-    MatSortModule,
-    NgcCookieConsentModule.forRoot(cookieConfig),
-  ],
-  providers: [BytesPipe, GisService, FilterService, GetDataService],
-  bootstrap: [AppComponent],
-
-})
+@NgModule({ declarations: [
+        AppComponent,
+        HeaderComponent,
+        FooterComponent,
+        AboutComponent,
+        HelpComponent,
+        HomeComponent,
+        ApiComponent,
+        DownloadConfirmationDialogComponent,
+        BytesPipe,
+        ConfirmationDialogComponent,
+        GisComponent,
+        BulkDownloadsComponent,
+        PublicationsComponent
+    ],
+    bootstrap: [AppComponent], imports: [BrowserModule,
+        AppRoutingModule,
+        BrowserAnimationsModule,
+        FormsModule,
+        ReactiveFormsModule,
+        MatTreeModule,
+        MatIconModule,
+        MatButtonModule,
+        MatDialogModule,
+        MatSnackBarModule,
+        MatRadioModule,
+        MatTooltipModule,
+        ClipboardModule,
+        NgxSpinnerModule,
+        MatFormFieldModule,
+        MatAutocompleteModule,
+        MatSlideToggleModule,
+        DashboardModule,
+        MatInputModule,
+        NgxSpinnerModule,
+        MatExpansionModule,
+        MatTabsModule,
+        MatTableModule,
+        MatPaginatorModule,
+        MatSortModule,
+        NgcCookieConsentModule.forRoot(cookieConfig)], providers: [BytesPipe, GisService, FilterService, GetDataService, provideHttpClient(withInterceptorsFromDi())] })
 export class AppModule { }
 
