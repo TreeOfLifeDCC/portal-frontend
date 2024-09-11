@@ -1,5 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import {NgcCookieConsentService, NgcCookieConsentConfig} from 'ngx-cookieconsent';
+import { NgcCookieConsentConfig, NgcCookieConsentService} from 'ngx-cookieconsent';
+import { HeaderComponent } from './shared/header/header.component';
+import { RouterOutlet } from '@angular/router';
+import { FooterComponent } from './shared/footer/footer.component';
 
 export const cookieConfig: NgcCookieConsentConfig = {
   cookie: {
@@ -47,13 +50,18 @@ export const cookieConfig: NgcCookieConsentConfig = {
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.css']
+  styleUrls: ['./app.component.css'],
+  standalone: true,
+  imports: [
+    HeaderComponent,
+    RouterOutlet,
+    FooterComponent,
+  ],
 })
 export class AppComponent implements OnInit {
   title = 'tree-of-life-portal';
 
   constructor(
-      private ccService: NgcCookieConsentService
   ) {}
 
   ngOnInit() {

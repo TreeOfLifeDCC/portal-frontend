@@ -25,7 +25,7 @@ button {
 .card-header,
 .card-header{
     background-color: #8FBC45;
-    width: 107%;
+    width: 100%;
 }
 .btn-success,
 .badge-success {
@@ -221,6 +221,7 @@ ul[class*="other-"] {
 
 .goat-color {
     color: #fff;
+    --mdc-chip-label-text-color: #fff;
     background-color: #4BBEFD;
     margin-left: 3px;
     font-size: 12px;
@@ -288,7 +289,7 @@ mat-header-cell:nth-child(5) {
 }
 
 .w-150 {
-    max-width: 150px !important;
+    max-width: 180px !important;
 }
 .current_status_chip {
     /*min-width: 150px;*/
@@ -311,15 +312,15 @@ mat-header-cell:nth-child(5) {
     background-color: #4BBEFD;
 }
 
-.organismsMainTable mat-header-cell {
+.organismsMainTable {
     text-align: left;
     padding: 8px 8px 8px 8px;
 }
 
-.organismsMainTable mat-cell {
-    padding: 8px 8px 8px 8px;
-    word-break: break-word;
-}
+/*.organismsMainTable td {*/
+/*    padding: 8px 8px 8px 8px;*/
+/*    word-break: break-word;*/
+/*}*/
 
 .search-bar {
     margin-top: 15px;
@@ -333,6 +334,7 @@ mat-header-cell:nth-child(5) {
 
 mat-chip {
     padding: 0px !important;
+    
 }
 
 .current_status_text {
@@ -369,4 +371,17 @@ mat-chip {
 
 .table-cell-data {
     font-size: 16px;
+}
+.list-group-item {
+    padding: 0.25rem;
+    width: 100%;
+}
+
+.active-filter {
+    background-color: #4BBEFD;
+}
+
+.custom-chip {
+    color: white; /* Text color white */
+    background-color: #3f51b5; /* Chip background color (optional) */
 }

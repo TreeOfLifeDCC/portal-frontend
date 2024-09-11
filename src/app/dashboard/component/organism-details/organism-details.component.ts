@@ -1,18 +1,68 @@
 import {AfterViewInit, Component, Input, OnInit, ViewChild} from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { Sample, samples } from '../../model/dashboard.model';
-import { MatSort } from '@angular/material/sort';
+import { MatSort, MatSortHeader } from '@angular/material/sort';
 import { MatPaginator } from '@angular/material/paginator';
-import { MatTableDataSource } from '@angular/material/table';
-import { DashboardService } from '../../services/dashboard.service';
-import { NgxSpinnerService } from 'ngx-spinner';
-import { MatTabGroup } from '@angular/material/tabs';
-import {DomSanitizer, SafeResourceUrl} from "@angular/platform-browser";
+import { MatCell, MatCellDef, MatColumnDef, MatHeaderCell, MatHeaderCellDef, MatHeaderRow, MatHeaderRowDef, MatNoDataRow, MatRow, MatRowDef, MatTable, MatTableDataSource } from '@angular/material/table';
+import { NgxSpinnerModule, NgxSpinnerService } from 'ngx-spinner';
+import {DomSanitizer, SafeResourceUrl} from '@angular/platform-browser';
+import {ApiService} from "../../../api.service";
+import {MatTab, MatTabGroup} from "@angular/material/tabs";
+import {MatCard, MatCardActions, MatCardTitle} from "@angular/material/card";
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatExpansionModule } from '@angular/material/expansion';
+import { NgForOf, NgIf } from '@angular/common';
+import { MatFormField, MatInput, MatLabel } from '@angular/material/input';
+import { MatAnchor, MatButton } from '@angular/material/button';
+import { MatList, MatListItem } from '@angular/material/list';
+import { MatChip, MatChipSet } from '@angular/material/chips';
+import { MatLine } from '@angular/material/core';
+import { MatIcon } from '@angular/material/icon';
+import { MatProgressSpinner } from '@angular/material/progress-spinner';
 
 @Component({
   selector: 'dashboard-organism-details',
   templateUrl: './organism-details.component.html',
-  styleUrls: ['./organism-details.component.css']
+  styleUrls: ['./organism-details.component.css'],
+  standalone: true,
+  imports: [
+    MatTabGroup,MatTab,
+    MatCard,
+    MatCardTitle,
+    MatCardActions,
+    MatList,
+    MatListItem,
+    MatChipSet,
+    MatLine,
+    MatChip,
+    MatIcon,
+    MatProgressSpinner,
+    MatLabel,
+    MatFormField,
+    MatTable,
+    MatSort,
+    MatHeaderCellDef,
+    RouterLink,
+    MatHeaderCell,
+    MatCell,
+    MatAnchor,
+    MatColumnDef,
+    MatPaginator,
+    MatHeaderRow,
+    MatRow,
+    MatHeaderRowDef,
+    MatRowDef,
+    MatNoDataRow,
+    MatCellDef,
+    MatButton,
+    MatInput,
+    NgIf,
+    NgForOf,
+    MatSortHeader,
+    NgxSpinnerModule,
+    MatExpansionModule,
+    MatCheckboxModule
+  ]
 })
 export class OrganismDetailsComponent implements OnInit, AfterViewInit {
   codes = {
@@ -94,7 +144,7 @@ export class OrganismDetailsComponent implements OnInit, AfterViewInit {
   dataSourceRelatedAnnotation;
   dataSourceRelatedAnnotationCount;
 
-  experimentColumnsDefination = [{ column: "study_accession", selected: true }, { column: "secondary_study_accession", selected: false }, { column: "sample_accession", selected: true }, { column: "secondary_sample_accession", selected: false }, { column: "experiment_accession", selected: true }, { column: "run_accession", selected: true }, { column: "submission_accession", selected: false }, { column: "tax_id", selected: true }, { column: "scientific_name", selected: true }, { column: "instrument_platform", selected: false }, { column: "instrument_model", selected: false }, { column: "library_name", selected: false }, { column: "nominal_length", selected: false }, { column: "library_layout", selected: false }, { column: "library_strategy", selected: false }, { column: "library_source", selected: false }, { column: "library_selection", selected: false }, { column: "read_count", selected: false }, { column: "base_count", selected: false }, { column: "center_name", selected: false }, { column: "first_public", selected: false }, { column: "last_updated", selected: false }, { column: "experiment_title", selected: false }, { column: "study_title", selected: false }, { column: "study_alias", selected: false }, { column: "experiment_alias", selected: false }, { column: "run_alias", selected: false }, { column: "fastq_bytes", selected: false }, { column: "fastq_md5", selected: false }, { column: "fastq_ftp", selected: true }, { column: "fastq_aspera", selected: false }, { column: "fastq_galaxy", selected: false }, { column: "submitted_bytes", selected: false }, { column: "submitted_md5", selected: false }, { column: "submitted_ftp", selected: true }, { column: "submitted_aspera", selected: false }, { column: "submitted_galaxy", selected: false }, { column: "submitted_format", selected: false }, { column: "sra_bytes", selected: false }, { column: "sra_md5", selected: false }, { column: "sra_ftp", selected: true }, { column: "sra_aspera", selected: false }, { column: "sra_galaxy", selected: false }, { column: "cram_index_ftp", selected: false }, { column: "cram_index_aspera", selected: false }, { column: "cram_index_galaxy", selected: false }, { column: "sample_alias", selected: false }, { column: "broker_name", selected: false }, { column: "sample_title", selected: false }, { column: "nominal_sdev", selected: false }, { column: "first_created", selected: false }, { column: "library_construction_protocol", selected: true }]
+  experimentColumnsDefination = [{ column: 'study_accession', selected: true }, { column: 'secondary_study_accession', selected: false }, { column: 'sample_accession', selected: true }, { column: 'secondary_sample_accession', selected: false }, { column: 'experiment_accession', selected: true }, { column: 'run_accession', selected: true }, { column: 'submission_accession', selected: false }, { column: 'tax_id', selected: true }, { column: 'scientific_name', selected: true }, { column: 'instrument_platform', selected: false }, { column: 'instrument_model', selected: false }, { column: 'library_name', selected: false }, { column: 'nominal_length', selected: false }, { column: 'library_layout', selected: false }, { column: 'library_strategy', selected: false }, { column: 'library_source', selected: false }, { column: 'library_selection', selected: false }, { column: 'read_count', selected: false }, { column: 'base_count', selected: false }, { column: 'center_name', selected: false }, { column: 'first_public', selected: false }, { column: 'last_updated', selected: false }, { column: 'experiment_title', selected: false }, { column: 'study_title', selected: false }, { column: 'study_alias', selected: false }, { column: 'experiment_alias', selected: false }, { column: 'run_alias', selected: false }, { column: 'fastq_bytes', selected: false }, { column: 'fastq_md5', selected: false }, { column: 'fastq_ftp', selected: true }, { column: 'fastq_aspera', selected: false }, { column: 'fastq_galaxy', selected: false }, { column: 'submitted_bytes', selected: false }, { column: 'submitted_md5', selected: false }, { column: 'submitted_ftp', selected: true }, { column: 'submitted_aspera', selected: false }, { column: 'submitted_galaxy', selected: false }, { column: 'submitted_format', selected: false }, { column: 'sra_bytes', selected: false }, { column: 'sra_md5', selected: false }, { column: 'sra_ftp', selected: true }, { column: 'sra_aspera', selected: false }, { column: 'sra_galaxy', selected: false }, { column: 'cram_index_ftp', selected: false }, { column: 'cram_index_aspera', selected: false }, { column: 'cram_index_galaxy', selected: false }, { column: 'sample_alias', selected: false }, { column: 'broker_name', selected: false }, { column: 'sample_title', selected: false }, { column: 'nominal_sdev', selected: false }, { column: 'first_created', selected: false }, { column: 'library_construction_protocol', selected: true }];
 
   displayedColumnsFiles = [];
   displayedColumnsAnnotations = [];
@@ -157,10 +207,10 @@ export class OrganismDetailsComponent implements OnInit, AfterViewInit {
   nbnatlasMapUrl: string;
   url: SafeResourceUrl;
   nbntalMapurl: string;
-  @ViewChild("tabgroup", { static: false }) tabgroup: MatTabGroup;
+  @ViewChild('tabgroup', { static: false }) tabgroup: MatTabGroup;
   private http: any;
 
-  constructor(private route: ActivatedRoute, private dashboardService: DashboardService, private spinner: NgxSpinnerService, private router: Router, private sanitizer: DomSanitizer) {
+  constructor(private route: ActivatedRoute, private apiService: ApiService, private spinner: NgxSpinnerService, private router: Router, private sanitizer: DomSanitizer) {
     this.route.params.subscribe(param => this.bioSampleId = param.id);
     this.isLoading = true;
   }
@@ -232,14 +282,14 @@ export class OrganismDetailsComponent implements OnInit, AfterViewInit {
 
   getBiosampleById() {
     this.spinner.show();
-    this.dashboardService.getRootOrganismById(this.bioSampleId)
+    this.apiService.getRootOrganismById(this.bioSampleId, 'data_portal')
       .subscribe(
         data => {
           const unpackedData = [];
           const unpackedSymbiontsData = [];
-          this.bioSampleObj = data;
-          this.orgGeoList = data.orgGeoList;
-          this.specGeoList = data.specGeoList;
+          this.bioSampleObj = data.results[0]['_source'];
+          this.orgGeoList = this.bioSampleObj.orgGeoList;
+          this.specGeoList = this.bioSampleObj.specGeoList;
           if (this.orgGeoList !== undefined && this.orgGeoList.length !== 0) {
             this.geoLocation = true;
             setTimeout(() => {
@@ -251,101 +301,101 @@ export class OrganismDetailsComponent implements OnInit, AfterViewInit {
               }, 1);
             }, 400);
           }
-          if (data.goat_info) {
-            this.dataSourceGoatInfo = data.goat_info.attributes;
+          if (this.bioSampleObj.goat_info) {
+            this.dataSourceGoatInfo = this.bioSampleObj.goat_info.attributes;
           }
 
-          if (data.experiment?.length > 0) {
-            this.INSDC_ID = data.experiment[0].study_accession;
+          if (this.bioSampleObj.experiment?.length > 0) {
+            this.INSDC_ID = this.bioSampleObj.experiment[0].study_accession;
           }
-          if (data.nbnatlas != null) {
+          if (this.bioSampleObj.nbnatlas != null) {
             // https://species.nbnatlas.org/species/['NHMSYS0000080159']
             // https://species.nbnatlas.org/species/NHMSYS0000080159
             // tslint:disable-next-line:max-line-length
-            this.nbnatlasMapUrl = 'https://easymap.nbnatlas.org/Image?tvk=' + data.nbnatlas.split('/')[4] + '&ref=0&w=400&h=600&b0fill=6ecc39&title=0' ;
+            this.nbnatlasMapUrl = 'https://easymap.nbnatlas.org/Image?tvk=' + this.bioSampleObj.nbnatlas.split('/')[4] + '&ref=0&w=400&h=600&b0fill=6ecc39&title=0' ;
             this.url = this.sanitizer.bypassSecurityTrustResourceUrl(this.nbnatlasMapUrl);
             // tslint:disable-next-line:no-unused-expression
             // @ts-ignore
-            this.nbnatlasMapUrl = 'https://records.nbnatlas.org/occurrences/search?q=lsid:' + data.nbnatlas.split('/')[4] + '+&nbn_loading=true&fq=-occurrence_status%3A%22absent%22#tab_mapView';
+            this.nbnatlasMapUrl = 'https://records.nbnatlas.org/occurrences/search?q=lsid:' + this.bioSampleObj.nbnatlas.split('/')[4] + '+&nbn_loading=true&fq=-occurrence_status%3A%22absent%22#tab_mapView';
           }
-          for (const item of data.records) {
+          for (const item of this.bioSampleObj.records) {
             unpackedData.push(this.unpackData(item));
           }
-          if (data.symbionts_records && data.symbionts_records.length) {
-            for (const item of data.symbionts_records) {
+          if (this.bioSampleObj.symbionts_records && data.symbionts_records.length) {
+            for (const item of this.bioSampleObj.symbionts_records) {
               unpackedSymbiontsData.push(this.unpackData(item));
             }
           }
           if (unpackedData.length > 0) {
-            this.getFilters(data.organism);
+            this.getFilters(this.bioSampleObj.organism);
           }
-          setTimeout(() => {
-            this.organismName = data.organism;
-            this.dataSourceRecords = new MatTableDataSource<any>(unpackedData);
-            this.dataSourceSymbiontsRecords = new MatTableDataSource<any>(unpackedSymbiontsData);
-            this.specBioSampleTotalCount = unpackedData?.length;
-            this.specSymbiontsTotalCount = unpackedSymbiontsData?.length;
-            this.genomeNotes = data.genome_notes;
-            if (data.experiment != null) {
-              this.dataSourceFiles = new MatTableDataSource<Sample>(data.experiment);
-              this.dataSourceFilesCount = data.experiment?.length;
+        
+          this.organismName = this.bioSampleObj.organism;
+          this.dataSourceRecords = new MatTableDataSource<any>(unpackedData);
+          this.dataSourceSymbiontsRecords = new MatTableDataSource<any>(unpackedSymbiontsData);
+          this.specBioSampleTotalCount = unpackedData?.length;
+          this.specSymbiontsTotalCount = unpackedSymbiontsData?.length;
+          this.genomeNotes = this.bioSampleObj.genome_notes;
+          if (this.bioSampleObj.experiment != null) {
+            this.dataSourceFiles = new MatTableDataSource<Sample>(this.bioSampleObj.experiment);
+            this.dataSourceFilesCount = this.bioSampleObj.experiment?.length;
+          }
+          else {
+            this.dataSourceFiles = new MatTableDataSource<Sample>();
+            this.dataSourceFilesCount = 0;
+          }
+          if (this.bioSampleObj.assemblies != null) {
+            this.dataSourceAssemblies = new MatTableDataSource<any>(this.bioSampleObj.assemblies);
+            this.dataSourceAssembliesCount = this.bioSampleObj.assemblies?.length;
+            for (let i = 0; i < this.bioSampleObj.assemblies.length ; i++) {
+              this.assembliesurls.push(this.ENA_PORTAL_API_BASE_URL_FASTA + this.bioSampleObj.assemblies[i].accession + '?download=true&gzip=true');
             }
-            else {
-              this.dataSourceFiles = new MatTableDataSource<Sample>();
-              this.dataSourceFilesCount = 0;
+          }
+          else {
+            this.dataSourceAssemblies = new MatTableDataSource<Sample>();
+            this.dataSourceAssembliesCount = 0;
+          }
+          if (this.bioSampleObj.symbionts_assemblies != null) {
+            console.log('here');
+            this.dataSourceSymbiontsAssemblies = new MatTableDataSource<any>(this.bioSampleObj.symbionts_assemblies);
+            this.dataSourceSymbiontsAssembliesCount = this.bioSampleObj.symbionts_assemblies?.length;
+          } else {
+            this.dataSourceSymbiontsAssemblies = new MatTableDataSource<Sample>();
+            this.dataSourceSymbiontsAssembliesCount = 0;
+          }
+          if (this.bioSampleObj.annotation != null) {
+            this.dataSourceAnnotation = new MatTableDataSource<any>(this.bioSampleObj.annotation);
+            this.dataSourceAnnotationCount = this.bioSampleObj.annotation?.length;
+            for (let i = 0; i < this.bioSampleObj.annotation.length ; i++) {
+              this.annotationsurls.push(this.ENA_PORTAL_API_BASE_URL_FASTA + this.bioSampleObj.annotation[i].accession + '?download=true&gzip=true');
             }
-            if (data.assemblies != null) {
-              this.dataSourceAssemblies = new MatTableDataSource<any>(data.assemblies);
-              this.dataSourceAssembliesCount = data.assemblies?.length;
-              for (let i = 0; i < data.assemblies.length ; i++) {
-                this.assembliesurls.push(this.ENA_PORTAL_API_BASE_URL_FASTA + data.assemblies[i].accession + '?download=true&gzip=true');
-              }
-            }
-            else {
-              this.dataSourceAssemblies = new MatTableDataSource<Sample>();
-              this.dataSourceAssembliesCount = 0;
-            }
-            if (data.symbionts_assemblies != null) {
-              console.log('here');
-              this.dataSourceSymbiontsAssemblies = new MatTableDataSource<any>(data.symbionts_assemblies);
-              this.dataSourceSymbiontsAssembliesCount = data.symbionts_assemblies?.length;
-            } else {
-              this.dataSourceSymbiontsAssemblies = new MatTableDataSource<Sample>();
-              this.dataSourceSymbiontsAssembliesCount = 0;
-            }
-            if (data.annotation != null) {
-              this.dataSourceAnnotation = new MatTableDataSource<any>(data.annotation);
-              this.dataSourceAnnotationCount = data.annotation?.length;
-              for (let i = 0; i < data.annotation.length ; i++) {
-                this.annotationsurls.push(this.ENA_PORTAL_API_BASE_URL_FASTA + data.annotation[i].accession + '?download=true&gzip=true');
-              }
-            }
-            else {
-              this.dataSourceAnnotation = new MatTableDataSource<Sample>();
-              this.dataSourceAnnotationCount = 0;
-            }
+          }
+          else {
+            this.dataSourceAnnotation = new MatTableDataSource<Sample>();
+            this.dataSourceAnnotationCount = 0;
+          }
 
-            if (data.related_annotation != null) {
-              this.dataSourceRelatedAnnotation = new MatTableDataSource<any>(data.related_annotation);
-              this.dataSourceRelatedAnnotation = data.related_annotation?.length;
-            }
-            else {
-              this.dataSourceRelatedAnnotation = new MatTableDataSource<Sample>();
-              this.dataSourceRelatedAnnotationCount = 0;
-            }
+          if (this.bioSampleObj.related_annotation != null) {
+            this.dataSourceRelatedAnnotation = new MatTableDataSource<any>(this.bioSampleObj.related_annotation);
+            this.dataSourceRelatedAnnotation = this.bioSampleObj.related_annotation?.length;
+          }
+          else {
+            this.dataSourceRelatedAnnotation = new MatTableDataSource<Sample>();
+            this.dataSourceRelatedAnnotationCount = 0;
+          }
 
-            this.dataSourceFiles.paginator = this.exPaginator;
-            this.dataSourceAssemblies.paginator = this.asPaginator;
-            this.dataSourceAnnotation.paginator = this.anPaginator;
-            this.dataSourceRecords.paginator = this.relatedOrganismsTable;
-            this.dataSourceRelatedAnnotation.paginator = this.relatedAnnotationTable;
+          this.dataSourceFiles.paginator = this.exPaginator;
+          this.dataSourceAssemblies.paginator = this.asPaginator;
+          this.dataSourceAnnotation.paginator = this.anPaginator;
+          this.dataSourceRecords.paginator = this.relatedOrganismsTable;
+          this.dataSourceRelatedAnnotation.paginator = this.relatedAnnotationTable;
 
-            this.dataSourceRecords.sort = this.sort;
-            this.dataSourceFiles.sort = this.sort;
-            this.dataSourceAssemblies.sort = this.sort;
-            this.dataSourceAnnotation.sort = this.sort;
-            this.dataSourceRelatedAnnotation.sort = this.sort;
-          }, 50);
+          this.dataSourceRecords.sort = this.sort;
+          this.dataSourceFiles.sort = this.sort;
+          this.dataSourceAssemblies.sort = this.sort;
+          this.dataSourceAnnotation.sort = this.sort;
+          this.dataSourceRelatedAnnotation.sort = this.sort;
+         
 
           setTimeout(() => {
             this.spinner.hide();
@@ -544,7 +594,7 @@ export class OrganismDetailsComponent implements OnInit, AfterViewInit {
 
   // tslint:disable-next-line:typedef
   getFilters(organism) {
-    this.dashboardService.getDetailTableOrganismFilters(organism).subscribe(
+    this.apiService.getDetailTableOrganismFilters(organism).subscribe(
       data => {
         this.filtersMap = data;
         this.sexFilters = this.filtersMap.sex.filter(i => i !== '');
@@ -666,7 +716,7 @@ export class OrganismDetailsComponent implements OnInit, AfterViewInit {
 
 
   downloadRawFiles(): void {
-    this.dashboardService.downloadFastaq(this.INSDC_ID);
+    this.apiService.downloadFastaq(this.INSDC_ID);
   }
   downloadAnnotation(): void {
     this.download_files(this.annotationsurls);
