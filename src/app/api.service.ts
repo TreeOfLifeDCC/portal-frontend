@@ -12,7 +12,7 @@ import { Observable } from 'rxjs';
 export class ApiService {
 
     private ENA_PORTAL_API_BASE_URL = 'https://www.ebi.ac.uk/ena/portal/api/files';
-    private API_BASE_URL = 'https://portal.darwintreeoflife.org/api';
+    private API_BASE_URL = 'http://localhost:8000';
     dialog: any;
     bytesPipe: any;
 
@@ -44,7 +44,7 @@ export class ApiService {
                         filterItem = filterValue[i].split(' - ')[0].toLowerCase().split(' ').join('_');
                         if (filterItem === 'assemblies') {
                             filterItem = 'assemblies_status:Done';
-                        } if (filterItem === 'genome_notes') {
+                        }else if (filterItem === 'genome_notes') {
                             filterItem = 'genome_notes:Submitted';
                         } else
                             filterItem = `${filterItem}:Done`;
@@ -84,9 +84,17 @@ export class ApiService {
         return this.http.get<any>('https://portal.erga-biodiversity.eu/api/summary');
     }
 
+    public getBiosampleByAccession(accession: string): Observable<any> {
+        return this.http.get(`${this.API_BASE_URL}/organisms_test/${accession}`);
+    }
+
+    public getSpecimenByAccession(accession: string): Observable<any> {
+        return this.http.get(`${this.API_BASE_URL}/specimens_test/${accession}`);
+    }
+
 
     downloadRecords(pageIndex: number, pageSize: number, searchValue: string, sortActive: string, sortDirection: string,
-                    filterValue: string[], currentClass: string, phylogeny_filters: string[], index_name: string,) {
+                    filterValue: string[], currentClass: string, phylogeny_filters: string[], index_name: string) {
         const project_names = ['DToL', '25 genomes', 'ERGA', 'CBP', 'ASG'];
         const offset = pageIndex * pageSize;
         let url = `https://portal.erga-biodiversity.eu/api/export-csv/?limit=${pageSize}&offset=${offset}`;
@@ -163,5 +171,21 @@ export class ApiService {
     public getDetailTableOrganismFilters(organism): Observable<any> {
         return this.http.get(`${this.API_BASE_URL}/root_organisms/secondary/filters?organism=${organism}`);
     }
-
+    public download(filter: any,sortColumn?, sortOrder?, from?, size?, taxonomyFilter?, searchText? , downloadOption?): any {
+        let requestParams = `?from=${from}&size=${size}`
+        if (sortColumn != undefined) {
+          requestParams = requestParams + `&z=${sortColumn}&sortOrder=${sortOrder}`
+        }
+        if(taxonomyFilter != undefined) {
+          let taxa = encodeURIComponent(JSON.stringify(taxonomyFilter[0]));
+          requestParams = requestParams + `&taxonomyFilter=${taxa}`
+        }
+        if(searchText) {
+          requestParams = requestParams + `&searchText=${searchText}`
+        }
+        let requestURL = `${this.API_BASE_URL}/root_organisms/data-files/csv${requestParams}&downloadOption=` + downloadOption;
+        return this.http.post(`${requestURL}`, filter, {responseType: 'blob'});
+      }
+   
 }
+

@@ -1,17 +1,17 @@
 import {AfterViewInit, Component, Input, OnInit, ViewChild} from '@angular/core';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
-import { Sample, samples } from '../../model/dashboard.model';
+import { Sample, samples } from '../dashboard/model/dashboard.model';
 import { MatSort, MatSortHeader } from '@angular/material/sort';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatCell, MatCellDef, MatColumnDef, MatHeaderCell, MatHeaderCellDef, MatHeaderRow, MatHeaderRowDef, MatNoDataRow, MatRow, MatRowDef, MatTable, MatTableDataSource } from '@angular/material/table';
 import { NgxSpinnerModule, NgxSpinnerService } from 'ngx-spinner';
 import {DomSanitizer, SafeResourceUrl} from '@angular/platform-browser';
-import {ApiService} from "../../../api.service";
-import {MatTab, MatTabGroup} from "@angular/material/tabs";
-import {MatCard, MatCardActions, MatCardTitle} from "@angular/material/card";
+import {ApiService} from '../api.service';
+import {MatTab, MatTabGroup} from '@angular/material/tabs';
+import {MatCard, MatCardActions, MatCardTitle} from '@angular/material/card';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatExpansionModule } from '@angular/material/expansion';
-import { NgForOf, NgIf } from '@angular/common';
+import {NgClass, NgForOf, NgIf, NgStyle} from '@angular/common';
 import { MatFormField, MatInput, MatLabel } from '@angular/material/input';
 import { MatAnchor, MatButton } from '@angular/material/button';
 import { MatList, MatListItem } from '@angular/material/list';
@@ -19,14 +19,15 @@ import { MatChip, MatChipSet } from '@angular/material/chips';
 import { MatLine } from '@angular/material/core';
 import { MatIcon } from '@angular/material/icon';
 import { MatProgressSpinner } from '@angular/material/progress-spinner';
+import {FormsModule} from '@angular/forms';
 
 @Component({
-  selector: 'dashboard-organism-details',
-  templateUrl: './organism-details.component.html',
-  styleUrls: ['./organism-details.component.css'],
+  selector: 'dashboard-data-portal-organism-details',
+  templateUrl: './data-portal-details.component.html',
+  styleUrls: ['./data-portal-details.component.css'],
   standalone: true,
   imports: [
-    MatTabGroup,MatTab,
+    MatTabGroup, MatTab,
     MatCard,
     MatCardTitle,
     MatCardActions,
@@ -61,10 +62,10 @@ import { MatProgressSpinner } from '@angular/material/progress-spinner';
     MatSortHeader,
     NgxSpinnerModule,
     MatExpansionModule,
-    MatCheckboxModule
+    MatCheckboxModule, NgStyle, NgClass, FormsModule
   ]
 })
-export class OrganismDetailsComponent implements OnInit, AfterViewInit {
+export class DataPortalDetailsComponent implements OnInit, AfterViewInit {
   codes = {
     m: 'mammals',
     d: 'dicots',
@@ -98,6 +99,7 @@ export class OrganismDetailsComponent implements OnInit, AfterViewInit {
   @ViewChild(MatSort) sort: MatSort;
   bioSampleId: string;
   bioSampleObj;
+  aggregations;
   dataSourceRecords;
   dataSourceSymbiontsRecords;
   specBioSampleTotalCount;
@@ -123,8 +125,6 @@ export class OrganismDetailsComponent implements OnInit, AfterViewInit {
   sexFilters = [];
   trackingSystemFilters = [];
   organismPartFilters = [];
-  unpackedData;
-  unpackedSymbiontsData;
   organismName;
   relatedRecords;
   filterJson = {
@@ -210,6 +210,7 @@ export class OrganismDetailsComponent implements OnInit, AfterViewInit {
   @ViewChild('tabgroup', { static: false }) tabgroup: MatTabGroup;
   private http: any;
 
+  // tslint:disable-next-line:max-line-length
   constructor(private route: ActivatedRoute, private apiService: ApiService, private spinner: NgxSpinnerService, private router: Router, private sanitizer: DomSanitizer) {
     this.route.params.subscribe(param => this.bioSampleId = param.id);
     this.isLoading = true;
@@ -287,7 +288,8 @@ export class OrganismDetailsComponent implements OnInit, AfterViewInit {
         data => {
           const unpackedData = [];
           const unpackedSymbiontsData = [];
-          this.bioSampleObj = data.results[0]['_source'];
+          this.bioSampleObj = data.results[0]._source;
+          this.aggregations = data.aggregations;
           this.orgGeoList = this.bioSampleObj.orgGeoList;
           this.specGeoList = this.bioSampleObj.specGeoList;
           if (this.orgGeoList !== undefined && this.orgGeoList.length !== 0) {
@@ -329,7 +331,7 @@ export class OrganismDetailsComponent implements OnInit, AfterViewInit {
           if (unpackedData.length > 0) {
             this.getFilters(this.bioSampleObj.organism);
           }
-        
+
           this.organismName = this.bioSampleObj.organism;
           this.dataSourceRecords = new MatTableDataSource<any>(unpackedData);
           this.dataSourceSymbiontsRecords = new MatTableDataSource<any>(unpackedSymbiontsData);
@@ -395,7 +397,7 @@ export class OrganismDetailsComponent implements OnInit, AfterViewInit {
           this.dataSourceAssemblies.sort = this.sort;
           this.dataSourceAnnotation.sort = this.sort;
           this.dataSourceRelatedAnnotation.sort = this.sort;
-         
+
 
           setTimeout(() => {
             this.spinner.hide();
@@ -594,16 +596,11 @@ export class OrganismDetailsComponent implements OnInit, AfterViewInit {
 
   // tslint:disable-next-line:typedef
   getFilters(organism) {
-    this.apiService.getDetailTableOrganismFilters(organism).subscribe(
-      data => {
-        this.filtersMap = data;
-        this.sexFilters = this.filtersMap.sex.filter(i => i !== '');
-        this.trackingSystemFilters = this.filtersMap.trackingSystem.filter(i => i !== '');
-        this.organismPartFilters = this.filtersMap.organismPart.filter(i => i !== '');
-      },
-      err => console.log(err)
-    );
 
+        this.sexFilters = this.aggregations.filters.sex_filter.buckets;
+        this.trackingSystemFilters = this.aggregations.filters.tracking_status_filter.buckets;
+        this.organismPartFilters = this.aggregations.filters.
+            organism_part_filter.buckets;
 
   }
 
@@ -646,7 +643,8 @@ export class OrganismDetailsComponent implements OnInit, AfterViewInit {
   }
 
   toggleCollapse(filterKey) {
-    if (filterKey == 'Sex') {
+
+    if (filterKey === 'Sex') {
       if (this.isSexFilterCollapsed) {
         this.itemLimitSexFilter = 10000;
         this.isSexFilterCollapsed = false;
@@ -655,7 +653,7 @@ export class OrganismDetailsComponent implements OnInit, AfterViewInit {
         this.isSexFilterCollapsed = true;
       }
     }
-    else if (filterKey == 'Tracking Status') {
+    else if (filterKey === 'Tracking Status') {
       if (this.isTrackCollapsed) {
         this.itemLimitTrackFilter = 10000;
         this.isTrackCollapsed = false;
@@ -664,7 +662,7 @@ export class OrganismDetailsComponent implements OnInit, AfterViewInit {
         this.isTrackCollapsed = true;
       }
     }
-    else if (filterKey == 'Organism Part') {
+    else if (filterKey === 'Organism Part') {
       if (this.isOrganismPartCollapsed) {
         this.itemLimitOrgFilter = 10000;
         this.isOrganismPartCollapsed = false;

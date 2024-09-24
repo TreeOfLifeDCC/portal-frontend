@@ -2,12 +2,14 @@ import {
   AfterViewInit,
   Component,
   EventEmitter,
+  inject,
   OnDestroy,
   OnInit,
+  Query,
   ViewChild
 } from '@angular/core';
-import {merge, of as observableOf} from 'rxjs';
-import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+import {merge, Observable, of as observableOf} from 'rxjs';
+import { ActivatedRoute, Router, RouterLink,Params } from '@angular/router';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort, MatSortHeader } from '@angular/material/sort';
 import {MatCell, MatCellDef, MatColumnDef, MatHeaderCell, MatHeaderCellDef,
@@ -46,6 +48,9 @@ import { MatInput } from '@angular/material/input';
 import {MatAnchor, MatButton } from '@angular/material/button';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { ApiService } from 'src/app/api.service';
+import { DownloadConfirmationDialogComponent } from 'src/app/download-confirmation-dialog-component/download-confirmation-dialog.component';
+import { QueryFilter } from 'src/app/shared/query-filter';
+import { GenomeNoteListComponent } from '../genome-note-list-component/genome-note-list.component';
 
 @Component({
   selector: 'app-dashboard',
@@ -155,14 +160,37 @@ export class DashboardComponent implements OnInit, AfterViewInit {
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
+  private activatedRoute = inject(ActivatedRoute);
+  urlAppendFilterArray = []
 
-  constructor(private apiService: ApiService, private dialog: MatDialog, private titleService: Title) {
+
+  constructor(private apiService: ApiService, private dialog: MatDialog, private titleService: Title,private router: Router) {
   }
 
   ngOnInit(): void {
     this.getDisplayedColumns();
     this.titleService.setTitle('Data Portal');
+    const queryParamMap = this.activatedRoute.snapshot['queryParamMap'];
+    const params = queryParamMap['params'];
+    // tslint:disable-next-line:triple-equals
+    if (Object.keys(params).length != 0) {
+      for (const key in params) {
+        this.urlAppendFilterArray.push(params[key]);
+        this.activeFilters.push(params[key]);
+      }
+    }
+      
   }
+
+  addToActiveFilters(filterArr, filterPrefix) {
+    const list = filterArr.split(',');
+    list.forEach((value: any) => {
+      this.activeFilters.push(filterPrefix + '-' + value);
+    });
+  }
+  
+
+
 
   ngAfterViewInit() {
     // If the user changes the metadataSort order, reset back to the first page.
@@ -194,7 +222,8 @@ export class DashboardComponent implements OnInit, AfterViewInit {
               // would prevent users from re-triggering requests.
               this.resultsLength = data.count;
               this.aggregations = data.aggregations;
-
+    
+              
               // symbionts
               this.symbiontsFilters = [];
               if (this.aggregations.symbionts_biosamples_status.buckets.length > 0) {
@@ -222,6 +251,9 @@ export class DashboardComponent implements OnInit, AfterViewInit {
               // this.result = new MatTableDataSource(data.result);
               // this.result.paginator= this.paginator;
               // this.data=this.result
+              this.router.navigate([], {
+                relativeTo: this.activatedRoute, queryParams:this.activeFilters,queryParamsHandling: 'merge'
+              })
               return data.results;
             }),
         )
@@ -266,8 +298,11 @@ export class DashboardComponent implements OnInit, AfterViewInit {
     clearTimeout(this.timer);
     const index = this.activeFilters.indexOf(filterValue);
     index !== -1 ? this.activeFilters.splice(index, 1) : this.activeFilters.push(filterValue);
+    console.log(filterValue)
+    // this.selectedFilterArray(filterlabel,filterValue)
     this.filterChanged.emit();
   }
+
 
   checkStyle(filterValue: string) {
     if (this.activeFilters.includes(filterValue)) {
@@ -306,7 +341,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
     this.phylogenyFilters.splice(this.phylogenyFilters.length - 1, 1);
     const previousClassIndex = this.classes.indexOf(this.currentClass) - 1;
     this.currentClass = this.classes[previousClassIndex];
-    this.filterChanged.emit();
+    this.filterChanged.emit();    
   }
 
   onRefreshClick() {
@@ -384,6 +419,13 @@ export class DashboardComponent implements OnInit, AfterViewInit {
       }
     }
   }
+  generateGoatInfoLink(data) {
+    if(data.goat_info){
+      return data.goat_info.url;
+    }
+    
+   
+  }
   // tslint:disable-next-line:typedef
   getGenomeURL(data) {
     const genomeNotes = data.genome_notes;
@@ -430,17 +472,17 @@ export class DashboardComponent implements OnInit, AfterViewInit {
       autoFocus: false,
       data: {
         message: 'Are you sure want to donload?',
-        name: this.filterService.selectedFilterValue.taxonomy,
-        activeFilters: this.filterService.activeFilters.toString(),
+        activeFilters: this.activeFilters.toString(),
         sort: this.sort,
         taxonomy: { rank: 'superkingdom', taxonomy: 'Eukaryota', childRank: 'kingdom' },
-        searchText: this.filterService.searchText,
+        searchText: this.searchValue,
         selectedOptions: [0, 1, 2],
-        hideAnnotation: this.filterService.AnnotationFilters.length === 0 && this.filterService.AnnotationCompleteFilters.length === 0 ,
-        hideAssemblies: this.filterService.AssembliesFilters.length === 0 ,
-        hideRawData: this.filterService.RawDataFilters.length === 0
+        hideAnnotation: this.aggregations?.annotation_complete.buckets.length === 0 && this.aggregations?.annotation_complete.buckets.length === 0 ,
+        hideAssemblies: this.aggregations?.assemblies_status.buckets.length === 0 ,
+        hideRawData: this.aggregations?.raw_data.buckets.length === 0
       }
-    }
+    })
+  }
 
   expanded() {
   }
@@ -484,7 +526,10 @@ export class DashboardComponent implements OnInit, AfterViewInit {
     this.preventSimpleClick = true;
     clearTimeout(this.timer);
     this.activeFilters= [];
+    this.phylogenyFilters = [];
+    this.currentClass = 'kingdom';
     this.filterChanged.emit();
+    this.router.navigate([]);
   
   }
 
@@ -494,5 +539,28 @@ export class DashboardComponent implements OnInit, AfterViewInit {
       return 'active-filter';
     }
 
+  }
+
+
+  hasActiveFilters() {
+    if (typeof this.activeFilters === 'undefined') {
+      return false;
+    }
+    for (const key of Object.keys(this.activeFilters)) {
+      if (this.activeFilters[key].length !== 0) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  openGenomeNoteDialog(element: any) {
+    const dialogRef = this.dialog.open(GenomeNoteListComponent, {
+      width: '550px',
+      autoFocus: false,
+      data: {
+        genomNotes: element.genome_notes,
+      }
+    });
   }
 }

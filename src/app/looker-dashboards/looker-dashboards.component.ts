@@ -5,7 +5,8 @@ import { Component } from '@angular/core';
   standalone: true,
   imports: [],
   templateUrl: './looker-dashboards.component.html',
-  styleUrl: './looker-dashboards.component.css'
+  styleUrl: './looker-dashboards.component.css',
+  
 })
 export class LookerDashboardsComponent {
 

@@ -52,9 +52,6 @@
         </dl>
 
 
-
-
-
         <mat-tab-group dynamicHeight #tabgroup>
             @if(bioSampleObj?.records && bioSampleObj?.records.length){
                 <mat-tab label="Metadata">
@@ -147,7 +144,7 @@
 
                                                     </h3>
                                                     <ul id="tracking-status-inactive" class="list-group" [ngClass]="{'long-list': itemLimitTrackFilter > filterSize}">
-                                                        @for(filter of organismPartFilters; track $index){
+                                                        @for(filter of trackingSystemFilters; track $index){
                                                             @if($index<itemLimitOrgFilter && filter.key != ''){
                                                                 <li id="{{$index}}" class="list-group-item d-flex justify-content-between align-items-center tracking-status-inactive" [ngClass]="checkFilterIsActive(filter.key)" (click)="onFilterClick($event, lbltextTrack.innerText, filter.key)" style="cursor: pointer; padding: .75rem 0.25rem;"
                                                                    >
@@ -188,7 +185,7 @@
                                                 <mat-header-cell *matHeaderCellDef mat-sort-header> BioSample ID
                                                 </mat-header-cell>
                                                 <mat-cell *matCellDef="let element" class="txt-center">
-                                                    <a [routerLink]="['/data/organism/details/', element.accession]">
+                                                    <a [routerLink]="['/organism', element.accession]">
                                                         {{element.accession}}</a>
                                                 </mat-cell>
                                             </ng-container>
@@ -649,7 +646,7 @@
                                             <mat-header-cell *matHeaderCellDef> FASTQ FTP </mat-header-cell>
                                             <mat-cell *matCellDef="let element" class="assemblies-font">
                                                 <ul class="list-group" style="list-style-type:none;">
-                                                    {{element.fastq_ftp.length}}
+                                                    {{element.fastq_ftp}}
                                                     @for(fastq of element.fastq_ftp; track $index){
                                                         <li >
                                                             <a href="ftp://{{fastq}}">{{element.run_accession}}</a>
@@ -979,7 +976,7 @@
                                                 <mat-header-cell *matHeaderCellDef mat-sort-header> BioSample ID
                                                 </mat-header-cell>
                                                 <mat-cell *matCellDef="let element" class="txt-center">
-                                                    <a [routerLink]="['/data/organism/details/', element.accession]">
+                                                    <a [routerLink]="['/data/organism/organism-details/', element.accession]">
                                                         {{element.accession}}</a>
                                                 </mat-cell>
                                             </ng-container>
@@ -1211,7 +1208,7 @@
                                         <br>
     
                                         The National Biodiversity Network records are shown on the map above (See <a href="https://nbnatlas.org/help/nbn-atlas-terms-use/" target="_blank">terms and conditions</a>) .
-                                        <a href="https://nbnatlas.org/" target="_blank"><img src="assets/NBNPower.gif"></a>
+                                        <a href="https://nbnatlas.org/" target="_blank"><img src="../../assets/NBNPower.gif"></a>
     
                                         <br>
     

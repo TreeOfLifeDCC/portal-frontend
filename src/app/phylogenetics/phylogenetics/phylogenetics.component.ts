@@ -1,14 +1,28 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { DynamicScriptLoaderService } from './services/dynamic-script-loader.service';
-import { FormControl } from '@angular/forms';
-import {MatRadioChange} from '@angular/material/radio';
-import { NgxSpinnerService } from 'ngx-spinner';
+import { FormControl, FormsModule } from '@angular/forms';
+import {MatRadioChange, MatRadioModule} from '@angular/material/radio';
+import { NgxSpinnerModule, NgxSpinnerService } from 'ngx-spinner';
+import { CommonModule } from '@angular/common';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
 
 @Component({
   selector: 'app-phylogenetics',
   templateUrl: './phylogenetics.component.html',
-  styleUrls: ['./phylogenetics.component.css']
+  styleUrls: ['./phylogenetics.component.css'],
+  standalone: true,
+  imports: [
+    MatFormFieldModule,
+    MatInputModule,
+    FormsModule,
+    MatRadioModule,
+    NgxSpinnerModule
+],
+providers: [
+DynamicScriptLoaderService
+]
 })
 export class PhylogeneticsComponent implements OnInit {
 
