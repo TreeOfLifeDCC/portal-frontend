@@ -1,0 +1,359 @@
+<div id="overlay"></div>
+<div>
+    <!-- <ngx-spinner bdColor="rgba(0,0,0,0.9)" size="large" color="#fff" type="ball-clip-rotate-pulse">
+    </ngx-spinner> -->
+    <div class="jumbotron jumbotron-fluid">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-3">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container" style="padding-top: 20px;">
+        <div class="row main-table">
+            <div  class="col-md-2 status-table">
+                <mat-card class="card  filter-top" >
+                    <mat-card-title class="card-header filter-heading">Data status</mat-card-title>
+                    <mat-card-actions style="padding: 0px;">
+                        <ul role="list"  class="list-group">
+                            @if (getStatusCount(aggregations?.biosamples.buckets)) {
+                                <li role="listitem" class="biosample
+                                           list-group-item d-flex justify-content-between
+                                           align-items-center biosamples-inactive"
+                                    [style]="checkStyle('BioSamples - Submitted')"
+                                    (click)="onFilterClick('BioSamples - Submitted')"
+                                    style="cursor: pointer">
+                                    <span>BioSamples - Submitted</span>
+                                    <span
+                                            class="badge badge-pill badge-space
+                                      badge-info">
+                        {{getStatusCount(aggregations?.biosamples.buckets)}}
+                        </span>
+
+                                </li>
+                            }
+                            @if (getStatusCount(aggregations?.raw_data.buckets)) {
+                                <li role="listitem"
+                                    class="list-group-item d-flex justify-content-between
+                                           align-items-center"
+                                    [style]="checkStyle('Raw Data - Submitted')"
+                                    (click)="onFilterClick('Raw Data - Submitted')"
+                                    style="cursor: pointer">
+
+                                    <span>Raw Data - Submitted</span>
+                                    <span
+                                            class="badge badge-pill badge-info badge-space">{{ getStatusCount(aggregations?.raw_data.buckets) }}
+                                </span>
+
+                                </li>
+                            }
+                            @if (getStatusCount(aggregations?.assemblies_status.buckets)) {
+                                <li role="listitem"
+                                    class="list-group-item d-flex justify-content-between
+                                           align-items-center"
+                                    [style]="checkStyle('Assemblies - Submitted')"
+                                    (click)="onFilterClick('Assemblies - Submitted')"
+                                    style="cursor: pointer">
+                                    <span> Assemblies - Submitted</span>
+
+                                    <span
+                                            class="badge badge-pill badge-info badge-space">
+
+                                                {{ getStatusCount(aggregations?.assemblies_status.buckets) }}
+
+                                    </span>
+
+                                </li>
+                            }
+                            @if (getStatusCount(aggregations?.annotation_complete.buckets)) {
+                                <li role="listitem"
+                                    class="list-group-item d-flex justify-content-between
+                                           align-items-center"
+                                    [style]="checkStyle('Annotation Complete - Done')"
+                                    (click)="onFilterClick('Annotation Complete - Done')"
+                                    style="cursor: pointer">
+
+                                        <span >
+                                            Annotation Complete - Done  </span>
+
+                                    <span class="badge badge-pill badge-info badge-space">
+
+                                                {{ getStatusCount(aggregations?.annotation_complete.buckets) }}
+
+                                    </span>
+
+                                </li>
+                            }
+
+                            @if (aggregations?.genome.doc_count) {
+                                <li role="listitem"
+                                    class="list-group-item d-flex justify-content-between
+                                           align-items-center"
+                                    [style]="checkStyle('Genome Notes - Submitted')"
+                                    (click)="onFilterClick('Genome Notes - Submitted')"
+                                    style="cursor: pointer">
+
+                                        <span >
+                                            Genome Notes - Submitted</span>
+
+                                    <span class="badge badge-pill badge-info badge-space">
+
+                                                {{ aggregations?.genome.doc_count }}
+
+                                    </span>
+
+                                </li>
+                            }
+                        </ul>
+                    </mat-card-actions>
+                </mat-card>
+                <br>
+                <mat-card  class="card  filter-top">
+                    <mat-card-title class="card-header filter-heading">Symbionts</mat-card-title>
+                    <mat-card-actions style="padding: 0px;">
+                        <ul role="list"  class="list-group" >
+                            @for (filter of symbiontsFilters; track $index) {
+                                <li role="listitem"
+                                    class="list-group-item d-flex justify-content-between
+                                           align-items-center"
+                                    [style]="checkStyle(filter.label + '-' + filter.key)"
+                                    (click)="onFilterClick(filter.label + '-' + filter.key)"
+                                    style="cursor: pointer">
+
+                                    <span >{{ filter.key }}</span>
+                                    <span
+                                            class="badge badge-pill badge-info badge-space">{{ filter.doc_count }}
+                                   </span>
+
+                                </li>
+                            }
+                        </ul>
+                    </mat-card-actions>
+                </mat-card>
+                <br>
+
+
+                <mat-card class="card  filter-top">
+                    <mat-card-title class="card-header filter-heading">
+                        Phylogeny/{{ currentClass }}
+                        @if (phylogenyFilters.length !== 0) {
+                            <mat-icon (click)="onRefreshClick()"
+                                      style="cursor: pointer">
+                                refresh
+                            </mat-icon>
+                        }
+                        @if (phylogenyFilters.length !== 0) {
+                            <mat-icon (click)="onHistoryClick()"
+                                      style="cursor: pointer">
+                                arrow_circle_left
+                            </mat-icon>
+                        }
+                    </mat-card-title>
+                    <mat-card-actions style="padding: 0;display: block;">
+                        <ul role="list"  class="list-group" >
+                            @for (phylogeny_name of aggregations?.taxonomies[currentClass]?.buckets; track $index) {
+                                <li role="listitem"
+                                    class="list-group-item d-flex justify-content-between
+                                           align-items-center"
+                                    style="cursor: pointer"
+                                    [style]="checkStyle(phylogeny_name.key)"
+                                    (dblclick)="onFilterClick(phylogeny_name.key)"
+                                    (click)="changeCurrentClass(phylogeny_name.key)">
+                                    <span> {{ phylogeny_name.key }}</span>
+
+                                    <span class="badge badge-pill badge-info badge-space">
+                                                {{ phylogeny_name.doc_count }}
+                                   </span>
+                                </li>
+                            }
+                        </ul>
+                    </mat-card-actions>
+                </mat-card>
+                <br>
+            </div>
+
+            <div class="col-md-10 status-table">
+                <h1 class="page-header">Statuses</h1>
+                <br/>
+                <div  class="column-header">
+                    @if (isLoadingResults || isRateLimitReached) {
+                        <div class="example-loading-shade">
+                            @if (isLoadingResults) {
+                                <mat-spinner></mat-spinner>
+                            }
+                            @if (isRateLimitReached) {
+                                <div class="example-rate-limit-reached">
+                                    Something went wrong, please try again!
+                                </div>
+                            }
+
+                        </div>
+                    }
+                    <div class="example-table-container">
+                        @if(activeFilters.length > 0){
+                            <h1 >Filters: </h1>
+                        }
+                     @if((activeFilters.length > 0)){
+                        @for(field of activeFilters;track $index){
+
+                                <button type="button" class="btn btn-success">
+                                    {{displayActiveFilterName(field)}} <span class="badge badge-light" (click)="onFilterClick(field)">X</span>
+                                </button>
+
+
+                        }
+                        <button class="btn btn-primary" type="button" (click)="removeFilter()">Remove all filters
+                        </button>
+                     }
+
+                        <br>
+
+                        <button  class="btn btn-primary" style="float: right;
+                        background-color: #4BBEFD; color: #ffffff;" mat-raised-button
+                             >
+                            Download metadata
+                        </button>
+                <mat-form-field class="searchField">
+                    <mat-label>Search</mat-label>
+                    <input matInput (keyup)="applyFilter($event)" placeholder="Ex. lutra" >
+                </mat-form-field>
+                        <table mat-table #table  [dataSource]="data"
+                               matSort matSortActive="annotation_complete"
+                               matSortDisableClear
+                               matSortDirection="asc"
+                               class="statusesTable">
+                            <!-- First Column -->
+                            <ng-container matColumnDef="organism">
+                                <mat-header-cell *matHeaderCellDef mat-sort-header> Organism </mat-header-cell>
+                                <mat-cell *matCellDef="let element">
+                                    <a [routerLink]="['/data', element._source.organism]">
+                                        {{element._source.organism}}</a>
+                                </mat-cell>
+                            </ng-container>
+
+                            <!-- Second Column -->
+                            <ng-container matColumnDef="commonName">
+                                <mat-header-cell *matHeaderCellDef mat-sort-header> Common name </mat-header-cell>
+                                <mat-cell *matCellDef="let element"> {{element._source.commonName}} </mat-cell>
+                            </ng-container>
+
+                            <!-- Third Column -->
+                            <ng-container matColumnDef="biosamples">
+                                <mat-header-cell *matHeaderCellDef mat-sort-header style=" margin-left: -10px; "> Metadata submitted to BioSamples
+                                </mat-header-cell>
+                                <mat-cell *matCellDef="let element">
+                                    <mat-list>
+                                        <mat-list-item>
+                                            <mat-chip [ngStyle]="{'background-color': '#8FBC45'}">
+                                                <span class="white_text_chip">{{element._source.biosamples}}</span>
+                                            </mat-chip>
+                                        </mat-list-item>
+                                        @if(element._source.biosamples_date){
+                                            <mat-list-item >
+                                                {{element._source.biosamples_date}}
+                                            </mat-list-item>
+                                        }
+
+                                    </mat-list>
+                                </mat-cell>
+                            </ng-container>
+                            <!-- Fourth Column -->
+                            <ng-container matColumnDef="raw_data">
+                                <mat-header-cell *matHeaderCellDef mat-sort-header style=" margin-left: -5px; "> Raw data submitted to ENA </mat-header-cell>
+                                <mat-cell *matCellDef="let element">
+                                    <mat-list>
+                                        <mat-list-item>
+                                            <mat-chip [ngStyle]="{'background-color': getStatusStyle(element._source.raw_data)[0]}">
+                                                <span [ngClass]="getStatusStyle(element._source.raw_data)[1]">{{element._source.raw_data}}</span>
+                                            </mat-chip>
+                                        </mat-list-item>
+                                       @if(element._source.ena_date){
+                                           <mat-list-item>
+                                               {{element._source.ena_date}}
+                                           </mat-list-item>
+                                       }
+                                    </mat-list>
+                                </mat-cell>
+                            </ng-container>
+                            <!-- Fifth Column -->
+                            <!--                    <ng-container matColumnDef="mapped_reads_submitted_to_ena">-->
+                            <!--                        <mat-header-cell *matHeaderCellDef mat-sort-header> Mapped reads submitted to ENA-->
+                            <!--                        </mat-header-cell>-->
+                            <!--                        <mat-cell *matCellDef="let element">-->
+                            <!--                            <mat-list>-->
+                            <!--                                <mat-list-item>-->
+                            <!--                                    <span [ngClass]="getStatusClass(element.mapped_reads)">{{element.mapped_reads }}-->
+                            <!--                                    </span>-->
+                            <!--                                </mat-list-item>-->
+                            <!--                                <mat-list-item *ngIf="element.ena_date">-->
+                            <!--                                    {{element.ena_date}}-->
+                            <!--                                </mat-list-item>-->
+                            <!--                            </mat-list>-->
+                            <!--                        </mat-cell>-->
+                            <!--                    </ng-container>-->
+
+                            <ng-container matColumnDef="assemblies_status">
+                                <mat-header-cell *matHeaderCellDef mat-sort-header> Assemblies submitted to ENA
+                                </mat-header-cell>
+                                <mat-cell *matCellDef="let element">
+                                    <mat-list>
+                                        <mat-list-item>
+                                            <mat-chip [ngStyle]="{'background-color': getStatusStyle(element._source.assemblies)[0]}">
+                                                <span [ngClass]="getStatusStyle(element._source.assemblies)[1]">{{element._source.assemblies}}</span>
+                                            </mat-chip>
+                                        </mat-list-item>
+                                        @if(element._source.ena_date){
+                                            <mat-list-item >
+                                                {{element._source.ena_date}}
+                                            </mat-list-item>
+                                        }
+                                    </mat-list>
+                                </mat-cell>
+                            </ng-container>
+
+                            <ng-container matColumnDef="annotation_complete">
+                                <mat-header-cell *matHeaderCellDef mat-sort-header> Annotation complete </mat-header-cell>
+                                <mat-cell *matCellDef="let element">
+                                    <mat-list>
+                                        <mat-list-item>
+                                            <mat-chip [ngStyle]="{'background-color': getStatusStyle(element._source.annotation_complete)[0]}">
+                                                <span [ngClass]="getStatusStyle(element._source.annotation_complete)[1]">{{element._source.annotation_complete}}</span>
+                                            </mat-chip>
+                                        </mat-list-item>
+                                        @if(element._source.annotation_date){
+                                            <mat-list-item >
+                                                {{element._source.annotation_date}}
+                                            </mat-list-item>
+                                        }
+
+                                    </mat-list>
+                                </mat-cell>
+                            </ng-container>
+
+                            <!-- <ng-container matColumnDef="annotation_submitted_to_ena">
+                                <mat-header-cell *matHeaderCellDef mat-sort-header> Annotation submitted to ENA
+                                </mat-header-cell>
+                                <mat-cell *matCellDef="let element">
+                                    <mat-list>
+                                        <mat-list-item>
+                                            <span [ngClass]="getStatusClass(element.annotation)">{{element.annotation }} </span>
+                                        </mat-list-item>
+                                        <mat-list-item *ngIf="element.annotation_date">
+                                            {{element.annotation_date}}
+                                        </mat-list-item>
+                                    </mat-list>
+                                </mat-cell>
+                            </ng-container> -->
+
+                            <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+                            <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+                        </table>
+
+                        <mat-paginator [pageSizeOptions]="[15, 30, 50, 100]" showFirstLastButtons [length]="resultsLength" ></mat-paginator>
+            </div>
+        </div>
+    </div>
+
+</div>
