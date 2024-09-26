@@ -9,7 +9,7 @@ import {
   ViewChild
 } from '@angular/core';
 import {merge, Observable, of as observableOf} from 'rxjs';
-import { ActivatedRoute, Router, RouterLink,Params } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink, Params } from '@angular/router';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort, MatSortHeader } from '@angular/material/sort';
 import {MatCell, MatCellDef, MatColumnDef, MatHeaderCell, MatHeaderCellDef,
@@ -36,11 +36,11 @@ import {
   switchMap
 } from 'rxjs/operators';
 
-import {MatCard, MatCardActions, MatCardTitle} from "@angular/material/card";
-import {MatChip, MatChipSet} from "@angular/material/chips";
-import {MatIcon} from "@angular/material/icon";
-import {MatLine} from "@angular/material/core";
-import {MatList, MatListItem} from "@angular/material/list";
+import {MatCard, MatCardActions, MatCardTitle} from '@angular/material/card';
+import {MatChip, MatChipSet} from '@angular/material/chips';
+import {MatIcon} from '@angular/material/icon';
+import {MatLine} from '@angular/material/core';
+import {MatList, MatListItem} from '@angular/material/list';
 import { MatProgressSpinner } from '@angular/material/progress-spinner';
 import {MatFormField, MatLabel } from '@angular/material/form-field';
 import { NgForOf, NgIf } from '@angular/common';
@@ -93,7 +93,7 @@ import { GenomeNoteListComponent } from '../genome-note-list-component/genome-no
     MatProgressSpinner,
     MatExpansionModule,
     MatCheckboxModule,
-  
+
 
   ],
   standalone: true
@@ -139,9 +139,21 @@ export class DashboardComponent implements OnInit, AfterViewInit {
   isLoadingResults = true;
   isRateLimitReached = false;
   aggregations: any;
+  queryParams: any = {};
 
   activeFilters = new Array<string>();
-  dataColumnsDefination = [{ name: 'Organism', column: 'organism', selected: true }, { name: 'ToL ID', column: 'tolid', selected: true }, { name: 'INSDC ID', column: 'INSDC_ID', selected: true }, { name: 'Common Name', column: 'commonName', selected: true }, { name: 'Common Name Source', column: 'commonNameSource', selected: true }, { name: 'Current Status', column: 'currentStatus', selected: true }, { name: 'External references', column: 'goatInfo', selected: true }, { name: 'Submitted to Biosamples', column: 'biosamples', selected: false }, { name: 'Raw data submitted to ENA', column: 'raw_data', selected: false },  { name: 'Assemblies submitted to ENA', column: 'assemblies', selected: false }, { name: 'Annotation complete', column: 'annotation_complete', selected: false }, { name: 'Annotation submitted to ENA', column: 'annotation', selected: false }];
+  dataColumnsDefination = [{ name: 'Organism', column: 'organism', selected: true },
+    { name: 'ToL ID', column: 'tolid', selected: true },
+    { name: 'INSDC ID', column: 'INSDC_ID', selected: true },
+    { name: 'Common Name', column: 'commonName', selected: true },
+    { name: 'Common Name Source', column: 'commonNameSource', selected: true },
+    { name: 'Current Status', column: 'currentStatus', selected: true },
+    { name: 'External references', column: 'goatInfo', selected: true },
+    { name: 'Submitted to Biosamples', column: 'biosamples', selected: false },
+    { name: 'Raw data submitted to ENA', column: 'raw_data', selected: false },
+    { name: 'Assemblies submitted to ENA', column: 'assemblies', selected: false },
+    { name: 'Annotation complete', column: 'annotation_complete', selected: false },
+    { name: 'Annotation submitted to ENA', column: 'annotation', selected: false }];
   displayedColumns = [];
   currentStyle: string;
   currentClass = 'kingdom';
@@ -161,25 +173,33 @@ export class DashboardComponent implements OnInit, AfterViewInit {
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
   private activatedRoute = inject(ActivatedRoute);
-  urlAppendFilterArray = []
 
-
-  constructor(private apiService: ApiService, private dialog: MatDialog, private titleService: Title,private router: Router) {
+  constructor(private apiService: ApiService, private dialog: MatDialog, private titleService: Title, private router: Router) {
   }
 
   ngOnInit(): void {
     this.getDisplayedColumns();
     this.titleService.setTitle('Data Portal');
+
+    // get url parameters
     const queryParamMap = this.activatedRoute.snapshot['queryParamMap'];
     const params = queryParamMap['params'];
-    // tslint:disable-next-line:triple-equals
-    if (Object.keys(params).length != 0) {
+    if (Object.keys(params).length !== 0) {
       for (const key in params) {
-        this.urlAppendFilterArray.push(params[key]);
-        this.activeFilters.push(params[key]);
+        if (params.hasOwnProperty(key)) {
+          if (params[key].includes('phylogenyFilters - ')) {
+            const phylogenyFilters = params[key].split('phylogenyFilters - ')[1];
+            // Remove square brackets and split by comma
+            this.phylogenyFilters = phylogenyFilters.slice(1, -1).split(',');
+          } else {
+            this.activeFilters.push(params[key]);
+          }
+
+        }
       }
     }
-      
+
+
   }
 
   addToActiveFilters(filterArr, filterPrefix) {
@@ -188,7 +208,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
       this.activeFilters.push(filterPrefix + '-' + value);
     });
   }
-  
+
 
 
 
@@ -222,8 +242,8 @@ export class DashboardComponent implements OnInit, AfterViewInit {
               // would prevent users from re-triggering requests.
               this.resultsLength = data.count;
               this.aggregations = data.aggregations;
-    
-              
+
+
               // symbionts
               this.symbiontsFilters = [];
               if (this.aggregations.symbionts_biosamples_status.buckets.length > 0) {
@@ -248,12 +268,27 @@ export class DashboardComponent implements OnInit, AfterViewInit {
                   this.aggregations?.experiment.library_construction_protocol.buckets,
                     'experimentType');
               }
-              // this.result = new MatTableDataSource(data.result);
-              // this.result.paginator= this.paginator;
-              // this.data=this.result
+
+              console.log(this.phylogenyFilters)
+
+              this.queryParams = [...this.activeFilters];
+              if (this.phylogenyFilters && this.phylogenyFilters.length) {
+                const index = this.queryParams.findIndex(element => element.includes('phylogenyFilters - '));
+                if (index > -1) {
+                  this.queryParams[index] = `phylogenyFilters - [${this.phylogenyFilters}]`;
+                } else {
+                  this.queryParams.push(`phylogenyFilters - [${this.phylogenyFilters}]`);
+                }
+              }
+              console.log("Before navigation queryParams", this.queryParams);
+
               this.router.navigate([], {
-                relativeTo: this.activatedRoute, queryParams:this.activeFilters,queryParamsHandling: 'merge'
-              })
+                relativeTo: this.activatedRoute,
+                queryParams: this.queryParams,
+                queryParamsHandling: 'merge',
+                replaceUrl: true,
+                skipLocationChange: false
+              });
               return data.results;
             }),
         )
@@ -262,18 +297,19 @@ export class DashboardComponent implements OnInit, AfterViewInit {
 
 
   merge = (first: any[], second: any[], filterLabel: string) => {
-    for (let i = 0; i < second.length; i++) {
-      second[i].label = filterLabel;
-      first.push(second[i]);
+    for (const item of second) {
+      item.label = filterLabel;
+      first.push(item);
     }
+
     return first;
   }
 
   getStatusCount(data: any) {
     if (data) {
-      for (let i = 0; i < data.length; ++i) {
-        if (data[i].key === 'Done') {
-          return data[i].doc_count;
+      for (const item of data) {
+        if (item.key === 'Done') {
+          return item.doc_count;
         }
       }
     }
@@ -293,14 +329,18 @@ export class DashboardComponent implements OnInit, AfterViewInit {
   }
 
 
-  onFilterClick(filterValue: string) {
-    this.preventSimpleClick = true;
-    clearTimeout(this.timer);
-    const index = this.activeFilters.indexOf(filterValue);
-    index !== -1 ? this.activeFilters.splice(index, 1) : this.activeFilters.push(filterValue);
-    console.log(filterValue)
-    // this.selectedFilterArray(filterlabel,filterValue)
-    this.filterChanged.emit();
+  onFilterClick(filterValue: string, phylogenyFilter: boolean = false) {
+    if (phylogenyFilter) {
+      this.changeCurrentClass(filterValue);
+    } else{
+      this.preventSimpleClick = true;
+      clearTimeout(this.timer);
+      const index = this.activeFilters.indexOf(filterValue);
+      index !== -1 ? this.activeFilters.splice(index, 1) : this.activeFilters.push(filterValue);
+      console.log(filterValue);
+      console.log(this.activeFilters)
+      this.filterChanged.emit();
+    }
   }
 
 
@@ -341,28 +381,40 @@ export class DashboardComponent implements OnInit, AfterViewInit {
     this.phylogenyFilters.splice(this.phylogenyFilters.length - 1, 1);
     const previousClassIndex = this.classes.indexOf(this.currentClass) - 1;
     this.currentClass = this.classes[previousClassIndex];
-    this.filterChanged.emit();    
+    this.filterChanged.emit();
   }
 
   onRefreshClick() {
     this.phylogenyFilters = [];
     this.currentClass = 'kingdom';
+    // remove phylogenyFilters param from url
+    const index = this.queryParams.findIndex(element => element.includes('phylogenyFilters - '));
+    if (index > -1) {
+      this.queryParams.splice(index, 1);
+      // Replace current parameters with new parameters.
+      this.router.navigate([], {
+        relativeTo: this.activatedRoute,
+        queryParams: this.queryParams,
+        replaceUrl: true,
+        skipLocationChange: false
+      });
+    }
     this.filterChanged.emit();
   }
 
   getStyle(status: string) {
     if (['Annotation Complete', 'Done', 'Submitted'].includes(status.trim())) {
-      return "background-color:#8FBc45; --mdc-chip-label-text-color: #fff; --mdc-chip-label-text-size: 10px;";
+      return 'background-color:#8FBc45; --mdc-chip-label-text-color: #fff; --mdc-chip-label-text-size: 10px;';
     }
     else {
-      return "background-color:#ffc107;color: black;--mdc-chip-label-text-size: 10px;";
+      return 'background-color:#ffc107;color: black;--mdc-chip-label-text-size: 10px;';
     }
   }
 
   getCurrentStatusColour(status: string) {
     console.log(status);
     if (['Annotation Complete', 'Done', 'Submitted'].includes(status.trim())) {
-      return 'background-color:#8FBc45 ; --mdc-chip-label-text-color: #fff;'
+      return 'background-color:#8FBc45 ; --mdc-chip-label-text-color: #fff;';
     } else {
       return 'background-color:#ffc107;color: black;--mdc-chip-label-text-size: 10px;';
     }
@@ -370,9 +422,9 @@ export class DashboardComponent implements OnInit, AfterViewInit {
 
   getCommonNameSourceStyle(source: string) {
     if (source === 'UKSI') {
-      return "background-color:#ffc107; color: #212529; --mdc-chip-label-text-size: 12px;";
+      return 'background-color:#ffc107; color: #212529; --mdc-chip-label-text-size: 12px;';
     } else {
-      return "background-color:#4BBEFD; --mdc-chip-label-text-color: #fff; --mdc-chip-label-text-size: 11px;"
+      return 'background-color:#4BBEFD; --mdc-chip-label-text-color: #fff; --mdc-chip-label-text-size: 11px;';
     }
   }
 
@@ -393,13 +445,13 @@ export class DashboardComponent implements OnInit, AfterViewInit {
   }
 
   checkTolidExists(data) {
-    return data != undefined && data.tolid != undefined && data.tolid != null && data.tolid.length > 0 &&
+    return data !== undefined && data.tolid !== undefined && data.tolid != null && data.tolid.length > 0 &&
         data.show_tolqc === true;
   }
   // tslint:disable-next-line:typedef
   checkGenomeExists(data) {
-    this.genomelength = data != undefined && data.genome_notes != undefined && data.genome_notes != null && data.genome_notes.length ? data.genome_notes.length :0;
-    return data != undefined && data.genome_notes != undefined && data.genome_notes != null && data.genome_notes.length;
+    this.genomelength = data !== undefined && data.genome_notes !== undefined && data.genome_notes != null && data.genome_notes.length ? data.genome_notes.length : 0;
+    return data !== undefined && data.genome_notes !== undefined && data.genome_notes != null && data.genome_notes.length;
   }
 
   checkNbnAtlasExists(data): boolean {
@@ -420,17 +472,17 @@ export class DashboardComponent implements OnInit, AfterViewInit {
     }
   }
   generateGoatInfoLink(data) {
-    if(data.goat_info){
+    if (data.goat_info){
       return data.goat_info.url;
     }
-    
-   
+
+
   }
   // tslint:disable-next-line:typedef
   getGenomeURL(data) {
     const genomeNotes = data.genome_notes;
     let genomeNotesURL = '#';
-    if (genomeNotes != null && genomeNotes != undefined) {
+    if (genomeNotes != null && genomeNotes !== undefined) {
       genomeNotesURL = genomeNotes[0].url;
     }
     return genomeNotesURL;
@@ -481,7 +533,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
         hideAssemblies: this.aggregations?.assemblies_status.buckets.length === 0 ,
         hideRawData: this.aggregations?.raw_data.buckets.length === 0
       }
-    })
+    });
   }
 
   expanded() {
@@ -525,12 +577,12 @@ export class DashboardComponent implements OnInit, AfterViewInit {
   removeFilter() {
     this.preventSimpleClick = true;
     clearTimeout(this.timer);
-    this.activeFilters= [];
+    this.activeFilters = [];
     this.phylogenyFilters = [];
     this.currentClass = 'kingdom';
     this.filterChanged.emit();
     this.router.navigate([]);
-  
+
   }
 
   checkFilterIsActive = (filter: string) => {
@@ -563,4 +615,8 @@ export class DashboardComponent implements OnInit, AfterViewInit {
       }
     });
   }
+
+
+
+
 }

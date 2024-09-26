@@ -159,8 +159,7 @@
                                            align-items-center"
                                            style="cursor: pointer"
                                            [style]="checkStyle(phylogeny_name.key)"
-                                           (dblclick)="onFilterClick(phylogeny_name.key)"
-                                           (click)="changeCurrentClass(phylogeny_name.key)">
+                                           (click)="onFilterClick(phylogeny_name.key, true)">
                                       <span> {{ phylogeny_name.key }}</span>
 
                                    <span class="badge badge-pill badge-info badge-space">
