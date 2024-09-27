@@ -133,8 +133,6 @@
                 </mat-card-actions>
             </mat-card>
             <br>
-
-
             <mat-card class="card  filter-top">
                 <mat-card-title class="card-header filter-heading">
                     Phylogeny/{{ currentClass }}
@@ -246,22 +244,24 @@
                     </div>
                 }
                 <div class="example-table-container">
-                    @if(activeFilters.length > 0){
+                    @if(activeFilters.length > 0 || phylogenyFilters.length > 0){
                         <h1 >Filters: </h1>
                     }
                  @if((activeFilters.length > 0)){
                     @for(field of activeFilters;track $index){
-                        
                             <button type="button" class="btn btn-success">
                                 {{displayActiveFilterName(field)}} <span class="badge badge-light" (click)="onFilterClick(field)">X</span>
                             </button>
-                           
-                       
                     }
                     <button class="btn btn-primary" type="button" (click)="removeFilter()">Remove all filters
                     </button>
                  }
-                   
+                    @if((phylogenyFilters.length > 0)){
+                        <button type="button" class="btn btn-success">
+                            {{displayActiveFilterName(lastPhylogenyVal)}} <span class="badge badge-light" (click)="removePhylogenyFilters()">X</span>
+                        </button>
+
+                    }
                     <br>
 
                     <button  class="btn btn-primary" style="float: right;

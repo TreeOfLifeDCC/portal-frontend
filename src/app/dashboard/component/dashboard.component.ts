@@ -140,6 +140,8 @@ export class DashboardComponent implements OnInit, AfterViewInit {
   isRateLimitReached = false;
   aggregations: any;
   queryParams: any = {};
+  lastPhylogenyVal = '';
+  isPhylogenyFilterProcessing = false; // Flag to prevent double-clicking
 
   activeFilters = new Array<string>();
   dataColumnsDefination = [{ name: 'Organism', column: 'organism', selected: true },
@@ -163,8 +165,6 @@ export class DashboardComponent implements OnInit, AfterViewInit {
     'species_group', 'species_subgroup', 'species', 'subspecies', 'varietas', 'forma'];
   timer: any;
   phylogenyFilters: string[] = [];
-
-  preventSimpleClick = false;
   genomelength = 0;
   result: any;
   isCollapsed = true;
@@ -191,6 +191,9 @@ export class DashboardComponent implements OnInit, AfterViewInit {
             const phylogenyFilters = params[key].split('phylogenyFilters - ')[1];
             // Remove square brackets and split by comma
             this.phylogenyFilters = phylogenyFilters.slice(1, -1).split(',');
+          } else if (params[key].includes('phylogenyCurrentClass - ')) {
+            const phylogenyCurrentClass = params[key].split('phylogenyCurrentClass - ')[1];
+            this.currentClass = phylogenyCurrentClass;
           } else {
             this.activeFilters.push(params[key]);
           }
@@ -269,8 +272,10 @@ export class DashboardComponent implements OnInit, AfterViewInit {
                     'experimentType');
               }
 
-              console.log(this.phylogenyFilters)
+              //get last phylogeny element for filter button
+              this.lastPhylogenyVal = this.phylogenyFilters.slice(-1)[0];
 
+              // add filters to URL query parameters
               this.queryParams = [...this.activeFilters];
               if (this.phylogenyFilters && this.phylogenyFilters.length) {
                 const index = this.queryParams.findIndex(element => element.includes('phylogenyFilters - '));
@@ -331,9 +336,32 @@ export class DashboardComponent implements OnInit, AfterViewInit {
 
   onFilterClick(filterValue: string, phylogenyFilter: boolean = false) {
     if (phylogenyFilter) {
-      this.changeCurrentClass(filterValue);
+      if (this.isPhylogenyFilterProcessing) {
+        return;
+      }
+      // Set flag to prevent further clicks
+      this.isPhylogenyFilterProcessing = true;
+
+      this.phylogenyFilters.push(`${this.currentClass}:${filterValue}`);
+      const index = this.classes.indexOf(this.currentClass) + 1;
+      this.currentClass = this.classes[index];
+
+      // update url with the value of the phylogeny current class
+      const queryParamIndex = this.queryParams.findIndex(element => element.includes('phylogenyCurrentClass - '));
+      if (queryParamIndex > -1) {
+        this.queryParams[queryParamIndex] = `phylogenyCurrentClass - ${this.currentClass}`;
+      } else {
+        this.queryParams.push(`phylogenyCurrentClass - ${this.currentClass}`);
+      }
+      // Replace current parameters with new parameters.
+      this.replaceUrlQueryParams();
+      this.filterChanged.emit();
+
+      // Reset isPhylogenyFilterProcessing flag
+      setTimeout(() => {
+        this.isPhylogenyFilterProcessing = false;
+      }, 500);
     } else{
-      this.preventSimpleClick = true;
       clearTimeout(this.timer);
       const index = this.activeFilters.indexOf(filterValue);
       index !== -1 ? this.activeFilters.splice(index, 1) : this.activeFilters.push(filterValue);
@@ -343,6 +371,34 @@ export class DashboardComponent implements OnInit, AfterViewInit {
     }
   }
 
+  removePhylogenyFilters() {
+    // update url with the value of the phylogeny current class
+    const queryParamPhyloIndex = this.queryParams.findIndex(element => element.includes('phylogenyFilters - '));
+    if (queryParamPhyloIndex > -1) {
+      this.queryParams.splice(queryParamPhyloIndex, 1);
+    }
+
+    const queryParamCurrentClassIndex = this.queryParams.findIndex(element => element.includes('phylogenyCurrentClass - '));
+    if (queryParamCurrentClassIndex > -1) {
+      this.queryParams.splice(queryParamCurrentClassIndex, 1);
+    }
+    // Replace current url parameters with new parameters.
+    this.replaceUrlQueryParams();
+    // reset phylogeny variables
+    this.phylogenyFilters = [];
+    this.currentClass = 'kingdom';
+    this.filterChanged.emit();
+  }
+
+
+  replaceUrlQueryParams() {
+    this.router.navigate([], {
+      relativeTo: this.activatedRoute,
+      queryParams: this.queryParams,
+      replaceUrl: true,
+      skipLocationChange: false
+    });
+  }
 
   checkStyle(filterValue: string) {
     if (this.activeFilters.includes(filterValue)) {
@@ -353,28 +409,13 @@ export class DashboardComponent implements OnInit, AfterViewInit {
   }
 
   displayActiveFilterName(filterName: string) {
-    if (filterName.startsWith('symbionts_')) {
+    if (filterName && filterName.startsWith('symbionts_')) {
       return 'Symbionts-' + filterName.split('-')[1];
     }
-    if (filterName.startsWith('experimentType_')) {
+    if (filterName && filterName.startsWith('experimentType_')) {
       return  filterName.split('_')[1];
     }
     return filterName;
-  }
-
-  changeCurrentClass(filterValue: string) {
-    console.log('single click');
-    const delay = 200;
-    this.preventSimpleClick = false;
-    this.timer = setTimeout(() => {
-      if (!this.preventSimpleClick) {
-        this.phylogenyFilters.push(`${this.currentClass}:${filterValue}`);
-        const index = this.classes.indexOf(this.currentClass) + 1;
-        this.currentClass = this.classes[index];
-        console.log(this.phylogenyFilters);
-        this.filterChanged.emit();
-      }
-    }, delay);
   }
 
   onHistoryClick() {
@@ -392,12 +433,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
     if (index > -1) {
       this.queryParams.splice(index, 1);
       // Replace current parameters with new parameters.
-      this.router.navigate([], {
-        relativeTo: this.activatedRoute,
-        queryParams: this.queryParams,
-        replaceUrl: true,
-        skipLocationChange: false
-      });
+      this.replaceUrlQueryParams();
     }
     this.filterChanged.emit();
   }
@@ -448,9 +484,10 @@ export class DashboardComponent implements OnInit, AfterViewInit {
     return data !== undefined && data.tolid !== undefined && data.tolid != null && data.tolid.length > 0 &&
         data.show_tolqc === true;
   }
-  // tslint:disable-next-line:typedef
+
   checkGenomeExists(data) {
-    this.genomelength = data !== undefined && data.genome_notes !== undefined && data.genome_notes != null && data.genome_notes.length ? data.genome_notes.length : 0;
+    this.genomelength = data !== undefined && data.genome_notes !== undefined && data.genome_notes != null &&
+    data.genome_notes.length ? data.genome_notes.length : 0;
     return data !== undefined && data.genome_notes !== undefined && data.genome_notes != null && data.genome_notes.length;
   }
 
@@ -575,7 +612,6 @@ export class DashboardComponent implements OnInit, AfterViewInit {
   }
 
   removeFilter() {
-    this.preventSimpleClick = true;
     clearTimeout(this.timer);
     this.activeFilters = [];
     this.phylogenyFilters = [];
