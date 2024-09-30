@@ -272,7 +272,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
                     'experimentType');
               }
 
-              //get last phylogeny element for filter button
+              // get last phylogeny element for filter button
               this.lastPhylogenyVal = this.phylogenyFilters.slice(-1)[0];
 
               // add filters to URL query parameters
@@ -566,7 +566,8 @@ export class DashboardComponent implements OnInit, AfterViewInit {
         taxonomy: { rank: 'superkingdom', taxonomy: 'Eukaryota', childRank: 'kingdom' },
         searchText: this.searchValue,
         selectedOptions: [0, 1, 2],
-        hideAnnotation: this.aggregations?.annotation_complete.buckets.length === 0 && this.aggregations?.annotation_complete.buckets.length === 0 ,
+        hideAnnotation: this.aggregations?.annotation_complete.buckets.length === 0 &&
+            this.aggregations?.annotation_complete.buckets.length === 0 ,
         hideAssemblies: this.aggregations?.assemblies_status.buckets.length === 0 ,
         hideRawData: this.aggregations?.raw_data.buckets.length === 0
       }
