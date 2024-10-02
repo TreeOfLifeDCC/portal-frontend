@@ -179,10 +179,10 @@ export class DashboardComponent implements OnInit, AfterViewInit {
   @ViewChild(MatSort) sort: MatSort;
   private activatedRoute = inject(ActivatedRoute);
 
-  subscriptionDialogTitle = '';
+  downloadDialogTitle = '';
   dialogRef: any;
   public downloadForm!: FormGroup;
-  @ViewChild('subscriptionTemplate') subscriptionTemplate = {} as TemplateRef<any>;
+  @ViewChild('downloadTemplate') downloadTemplate = {} as TemplateRef<any>;
 
   constructor(private apiService: ApiService, private dialog: MatDialog, private titleService: Title, private router: Router) {
   }
@@ -562,8 +562,8 @@ export class DashboardComponent implements OnInit, AfterViewInit {
   }
 
   openDownloadDialog(value: string) {
-    this.subscriptionDialogTitle = `Download data`;
-    this.dialogRef = this.dialog.open(this.subscriptionTemplate,
+    this.downloadDialogTitle = `Download data`;
+    this.dialogRef = this.dialog.open(this.downloadTemplate,
         { data: value, height: '260px', width: '400px' });
   }
 

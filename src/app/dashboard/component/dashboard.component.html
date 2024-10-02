@@ -538,9 +538,9 @@
 
 
 <!-- Download Dialog Box -->
-<ng-template let-data #subscriptionTemplate>
+<ng-template let-data #downloadTemplate>
     <div mat-dialog-content class="centerContents">
-        <p class="mat-dialog-title-font">{{subscriptionDialogTitle}}</p>
+        <p class="mat-dialog-title-font">{{downloadDialogTitle}}</p>
         <form [formGroup]="downloadForm" novalidate>
             <p>
                 <mat-radio-group aria-label="Select an option" formControlName="downloadOption">
