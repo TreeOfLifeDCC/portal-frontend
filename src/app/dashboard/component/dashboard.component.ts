@@ -5,7 +5,7 @@ import {
   inject,
   OnDestroy,
   OnInit,
-  Query,
+  Query, TemplateRef,
   ViewChild
 } from '@angular/core';
 import {merge, Observable, of as observableOf} from 'rxjs';
@@ -42,7 +42,7 @@ import {MatIcon} from '@angular/material/icon';
 import {MatLine} from '@angular/material/core';
 import {MatList, MatListItem} from '@angular/material/list';
 import { MatProgressSpinner } from '@angular/material/progress-spinner';
-import {MatFormField, MatLabel } from '@angular/material/form-field';
+import {MatError, MatFormField, MatLabel} from '@angular/material/form-field';
 
 import { MatInput } from '@angular/material/input';
 import {MatAnchor, MatButton } from '@angular/material/button';
@@ -51,6 +51,9 @@ import { ApiService } from 'src/app/api.service';
 import { DownloadConfirmationDialogComponent } from 'src/app/download-confirmation-dialog-component/download-confirmation-dialog.component';
 import { QueryFilter } from 'src/app/shared/query-filter';
 import { GenomeNoteListComponent } from '../genome-note-list-component/genome-note-list.component';
+import {FormControl, FormGroup, ReactiveFormsModule, Validators} from "@angular/forms";
+import {MatRadioButton, MatRadioGroup} from "@angular/material/radio";
+import {MatProgressBar} from "@angular/material/progress-bar";
 
 @Component({
   selector: 'app-dashboard',
@@ -89,8 +92,13 @@ import { GenomeNoteListComponent } from '../genome-note-list-component/genome-no
     MatSortHeader,
     MatProgressSpinner,
     MatExpansionModule,
-    MatCheckboxModule
-],
+    MatCheckboxModule,
+    ReactiveFormsModule,
+    MatRadioGroup,
+    MatRadioButton,
+    MatError,
+    MatProgressBar
+  ],
   standalone: true
 })
 export class DashboardComponent implements OnInit, AfterViewInit {
@@ -137,6 +145,8 @@ export class DashboardComponent implements OnInit, AfterViewInit {
   queryParams: any = {};
   lastPhylogenyVal = '';
   isPhylogenyFilterProcessing = false; // Flag to prevent double-clicking
+  displayErrorMsg = false;
+  displayProgressBar = false;
 
   activeFilters = new Array<string>();
   dataColumnsDefination = [{ name: 'Organism', column: 'organism', selected: true },
@@ -169,10 +179,19 @@ export class DashboardComponent implements OnInit, AfterViewInit {
   @ViewChild(MatSort) sort: MatSort;
   private activatedRoute = inject(ActivatedRoute);
 
+  subscriptionDialogTitle = '';
+  dialogRef: any;
+  public downloadForm!: FormGroup;
+  @ViewChild('subscriptionTemplate') subscriptionTemplate = {} as TemplateRef<any>;
+
   constructor(private apiService: ApiService, private dialog: MatDialog, private titleService: Title, private router: Router) {
   }
 
   ngOnInit(): void {
+    this.downloadForm = new FormGroup({
+      downloadOption: new FormControl('', [Validators.required]),
+    });
+
     this.getDisplayedColumns();
     this.titleService.setTitle('Data Portal');
 
@@ -206,9 +225,6 @@ export class DashboardComponent implements OnInit, AfterViewInit {
       this.activeFilters.push(filterPrefix + '-' + value);
     });
   }
-
-
-
 
   ngAfterViewInit() {
     // If the user changes the metadataSort order, reset back to the first page.
@@ -530,16 +546,57 @@ export class DashboardComponent implements OnInit, AfterViewInit {
   //   });
   // }
 
-  downloadFile(format: string) {
-    this.apiService.downloadRecords(this.paginator.pageIndex,
-        this.paginator.pageSize, this.searchValue, this.sort.active, this.sort.direction, this.activeFilters,
-        this.currentClass, this.phylogenyFilters, 'data_portal').subscribe((res: Blob) => {
-      const a = document.createElement('a');
-      a.href = URL.createObjectURL(res);
-      a.download = 'data_portal.' + format;
-      a.click();
+  onCancelDialog() {
+    this.dialogRef.close();
+  }
+
+  onDownload() {
+    if (this.downloadForm?.valid && this.downloadForm?.touched) {
+      this.displayProgressBar = true;
+      const downloadOption = this.downloadForm.value['downloadOption']
+      console.log("downloadOption: ", downloadOption)
+      this.downloadFile(downloadOption, true);
+    }
+    this.displayErrorMsg = true;
+
+  }
+
+  openDownloadDialog(value: string) {
+    this.subscriptionDialogTitle = `Download data`;
+    this.dialogRef = this.dialog.open(this.subscriptionTemplate,
+        { data: value, height: '260px', width: '400px' });
+  }
+
+  public displayError = (controlName: string, errorName: string) => {
+    return this.downloadForm?.controls[controlName].hasError(errorName);
+  }
+
+  downloadFile(downloadOption: string, dialog: boolean) {
+    this.apiService.downloadData(downloadOption, this.paginator.pageIndex,
+        this.paginator.pageSize, this.searchValue || '', this.sort.active, this.sort.direction, this.activeFilters,
+        this.currentClass, this.phylogenyFilters, 'data_portal').subscribe({
+      next: (response: Blob) => {
+        const blobUrl = window.URL.createObjectURL(response);
+        const a = document.createElement('a');
+        a.href = blobUrl;
+        a.download = 'download.csv';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        this.displayProgressBar = false;
+        if (dialog) {
+          // close dialog box
+          setTimeout(() => {
+            this.dialogRef.close();
+          }, 500);
+        }
+      },
+      error: error => {
+        console.error('Error downloading the CSV file:', error);
+      }
     });
   }
+
 
   toggleCollapse = () => {
     if (this.isCollapsed) {

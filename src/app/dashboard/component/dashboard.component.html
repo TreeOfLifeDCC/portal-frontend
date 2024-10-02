@@ -268,19 +268,17 @@
 
                     <button  class="btn btn-primary" style="float: right;
                     background-color: #4BBEFD; color: #ffffff;" mat-raised-button
-                      (click)="downloadFile('csv')">
+                             (click)="downloadFile('metadata', false)">
                       Download metadata
                     </button>
-
-                    <button  type="button"
-                      style="float: right; background-color: #4BBEFD; color: #ffffff;"
-                      class="btn btn-primary" mat-raised-button (click)="openDialog()">Download
-                    </button>
+                    @if (this.activeFilters.length > 0) {
+                        <button type="button"
+                                style="float: right; background-color: #4BBEFD; color: #ffffff;"
+                                class="btn btn-primary" mat-raised-button
+                                (click)="openDownloadDialog(this.activeFilters[0])">Download
+                        </button>
+                    }
                   </div>
-
-
-
-
 
                   <mat-form-field class="search_field column-header"  style="margin-top: 15px;">
                     <mat-label>Search</mat-label>
@@ -535,3 +533,47 @@
             </div>
           </div>
         </div>>
+
+
+
+
+<!-- Download Dialog Box -->
+<ng-template let-data #subscriptionTemplate>
+    <div mat-dialog-content class="centerContents">
+        <p class="mat-dialog-title-font">{{subscriptionDialogTitle}}</p>
+        <form [formGroup]="downloadForm" novalidate>
+            <p>
+                <mat-radio-group aria-label="Select an option" formControlName="downloadOption">
+                    <div><mat-radio-button value="assemblies" color="primary">All Assemblies</mat-radio-button></div>
+                    <div><mat-radio-button value="annotation" color="primary" class="radio">Annotation</mat-radio-button></div>
+                </mat-radio-group>
+                @if (displayError('downloadOption', 'required') && displayErrorMsg) {
+                    <mat-error class="errorMsg">
+                        <div>
+                            Please select an option!
+                        </div>
+                    </mat-error>
+                }
+            </p>
+            <div>
+                To download data outside of the web interface, please see
+                <a target="_blank" [routerLink]="['/bulk-downloads/']">Bulk Downloads</a>
+            </div>
+        </form>
+
+        <div mat-dialog-actions class="buttonContainer">
+            <button mat-button (click)="onCancelDialog()" class="flex-item cancel-button">Cancel</button>
+            <button mat-button (click)="onDownload()"
+                    [disabled]="downloadForm.get('downloadOption')?.invalid || displayProgressBar"
+                    class="flex-item download-button">
+                Download
+            </button>
+        </div>
+        @if (displayProgressBar) {
+            <div style="padding: 15px">
+                <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+            </div>
+        }
+
+    </div>
+</ng-template>
