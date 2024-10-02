@@ -16,7 +16,7 @@ import { MatFormField, MatLabel } from '@angular/material/form-field';
 import { MatAnchor, MatButton } from '@angular/material/button';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatExpansionModule } from '@angular/material/expansion';
-import { NgForOf, NgIf } from '@angular/common';
+
 import { MatInput } from '@angular/material/input';
 import { catchError, map, merge, startWith, switchMap } from 'rxjs';
 import { ApiService } from '../api.service';
@@ -26,7 +26,7 @@ import { ApiService } from '../api.service';
   templateUrl: './publications.component.html',
   styleUrls: ['./publications.component.css'],
   standalone : true,
-  imports:[
+  imports: [
     MatCard,
     MatCardTitle,
     MatCardActions,
@@ -56,13 +56,11 @@ import { ApiService } from '../api.service';
     MatCellDef,
     MatButton,
     MatInput,
-    NgIf,
-    NgForOf,
     MatSortHeader,
     MatProgressSpinner,
     MatExpansionModule,
-    MatCheckboxModule,
-  ]
+    MatCheckboxModule
+]
 })
 export class PublicationsComponent implements OnInit, AfterViewInit, OnDestroy {
 

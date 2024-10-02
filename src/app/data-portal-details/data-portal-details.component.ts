@@ -11,7 +11,7 @@ import {MatTab, MatTabGroup} from '@angular/material/tabs';
 import {MatCard, MatCardActions, MatCardTitle} from '@angular/material/card';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatExpansionModule } from '@angular/material/expansion';
-import {NgClass, NgForOf, NgIf, NgStyle} from '@angular/common';
+import { NgClass, NgStyle } from '@angular/common';
 import { MatFormField, MatInput, MatLabel } from '@angular/material/input';
 import { MatAnchor, MatButton } from '@angular/material/button';
 import { MatList, MatListItem } from '@angular/material/list';
@@ -27,7 +27,8 @@ import {FormsModule} from '@angular/forms';
   styleUrls: ['./data-portal-details.component.css'],
   standalone: true,
   imports: [
-    MatTabGroup, MatTab,
+    MatTabGroup,
+    MatTab,
     MatCard,
     MatCardTitle,
     MatCardActions,
@@ -57,13 +58,14 @@ import {FormsModule} from '@angular/forms';
     MatCellDef,
     MatButton,
     MatInput,
-    NgIf,
-    NgForOf,
     MatSortHeader,
     NgxSpinnerModule,
     MatExpansionModule,
-    MatCheckboxModule, NgStyle, NgClass, FormsModule
-  ]
+    MatCheckboxModule,
+    NgStyle,
+    NgClass,
+    FormsModule
+]
 })
 export class DataPortalDetailsComponent implements OnInit, AfterViewInit {
   codes = {

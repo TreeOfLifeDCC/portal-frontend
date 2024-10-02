@@ -43,7 +43,7 @@ import {MatLine} from '@angular/material/core';
 import {MatList, MatListItem} from '@angular/material/list';
 import { MatProgressSpinner } from '@angular/material/progress-spinner';
 import {MatFormField, MatLabel } from '@angular/material/form-field';
-import { NgForOf, NgIf } from '@angular/common';
+
 import { MatInput } from '@angular/material/input';
 import {MatAnchor, MatButton } from '@angular/material/button';
 import { MatCheckboxModule } from '@angular/material/checkbox';
@@ -57,7 +57,6 @@ import { GenomeNoteListComponent } from '../genome-note-list-component/genome-no
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.css'],
   imports: [
-
     MatCard,
     MatCardTitle,
     MatCardActions,
@@ -87,15 +86,11 @@ import { GenomeNoteListComponent } from '../genome-note-list-component/genome-no
     MatCellDef,
     MatButton,
     MatInput,
-    NgIf,
-    NgForOf,
     MatSortHeader,
     MatProgressSpinner,
     MatExpansionModule,
-    MatCheckboxModule,
-
-
-  ],
+    MatCheckboxModule
+],
   standalone: true
 })
 export class DashboardComponent implements OnInit, AfterViewInit {

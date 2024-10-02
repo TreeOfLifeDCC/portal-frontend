@@ -8,8 +8,8 @@ describe('BulkDownloadsComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ BulkDownloadsComponent ]
-    })
+    imports: [BulkDownloadsComponent]
+})
     .compileComponents();
   }));
 

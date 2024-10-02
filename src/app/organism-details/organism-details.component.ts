@@ -17,7 +17,7 @@ import {ApiService} from '../api.service';
 import {MatFormField} from '@angular/material/form-field';
 import {MatInput} from '@angular/material/input';
 import {FormsModule} from '@angular/forms';
-import {NgClass, NgIf} from '@angular/common';
+import { NgClass } from '@angular/common';
 import {ImageSliderComponent} from '../image-slider/image-slider.component';
 
 
@@ -43,9 +43,8 @@ import {ImageSliderComponent} from '../image-slider/image-slider.component';
     FormsModule,
     NgClass,
     RouterLink,
-    ImageSliderComponent,
-    NgIf
-  ],
+    ImageSliderComponent
+],
   standalone: true
 })
 export class OrganismDetailsComponent implements OnInit {

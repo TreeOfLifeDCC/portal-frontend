@@ -9,8 +9,8 @@ describe('DashboardComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ DataPortalDetailsComponent ]
-    })
+    imports: [DataPortalDetailsComponent]
+})
         .compileComponents();
   }));
 

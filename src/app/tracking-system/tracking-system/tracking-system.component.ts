@@ -15,7 +15,7 @@ import {MatList, MatListItem} from '@angular/material/list';
 
 import {MatLine} from '@angular/material/core';
 import {MatChip, MatChipSet} from '@angular/material/chips';
-import {NgClass, NgForOf, NgStyle} from '@angular/common';
+import { NgClass, NgStyle } from '@angular/common';
 import {MatIcon} from '@angular/material/icon';
 import {MatProgressSpinner} from '@angular/material/progress-spinner';
 import {MatFormField, MatLabel} from '@angular/material/form-field';
@@ -40,40 +40,38 @@ import { ApiService } from 'src/app/api.service';
   styleUrls: ['./tracking-system.component.css'],
   standalone: true,
     imports: [
-        MatCard,
-        MatCardTitle,
-        MatCardActions,
-        MatListItem,
-        MatList,
-        MatLine,
-        MatChipSet,
-        MatChip,
-        NgForOf,
-        MatIcon,
-        MatProgressSpinner,
-
-        MatTable,
-        RouterLink,
-        MatHeaderCell,
-        MatColumnDef,
-        MatSortHeader,
-        MatCell,
-        MatHeaderCellDef,
-        MatCellDef,
-        MatPaginator,
-        MatNoDataRow,
-        MatSort,
-        MatAnchor,
-        MatHeaderRow,
-        MatRow,
-        MatInput,
-        MatLabel,
-        MatFormField,
-        MatHeaderRowDef,
-        MatRowDef,
-        NgClass,
-        NgStyle
-    ]
+    MatCard,
+    MatCardTitle,
+    MatCardActions,
+    MatListItem,
+    MatList,
+    MatLine,
+    MatChipSet,
+    MatChip,
+    MatIcon,
+    MatProgressSpinner,
+    MatTable,
+    RouterLink,
+    MatHeaderCell,
+    MatColumnDef,
+    MatSortHeader,
+    MatCell,
+    MatHeaderCellDef,
+    MatCellDef,
+    MatPaginator,
+    MatNoDataRow,
+    MatSort,
+    MatAnchor,
+    MatHeaderRow,
+    MatRow,
+    MatInput,
+    MatLabel,
+    MatFormField,
+    MatHeaderRowDef,
+    MatRowDef,
+    NgClass,
+    NgStyle
+]
 })
 export class TrackingSystemComponent implements OnInit, AfterViewInit {
   displayedColumns: string[] = ['organism', 'commonName', 'biosamples', 'raw_data', 'assemblies_status',
@@ -196,7 +194,6 @@ export class TrackingSystemComponent implements OnInit, AfterViewInit {
                           this.queryParams.push(`phylogenyFilters - [${this.phylogenyFilters}]`);
                       }
                   }
-                  console.log("Before navigation queryParams", this.queryParams);
 
                   this.router.navigate([], {
                       relativeTo: this.activatedRoute,

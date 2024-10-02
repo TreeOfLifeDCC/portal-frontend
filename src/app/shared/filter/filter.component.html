@@ -1,76 +1,103 @@
 <div class="card bg-lite mb-3 filter-top">
-    <h3 class="card-header filter-heading" >
-        {{title}}
-        <i class="material-icons float-right"  *ngIf="((filterService.experimentTypeFilters?.length > filterSize || filterService.filterArray?.length >filterSize) && isCollapsed)" (click)="toggleCollapse()">add</i>
-        <i class="material-icons float-right"   *ngIf="( (filterService.experimentTypeFilters?.length > filterSize || filterService.filterArray?.length >filterSize)  && !isCollapsed)" (click)="toggleCollapse()">remove</i>
+  <h3 class="card-header filter-heading" >
+    {{title}}
+    @if (((filterService.experimentTypeFilters?.length > filterSize || filterService.filterArray?.length >filterSize) && isCollapsed)) {
+      <i class="material-icons float-right"  (click)="toggleCollapse()">add</i>
+    }
+    @if (( (filterService.experimentTypeFilters?.length > filterSize || filterService.filterArray?.length >filterSize)  && !isCollapsed)) {
+      <i class="material-icons float-right"   (click)="toggleCollapse()">remove</i>
+    }
 
-    </h3>
-    <ul  class="list-group" *ngIf="title === 'Experiment Type'">
-        <ng-container *ngFor="let filter of filterService.experimentTypeFilters; let i = index">
-            <li   *ngIf="i<itemLimit" class="biosample list-group-item d-flex justify-content-between
+  </h3>
+  @if (title === 'Experiment Type') {
+    <ul  class="list-group">
+      @for (filter of filterService.experimentTypeFilters; track filter; let i = $index) {
+        @if (i<itemLimit) {
+<li   class="biosample list-group-item d-flex justify-content-between
             align-items-center biosamples-inactive"
-                  id="{{filter.key}}-Experiment Type"
-                  [ngClass]="checkFilterIsActive('experimentType-'+filter.key)"
-                  (click)="onFilterClick($event, 'experiment-type', filter.key)" style="cursor: pointer" >
-                <span>{{filter.key}}</span>
-                <span *ngIf="isShowCount === 'true'" class="badge badge-pill badge-info">{{filter.organism_count.doc_count}}</span>
-            </li>
-        </ng-container>
-
+            id="{{filter.key}}-Experiment Type"
+            [ngClass]="checkFilterIsActive('experimentType-'+filter.key)"
+            (click)="onFilterClick($event, 'experiment-type', filter.key)" style="cursor: pointer" >
+            <span>{{filter.key}}</span>
+            @if (isShowCount === 'true') {
+              <span class="badge badge-pill badge-info">{{filter.organism_count.doc_count}}</span>
+            }
+          </li>
+        }
+      }
     </ul>
-    <ul  class="list-group" *ngIf="title === 'Data Status'">
-            <ng-container *ngFor="let filter of filterService.filterArray; let i = index">
-                <li *ngIf="filter.count > 0" class="biosample list-group-item d-flex justify-content-between align-items-center biosamples-inactive" [ngClass]="checkFilterIsActive(filter.key)" (click)="onFilterClick($event, filter.label, filter.key)" style="cursor: pointer" >
-                    <span>{{filter.title}}</span>
-                    <span *ngIf="isShowCount === 'true'" class="badge badge-pill badge-info">{{filter.count}}</span>
-                </li>
-            </ng-container>
+  }
+  @if (title === 'Data Status') {
+    <ul  class="list-group">
+      @for (filter of filterService.filterArray; track filter; let i = $index) {
+        @if (filter.count > 0) {
+          <li class="biosample list-group-item d-flex justify-content-between align-items-center biosamples-inactive" [ngClass]="checkFilterIsActive(filter.key)" (click)="onFilterClick($event, filter.label, filter.key)" style="cursor: pointer" >
+            <span>{{filter.title}}</span>
+            @if (isShowCount === 'true') {
+              <span class="badge badge-pill badge-info">{{filter.count}}</span>
+            }
+          </li>
+        }
+      }
     </ul>
+  }
 
-    <ul class="list-group" *ngIf="title === 'Symbionts'">
-        <ng-container *ngFor="let filter of filterService.symbiontsFilters; let i = index">
-            <li *ngIf="i<itemLimit"
-                class="biosample list-group-item d-flex justify-content-between align-items-center biosamples-inactive"
-                id="{{filter.key}}-Symbionts Status" [ngClass]="checkFilterIsActive(filter.filterPrefix+'-'+filter.key)"
-                (click)="onFilterClick($event, filter.label, filter.key)" style="cursor: pointer">
-                <span>{{filter.key}}</span>
-                <span *ngIf="isShowCount === 'true'"
-                      class="badge badge-pill badge-info">{{filter.doc_count}}</span>
-            </li>
-        </ng-container>
+  @if (title === 'Symbionts') {
+    <ul class="list-group">
+      @for (filter of filterService.symbiontsFilters; track filter; let i = $index) {
+        @if (i<itemLimit) {
+          <li
+            class="biosample list-group-item d-flex justify-content-between align-items-center biosamples-inactive"
+            id="{{filter.key}}-Symbionts Status" [ngClass]="checkFilterIsActive(filter.filterPrefix+'-'+filter.key)"
+            (click)="onFilterClick($event, filter.label, filter.key)" style="cursor: pointer">
+            <span>{{filter.key}}</span>
+            @if (isShowCount === 'true') {
+              <span
+              class="badge badge-pill badge-info">{{filter.doc_count}}</span>
+            }
+          </li>
+        }
+      }
     </ul>
+  }
 
-    <ul class="list-group" *ngIf="title === 'Journal'">
-        <ng-container *ngFor="let filter of filterService.journalNameFilters">
+  @if (title === 'Journal') {
+    <ul class="list-group">
+      @for (filter of filterService.journalNameFilters; track filter) {
             <li class="biosample list-group-item d-flex justify-content-between align-items-center
                     biosamples-inactive" [ngClass]="checkFilterIsActive(filter.key)"
-                (click)="onFilterClick($event, 'journal-name', filter.key)" style="cursor: pointer">
-                <span>{{filter.key}}</span>
-                <span class="badge badge-pill badge-info">{{filter.doc_count}}</span>
-            </li>
-        </ng-container>
+          (click)="onFilterClick($event, 'journal-name', filter.key)" style="cursor: pointer">
+          <span>{{filter.key}}</span>
+          <span class="badge badge-pill badge-info">{{filter.doc_count}}</span>
+        </li>
+      }
     </ul>
+  }
 
-    <ul class="list-group" *ngIf="title === 'Publication Year'">
-        <ng-container *ngFor="let filter of filterService.publicationYearFilters">
+  @if (title === 'Publication Year') {
+    <ul class="list-group">
+      @for (filter of filterService.publicationYearFilters; track filter) {
             <li class="biosample list-group-item d-flex justify-content-between align-items-center
                     biosamples-inactive" [ngClass]="checkFilterIsActive(filter.key)"
-                (click)="onFilterClick($event, 'publication-year', filter.key)" style="cursor: pointer">
-                <span>{{filter.key}}</span>
-                <span class="badge badge-pill badge-info">{{filter.doc_count}}</span>
-            </li>
-        </ng-container>
+          (click)="onFilterClick($event, 'publication-year', filter.key)" style="cursor: pointer">
+          <span>{{filter.key}}</span>
+          <span class="badge badge-pill badge-info">{{filter.doc_count}}</span>
+        </li>
+      }
     </ul>
+  }
 
-    <ul class="list-group" *ngIf="title === 'Article Type'">
-        <ng-container *ngFor="let filter of filterService.articleTypeFilters">
+  @if (title === 'Article Type') {
+    <ul class="list-group">
+      @for (filter of filterService.articleTypeFilters; track filter) {
             <li class="biosample list-group-item d-flex justify-content-between align-items-center
                     biosamples-inactive" [ngClass]="checkFilterIsActive(filter.key)"
-                (click)="onFilterClick($event, 'article-type', filter.key)" style="cursor: pointer">
-                <span>{{filter.key}}</span>
-                <span class="badge badge-pill badge-info">{{filter.doc_count}}</span>
-            </li>
-        </ng-container>
+          (click)="onFilterClick($event, 'article-type', filter.key)" style="cursor: pointer">
+          <span>{{filter.key}}</span>
+          <span class="badge badge-pill badge-info">{{filter.doc_count}}</span>
+        </li>
+      }
     </ul>
+  }
 
 </div>

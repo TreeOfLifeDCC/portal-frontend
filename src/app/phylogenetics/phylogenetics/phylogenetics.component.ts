@@ -4,7 +4,7 @@ import { DynamicScriptLoaderService } from './services/dynamic-script-loader.ser
 import { FormControl, FormsModule } from '@angular/forms';
 import {MatRadioChange, MatRadioModule} from '@angular/material/radio';
 import { NgxSpinnerModule, NgxSpinnerService } from 'ngx-spinner';
-import { CommonModule } from '@angular/common';
+
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 

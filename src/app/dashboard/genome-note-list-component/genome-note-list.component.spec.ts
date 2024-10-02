@@ -13,12 +13,12 @@ describe('GenomeNoteListComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      imports: [
+    imports: [
         MatDialogModule,
         AppModule,
-      ],
-      declarations: [ GenomeNoteListComponent ],
-    })
+        GenomeNoteListComponent,
+    ],
+})
     .compileComponents();
   }));
 

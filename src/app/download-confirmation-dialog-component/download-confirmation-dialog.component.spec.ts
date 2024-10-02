@@ -13,12 +13,12 @@ describe('ConfirmationDialogComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      imports: [
+    imports: [
         MatDialogModule,
         AppModule,
-      ],
-      declarations: [ DownloadConfirmationDialogComponent ],
-    })
+        DownloadConfirmationDialogComponent,
+    ],
+})
     .compileComponents();
   }));
 
