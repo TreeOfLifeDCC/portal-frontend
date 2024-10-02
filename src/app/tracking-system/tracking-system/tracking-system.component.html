@@ -159,8 +159,7 @@
                                            align-items-center"
                                     style="cursor: pointer"
                                     [style]="checkStyle(phylogeny_name.key)"
-                                    (dblclick)="onFilterClick(phylogeny_name.key)"
-                                    (click)="changeCurrentClass(phylogeny_name.key)">
+                                    (click)="onFilterClick(phylogeny_name.key, true)">
                                     <span> {{ phylogeny_name.key }}</span>
 
                                     <span class="badge badge-pill badge-info badge-space">
@@ -192,7 +191,7 @@
                         </div>
                     }
                     <div class="example-table-container">
-                        @if(activeFilters.length > 0){
+                        @if(activeFilters.length > 0 || phylogenyFilters.length > 0){
                             <h1 >Filters: </h1>
                         }
                      @if((activeFilters.length > 0)){
@@ -207,6 +206,12 @@
                         <button class="btn btn-primary" type="button" (click)="removeFilter()">Remove all filters
                         </button>
                      }
+                        @if((phylogenyFilters.length > 0)){
+                            <button type="button" class="btn btn-success">
+                                {{displayActiveFilterName(lastPhylogenyVal)}} <span class="badge badge-light" (click)="removePhylogenyFilters()">X</span>
+                            </button>
+
+                        }
 
                         <br>
 
