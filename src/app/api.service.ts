@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import { HttpClient } from "@angular/common/http";
+import { HttpClient } from '@angular/common/http';
 
 import {catchError, map, retry, tap} from 'rxjs/operators';
 import { ConfirmationDialogComponent } from './confirmation-dialog-component/confirmation-dialog.component';
@@ -20,11 +20,11 @@ export class ApiService {
     }
 
     getData(pageIndex: number, pageSize: number, searchValue: string, sortActive: string, sortDirection: string,
-            filterValue: string[], currentClass: string, phylogeny_filters: string[], index_name: string) {
+            filterValue: string[], currentClass: string, phylogenyFilters: string[], indexName: string) {
 
-        const project_names = ['DToL', '25 genomes', 'ERGA', 'CBP', 'ASG'];
+        const projectNames = ['DToL', '25 genomes', 'ERGA', 'CBP', 'ASG'];
         const offset = pageIndex * pageSize;
-        let url = `http://localhost:8000/${index_name}?limit=${pageSize}&offset=${offset}`;
+        let url = `http://localhost:8000/${indexName}?limit=${pageSize}&offset=${offset}`;
         if (searchValue) {
             url += `&search=${searchValue}`;
         }
@@ -35,7 +35,7 @@ export class ApiService {
             let filterStr = '&filter=';
             let filterItem;
             for (let i = 0; i < filterValue.length; i++) {
-                if (project_names.indexOf(filterValue[i]) !== -1) {
+                if (projectNames.indexOf(filterValue[i]) !== -1) {
                     filterValue[i] === 'DToL' ? filterItem = 'project_name:dtol' : filterItem = `project_name:${filterValue[i]}`;
                 } else if (filterValue[i].includes('-') && !filterValue[i].startsWith('experimentType')) {
                     if (filterValue[i].startsWith('symbionts')) {
@@ -46,31 +46,33 @@ export class ApiService {
                             filterItem = 'assemblies_status:Done';
                         }else if (filterItem === 'genome_notes') {
                             filterItem = 'genome_notes:Submitted';
-                        } else
+                        } else {
                             filterItem = `${filterItem}:Done`;
+ }
                     }
-                }else if(filterValue[i].includes('_') && filterValue[i].startsWith('experimentType')) {
+                }else if (filterValue[i].includes('_') && filterValue[i].startsWith('experimentType')) {
                     filterItem = filterValue[i].replace('_', ':');
 
                 }
                 else {
                     filterItem = `${currentClass}:${filterValue[i]}`;
                 }
-               
+
                 filterStr === '&filter=' ? filterStr += `${filterItem}` : filterStr += `,${filterItem}`;
 
             }
             url += filterStr;
         }
-        if (phylogeny_filters.length !== 0) {
+        if (phylogenyFilters.length !== 0) {
             let filterStr = '&phylogeny_filters=';
-            for (let i = 0; i < phylogeny_filters.length; i++) {
-                filterStr === '&phylogeny_filters=' ? filterStr += `${phylogeny_filters[i]}` : filterStr += `-${phylogeny_filters[i]}`;
+            for (let i = 0; i < phylogenyFilters.length; i++) {
+                filterStr === '&phylogeny_filters=' ? filterStr += `${phylogenyFilters[i]}` : filterStr += `-${phylogenyFilters[i]}`;
             }
 
             url += filterStr;
         }
         url += `&current_class=${currentClass}`;
+        console.log(url);
 
         return this.http.get<any>(url);
     }
@@ -93,8 +95,9 @@ export class ApiService {
     }
 
 
-    downloadData(downloadOption: string, pageIndex: number, pageSize: number, searchValue: string, sortActive: string, sortDirection: string,
-                 filterValue: string[], currentClass: string, phylogenyFilters: string[], indexName: string) {
+    downloadData(downloadOption: string, pageIndex: number, pageSize: number, searchValue: string, sortActive: string,
+                 sortDirection: string, filterValue: string[], currentClass: string, phylogenyFilters: string[],
+                 indexName: string) {
 
         const url = `http://127.0.0.1:8000/data-download`;
         const projectNames = ['DToL', '25 genomes', 'ERGA', 'CBP', 'ASG'];
@@ -134,7 +137,7 @@ export class ApiService {
             downloadOption
         };
 
-        console.log(payload)
+        console.log(payload);
 
         return this.http.post(url, payload, { responseType: 'blob' });
     }
@@ -168,21 +171,21 @@ export class ApiService {
     public getDetailTableOrganismFilters(organism): Observable<any> {
         return this.http.get(`${this.API_BASE_URL}/root_organisms/secondary/filters?organism=${organism}`);
     }
-    public download(filter: any,sortColumn?, sortOrder?, from?, size?, taxonomyFilter?, searchText? , downloadOption?): any {
-        let requestParams = `?from=${from}&size=${size}`
-        if (sortColumn != undefined) {
-          requestParams = requestParams + `&z=${sortColumn}&sortOrder=${sortOrder}`
+    public download(filter: any, sortColumn?, sortOrder?, from?, size?, taxonomyFilter?, searchText? , downloadOption?): any {
+        let requestParams = `?from=${from}&size=${size}`;
+        if (sortColumn !== undefined) {
+          requestParams = requestParams + `&z=${sortColumn}&sortOrder=${sortOrder}`;
         }
-        if(taxonomyFilter != undefined) {
-          let taxa = encodeURIComponent(JSON.stringify(taxonomyFilter[0]));
-          requestParams = requestParams + `&taxonomyFilter=${taxa}`
+        if (taxonomyFilter !== undefined) {
+          const taxa = encodeURIComponent(JSON.stringify(taxonomyFilter[0]));
+          requestParams = requestParams + `&taxonomyFilter=${taxa}`;
         }
-        if(searchText) {
-          requestParams = requestParams + `&searchText=${searchText}`
+        if (searchText) {
+          requestParams = requestParams + `&searchText=${searchText}`;
         }
-        let requestURL = `${this.API_BASE_URL}/root_organisms/data-files/csv${requestParams}&downloadOption=` + downloadOption;
+        const requestURL = `${this.API_BASE_URL}/root_organisms/data-files/csv${requestParams}&downloadOption=` + downloadOption;
         return this.http.post(`${requestURL}`, filter, {responseType: 'blob'});
       }
-   
+
 }
 

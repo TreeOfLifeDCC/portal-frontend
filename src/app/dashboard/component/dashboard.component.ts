@@ -51,9 +51,9 @@ import { ApiService } from 'src/app/api.service';
 import { DownloadConfirmationDialogComponent } from 'src/app/download-confirmation-dialog-component/download-confirmation-dialog.component';
 import { QueryFilter } from 'src/app/shared/query-filter';
 import { GenomeNoteListComponent } from '../genome-note-list-component/genome-note-list.component';
-import {FormControl, FormGroup, ReactiveFormsModule, Validators} from "@angular/forms";
-import {MatRadioButton, MatRadioGroup} from "@angular/material/radio";
-import {MatProgressBar} from "@angular/material/progress-bar";
+import {FormControl, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
+import {MatRadioButton, MatRadioGroup} from '@angular/material/radio';
+import {MatProgressBar} from '@angular/material/progress-bar';
 
 @Component({
   selector: 'app-dashboard',
@@ -296,7 +296,6 @@ export class DashboardComponent implements OnInit, AfterViewInit {
                   this.queryParams.push(`phylogenyFilters - [${this.phylogenyFilters}]`);
                 }
               }
-              console.log("Before navigation queryParams", this.queryParams);
 
               this.router.navigate([], {
                 relativeTo: this.activatedRoute,
@@ -376,8 +375,6 @@ export class DashboardComponent implements OnInit, AfterViewInit {
       clearTimeout(this.timer);
       const index = this.activeFilters.indexOf(filterValue);
       index !== -1 ? this.activeFilters.splice(index, 1) : this.activeFilters.push(filterValue);
-      console.log(filterValue);
-      console.log(this.activeFilters)
       this.filterChanged.emit();
     }
   }
@@ -459,7 +456,6 @@ export class DashboardComponent implements OnInit, AfterViewInit {
   }
 
   getCurrentStatusColour(status: string) {
-    console.log(status);
     if (['Annotation Complete', 'Done', 'Submitted'].includes(status.trim())) {
       return 'background-color:#8FBc45 ; --mdc-chip-label-text-color: #fff;';
     } else {
@@ -553,8 +549,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
   onDownload() {
     if (this.downloadForm?.valid && this.downloadForm?.touched) {
       this.displayProgressBar = true;
-      const downloadOption = this.downloadForm.value['downloadOption']
-      console.log("downloadOption: ", downloadOption)
+      const downloadOption = this.downloadForm.value['downloadOption'];
       this.downloadFile(downloadOption, true);
     }
     this.displayErrorMsg = true;
@@ -675,7 +670,6 @@ export class DashboardComponent implements OnInit, AfterViewInit {
   }
 
   checkFilterIsActive = (filter: string) => {
-    // console.log(this.filterService.activeFilters);
     if (this.activeFilters.indexOf(filter) !== -1) {
       return 'active-filter';
     }
