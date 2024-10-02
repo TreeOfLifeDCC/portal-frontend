@@ -646,8 +646,7 @@
                                             <mat-header-cell *matHeaderCellDef> FASTQ FTP </mat-header-cell>
                                             <mat-cell *matCellDef="let element" class="assemblies-font">
                                                 <ul class="list-group" style="list-style-type:none;">
-                                                    {{element.fastq_ftp}}
-                                                    @for(fastq of element.fastq_ftp; track $index){
+                                                    @for(fastq of element.fastq_ftp.split(';'); track $index){
                                                         <li >
                                                             <a href="ftp://{{fastq}}">{{element.run_accession}}</a>
                                                         </li>
@@ -661,13 +660,11 @@
                                             <mat-header-cell *matHeaderCellDef> Submitted FTP </mat-header-cell>
                                             <mat-cell *matCellDef="let element" class="assemblies-font">
                                                 <ul class="list-group" style="list-style-type:none;">
-                                                    {{element.submitted_ftp.length}}
-                                                    @for(submitted_ftp of element.submitted_ftp; track $index){
+                                                    @for(submitted_ftp of element.submitted_ftp.split(';'); track $index){
                                                         <li >
                                                             <a href="ftp://{{submitted_ftp}}">{{element.study_accession}}</a>
                                                         </li>
                                                     }
-                                                    
                                                 </ul>
                                             </mat-cell>
                                         </ng-container>
