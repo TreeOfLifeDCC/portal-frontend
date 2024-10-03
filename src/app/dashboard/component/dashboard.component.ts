@@ -191,7 +191,6 @@ export class DashboardComponent implements OnInit, AfterViewInit {
     this.downloadForm = new FormGroup({
       downloadOption: new FormControl('', [Validators.required]),
     });
-
     this.getDisplayedColumns();
     this.titleService.setTitle('Data Portal');
 
