@@ -29,7 +29,7 @@ import {
   MatTable
 } from '@angular/material/table';
 import {ActivatedRoute, Router, RouterLink} from '@angular/router';
-import {MatAnchor} from '@angular/material/button';
+import {MatAnchor, MatButton} from '@angular/material/button';
 import {MatInput} from '@angular/material/input';
 import {HttpClient} from '@angular/common/http';
 import { ApiService } from 'src/app/api.service';
@@ -40,38 +40,39 @@ import { ApiService } from 'src/app/api.service';
   styleUrls: ['./tracking-system.component.css'],
   standalone: true,
     imports: [
-    MatCard,
-    MatCardTitle,
-    MatCardActions,
-    MatListItem,
-    MatList,
-    MatLine,
-    MatChipSet,
-    MatChip,
-    MatIcon,
-    MatProgressSpinner,
-    MatTable,
-    RouterLink,
-    MatHeaderCell,
-    MatColumnDef,
-    MatSortHeader,
-    MatCell,
-    MatHeaderCellDef,
-    MatCellDef,
-    MatPaginator,
-    MatNoDataRow,
-    MatSort,
-    MatAnchor,
-    MatHeaderRow,
-    MatRow,
-    MatInput,
-    MatLabel,
-    MatFormField,
-    MatHeaderRowDef,
-    MatRowDef,
-    NgClass,
-    NgStyle
-]
+        MatCard,
+        MatCardTitle,
+        MatCardActions,
+        MatListItem,
+        MatList,
+        MatLine,
+        MatChipSet,
+        MatChip,
+        MatIcon,
+        MatProgressSpinner,
+        MatTable,
+        RouterLink,
+        MatHeaderCell,
+        MatColumnDef,
+        MatSortHeader,
+        MatCell,
+        MatHeaderCellDef,
+        MatCellDef,
+        MatPaginator,
+        MatNoDataRow,
+        MatSort,
+        MatAnchor,
+        MatHeaderRow,
+        MatRow,
+        MatInput,
+        MatLabel,
+        MatFormField,
+        MatHeaderRowDef,
+        MatRowDef,
+        NgClass,
+        NgStyle,
+        MatButton
+    ]
 })
 export class TrackingSystemComponent implements OnInit, AfterViewInit {
   displayedColumns: string[] = ['organism', 'commonName', 'biosamples', 'raw_data', 'assemblies_status',
@@ -100,6 +101,7 @@ export class TrackingSystemComponent implements OnInit, AfterViewInit {
   timer: any;
   phylogenyFilters: string[] = [];
   symbiontsFilters: any[] = [];
+  displayProgressBar = false;
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
@@ -144,7 +146,7 @@ export class TrackingSystemComponent implements OnInit, AfterViewInit {
                   this.isLoadingResults = true;
                   return this._apiService.getData(this.paginator.pageIndex,
                       this.paginator.pageSize, this.searchValue, this.sort.active, this.sort.direction, this.activeFilters,
-                      this.currentClass, this.phylogenyFilters, 'tracking_status_test'
+                      this.currentClass, this.phylogenyFilters, 'tracking_status'
                   ).pipe(catchError(() => observableOf(null)));
               }),
               map(data => {
@@ -356,16 +358,37 @@ export class TrackingSystemComponent implements OnInit, AfterViewInit {
     }
 
     getStatusStyle(status: string) {
-        if (status !== undefined) {
-            if (status.toLowerCase().includes('waiting')) {
+      if (status !== undefined) {
+            if (status.toString().toLowerCase().includes('waiting')) {
                 return ['#FFC107', 'dark_text_chip'];
             } else {
                 return ['#8FBC45', 'white_text_chip'];
             }
         }
+      // default background colour
+      return ['#8FBC45', 'white_text_chip'];
     }
 
 
+    downloadFile(downloadOption: string, dialog: boolean) {
+        this._apiService.downloadData(downloadOption, this.paginator.pageIndex,
+            this.paginator.pageSize, this.searchValue || '', this.sort.active, this.sort.direction, this.activeFilters,
+            this.currentClass, this.phylogenyFilters, 'tracking_status').subscribe({
+            next: (response: Blob) => {
+                const blobUrl = window.URL.createObjectURL(response);
+                const a = document.createElement('a');
+                a.href = blobUrl;
+                a.download = 'download.csv';
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                this.displayProgressBar = false;
+            },
+            error: error => {
+                console.error('Error downloading the CSV file:', error);
+            }
+        });
+    }
 
 
 
