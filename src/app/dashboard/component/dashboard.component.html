@@ -273,7 +273,7 @@
                              (click)="downloadFile('metadata', false)">
                       Download metadata
                     </button>
-                    @if (this.activeFilters.length > 0) {
+                    @if (this.activeFilters.length > 0 || this.phylogenyFilters.length > 0) {
                         <button type="button"
                                 style="float: right; background-color: #4BBEFD; color: #ffffff;"
                                 class="btn btn-primary" mat-raised-button
