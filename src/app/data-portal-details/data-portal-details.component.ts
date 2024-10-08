@@ -7,11 +7,11 @@ import { MatCell, MatCellDef, MatColumnDef, MatHeaderCell, MatHeaderCellDef, Mat
 import { NgxSpinnerModule, NgxSpinnerService } from 'ngx-spinner';
 import {DomSanitizer, SafeResourceUrl} from '@angular/platform-browser';
 import {ApiService} from '../api.service';
-import {MatTab, MatTabGroup} from '@angular/material/tabs';
+import {MatTab, MatTabContent, MatTabGroup} from '@angular/material/tabs';
 import {MatCard, MatCardActions, MatCardTitle} from '@angular/material/card';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatExpansionModule } from '@angular/material/expansion';
-import { NgClass, NgStyle } from '@angular/common';
+import {NgClass, NgOptimizedImage, NgStyle} from '@angular/common';
 import { MatFormField, MatInput, MatLabel } from '@angular/material/input';
 import { MatAnchor, MatButton } from '@angular/material/button';
 import { MatList, MatListItem } from '@angular/material/list';
@@ -20,6 +20,7 @@ import { MatLine } from '@angular/material/core';
 import { MatIcon } from '@angular/material/icon';
 import { MatProgressSpinner } from '@angular/material/progress-spinner';
 import {FormsModule} from '@angular/forms';
+import {MapClusterComponent} from '../dashboard/map-cluster/map-cluster.component';
 
 @Component({
   selector: 'dashboard-data-portal-organism-details',
@@ -64,8 +65,11 @@ import {FormsModule} from '@angular/forms';
     MatCheckboxModule,
     NgStyle,
     NgClass,
-    FormsModule
-]
+    FormsModule,
+    MapClusterComponent,
+    NgOptimizedImage,
+    MatTabContent
+  ]
 })
 export class DataPortalDetailsComponent implements OnInit, AfterViewInit {
   codes = {
@@ -292,6 +296,7 @@ export class DataPortalDetailsComponent implements OnInit, AfterViewInit {
           const unpackedSymbiontsData = [];
           this.bioSampleObj = data.results[0]._source;
           this.aggregations = data.aggregations;
+          console.log(this.bioSampleObj.orgGeoList);
           this.orgGeoList = this.bioSampleObj.orgGeoList;
           this.specGeoList = this.bioSampleObj.specGeoList;
           if (this.orgGeoList !== undefined && this.orgGeoList.length !== 0) {
@@ -303,7 +308,7 @@ export class DataPortalDetailsComponent implements OnInit, AfterViewInit {
               setTimeout(() => {
                 this.tabgroup.selectedIndex = selected;
               }, 1);
-            }, 400);
+            }, 700);
           }
           if (this.bioSampleObj.goat_info) {
             this.dataSourceGoatInfo = this.bioSampleObj.goat_info.attributes;
