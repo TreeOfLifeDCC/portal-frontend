@@ -308,7 +308,7 @@ export class DataPortalDetailsComponent implements OnInit, AfterViewInit {
               setTimeout(() => {
                 this.tabgroup.selectedIndex = selected;
               }, 1);
-            }, 700);
+            }, 400);
           }
           if (this.bioSampleObj.goat_info) {
             this.dataSourceGoatInfo = this.bioSampleObj.goat_info.attributes;
