@@ -197,13 +197,10 @@ export class TrackingSystemComponent implements OnInit, AfterViewInit {
                       }
                   }
 
-                  this.router.navigate([], {
-                      relativeTo: this.activatedRoute,
-                      queryParams: this.queryParams,
-                      queryParamsHandling: 'merge',
-                      replaceUrl: true,
-                      skipLocationChange: false
-                  });
+                  // update url with the value of the phylogeny current class
+                  this.updateQueryParams('phylogenyCurrentClass');
+
+                  this.replaceUrlQueryParams();
                   return data.results;
               }),
           )
@@ -240,6 +237,16 @@ export class TrackingSystemComponent implements OnInit, AfterViewInit {
         this.searchChanged.emit();
     }
 
+    updateQueryParams(urlParam: string){
+        if (urlParam === 'phylogenyCurrentClass'){
+            const queryParamIndex = this.queryParams.findIndex((element: any) => element.includes('phylogenyCurrentClass - '));
+            if (queryParamIndex > -1) {
+                this.queryParams[queryParamIndex] = `phylogenyCurrentClass - ${this.currentClass}`;
+            } else {
+                this.queryParams.push(`phylogenyCurrentClass - ${this.currentClass}`);
+            }
+        }
+    }
 
     onFilterClick(filterValue: string, phylogenyFilter: boolean = false) {
         if (phylogenyFilter) {
@@ -254,12 +261,8 @@ export class TrackingSystemComponent implements OnInit, AfterViewInit {
             this.currentClass = this.classes[index];
 
             // update url with the value of the phylogeny current class
-            const queryParamIndex = this.queryParams.findIndex(element => element.includes('phylogenyCurrentClass - '));
-            if (queryParamIndex > -1) {
-                this.queryParams[queryParamIndex] = `phylogenyCurrentClass - ${this.currentClass}`;
-            } else {
-                this.queryParams.push(`phylogenyCurrentClass - ${this.currentClass}`);
-            }
+            this.updateQueryParams('phylogenyCurrentClass');
+
             // Replace current parameters with new parameters.
             this.replaceUrlQueryParams();
             this.filterChanged.emit();
