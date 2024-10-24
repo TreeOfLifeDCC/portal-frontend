@@ -1,15 +1,25 @@
 import {Component, Inject, OnDestroy} from '@angular/core';
-import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import {DashboardService} from '../dashboard/services/dashboard.service';
+import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
+import { RouterLink } from '@angular/router';
+import { MatRadioModule } from '@angular/material/radio';
+import { MatButtonModule } from '@angular/material/button';
+import { ApiService } from '../api.service';
 
 @Component({
   selector: 'download-confirmation-dialog',
   templateUrl: './download-confirmation-dialog.component.html',
-  styleUrls: ['./download-confirmation-dialog.component.scss']
+  styleUrls: ['./download-confirmation-dialog.component.scss'],
+  standalone : true,
+  imports:[
+    RouterLink,
+    MatRadioModule,
+    MatButtonModule,
+    MatDialogModule,
+  ]
 })
 export class DownloadConfirmationDialogComponent implements  OnDestroy {
   radioOptions: string;
-  constructor(private dashboardService: DashboardService, public dialogRef: MatDialogRef<DownloadConfirmationDialogComponent>, @Inject(MAT_DIALOG_DATA) public data: any) {
+  constructor(private apiService: ApiService, public dialogRef: MatDialogRef<DownloadConfirmationDialogComponent>, @Inject(MAT_DIALOG_DATA) public data: any) {
   }
 
 
@@ -64,7 +74,7 @@ export class DownloadConfirmationDialogComponent implements  OnDestroy {
       form.submit();
       document.body.removeChild(form);
     } else {
-      this.dashboardService.download(this.data.activeFilters.toString(), this.data.sort.active, this.data.sort.direction, 0, 5000, [], this.data.searchText, this.radioOptions).subscribe(data => {
+      this.apiService.download(this.data.activeFilters.toString(), this.data.sort.active, this.data.sort.direction, 0, 5000, [], this.data.searchText, this.radioOptions).subscribe(data => {
         const blob = new Blob([data], {type: 'application/csv'});
         const downloadURL = window.URL.createObjectURL(data);
         const link = document.createElement('a');

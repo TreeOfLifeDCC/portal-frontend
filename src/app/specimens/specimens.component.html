@@ -1,0 +1,195 @@
+<div class="container" style="padding-top: 65px;">
+    <h1 class="text-center page-header">{{bioSampleId}}</h1>
+    <dl class="row">
+       @if(bioSampleObj?.commonName){
+           <dt class="col-sm-3">Name:</dt>
+           <dd class="col-sm-9" >{{bioSampleObj?.commonName}}</dd>
+       }
+
+
+        <dt class="col-sm-3">BioSample ID:</dt>
+        <dd class="col-sm-9"><a href="http://www.ebi.ac.uk/biosamples/samples/{{bioSampleObj?.accession}}" target="_blank">{{bioSampleObj?.accession}}</a></dd>
+
+        <dt class="col-sm-3">Organism:</dt>
+        <dd class="col-sm-9">{{bioSampleObj?.organism.text}}</dd>
+
+        <dt class="col-sm-3">Organism Part:</dt>
+        <dd class="col-sm-9">{{bioSampleObj?.organismPart}}</dd>
+
+        @if(bioSampleObj?.sex){
+            <dt class="col-sm-3" >Sex:</dt>
+            <dd class="col-sm-9" >{{bioSampleObj?.sex}}</dd>
+        }
+
+
+        <dt class="col-sm-3">Tax ID:</dt>
+        <dd class="col-sm-9">{{bioSampleObj?.taxonId}}</dd>
+        @if(bioSampleObj?.specimenId){
+            <dt class="col-sm-3" >Specimen ID:</dt>
+            <dd class="col-sm-9" >{{bioSampleObj?.specimenId}}</dd>
+        }
+
+        @if(bioSampleObj?.cultureOrStrainId){
+            <dt class="col-sm-3" >Culture ID:</dt>
+            <dd class="col-sm-9" >{{bioSampleObj?.cultureOrStrainId}}</dd>
+        }
+
+        @if(bioSampleObj?.lifestage){
+            <dt class="col-sm-3" >Lifestage:</dt>
+            <dd class="col-sm-9" >{{bioSampleObj?.lifestage}}</dd>
+        }
+
+        @if(bioSampleObj?.relationship){
+            <dt class="col-sm-3" >Relationship:</dt>
+            <dd class="col-sm-9" >{{bioSampleObj?.relationship}}</dd>
+        }
+
+        @if(bioSampleObj?.gal){
+            <dt class="col-sm-3" >Gal:</dt>
+            <dd class="col-sm-9" >{{bioSampleObj?.gal}}</dd>
+        }
+
+        @if(bioSampleObj?.galSampleId){
+            <dt class="col-sm-3" >Gal Sample ID:</dt>
+            <dd class="col-sm-9" >{{bioSampleObj?.galSampleId}}</dd>
+        }
+
+        @if(bioSampleObj?.relationship){
+            <dt class="col-sm-3" >Relationship:</dt>
+            <dd class="col-sm-9" >{{bioSampleObj?.relationship}}</dd>
+        }
+
+        @if(bioSampleObj?.collectedBy){
+            <dt class="col-sm-3">Collected By:</dt>
+            <dd class="col-sm-9" >{{bioSampleObj?.collectedBy}}</dd>
+        }
+
+        @if(bioSampleObj?.collectingInstitution){
+            <dt class="col-sm-3" >Collecting Institution:</dt>
+            <dd class="col-sm-9" >{{bioSampleObj?.collectingInstitution}}</dd>
+        }
+
+        @if(bioSampleObj?.collectionDate){
+            <dt class="col-sm-3" >Collection Date:</dt>
+            <dd class="col-sm-9" >{{bioSampleObj?.collectionDate}}</dd>
+        }
+
+        @if(bioSampleObj?.geographicLocationCountryAndOrSea){
+            <dt class="col-sm-3" >Geographic Location (Country and/or
+                Sea):</dt>
+            <dd class="col-sm-9" >
+                {{bioSampleObj?.geographicLocationCountryAndOrSea}}</dd>
+        }
+
+        @if(bioSampleObj?.geographicLocationRegionAndLocality){
+            <dt class="col-sm-3" >Geographic Location (Region and
+                Locality):</dt>
+            <dd class="col-sm-9" >
+                {{bioSampleObj?.geographicLocationRegionAndLocality}}</dd>
+        }
+
+        @if(bioSampleObj?.geographicLocationLatitude.text){
+            <dt class="col-sm-3" >Geographic Location (Latitude):</dt>
+            <dd class="col-sm-9">
+                {{bioSampleObj?.geographicLocationLatitude.text}}</dd>
+        }
+
+        @if(bioSampleObj?.geographicLocationLongitude.text){
+            <dt class="col-sm-3" >Geographic Location (Longitude):
+            </dt>
+            <dd class="col-sm-9" >
+                {{bioSampleObj?.geographicLocationLongitude.text}}</dd>
+        }
+
+        @if(bioSampleObj?.geographicLocationDepth.text){
+            <dt class="col-sm-3" >Geographic Location (Depth):</dt>
+            <dd class="col-sm-9">
+                {{bioSampleObj?.geographicLocationDepth.text}}</dd>
+        }
+
+        @if(bioSampleObj?.geographicLocationElevation.text){
+            <dt class="col-sm-3" >Geographic Location Elevation:</dt>
+            <dd class="col-sm-9">
+                {{bioSampleObj?.geographicLocationElevation.text}}</dd>
+        }
+
+        @if(bioSampleObj?.habitat){
+            <dt class="col-sm-3" >Habitat:</dt>
+            <dd class="col-sm-9" >{{bioSampleObj?.habitat}}</dd>
+        }
+
+        @if(bioSampleObj?.identifiedBy){
+            <dt class="col-sm-3" >Identified By:</dt>
+            <dd class="col-sm-9" >{{bioSampleObj?.identifiedBy}}</dd>
+        }
+
+        @if(bioSampleObj?.identifierAffiliation){
+            <dt class="col-sm-3" >Identifier Affiliation:</dt>
+            <dd class="col-sm-9" >{{bioSampleObj?.identifierAffiliation}}</dd>
+        }
+
+        @if(bioSampleObj?.specimenVoucher){
+            <dt class="col-sm-3" >Specimen Voucher:</dt>
+            <dd class="col-sm-9" >{{bioSampleObj?.specimenVoucher}}</dd>
+        }
+
+        @if(bioSampleObj?.projectName){
+            <dt class="col-sm-3" >Project Name:</dt>
+            <dd class="col-sm-9" >{{bioSampleObj?.projectName}}</dd>
+        }
+
+        @if(bioSampleObj?.sampleDerivedFrom){
+            <dt class="col-sm-3" >Sample Derived From:</dt>
+            <dd class="col-sm-9" ><a href="http://www.ebi.ac.uk/biosamples/samples/{{bioSampleObj?.sampleDerivedFrom}}" target="_blank">{{bioSampleObj?.sampleDerivedFrom}}</a></dd>
+
+        }
+
+        <!-- Custom Fields Section -->
+        <div class="col-sm-12">
+            <hr>
+            @for(sample of bioSampleObj?.customFields;track $index){
+                <div class="row">
+                    <dt class="col-sm-3">{{sample?.name}}</dt>
+                    <dd class="col-sm-9">
+                        @if(sample.ontologyTerms?.lenght > 0){<a  href="{{sample.ontologyTerms[0]}}">{{sample?.value}}</a>}
+                            {{sample?.value}}
+
+                    </dd>
+                </div>
+            }
+
+        </div>
+        @if(bioSampleObj?.annotation){
+            <div class="col-sm-12" >
+                <h1 class="col-sm-12 page-header">Annotations</h1>
+                <ul class="list-group">
+                    <li class="list-group-item list-group-item-success">
+                        <a href="{{bioSampleObj?.annotation}}">{{bioSampleObj?.annotation}}</a>
+                    </li>
+                </ul>
+            </div>
+        }
+
+    </dl>
+</div>
+
+<hr>
+@if(bioSampleObj?.images){
+    <div class="row" >
+        <div class="col-md-2"></div>
+        <div class="col-md-8">
+            <app-image-slider
+                    [indicatorsVisible]="true"
+                    [animationSpeed]="400"
+                    [slides]="slides"
+                    [autoPlay]="false"
+                    [autoPlaySpeed]="5000"
+            ></app-image-slider>
+        </div>
+        <div class="col-md-2"></div>
+    </div>
+}
+@if(geoLocation){
+    <span ><app-map [lat]="lat" [lng]="lng"></app-map></span>
+}
+

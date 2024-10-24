@@ -1,12 +1,18 @@
 
-<h1 *ngIf="aggs.length > 0">Filters: </h1>
-    <span *ngIf="(aggs.length > 0)">
-    <ng-container *ngFor="let field of aggs" >
-            <span *ngIf="phylSelectedRank != field">
-                 <button type="button" class="btn btn-success">
-                    {{displayActiveFilterName(field)}} <span class="badge badge-light" (click)="clearFilter(field)">X</span>
-                </button>
-            </span>
-    </ng-container>
-    </span>
+@if (aggs.length > 0) {
+  <h1>Filters: </h1>
+}
+@if ((aggs.length > 0)) {
+  <span>
+    @for (field of aggs; track field) {
+      @if (phylSelectedRank != field) {
+        <span>
+          <button type="button" class="btn btn-success">
+            {{displayActiveFilterName(field)}} <span class="badge badge-light" (click)="clearFilter(field)">X</span>
+          </button>
+        </span>
+      }
+    }
+  </span>
+}
 

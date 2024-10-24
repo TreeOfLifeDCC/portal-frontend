@@ -1,18 +1,53 @@
 import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
-import { Sample, samples } from '../../model/dashboard.model';
+import {ActivatedRoute, Router, RouterLink} from '@angular/router';
+import { Sample, samples } from '../dashboard/model/dashboard.model';
 import { MatSort } from '@angular/material/sort';
 import { MatPaginator } from '@angular/material/paginator';
-import { MatTableDataSource } from '@angular/material/table';
-import { DashboardService } from '../../services/dashboard.service';
+import {
+  MatCell,
+  MatCellDef,
+  MatColumnDef,
+  MatHeaderCell,
+  MatHeaderCellDef, MatHeaderRow,
+  MatHeaderRowDef, MatRow, MatRowDef,
+  MatTable,
+  MatTableDataSource
+} from '@angular/material/table';
+import {ApiService} from '../api.service';
+import {MatFormField} from '@angular/material/form-field';
+import {MatInput} from '@angular/material/input';
+import {FormsModule} from '@angular/forms';
+import { NgClass } from '@angular/common';
+import {ImageSliderComponent} from '../image-slider/image-slider.component';
 
 
 @Component({
-  selector: 'app-details',
-  templateUrl: './details.component.html',
-  styleUrls: ['./details.component.css']
+  selector: 'app-organism-details',
+  templateUrl: './organism-details.component.html',
+  styleUrls: ['./organism-details.component.css'],
+  imports: [
+    MatFormField,
+    MatTable,
+    MatInput,
+    MatSort,
+    MatColumnDef,
+    MatHeaderCell,
+    MatHeaderCellDef,
+    MatCell,
+    MatCellDef,
+    MatHeaderRowDef,
+    MatHeaderRow,
+    MatRow,
+    MatRowDef,
+    MatPaginator,
+    FormsModule,
+    NgClass,
+    RouterLink,
+    ImageSliderComponent
+],
+  standalone: true
 })
-export class DetailsComponent implements OnInit {
+export class OrganismDetailsComponent implements OnInit {
 
   bioSampleId;
   bioSampleObj;
@@ -44,12 +79,13 @@ export class DetailsComponent implements OnInit {
   organismName;
   relatedRecords;
   filterJson = {
-    sex: "",
-    organismPart: "",
+    sex: '',
+    organismPart: '',
   };
+  private aggregations: any;
 
-  constructor(private route: ActivatedRoute, private dashboardService: DashboardService, private router: Router) {
-    this.route.params.subscribe(param => this.bioSampleId = param.id);
+  constructor(private route: ActivatedRoute, private apiService: ApiService, private router: Router) {
+    this.route.params.subscribe(param => this.bioSampleId = param.organismId);
   }
 
   ngOnInit(): void {
@@ -58,46 +94,43 @@ export class DetailsComponent implements OnInit {
     this.itemLimitSexFilter = this.filterSize;
     this.itemLimitOrgFilter = this.filterSize;
     this.relatedRecords = [];
-    this.filterJson['sex'] = '';
-    this.filterJson['organismPart'] = '';
+    this.filterJson.sex = '';
+    this.filterJson.organismPart = '';
     this.getBiosamples();
   }
 
   // tslint:disable-next-line:typedef
   getBiosamples() {
-    this.dashboardService.getBiosampleByAccession(this.bioSampleId)
-      .subscribe(
-        data => {
-          const unpackedData = [];
-          for (const item of data.hits.hits) {
-            unpackedData.push(this.unpackData(item));
-          }
-          this.bioSampleObj = unpackedData[0];
-          this.slides = this.generateSlides(this.bioSampleObj);
-          if (this.bioSampleObj.specimens.length > 0) {
-            this.bioSampleObj.specimens.filter(obj => {
-              if (obj.commonName == null) {
-                obj.commonName = "-";
+    this.apiService.getBiosampleByAccession(this.bioSampleId)
+        .subscribe(
+            data => {
+              this.bioSampleObj = data.results[0]._source;
+              this.aggregations = data.aggregations;
+              this.slides = this.generateSlides(this.bioSampleObj);
+              if (this.bioSampleObj.specimens.length > 0) {
+                this.bioSampleObj.specimens.filter(obj => {
+                  if (obj.commonName == null) {
+                    obj.commonName = '-';
+                  }
+                });
+                this.getFiltersForSelectedFilter(this.bioSampleObj.specimens);
               }
-            });
-            this.getFiltersForSelectedFilter(this.bioSampleObj.specimens);
-          }
-          setTimeout(() => {
-            this.organismName = data.organism;
-            this.dataSourceRecords = new MatTableDataSource<any>(this.bioSampleObj.specimens);
-            this.specBioSampleTotalCount = unpackedData?.length;
-            this.dataSourceRecords.paginator = this.paginator;
-            this.dataSourceRecords.sort = this.sort;
-          }, 50);
-        },
-        err => console.log(err)
-      );
+              setTimeout(() => {
+                this.organismName = data.organism;
+                this.dataSourceRecords = new MatTableDataSource<any>(this.bioSampleObj.specimens);
+                this.specBioSampleTotalCount = data.results[0]._source.specimens.length;
+                this.dataSourceRecords.paginator = this.paginator;
+                this.dataSourceRecords.sort = this.sort;
+              }, 50);
+            },
+            err => console.log(err)
+        );
   }
 
   generateSlides(bioSampleObj){
     const output = [];
     const arr = bioSampleObj.images;
-    if (arr!== undefined) {
+    if (arr !== undefined) {
       for (let i = 0; i < arr.length; i++) {
         const obj = {url: encodeURI(arr[i])
               .replace('(', '%28')
@@ -126,7 +159,7 @@ export class DetailsComponent implements OnInit {
       }
       else {
         if (key === 'commonName' && data[key] == null) {
-          dataToReturn[key] = "-"
+          dataToReturn[key] = '-';
         }
         else {
           dataToReturn[key] = data[key];
@@ -145,8 +178,8 @@ export class DetailsComponent implements OnInit {
 
   onFilterClick(event, label: string, filter: string) {
     this.searchText = '';
-    let inactiveClassName = label.toLowerCase().replace(" ", "-") + '-inactive';
-    this.createFilterJson(label.toLowerCase().replace(" ", ""), filter);
+    const inactiveClassName = label.toLowerCase().replace(' ', '-') + '-inactive';
+    this.createFilterJson(label.toLowerCase().replace(' ', ''), filter);
     const filterIndex = this.activeFilters.indexOf(filter);
 
     if (filterIndex !== -1) {
@@ -165,10 +198,10 @@ export class DetailsComponent implements OnInit {
 
   createFilterJson(key, value) {
     if (key === 'sex') {
-      this.filterJson['sex'] = value;
+      this.filterJson.sex = value;
     }
     else if (key === 'organismpart') {
-      this.filterJson['organismPart'] = value;
+      this.filterJson.organismPart = value;
     }
     this.dataSourceRecords.filterPredicate = ((data, filter) => {
       const a = !filter.sex || data.sex === filter.sex;
@@ -201,13 +234,13 @@ export class DetailsComponent implements OnInit {
     this.filters = filters;
     const sexFilterObj = Object.entries(this.filters.sex);
     const orgFilterObj = Object.entries(this.filters.organismPart);
-    let j = 0;
+    const j = 0;
     for (let i = 0; i < sexFilterObj.length; i++) {
-      let jsonObj = { "key": sexFilterObj[i][j], doc_count: sexFilterObj[i][j + 1] };
+      const jsonObj = { key: sexFilterObj[i][j], doc_count: sexFilterObj[i][j + 1] };
       this.sexFilters.push(jsonObj);
     }
     for (let i = 0; i < orgFilterObj.length; i++) {
-      let jsonObj = { "key": orgFilterObj[i][j], doc_count: orgFilterObj[i][j + 1] };
+      const jsonObj = { key: orgFilterObj[i][j], doc_count: orgFilterObj[i][j + 1] };
       this.organismPartFilters.push(jsonObj);
     }
   }
@@ -216,14 +249,14 @@ export class DetailsComponent implements OnInit {
     $('.sex-inactive').removeClass('non-disp');
     $('.org-part-inactive').removeClass('non-disp');
     this.activeFilters = [];
-    this.filterJson['sex'] = '';
-    this.filterJson['organismPart'] = '';
+    this.filterJson.sex = '';
+    this.filterJson.organismPart = '';
     this.dataSourceRecords.filter = this.filterJson;
     this.getBiosamples();
   }
 
   removeFilter(filter: string) {
-    if (filter != undefined) {
+    if (filter !== undefined) {
       const filterIndex = this.activeFilters.indexOf(filter);
       if (this.activeFilters.length !== 0) {
         this.spliceFilterArray(filter);
@@ -231,8 +264,8 @@ export class DetailsComponent implements OnInit {
         this.dataSourceRecords.filter = this.filterJson;
         this.getFiltersForSelectedFilter(this.dataSourceRecords.filteredData);
       } else {
-        this.filterJson['sex'] = '';
-        this.filterJson['organismPart'] = '';
+        this.filterJson.sex = '';
+        this.filterJson.organismPart = '';
         this.dataSourceRecords.filter = this.filterJson;
         this.getBiosamples();
       }
@@ -240,24 +273,20 @@ export class DetailsComponent implements OnInit {
   }
 
   spliceFilterArray(filter: string) {
-    if (this.filterJson['sex'] === filter) {
-      this.filterJson['sex'] = '';
+    if (this.filterJson.sex === filter) {
+      this.filterJson.sex = '';
     }
-    else if (this.filterJson['organismPart'] === filter) {
-      this.filterJson['organismPart'] = '';
+    else if (this.filterJson.organismPart === filter) {
+      this.filterJson.organismPart = '';
     }
   }
 
   // tslint:disable-next-line:typedef
   getFilters(accession) {
-    this.dashboardService.getSpecimenFilters(accession).subscribe(
-      data => {
-        this.filtersMap = data;
-        this.sexFilters = this.filtersMap.sex.filter(i => i !== "");
-        this.organismPartFilters = this.filtersMap.organismPart.filter(i => i !== "");
-      },
-      err => console.log(err)
-    );
+          this.filtersMap = this.aggregations.filters;
+          this.sexFilters = this.aggregations.filters.sex_filter.buckets;
+          this.organismPartFilters = this.aggregations.filters.
+              organism_part_filter.buckets;
 
 
   }
@@ -266,14 +295,14 @@ export class DetailsComponent implements OnInit {
     if (status === 'Annotation Complete') {
       return 'badge badge-pill badge-success';
     } else {
-      return 'badge badge-pill badge-warning'
+      return 'badge badge-pill badge-warning';
     }
   }
 
   getSearchResults(from?, size?) {
     $('.sex-inactive').removeClass('non-disp active');
     $('.org-part-inactive').removeClass('non-disp active');
-    if (this.searchText.length == 0) {
+    if (this.searchText.length === 0) {
       this.getBiosamples();
     }
     else {
@@ -285,13 +314,14 @@ export class DetailsComponent implements OnInit {
         const c = !filter || data.accession.toLowerCase().includes(filter.toLowerCase());
         const d = !filter || data.commonName.toLowerCase().includes(filter.toLowerCase());
         return a || b || c || d;
+        // tslint:disable-next-line:variable-name
       }) as (PeriodicElement, string) => boolean;
       this.getFiltersForSelectedFilter(this.dataSourceRecords.filteredData);
     }
   }
 
   toggleCollapse(filterKey) {
-    if (filterKey == 'Sex') {
+    if (filterKey === 'Sex') {
       if (this.isSexFilterCollapsed) {
         this.itemLimitSexFilter = 10000;
         this.isSexFilterCollapsed = false;
@@ -300,7 +330,7 @@ export class DetailsComponent implements OnInit {
         this.isSexFilterCollapsed = true;
       }
     }
-    else if (filterKey == 'Organism Part') {
+    else if (filterKey === 'Organism Part') {
       if (this.isOrganismPartCollapsed) {
         this.itemLimitOrgFilter = 10000;
         this.isOrganismPartCollapsed = false;
@@ -313,7 +343,8 @@ export class DetailsComponent implements OnInit {
 
   redirectTo(accession: string) {
     this.router.navigateByUrl('/', { skipLocationChange: true }).then(() =>
-      this.router.navigate(["/data/root/details/" + accession]));
+        this.router.navigate(['/data/root/details/' + accession]));
   }
+
 
 }

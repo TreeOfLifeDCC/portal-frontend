@@ -8,8 +8,8 @@ describe('MapClusterComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ MapClusterComponent ]
-    })
+    declarations: [MapClusterComponent]
+})
     .compileComponents();
   }));
 

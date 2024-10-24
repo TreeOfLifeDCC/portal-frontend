@@ -8,8 +8,8 @@ describe('GisComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ GisComponent ]
-    })
+    imports: [GisComponent]
+})
     .compileComponents();
   }));
 
