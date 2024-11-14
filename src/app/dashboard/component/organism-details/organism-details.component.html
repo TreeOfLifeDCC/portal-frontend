@@ -879,6 +879,10 @@
                     <div class="row">
                         <div class="col-md-12">
                             <div class="row">
+                                <mat-form-field class="search-bar">
+                                    <mat-label>Search</mat-label>
+                                    <input matInput (keyup)="symbiontsRecordsSearch($event)" #input>
+                                </mat-form-field>
                                 <table matTableExporter  mat-table [dataSource]="dataSourceSymbiontsRecords" matSort style="width: 100%;">
                                     <ng-container matColumnDef="accession">
                                         <mat-header-cell *matHeaderCellDef mat-sort-header> BioSample ID
@@ -940,6 +944,10 @@
                     <div class="row">
                         <div class="col-md-12">
                             <div class="row">
+                                <mat-form-field class="search-bar">
+                                    <mat-label>Search</mat-label>
+                                    <input matInput (keyup)="symbiontsAssembliesSearch($event)" #input>
+                                </mat-form-field>
                                 <table mat-table matTableExporter [dataSource]="dataSourceSymbiontsAssemblies" matSort style="width: 100%;">
                                     <ng-container matColumnDef="accession">
                                         <mat-header-cell *matHeaderCellDef> Accession </mat-header-cell>
