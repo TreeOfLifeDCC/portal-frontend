@@ -29,7 +29,7 @@
 
     <ul class="list-group" *ngIf="title === 'Symbionts'">
         <ng-container *ngFor="let filter of filterService.symbiontsFilters; let i = index">
-            <li *ngIf="i<itemLimit"
+            <li
                 class="biosample list-group-item d-flex justify-content-between align-items-center biosamples-inactive"
                 id="{{filter.key}}-Symbionts Status" [ngClass]="checkFilterIsActive(filter.filterPrefix+'-'+filter.key)"
                 (click)="onFilterClick($event, filter.label, filter.key)" style="cursor: pointer">
