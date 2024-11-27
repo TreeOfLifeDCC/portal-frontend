@@ -346,6 +346,7 @@ export class TrackingSystemComponent implements OnInit, AfterViewInit {
   // tslint:disable-next-line:typedef
   unpackData(data: any) {
     const dataToReturn = {};
+    dataToReturn['tax_id'] = data['_id'];
     if (data.hasOwnProperty('_source')) {
       data = data._source;
     }

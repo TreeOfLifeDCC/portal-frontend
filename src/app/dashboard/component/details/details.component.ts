@@ -23,7 +23,7 @@ export class DetailsComponent implements OnInit {
   @ViewChild(MatSort) sort: MatSort;
   dataSourceRecords;
   specBioSampleTotalCount;
-  specDisplayedColumns = ['accession', 'organism', 'commonName', 'sex', 'organismPart'];
+  specDisplayedColumns = ['accession_source', 'type', 'accession_target'];
 
 
   isSexFilterCollapsed = true;
@@ -74,7 +74,7 @@ export class DetailsComponent implements OnInit {
           }
           this.bioSampleObj = unpackedData[0];
           this.slides = this.generateSlides(this.bioSampleObj);
-          if (this.bioSampleObj.specimens.length > 0) {
+          if (this.bioSampleObj.specimens?.length > 0) {
             this.bioSampleObj.specimens.filter(obj => {
               if (obj.commonName == null) {
                 obj.commonName = "-";
@@ -84,7 +84,7 @@ export class DetailsComponent implements OnInit {
           }
           setTimeout(() => {
             this.organismName = data.organism;
-            this.dataSourceRecords = new MatTableDataSource<any>(this.bioSampleObj.specimens);
+            this.dataSourceRecords = new MatTableDataSource<any>(this.bioSampleObj.relationships);
             this.specBioSampleTotalCount = unpackedData?.length;
             this.dataSourceRecords.paginator = this.paginator;
             this.dataSourceRecords.sort = this.sort;
@@ -95,6 +95,7 @@ export class DetailsComponent implements OnInit {
   }
 
   generateSlides(bioSampleObj){
+    console.log(bioSampleObj);
     const output = [];
     const arr = bioSampleObj.images;
     if (arr!== undefined) {
