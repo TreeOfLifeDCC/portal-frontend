@@ -428,8 +428,7 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
 
   // tslint:disable-next-line:typedef
   checkTolidExists(data) {
-    return data != undefined && data.tolid != undefined && data.tolid != null && data.tolid.length > 0 &&
-        data.show_tolqc === true;
+    return data.show_tolqc === true;
   }
   // tslint:disable-next-line:typedef
   checkGenomeExists(data) {
@@ -442,17 +441,7 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
   }
   // tslint:disable-next-line:typedef
   generateTolidLink(data) {
-    const organismName = data.organism.split(' ').join('_');
-    if (typeof(data.tolid) === 'string'){
-      const clade = this.codes[data.tolid.charAt(0)];
-      return `https://tolqc.cog.sanger.ac.uk/darwin/${clade}/${organismName}`;
-
-    }else {
-      if (data.tolid.length > 0) {
-        const clade = this.codes[data.tolid[0].charAt(0)];
-        return `https://tolqc.cog.sanger.ac.uk/darwin/${clade}/${organismName}`;
-    }
-    }
+    return data.tolqc_links[0];
   }
   // tslint:disable-next-line:typedef
   getGenomeURL(data) {
