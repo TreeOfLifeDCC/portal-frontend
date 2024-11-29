@@ -137,7 +137,7 @@
                     <ng-container matColumnDef="organism">
                         <mat-header-cell *matHeaderCellDef mat-sort-header> Organism </mat-header-cell>
                         <mat-cell *matCellDef="let element">
-                            <a [routerLink]="['/data/root/details/', element.tax_id]">
+                            <a [routerLink]="['/data/root/details/', element.organism]">
                                 {{element.organism}}</a>
                         </mat-cell>
                     </ng-container>
