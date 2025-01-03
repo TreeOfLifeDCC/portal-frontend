@@ -9,7 +9,7 @@ import {
   ViewChild
 } from '@angular/core';
 import {merge, Observable, of as observableOf} from 'rxjs';
-import { ActivatedRoute, Router, RouterLink, Params } from '@angular/router';
+import {ActivatedRoute, Router, RouterLink, Params, NavigationEnd} from '@angular/router';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort, MatSortHeader } from '@angular/material/sort';
 import {MatCell, MatCellDef, MatColumnDef, MatHeaderCell, MatHeaderCellDef,
@@ -188,6 +188,15 @@ export class DashboardComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit(): void {
+    // reload page if user clicks on menu link
+    this.router.events.subscribe((event) => {
+      if (event instanceof NavigationEnd) {
+        if (event.urlAfterRedirects === '/data') {
+          this.refreshPage();
+        }
+      }
+    });
+
     this.downloadForm = new FormGroup({
       downloadOption: new FormControl('', [Validators.required]),
     });
@@ -660,7 +669,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
 
   }
 
-  removeFilter() {
+  refreshPage() {
     clearTimeout(this.timer);
     this.activeFilters = [];
     this.phylogenyFilters = [];

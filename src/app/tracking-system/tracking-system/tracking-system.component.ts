@@ -28,7 +28,7 @@ import {
   MatNoDataRow, MatRow, MatRowDef,
   MatTable
 } from '@angular/material/table';
-import {ActivatedRoute, Router, RouterLink} from '@angular/router';
+import {ActivatedRoute, NavigationEnd, Router, RouterLink} from '@angular/router';
 import {MatAnchor, MatButton} from '@angular/material/button';
 import {MatInput} from '@angular/material/input';
 import {HttpClient} from '@angular/common/http';
@@ -111,6 +111,15 @@ export class TrackingSystemComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit(): void {
+      // reload page if user clicks on menu link
+      this.router.events.subscribe((event) => {
+          if (event instanceof NavigationEnd) {
+              if (event.urlAfterRedirects === '/tracking') {
+                  this.refreshPage();
+              }
+          }
+      });
+
       // get url parameters
       const queryParamMap = this.activatedRoute.snapshot['queryParamMap'];
       const params = queryParamMap['params'];
@@ -275,8 +284,6 @@ export class TrackingSystemComponent implements OnInit, AfterViewInit {
             clearTimeout(this.timer);
             const index = this.activeFilters.indexOf(filterValue);
             index !== -1 ? this.activeFilters.splice(index, 1) : this.activeFilters.push(filterValue);
-            console.log(filterValue);
-            console.log(this.activeFilters)
             this.filterChanged.emit();
         }
     }
@@ -351,7 +358,7 @@ export class TrackingSystemComponent implements OnInit, AfterViewInit {
           return 'background-color: #D8BCAA; color: black';
       }
   }
-    removeFilter() {
+    refreshPage() {
         clearTimeout(this.timer);
         this.activeFilters = [];
         this.phylogenyFilters = [];
