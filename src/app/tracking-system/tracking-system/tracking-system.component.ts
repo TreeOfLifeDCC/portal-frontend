@@ -33,7 +33,8 @@ import {MatAnchor, MatButton} from '@angular/material/button';
 import {MatInput} from '@angular/material/input';
 import {HttpClient} from '@angular/common/http';
 import { ApiService } from 'src/app/api.service';
-import {MatProgressBar} from "@angular/material/progress-bar";
+import {MatProgressBar} from '@angular/material/progress-bar';
+import {FormsModule} from '@angular/forms';
 
 @Component({
   selector: 'app-tracking-system',
@@ -73,7 +74,8 @@ import {MatProgressBar} from "@angular/material/progress-bar";
         NgClass,
         NgStyle,
         MatButton,
-        MatProgressBar
+        MatProgressBar,
+        FormsModule
     ]
 })
 export class TrackingSystemComponent implements OnInit, AfterViewInit {
@@ -135,6 +137,8 @@ export class TrackingSystemComponent implements OnInit, AfterViewInit {
                   } else if (params[key].includes('phylogenyCurrentClass - ')) {
                       const phylogenyCurrentClass = params[key].split('phylogenyCurrentClass - ')[1];
                       this.currentClass = phylogenyCurrentClass;
+                  } else if (params[key].includes('searchValue - ')) {
+                      this.searchValue = params[key].split('searchValue - ')[1];
                   } else {
                       this.activeFilters.push(params[key]);
                   }
@@ -199,6 +203,12 @@ export class TrackingSystemComponent implements OnInit, AfterViewInit {
 
                   // add filters to URL query parameters
                   this.queryParams = [...this.activeFilters];
+
+                  // add search value to URL query param
+                  if (this.searchValue) {
+                      this.queryParams.push(`searchValue - ${this.searchValue}`);
+                  }
+
                   if (this.phylogenyFilters && this.phylogenyFilters.length) {
                       const index = this.queryParams.findIndex(element => element.includes('phylogenyFilters - '));
                       if (index > -1) {
@@ -364,6 +374,7 @@ export class TrackingSystemComponent implements OnInit, AfterViewInit {
         clearTimeout(this.timer);
         this.activeFilters = [];
         this.phylogenyFilters = [];
+        this.searchValue = '';
         this.currentClass = 'kingdom';
         this.filterChanged.emit();
 

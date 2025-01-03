@@ -51,7 +51,7 @@ import { ApiService } from 'src/app/api.service';
 import { DownloadConfirmationDialogComponent } from 'src/app/download-confirmation-dialog-component/download-confirmation-dialog.component';
 import { QueryFilter } from 'src/app/shared/query-filter';
 import { GenomeNoteListComponent } from '../genome-note-list-component/genome-note-list.component';
-import {FormControl, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
+import {FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators} from '@angular/forms';
 import {MatRadioButton, MatRadioGroup} from '@angular/material/radio';
 import {MatProgressBar} from '@angular/material/progress-bar';
 
@@ -97,7 +97,8 @@ import {MatProgressBar} from '@angular/material/progress-bar';
     MatRadioGroup,
     MatRadioButton,
     MatError,
-    MatProgressBar
+    MatProgressBar,
+    FormsModule
   ],
   standalone: true
 })
@@ -216,6 +217,8 @@ export class DashboardComponent implements OnInit, AfterViewInit {
           } else if (params[key].includes('phylogenyCurrentClass - ')) {
             const phylogenyCurrentClass = params[key].split('phylogenyCurrentClass - ')[1];
             this.currentClass = phylogenyCurrentClass;
+          } else if (params[key].includes('searchValue - ')){
+            this.searchValue = params[key].split('searchValue - ')[1];
           } else {
             this.activeFilters.push(params[key]);
           }
@@ -296,6 +299,12 @@ export class DashboardComponent implements OnInit, AfterViewInit {
 
               // add filters to URL query parameters
               this.queryParams = [...this.activeFilters];
+
+              // add search value to URL query param
+              if (this.searchValue) {
+                this.queryParams.push(`searchValue - ${this.searchValue}`);
+              }
+
               if (this.phylogenyFilters && this.phylogenyFilters.length) {
                 const index = this.queryParams.findIndex(element => element.includes('phylogenyFilters - '));
                 if (index > -1) {
@@ -676,6 +685,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
     this.activeFilters = [];
     this.phylogenyFilters = [];
     this.currentClass = 'kingdom';
+    this.searchValue = '';
     this.filterChanged.emit();
     this.router.navigate([]);
   }
