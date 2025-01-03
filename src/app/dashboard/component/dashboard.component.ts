@@ -559,7 +559,6 @@ export class DashboardComponent implements OnInit, AfterViewInit {
 
   onDownload() {
     if (this.downloadForm?.valid && this.downloadForm?.touched) {
-      this.displayProgressBar = true;
       const downloadOption = this.downloadForm.value['downloadOption'];
       this.downloadFile(downloadOption, true);
     }
@@ -577,6 +576,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
   }
 
   downloadFile(downloadOption: string, dialog: boolean) {
+    this.displayProgressBar = true;
     this.apiService.downloadData(downloadOption, this.paginator.pageIndex,
         this.paginator.pageSize, this.searchValue || '', this.sort.active, this.sort.direction, this.activeFilters,
         this.currentClass, this.phylogenyFilters, 'data_portal').subscribe({
@@ -588,7 +588,6 @@ export class DashboardComponent implements OnInit, AfterViewInit {
         document.body.appendChild(a);
         a.click();
         document.body.removeChild(a);
-        this.displayProgressBar = false;
         if (dialog) {
           // close dialog box
           setTimeout(() => {
@@ -598,6 +597,9 @@ export class DashboardComponent implements OnInit, AfterViewInit {
       },
       error: error => {
         console.error('Error downloading the CSV file:', error);
+      },
+      complete: () => {
+        this.displayProgressBar = false;
       }
     });
   }

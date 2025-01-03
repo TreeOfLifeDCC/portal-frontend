@@ -33,6 +33,7 @@ import {MatAnchor, MatButton} from '@angular/material/button';
 import {MatInput} from '@angular/material/input';
 import {HttpClient} from '@angular/common/http';
 import { ApiService } from 'src/app/api.service';
+import {MatProgressBar} from "@angular/material/progress-bar";
 
 @Component({
   selector: 'app-tracking-system',
@@ -71,7 +72,8 @@ import { ApiService } from 'src/app/api.service';
         MatRowDef,
         NgClass,
         NgStyle,
-        MatButton
+        MatButton,
+        MatProgressBar
     ]
 })
 export class TrackingSystemComponent implements OnInit, AfterViewInit {
@@ -381,6 +383,7 @@ export class TrackingSystemComponent implements OnInit, AfterViewInit {
 
 
     downloadFile(downloadOption: string, dialog: boolean) {
+        this.displayProgressBar = true;
         this._apiService.downloadData(downloadOption, this.paginator.pageIndex,
             this.paginator.pageSize, this.searchValue || '', this.sort.active, this.sort.direction, this.activeFilters,
             this.currentClass, this.phylogenyFilters, 'tracking_status').subscribe({
@@ -396,6 +399,9 @@ export class TrackingSystemComponent implements OnInit, AfterViewInit {
             },
             error: error => {
                 console.error('Error downloading the CSV file:', error);
+            },
+            complete: () => {
+                this.displayProgressBar = false;
             }
         });
     }
