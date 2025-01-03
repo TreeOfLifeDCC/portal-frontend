@@ -171,11 +171,8 @@
 
           <br>
             <mat-card  class="card  filter-top">
-
               <mat-card-title class="card-header filter-heading">Experiment
                 Type
-
-
                 @if
                   (experimentTypeFilters.length > itemLimit && isCollapsed) {
                   <i class="material-icons float-right"
@@ -264,8 +261,6 @@
                  @if(activeFilters.length > 0 || phylogenyFilters.length > 0){
                     <button class="btn btn-primary" type="button" (click)="removeFilter()"> Remove all filters </button>
                  }
-
-
                   <br>
 
                     <button  class="btn btn-primary" style="float: right;

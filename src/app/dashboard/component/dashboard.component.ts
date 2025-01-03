@@ -555,7 +555,6 @@ export class DashboardComponent implements OnInit, AfterViewInit {
       this.downloadFile(downloadOption, true);
     }
     this.displayErrorMsg = true;
-
   }
 
   openDownloadDialog(value: string) {
@@ -668,7 +667,6 @@ export class DashboardComponent implements OnInit, AfterViewInit {
     this.currentClass = 'kingdom';
     this.filterChanged.emit();
     this.router.navigate([]);
-
   }
 
   checkFilterIsActive = (filter: string) => {
