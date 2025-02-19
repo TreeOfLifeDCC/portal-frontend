@@ -2,14 +2,15 @@ import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { OrganismDetailsComponent } from './organism-details.component';
 
-describe('OrganismDetailsComponent', () => {
+// @ts-ignore
+describe('DetailsComponent', () => {
   let component: OrganismDetailsComponent;
   let fixture: ComponentFixture<OrganismDetailsComponent>;
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ OrganismDetailsComponent ]
-    })
+    imports: [OrganismDetailsComponent]
+})
     .compileComponents();
   }));
 

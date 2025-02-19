@@ -8,8 +8,8 @@ describe('TaxanomyComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ TaxanomyComponent ]
-    })
+    declarations: [TaxanomyComponent]
+})
     .compileComponents();
   }));
 

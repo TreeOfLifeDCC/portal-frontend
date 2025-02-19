@@ -7,7 +7,7 @@ import {Observable} from "rxjs";
 })
 export class StatusesService {
 
-  private API_BASE_URL = 'https://portal.darwintreeoflife.org/api';
+  private API_BASE_URL = 'https://python-portal-backend-725097469588.europe-west2.run.app/';
   // private API_BASE_URL = 'http://45.88.81.118/api';
   // private API_BASE_URL = 'http://localhost:8080';
 
@@ -24,9 +24,7 @@ export class StatusesService {
     return this.http.get(`${this.API_BASE_URL}/statuses${requestParams}`);
   }
 
-  public getBiosampleByOrganism(organism: string): Observable<any> {
-    return this.http.get(`${this.API_BASE_URL}/statuses/detail/${organism}`);
-  }
+
 
   public getStatusesFilters(): Observable<any> {
     return this.http.get(`${this.API_BASE_URL}/statuses/filters`);

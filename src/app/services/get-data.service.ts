@@ -12,7 +12,7 @@ export class GetDataService {
   constructor(private http: HttpClient) { }
 
   // @ts-ignore
-  public getAllPublications(offset, limit, filter?): Observable<any> {
+  getAllPublications(offset, limit, filter?) {
     const filters = [];
     let url = `${this.API_BASE_URL}articles?offset=${offset}&limit=${limit}`;
     for (const key of filter) {
@@ -27,6 +27,6 @@ export class GetDataService {
     for (const key of filters) {
       url = `${url}&${key}`;
     }
-    return this.http.get(url);
+    return this.http.get<any>(url);
   }
 }

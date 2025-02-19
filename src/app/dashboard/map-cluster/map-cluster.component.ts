@@ -19,6 +19,7 @@ L.Marker.prototype.options.icon = iconDefault;
 
 @Component({
   selector: 'app-mapcluster',
+  standalone: true,
   templateUrl: './map-cluster.component.html',
   styleUrls: ['./map-cluster.component.css']
 })
