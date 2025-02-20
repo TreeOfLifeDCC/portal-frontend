@@ -294,6 +294,12 @@ export class DashboardComponent implements OnInit, AfterViewInit {
                     'experimentType');
               }
 
+              // remove empty experiment types
+              if (this.experimentTypeFilters.length > 0) {
+                this.experimentTypeFilters = this.experimentTypeFilters.filter(bucket => bucket.key !== '');
+              }
+
+
               // get last phylogeny element for filter button
               this.lastPhylogenyVal = this.phylogenyFilters.slice(-1)[0];
 
