@@ -1,175 +1,95 @@
 <div class="container" style="padding-top: 65px;">
-    <h1 class="text-center page-header">{{bioSampleId}}</h1>
+    <h1 class="text-center page-header">{{ bioSampleId }}</h1>
     <dl class="row">
 
-            <dt class="col-sm-3">Name:</dt>
 
-            <dd class="col-sm-9" >   @if(bioSampleObj?.commonName) {{{bioSampleObj?.commonName}}}</dd>
-
-
-
-        <dt class="col-sm-3">BioSample ID:</dt>
-        <dd class="col-sm-9"><a href="http://www.ebi.ac.uk/biosamples/samples/{{bioSampleObj?.accession}}" target="_blank">{{bioSampleObj?.accession}}</a></dd>
-
-        <dt class="col-sm-3">Organism:</dt>
-        <dd class="col-sm-9">{{bioSampleObj?.organism.text}}</dd>
-
-        <dt class="col-sm-3">Organism Part:</dt>
-        <dd class="col-sm-9">{{bioSampleObj?.organismPart}}</dd>
-
-        @if(bioSampleObj?.sex){
-            <dt class="col-sm-3" >Sex:</dt>
-            <dd class="col-sm-9" >{{bioSampleObj?.sex}}</dd>
-        }
-
-
-        <dt class="col-sm-3">Tax ID:</dt>
-        <dd class="col-sm-9">{{bioSampleObj?.taxonId}}</dd>
-
-        @if(bioSampleObj?.specimenId){
-            <dt class="col-sm-3" >Specimen ID:</dt>
-            <dd class="col-sm-9" >{{bioSampleObj?.specimenId}}</dd>
-        }
-
-        @if(bioSampleObj?.cultureOrStrainId){
-            <dt class="col-sm-3" >Culture ID:</dt>
-            <dd class="col-sm-9" >{{bioSampleObj?.cultureOrStrainId}}</dd>
-        }
-
-        @if(bioSampleObj?.lifestage){
-            <dt class="col-sm-3">Lifestage:</dt>
-            <dd class="col-sm-9" >{{bioSampleObj?.lifestage}}</dd>
-        }
-
-        @if(bioSampleObj?.relationship){
-            <dt class="col-sm-3" >Relationship:</dt>
-            <dd class="col-sm-9" >{{bioSampleObj?.relationship}}</dd>
-        }
-
-        @if(bioSampleObj?.gal){
-            <dt class="col-sm-3">Gal:</dt>
-            <dd class="col-sm-9" >{{bioSampleObj?.gal}}</dd>
-        }
-
-        @if(bioSampleObj?.galSampleId){
-            <dt class="col-sm-3" >Gal Sample ID:</dt>
-            <dd class="col-sm-9" >{{bioSampleObj?.galSampleId}}</dd>
-        }
-
-        @if(bioSampleObj?.relationship){
-            <dt class="col-sm-3">Relationship:</dt>
-            <dd class="col-sm-9" >{{bioSampleObj?.relationship}}</dd>
-        }
-
-        @if(bioSampleObj?.collectedBy){
-            <dt class="col-sm-3" >Collected By:</dt>
-            <dd class="col-sm-9" >{{bioSampleObj?.collectedBy}}</dd>
-        }
-
-        @if(bioSampleObj?.collectingInstitution){
-            <dt class="col-sm-3" >Collecting Institution:</dt>
-            <dd class="col-sm-9" >{{bioSampleObj?.collectingInstitution}}</dd>
-        }
-
-        @if(bioSampleObj?.collectionDate){
-            <dt class="col-sm-3" >Collection Date:</dt>
-            <dd class="col-sm-9" >{{bioSampleObj?.collectionDate}}</dd>
-        }
-
-        @if(bioSampleObj?.geographicLocationCountryAndOrSea){
-            <dt class="col-sm-3" >Geographic Location (Country and/or
-                Sea):</dt>
-            <dd class="col-sm-9" >
-                {{bioSampleObj?.geographicLocationCountryAndOrSea}}</dd>
-        }
-        @if(bioSampleObj?.geographicLocationRegionAndLocality){
-            <dt class="col-sm-3">Geographic Location (Region and
-                Locality):</dt>
-            <dd class="col-sm-9">
-                {{bioSampleObj?.geographicLocationRegionAndLocality}}</dd>
-        }
-
-        @if(bioSampleObj?.geographicLocationLatitude.text){
-            <dt class="col-sm-3" >Geographic Location (Latitude):</dt>
-            <dd class="col-sm-9" >
-              {{bioSampleObj?.geographicLocationLatitude.text}}</dd>
-        }
-
-        @if(bioSampleObj?.geographicLocationLongitude.text){
-            <dt class="col-sm-3" >Geographic Location (Longitude):
-            </dt>
-            <dd class="col-sm-9" >
-                {{bioSampleObj?.geographicLocationLongitude.text}}</dd>
-        }
-
-        @if(bioSampleObj?.geographicLocationDepth.text){
-            <dt class="col-sm-3" >Geographic Location (Depth):</dt>
-            <dd class="col-sm-9">
-                {{bioSampleObj?.geographicLocationDepth.text}}</dd>
-        }
-
-        @if(bioSampleObj?.geographicLocationElevation.text){
-            <dt class="col-sm-3" >Geographic Location Elevation:</dt>
-            <dd class="col-sm-9" >
-                {{bioSampleObj?.geographicLocationElevation.text}}</dd>
-        }
-
-        @if(bioSampleObj?.habitat){
-            <dt class="col-sm-3" >Habitat:</dt>
-            <dd class="col-sm-9">{{bioSampleObj?.habitat}}</dd>
-        }
-
-        @if(bioSampleObj?.identifiedBy){
-            <dt class="col-sm-3" >Identified By:</dt>
-            <dd class="col-sm-9" >{{bioSampleObj?.identifiedBy}}</dd>
-        }
-
-        @if(bioSampleObj?.identifierAffiliation){
-            <dt class="col-sm-3" >Identifier Affiliation:</dt>
-            <dd class="col-sm-9" >{{bioSampleObj?.identifierAffiliation}}</dd>
-        }
-
-        @if(bioSampleObj?.specimenVoucher){
-            <dt class="col-sm-3" >Specimen Voucher:</dt>
-            <dd class="col-sm-9" >{{bioSampleObj?.specimenVoucher}}</dd>
-        }
-
-        @if(bioSampleObj?.projectName){
-            <dt class="col-sm-3" >Project Name:</dt>
-            <dd class="col-sm-9" >{{bioSampleObj?.projectName}}</dd>
-        }
-
-        @if(bioSampleObj?.sampleDerivedFrom){
-            <dt class="col-sm-3" >Sample Derived From:</dt>
-            <dd class="col-sm-9" ><a href="http://www.ebi.ac.uk/biosamples/samples/{{bioSampleObj?.sampleDerivedFrom}}" target="_blank">{{bioSampleObj?.sampleDerivedFrom}}</a></dd>
-
-        }
-
-        <!-- Custom Fields Section -->
-        <div class="col-sm-12">
-            <hr>
-
-            @for(sample of bioSampleObj?.customFields; track $index ){
-                <div class="row">
-                    <dt class="col-sm-3">{{sample?.name}}</dt>
-                    <dd class="col-sm-9">
-                        @if(sample.ontologyTerms?.length > 0){
-                            <a href="{{sample.ontologyTerms[0]}}">{{sample?.value}}</a>
-                        }
-                        {{sample.value}}
-                    </dd>
-                </div>
+            @if (bioSampleObj?.commonName) {
+                <dt class="col-sm-3"><b>Common Name:</b></dt>
+                <dd class="col-sm-9">{{ bioSampleObj?.commonName }}</dd>
             }
 
-        </div>
-        @if(bioSampleObj?.specimens?.length){
-            <div class="col-sm-12" >
+            @if (bioSampleObj?.accession) {
+                <dt class="col-sm-3"><b>BioSamples ID:</b></dt>
+                <dd class="col-sm-9"><a href="http://www.ebi.ac.uk/biosamples/samples/{{bioSampleObj?.accession}}"
+                       target="_blank">{{ bioSampleObj?.accession }}</a></dd>
+            }
+
+            @if (bioSampleObj?.tracking_status) {
+                <dt class="col-sm-3"><b>Tracking Status:</b></dt>
+                <dd class="col-sm-9">{{ bioSampleObj?.tracking_status }}</dd>
+            }
+
+            @if (bioSampleObj?.organism) {
+                <dt class="col-sm-3"><b>Organism:</b></dt>
+                <dd class="col-sm-9">{{ bioSampleObj?.organism.text }}</dd>
+            }
+
+            @if (bioSampleObj?.taxId) {
+                <dt class="col-sm-3"><b>Tax ID:</b></dt>
+                <dd class="col-sm-9">{{ bioSampleObj?.taxId }}</dd>
+            }
+
+            <!-- custom fields -->
+            @for (sample of bioSampleObj?.customFields; track sample) {
+                <dt class="col-sm-3">{{ sample?.name }}</dt>
+                <dd class="col-sm-9">
+                    @if (sample.ontologyTerms?.length > 0) {
+                        <a href="{{sample.ontologyTerms[0]}}">{{ sample?.value }}</a>
+                    }
+                    {{ sample.value }}
+                </dd>
+            }
+
+
+        <br>
+        @if (bioSampleObj?.relationships?.length) {
+            <div class="col-sm-12">
+                <hr>
+                <h1 class="col-sm-12 page-header">Relationships</h1>
+
+                <div class="table-container">
+                    <table mat-table [dataSource]="relationshipRecords" matSort class="mat-elevation-z8">
+
+                        <ng-container matColumnDef="source">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header> Source</th>
+                            <td mat-cell *matCellDef="let element"> {{ element.source }}</td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="type">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header> Relationships Type</th>
+                            <td mat-cell *matCellDef="let element"> {{ element.type }}</td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="target">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header> Target</th>
+                            <td mat-cell *matCellDef="let element"> {{ element.target }}</td>
+                        </ng-container>
+
+                        <thead>
+                        <tr mat-header-row *matHeaderRowDef="relationshipDisplayedColumns"></tr>
+                        </thead>
+                        <tbody>
+                        <tr mat-row *matRowDef="let row; columns: relationshipDisplayedColumns;"></tr>
+                        </tbody>
+                    </table>
+                    <mat-paginator pageSize="10" [length]="bioSampleObj['relationships']"></mat-paginator>
+                </div>
+            </div>
+
+        }
+
+        @if (bioSampleObj?.specimens?.length) {
+            <div class="col-sm-12">
                 <hr>
                 <h1 class="col-sm-12 page-header">Related Specimens</h1>
-                <button type="button" style="float: right; background-color: #4BBEFD; color: #ffffff;" class="btn btn-primary" mat-raised-button (click)="exporter.exportTable('csv', {fileName:'related-specimens-metadata'})">Download metadata</button>
+                <button type="button" style="float: right; background-color: #4BBEFD; color: #ffffff;"
+                        class="btn btn-primary" mat-raised-button
+                        (click)="exporter.exportTable('csv', {fileName:'related-specimens-metadata'})">Download metadata
+                </button>
                 <mat-form-field class="search-bar">
                     <mat-label>Search</mat-label>
-                    <input matInput [(ngModel)]='searchText' (keyup)="getSearchResults()" placeholder="Ex. ILLUMINA" #input>
+                    <input matInput [(ngModel)]='searchText' (keyup)="getSearchResults()" placeholder="Ex. ILLUMINA"
+                           #input>
                 </mat-form-field>
                 <div class="row">
                     <div class="col-sm-2">
@@ -178,22 +98,29 @@
                                 <div class="card bg-lite mb-3 filter-top">
                                     <h3 class="card-header filter-heading">
                                         <span #lbltextSex>Sex</span>
-                                        @if(sexFilters.length > 3 && isSexFilterCollapsed){
-                                            <i class="material-icons float-right sex-inactive" (click)="toggleCollapse(lbltextSex.innerText)">add</i>
+                                        @if (sexFilters.length > 3 && isSexFilterCollapsed) {
+                                            <i class="material-icons float-right sex-inactive"
+                                               (click)="toggleCollapse(lbltextSex.innerText)">add</i>
                                         }
-                                        @if(sexFilters.length > 3 && !isSexFilterCollapsed){
-                                            <i class="material-icons float-right sex-inactive" (click)="toggleCollapse(lbltextSex.innerText)">remove</i>
+                                        @if (sexFilters.length > 3 && !isSexFilterCollapsed) {
+                                            <i class="material-icons float-right sex-inactive"
+                                               (click)="toggleCollapse(lbltextSex.innerText)">remove</i>
                                         }
 
                                     </h3>
-                                    <ul id="sex-inactive" class="list-group" [ngClass]="{'long-list': itemLimitSexFilter > filterSize}">
-                                        @for(filter of sexFilters; track $index){
-                                            <ng-container >
-                                                @if($index<itemLimitSexFilter && filter.key != ''){
-                                                    <li id="{{$index}}" class="list-group-item d-flex justify-content-between align-items-center sex-inactive" [ngClass]="checkFilterIsActive(filter.key)" (click)="onFilterClick($event, lbltextSex.innerText, filter.key)" style="cursor: pointer; padding: .75rem 0.25rem;"
+                                    <ul id="sex-inactive" class="list-group"
+                                        [ngClass]="{'long-list': itemLimitSexFilter > filterSize}">
+                                        @for (filter of sexFilters; track $index) {
+                                            <ng-container>
+                                                @if ($index < itemLimitSexFilter && filter.key != '') {
+                                                    <li id="{{$index}}"
+                                                        class="list-group-item d-flex justify-content-between align-items-center sex-inactive"
+                                                        [ngClass]="checkFilterIsActive(filter.key)"
+                                                        (click)="onFilterClick($event, lbltextSex.innerText, filter.key)"
+                                                        style="cursor: pointer; padding: .75rem 0.25rem;"
                                                     >
-                                                        {{filter.key}}
-                                                        <span class="badge badge-pill badge-info">{{filter.doc_count}}</span>
+                                                        {{ filter.key }}
+                                                        <span class="badge badge-pill badge-info">{{ filter.doc_count }}</span>
                                                     </li>
                                                 }
 
@@ -208,23 +135,30 @@
                                 <div class="card bg-lite mb-3 filter-top">
                                     <h3 class="card-header filter-heading">
                                         <span #lbltextOrgPart>Organism Part</span>
-                                        @if(organismPartFilters.length > 3 && isOrganismPartCollapsed){
-                                            <i class="material-icons float-right org-part-inactive" (click)="toggleCollapse(lbltextOrgPart.innerText)">add</i>
+                                        @if (organismPartFilters.length > 3 && isOrganismPartCollapsed) {
+                                            <i class="material-icons float-right org-part-inactive"
+                                               (click)="toggleCollapse(lbltextOrgPart.innerText)">add</i>
                                         }
-                                        @if(organismPartFilters.length > 3 && !isOrganismPartCollapsed){
-                                        <i class="material-icons float-right org-part-inactive" (click)="toggleCollapse(lbltextOrgPart.innerText)">remove</i>
+                                        @if (organismPartFilters.length > 3 && !isOrganismPartCollapsed) {
+                                            <i class="material-icons float-right org-part-inactive"
+                                               (click)="toggleCollapse(lbltextOrgPart.innerText)">remove</i>
                                         }
 
 
                                     </h3>
-                                    <ul id="org-part-inactive" class="list-group" [ngClass]="{'long-list': itemLimitOrgFilter > filterSize}">
-                                        @for(filter of organismPartFilters; track $index){
-                                            <ng-container >
-                                                @if($index<itemLimitOrgFilter && filter.key != ''){
-                                                    <li id="{{$index}}" class="list-group-item d-flex justify-content-between align-items-center org-part-inactive" [ngClass]="checkFilterIsActive(filter.key)" (click)="onFilterClick($event, lbltextOrgPart.innerText, filter.key)" style="cursor: pointer; padding: .75rem 0.25rem;"
+                                    <ul id="org-part-inactive" class="list-group"
+                                        [ngClass]="{'long-list': itemLimitOrgFilter > filterSize}">
+                                        @for (filter of organismPartFilters; track $index) {
+                                            <ng-container>
+                                                @if ($index < itemLimitOrgFilter && filter.key != '') {
+                                                    <li id="{{$index}}"
+                                                        class="list-group-item d-flex justify-content-between align-items-center org-part-inactive"
+                                                        [ngClass]="checkFilterIsActive(filter.key)"
+                                                        (click)="onFilterClick($event, lbltextOrgPart.innerText, filter.key)"
+                                                        style="cursor: pointer; padding: .75rem 0.25rem;"
                                                     >
-                                                        {{filter.key}}
-                                                        <span class="badge badge-pill badge-info">{{filter.doc_count}}</span>
+                                                        {{ filter.key }}
+                                                        <span class="badge badge-pill badge-info">{{ filter.doc_count }}</span>
                                                     </li>
                                                 }
 
@@ -238,11 +172,11 @@
                     </div>
                     <div class="col-sm-10">
                         <div class="row">
-                            @if(activeFilters.length !== 0){
-                                <h1 >Filters:
-                                    @for (filter of activeFilters; track $index){
+                            @if (activeFilters.length !== 0) {
+                                <h1>Filters:
+                                    @for (filter of activeFilters; track $index) {
                                         <button type="button" class="btn btn-success">
-                                            {{filter}}
+                                            {{ filter }}
                                             <span class="badge badge-light" (click)="removeFilter(filter)">X</span>
                                         </button>
                                     }
@@ -253,55 +187,57 @@
                                 </h1>
                             }
 
-                            <table mat-table matTableExporter  [dataSource]="dataSourceRecords" matSort style="width: 100%;">
+                            <table mat-table matTableExporter [dataSource]="dataSourceRecords" matSort
+                                   style="width: 100%;">
                                 <ng-container matColumnDef="accession">
-                                    <mat-header-cell *matHeaderCellDef mat-sort-header> BioSample ID </mat-header-cell>
+                                    <mat-header-cell *matHeaderCellDef mat-sort-header> BioSample ID</mat-header-cell>
                                     <mat-cell *matCellDef="let element" class="txt-center">
                                         <a [routerLink]="['/specimen', element.accession]">
-                                            {{element.accession}}</a>
+                                            {{ element.accession }}</a>
                                     </mat-cell>
                                 </ng-container>
 
                                 <ng-container matColumnDef="organism">
-                                    <mat-header-cell *matHeaderCellDef mat-sort-header> Organism </mat-header-cell>
+                                    <mat-header-cell *matHeaderCellDef mat-sort-header> Organism</mat-header-cell>
                                     <mat-cell *matCellDef="let element" class="txt-center">
-                                        {{element.organism}}
+                                        {{ element.organism }}
                                     </mat-cell>
                                 </ng-container>
 
                                 <ng-container matColumnDef="commonName">
-                                    <mat-header-cell *matHeaderCellDef mat-sort-header>Common Name </mat-header-cell>
-                                    <mat-cell *matCellDef="let element" class="txt-center"> {{element?.commonName}}
+                                    <mat-header-cell *matHeaderCellDef mat-sort-header>Common Name</mat-header-cell>
+                                    <mat-cell *matCellDef="let element" class="txt-center"> {{ element?.commonName }}
                                     </mat-cell>
                                 </ng-container>
 
                                 <ng-container matColumnDef="sex">
-                                    <mat-header-cell *matHeaderCellDef mat-sort-header> Sex </mat-header-cell>
-                                    <mat-cell *matCellDef="let element" class="txt-center"> {{element.sex}} </mat-cell>
+                                    <mat-header-cell *matHeaderCellDef mat-sort-header> Sex</mat-header-cell>
+                                    <mat-cell *matCellDef="let element" class="txt-center"> {{ element.sex }}</mat-cell>
                                 </ng-container>
 
                                 <ng-container matColumnDef="organismPart">
-                                    <mat-header-cell *matHeaderCellDef mat-sort-header> Organism part </mat-header-cell>
-                                    <mat-cell *matCellDef="let element" class="txt-center"> {{element.organismPart}}
+                                    <mat-header-cell *matHeaderCellDef mat-sort-header> Organism part</mat-header-cell>
+                                    <mat-cell *matCellDef="let element" class="txt-center"> {{ element.organismPart }}
                                     </mat-cell>
                                 </ng-container>
 
                                 <mat-header-row *matHeaderRowDef="specDisplayedColumns"></mat-header-row>
                                 <mat-row *matRowDef="let row; columns: specDisplayedColumns;"></mat-row>
                             </table>
-                            <mat-paginator style="width: 100%;" [pageSizeOptions]="[20, 30, 50]" showFirstLastButtons [length]="bioSampleTotalCount"></mat-paginator>
+                            <mat-paginator style="width: 100%;" [pageSizeOptions]="[20, 30, 50]" showFirstLastButtons
+                                           [length]="bioSampleTotalCount"></mat-paginator>
                         </div>
                     </div>
                 </div>
             </div>
         }
 
-        @if(bioSampleObj?.annotation){
-            <div class="col-sm-12" >
+        @if (bioSampleObj?.annotation) {
+            <div class="col-sm-12">
                 <h1 class="col-sm-12 page-header">Annotations</h1>
                 <ul class="list-group">
                     <li class="list-group-item list-group-item-success">
-                        <a href="{{bioSampleObj?.annotation}}">{{bioSampleObj?.annotation}}</a>
+                        <a href="{{bioSampleObj?.annotation}}">{{ bioSampleObj?.annotation }}</a>
                     </li>
                 </ul>
             </div>
@@ -310,8 +246,8 @@
     </dl>
 
     <hr>
-    @if(bioSampleObj?.images){
-        <div class="row" >
+    @if (bioSampleObj?.images) {
+        <div class="row">
             <div class="col-md-2"></div>
             <div class="col-md-8">
                 <app-image-slider

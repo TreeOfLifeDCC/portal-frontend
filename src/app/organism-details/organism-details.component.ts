@@ -1,7 +1,7 @@
 import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
 import {ActivatedRoute, Router, RouterLink} from '@angular/router';
 import { Sample, samples } from '../dashboard/model/dashboard.model';
-import { MatSort } from '@angular/material/sort';
+import {MatSort, MatSortHeader} from '@angular/material/sort';
 import { MatPaginator } from '@angular/material/paginator';
 import {
   MatCell,
@@ -30,6 +30,7 @@ import {ImageSliderComponent} from '../image-slider/image-slider.component';
     MatTable,
     MatInput,
     MatSort,
+    MatSortHeader,
     MatColumnDef,
     MatHeaderCell,
     MatHeaderCellDef,
@@ -51,7 +52,7 @@ export class OrganismDetailsComponent implements OnInit {
 
   bioSampleId;
   bioSampleObj;
-
+  relationshipRecords: any;
   slides: any[];
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
@@ -59,7 +60,7 @@ export class OrganismDetailsComponent implements OnInit {
   dataSourceRecords;
   specBioSampleTotalCount;
   specDisplayedColumns = ['accession', 'organism', 'commonName', 'sex', 'organismPart'];
-
+  relationshipDisplayedColumns: string[] = ['source', 'type', 'target'];
 
   isSexFilterCollapsed = true;
   isOrganismPartCollapsed = true;
@@ -99,7 +100,6 @@ export class OrganismDetailsComponent implements OnInit {
     this.getBiosamples();
   }
 
-  // tslint:disable-next-line:typedef
   getBiosamples() {
     this.apiService.getBiosampleByAccession(this.bioSampleId)
         .subscribe(
@@ -107,7 +107,8 @@ export class OrganismDetailsComponent implements OnInit {
               this.bioSampleObj = data.results[0]._source;
               this.aggregations = data.aggregations;
               this.slides = this.generateSlides(this.bioSampleObj);
-              if (this.bioSampleObj.specimens.length > 0) {
+
+              if (this.bioSampleObj.specimens && Array.isArray(this.bioSampleObj.specimens)){
                 this.bioSampleObj.specimens.filter(obj => {
                   if (obj.commonName == null) {
                     obj.commonName = '-';
@@ -118,10 +119,26 @@ export class OrganismDetailsComponent implements OnInit {
               setTimeout(() => {
                 this.organismName = data.organism;
                 this.dataSourceRecords = new MatTableDataSource<any>(this.bioSampleObj.specimens);
-                this.specBioSampleTotalCount = data.results[0]._source.specimens.length;
+                if (
+                    data.results &&
+                    data.results.length > 0 &&
+                    data.results[0]._source &&
+                    Array.isArray(data.results[0]._source.specimens)
+                ) {
+                  this.specBioSampleTotalCount = data.results[0]._source.specimens.length;
+                } else {
+                  this.specBioSampleTotalCount = 0;
+                }
                 this.dataSourceRecords.paginator = this.paginator;
                 this.dataSourceRecords.sort = this.sort;
               }, 50);
+
+
+              this.relationshipRecords = new MatTableDataSource<any>(this.bioSampleObj?.relationships ?? []);
+              setTimeout(() => {
+                this.relationshipRecords.paginator = this.paginator;
+                this.relationshipRecords.sort = this.sort;
+              });
             },
             err => console.log(err)
         );

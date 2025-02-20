@@ -150,7 +150,34 @@ export class DataPortalDetailsComponent implements OnInit, AfterViewInit {
   dataSourceRelatedAnnotation;
   dataSourceRelatedAnnotationCount;
 
-  experimentColumnsDefination = [{ column: 'study_accession', selected: true }, { column: 'secondary_study_accession', selected: false }, { column: 'sample_accession', selected: true }, { column: 'secondary_sample_accession', selected: false }, { column: 'experiment_accession', selected: true }, { column: 'run_accession', selected: true }, { column: 'submission_accession', selected: false }, { column: 'tax_id', selected: true }, { column: 'scientific_name', selected: true }, { column: 'instrument_platform', selected: false }, { column: 'instrument_model', selected: false }, { column: 'library_name', selected: false }, { column: 'nominal_length', selected: false }, { column: 'library_layout', selected: false }, { column: 'library_strategy', selected: false }, { column: 'library_source', selected: false }, { column: 'library_selection', selected: false }, { column: 'read_count', selected: false }, { column: 'base_count', selected: false }, { column: 'center_name', selected: false }, { column: 'first_public', selected: false }, { column: 'last_updated', selected: false }, { column: 'experiment_title', selected: false }, { column: 'study_title', selected: false }, { column: 'study_alias', selected: false }, { column: 'experiment_alias', selected: false }, { column: 'run_alias', selected: false }, { column: 'fastq_bytes', selected: false }, { column: 'fastq_md5', selected: false }, { column: 'fastq_ftp', selected: true }, { column: 'fastq_aspera', selected: false }, { column: 'fastq_galaxy', selected: false }, { column: 'submitted_bytes', selected: false }, { column: 'submitted_md5', selected: false }, { column: 'submitted_ftp', selected: true }, { column: 'submitted_aspera', selected: false }, { column: 'submitted_galaxy', selected: false }, { column: 'submitted_format', selected: false }, { column: 'sra_bytes', selected: false }, { column: 'sra_md5', selected: false }, { column: 'sra_ftp', selected: true }, { column: 'sra_aspera', selected: false }, { column: 'sra_galaxy', selected: false }, { column: 'cram_index_ftp', selected: false }, { column: 'cram_index_aspera', selected: false }, { column: 'cram_index_galaxy', selected: false }, { column: 'sample_alias', selected: false }, { column: 'broker_name', selected: false }, { column: 'sample_title', selected: false }, { column: 'nominal_sdev', selected: false }, { column: 'first_created', selected: false }, { column: 'library_construction_protocol', selected: true }];
+  // tslint:disable-next-line:max-line-length
+  experimentColumnsDefination = [{ column: 'study_accession', selected: true },
+    { column: 'secondary_study_accession', selected: false },
+    { column: 'sample_accession', selected: true }, { column: 'secondary_sample_accession', selected: false },
+    { column: 'experiment_accession', selected: true }, { column: 'run_accession', selected: true },
+    { column: 'submission_accession', selected: false }, { column: 'tax_id', selected: true },
+    { column: 'scientific_name', selected: true }, { column: 'instrument_platform', selected: false },
+    { column: 'instrument_model', selected: false }, { column: 'library_name', selected: false },
+    { column: 'nominal_length', selected: false }, { column: 'library_layout', selected: false },
+    { column: 'library_strategy', selected: false }, { column: 'library_source', selected: false },
+    { column: 'library_selection', selected: false }, { column: 'read_count', selected: false },
+    { column: 'base_count', selected: false }, { column: 'center_name', selected: false },
+    { column: 'first_public', selected: false }, { column: 'last_updated', selected: false },
+    { column: 'experiment_title', selected: false }, { column: 'study_title', selected: false },
+    { column: 'study_alias', selected: false }, { column: 'experiment_alias', selected: false },
+    { column: 'run_alias', selected: false }, { column: 'fastq_bytes', selected: false },
+    { column: 'fastq_md5', selected: false }, { column: 'fastq_ftp', selected: true },
+    { column: 'fastq_aspera', selected: false }, { column: 'fastq_galaxy', selected: false },
+    { column: 'submitted_bytes', selected: false }, { column: 'submitted_md5', selected: false },
+    { column: 'submitted_ftp', selected: true }, { column: 'submitted_aspera', selected: false },
+    { column: 'submitted_galaxy', selected: false }, { column: 'submitted_format', selected: false },
+    { column: 'sra_bytes', selected: false }, { column: 'sra_md5', selected: false },
+    { column: 'sra_ftp', selected: true }, { column: 'sra_aspera', selected: false },
+    { column: 'sra_galaxy', selected: false }, { column: 'cram_index_ftp', selected: false },
+    { column: 'cram_index_aspera', selected: false }, { column: 'cram_index_galaxy', selected: false },
+    { column: 'sample_alias', selected: false }, { column: 'broker_name', selected: false },
+    { column: 'sample_title', selected: false }, { column: 'nominal_sdev', selected: false },
+    { column: 'first_created', selected: false }, { column: 'library_construction_protocol', selected: true }];
 
   displayedColumnsFiles = [];
   displayedColumnsAnnotations = [];
@@ -330,7 +357,7 @@ export class DataPortalDetailsComponent implements OnInit, AfterViewInit {
           for (const item of this.bioSampleObj.records) {
             unpackedData.push(this.unpackData(item));
           }
-          if (this.bioSampleObj.symbionts_records && data.symbionts_records.length) {
+          if (this.bioSampleObj.symbionts_records && Array.isArray(this.bioSampleObj.symbionts_records)) {
             for (const item of this.bioSampleObj.symbionts_records) {
               unpackedSymbiontsData.push(this.unpackData(item));
             }

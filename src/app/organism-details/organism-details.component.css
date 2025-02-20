@@ -10,3 +10,9 @@
     margin-top: 15px;
     width: 100%;
 }
+
+.table-container {
+    width: 100%;
+    overflow-x: auto;
+    margin-top: 20px;
+}
