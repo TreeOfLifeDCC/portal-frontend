@@ -54,6 +54,7 @@ import { GenomeNoteListComponent } from '../genome-note-list-component/genome-no
 import {FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators} from '@angular/forms';
 import {MatRadioButton, MatRadioGroup} from '@angular/material/radio';
 import {MatProgressBar} from '@angular/material/progress-bar';
+import {NgClass, NgStyle} from '@angular/common';
 
 @Component({
   selector: 'app-dashboard',
@@ -98,7 +99,9 @@ import {MatProgressBar} from '@angular/material/progress-bar';
     MatRadioButton,
     MatError,
     MatProgressBar,
-    FormsModule
+    FormsModule,
+    NgClass,
+    NgStyle
   ],
   standalone: true
 })

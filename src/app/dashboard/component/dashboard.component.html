@@ -297,10 +297,9 @@
                     matSortDirection="asc" >
                     <!-- Number Column -->
                     <ng-container matColumnDef="organism" style=" max-width: 200px !important;">
-                      <th mat-header-cell *matHeaderCellDef
-                        mat-sort-header disableClear >Organism
+                      <th mat-header-cell *matHeaderCellDef mat-sort-header  [ngClass]="'w-150 th-left'" disableClear >Organism
                       </th>
-                      <td mat-cell *matCellDef="let row" >
+                      <td mat-cell *matCellDef="let row"  [ngClass]="'w-150 th-left'">
                         <a [routerLink]="['/data',row._source.organism]">
                           {{ row['_source']['organism'] }}
                         </a>
@@ -309,21 +308,21 @@
 
                     <!-- Title Column -->
                     <ng-container matColumnDef="tolid">
-                      <th mat-header-cell *matHeaderCellDef
+                      <th mat-header-cell *matHeaderCellDef [ngClass]="'w-200 th-left'"
                         disableClear >ToL ID
                       </th>
                       <td mat-cell
-                        *matCellDef="let row"> {{typeofTol(row['_source']['tolid'])}}
+                        *matCellDef="let row" [ngClass]="'w-200 th-left'"> {{typeofTol(row['_source']['tolid'])}}
                       </td>
                     </ng-container>
 
                     <!-- Title Column -->
                     <ng-container matColumnDef="INSDC_ID" >
-                      <th mat-header-cell *matHeaderCellDef
+                      <th mat-header-cell *matHeaderCellDef [ngClass]="'w-100-dashboard th-left'"
                         disableClear
                         >INSDC ID
                       </th>
-                      <td mat-cell *matCellDef="let row"
+                      <td mat-cell *matCellDef="let row" [ngClass]="'w-100-dashboard th-left'"
                         >
                         {{getINSDC_ID(row)}}
                       </td>
@@ -331,33 +330,30 @@
                     </ng-container>
                     <!-- Title Column -->
                     <ng-container matColumnDef="commonName">
-                      <th mat-header-cell *matHeaderCellDef
+                      <th mat-header-cell *matHeaderCellDef [ngClass]="'w-120 th-left'"
                         mat-sort-header disableClear
                         >Common Name
                       </th>
                       <td mat-cell
-                        *matCellDef="let row"
+                        *matCellDef="let row" [ngClass]="'w-120 th-left'"
 
                         >{{row['_source']['commonName']}}
                       </td>
                     </ng-container>
 
                     <ng-container matColumnDef="commonNameSource">
-                      <th mat-header-cell *matHeaderCellDef
+                      <th mat-header-cell *matHeaderCellDef [ngClass]="'w-120 th-center'"
                         >Common Name
                         Source
                       </th>
-                      <td mat-cell *matCellDef="let row" [ngClass]="'w-120 th-center'">
+                      <td mat-cell *matCellDef="let row" style="justify-content: center;" [ngClass]="'w-120 th-center'">
                         @if (row['_source']['commonNameSource'] &&
                           row['_source']['commonName']) {
                           <mat-chip
-                            [style]="getCommonNameSourceStyle(row['_source']['commonNameSource'])"
-
-                            >
+                            [style]="getCommonNameSourceStyle(row['_source']['commonNameSource'])">
                             {{row['_source']['commonNameSource']}}
                           </mat-chip>
                         }
-
                       </td>
                     </ng-container>
 
@@ -377,13 +373,11 @@
 
 
                     <ng-container matColumnDef="goatInfo">
-                      <th mat-header-cell *matHeaderCellDef style=" padding-right: 0px;"  [ngClass]="'w-219 th-left'">External
+                      <th mat-header-cell *matHeaderCellDef style="padding: 5px 0;"  [ngClass]="'w-219 th-left'">External
                         References
                       </th>
-                      <td mat-cell *matCellDef="let row"  style="padding-right: 0px;" [ngClass]="'w-219 th-left external_references_class'">
-
+                      <td mat-cell *matCellDef="let row"  style="padding: 5px 0;" [ngClass]="'w-219 th-left external_references_class'">
                         <span>
-
                           <mat-chip style="background-color: #4BBEFD">
                             <a class="goat-color" target="_blank" href="{{generateGoatInfoLink(row._source)}}"
                               style="cursor: pointer">
@@ -516,7 +510,6 @@
                     *matHeaderRowDef="displayedColumns"></tr>
                     <tr mat-row
                     *matRowDef="let row; columns: displayedColumns;"></tr>
-
                     <tr class="mat-row" *matNoDataRow>
                       <td class="mat-cell" colspan="4">No data matching
                         the filter
