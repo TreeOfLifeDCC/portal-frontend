@@ -24,7 +24,7 @@ export class ApiService {
 
         const projectNames = ['DToL', '25 genomes', 'ERGA', 'CBP', 'ASG'];
         const offset = pageIndex * pageSize;
-        let url = `https://python-portal-backend-725097469588.europe-west2.run.app/${indexName}?limit=${pageSize}&offset=${offset}`;
+        let url = `${this.API_BASE_URL}/${indexName}?limit=${pageSize}&offset=${offset}`;
         if (searchValue) {
             url += `&search=${searchValue}`;
         }
@@ -78,12 +78,8 @@ export class ApiService {
     }
 
     getRootOrganismById(organismName: any, indexName = 'data_portal') {
-        const url = `https://python-portal-backend-725097469588.europe-west2.run.app/${indexName}/${organismName}`;
+        const url = `${this.API_BASE_URL}/${indexName}/${organismName}`;
         return this.http.get<any>(url);
-    }
-
-    getSummaryData() {
-        return this.http.get<any>('https://portal.erga-biodiversity.eu/api/summary');
     }
 
     public getBiosampleByAccession(accession: string): Observable<any> {

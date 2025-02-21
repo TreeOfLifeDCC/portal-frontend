@@ -194,8 +194,8 @@
                         style="cursor: pointer">
 
                         <span >{{ filter.key }}</span>
-                        <span class="badge badge-pill badge-info badge-space">{{
-                          filter.doc_count }}
+                        <span class="badge badge-pill badge-info badge-space">
+                            {{filter?.distinct_docs?.parent_doc_count?.value}}
                         </span>
 
                       </li>
