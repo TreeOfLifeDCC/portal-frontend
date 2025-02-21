@@ -21,6 +21,7 @@ import { MatIcon } from '@angular/material/icon';
 import { MatProgressSpinner } from '@angular/material/progress-spinner';
 import {FormsModule} from '@angular/forms';
 import {MapClusterComponent} from '../dashboard/map-cluster/map-cluster.component';
+import { TABLE_CONFIG } from './table-config';
 
 @Component({
   selector: 'dashboard-data-portal-organism-details',
@@ -221,7 +222,7 @@ export class DataPortalDetailsComponent implements OnInit, AfterViewInit {
   @Input() height = 200;
   @Input() width = 200;
   @Input() image: string;
-
+  dataDownloaded: any = [];
   isLoading: boolean;
 
 
@@ -367,6 +368,8 @@ export class DataPortalDetailsComponent implements OnInit, AfterViewInit {
           }
 
           this.organismName = this.bioSampleObj.organism;
+          this.dataDownloaded = unpackedData;
+
           this.dataSourceRecords = new MatTableDataSource<any>(unpackedData);
           this.dataSourceSymbiontsRecords = new MatTableDataSource<any>(unpackedSymbiontsData);
           this.specBioSampleTotalCount = unpackedData?.length;
@@ -799,4 +802,28 @@ export class DataPortalDetailsComponent implements OnInit, AfterViewInit {
       return tolid.join(', ');
     }
   }
+
+  downloadCSV(tableName, fileName) {
+    const { headers, cellNames } = TABLE_CONFIG[tableName] || { headers: [], cellNames: [] };
+
+    const csvRows = [];
+    csvRows.push(headers.join(','));
+
+    this.dataDownloaded.forEach((row: any) => {
+      const values = cellNames.map(key => row[key] || '');
+      csvRows.push(values.map(val => `"${val}"`).join(','));
+    });
+
+    const csvContent = csvRows.join('\n');
+    const blob = new Blob([csvContent], { type: 'text/csv' });
+    const url = window.URL.createObjectURL(blob);
+
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `${fileName}.csv`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+  }
+
 }

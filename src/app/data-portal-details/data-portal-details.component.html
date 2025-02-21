@@ -60,8 +60,12 @@
         <div class="col-md-12" >
           <hr>
             <h1 class="col-md-12 page-header">Related Organisms</h1>
-            <button type="button" style="float: right; background-color: #4BBEFD; color: #ffffff;" class="btn btn-primary" mat-raised-button (click)="exporter.exportTable('csv', {fileName:'related-organisms-metadata'})">Download
-            metadata</button>
+            <button type="button" style="float: right; background-color: #4BBEFD; color: #ffffff;"
+                    class="btn btn-primary" mat-raised-button
+                    (click)="downloadCSV('relatedOrganismsTable', 'related-organisms-metadata')">
+                Download metadata
+            </button>
+
             <mat-form-field class="search-bar">
               <mat-label>Search</mat-label>
               <input matInput [(ngModel)]='searchText' (keyup)="getSearchResults()" placeholder="Ex. Salmo Trutta" #input>
@@ -152,10 +156,7 @@
                                 <span class="badge badge-pill badge-info">{{filter.doc_count}}</span>
                               </li>
                             }
-
                           }
-
-
                         </ul>
                       </div>
                     </div>
@@ -262,8 +263,12 @@
                 </div>
               </mat-expansion-panel>
               <br />
-              <button type="button" style="float: right; background-color: #4BBEFD; color: #ffffff;" class="btn btn-primary" mat-raised-button (click)="exporter.exportTable('csv', {fileName:'related-annotation-metadata'})">Download
-              metadata</button>
+            <button type="button" style="float: right; background-color: #4BBEFD; color: #ffffff;"
+                    class="btn btn-primary" mat-raised-button
+                    (click)="downloadCSV('relatedAnnotationTable', 'related-annotation-metadata')">
+                Download metadata
+            </button>
+
               <mat-form-field class="search-bar">
                 <mat-label>Search</mat-label>
                 <input matInput (keyup)="relatedAnnotationSearch($event)" #input>
@@ -463,8 +468,12 @@
             <div class="col-md-12" >
               <hr>
                 <h1 class="col-md-12 page-header">Annotation</h1>
-                <button type="button" style="float: right; background-color: #4BBEFD; color: #ffffff;" class="btn btn-primary" mat-raised-button (click)="exporter.exportTable('csv', {fileName:'annotation-metadata'})">Download
-                metadata</button>
+              <button type="button" style="float: right; background-color: #4BBEFD; color: #ffffff;"
+                      class="btn btn-primary" mat-raised-button
+                      (click)="downloadCSV('annotationTable', 'annotation-metadata')">
+                  Download metadata
+              </button>
+
                 <button type="button" style="float: right; background-color: #4BBEFD; color: #ffffff;" class="btn btn-success" mat-raised-button (click)="downloadAnnotation()">Download all Annotations</button>
                 <mat-form-field class="search-bar">
                   <mat-label>Search</mat-label>
@@ -536,8 +545,12 @@
               <div class="col-md-12" >
                 <hr>
                   <h1 class="col-md-12 page-header">Related assemblies</h1>
-                  <button type="button" style="float: right; background-color: #4BBEFD; color: #ffffff;" class="btn btn-primary" mat-raised-button (click)="exporter.exportTable('csv', {fileName:'assemblies-metadata'})">Download
-                  metadata</button>
+                <button type="button" style="float: right; background-color: #4BBEFD; color: #ffffff;"
+                        class="btn btn-primary" mat-raised-button
+                        (click)="downloadCSV('relatedAssembliesTable', 'related-assemblies-metadata')">
+                    Download metadata
+                </button>
+
                   <button type="button" style="float: right; background-color: #4BBEFD; color: #ffffff;" class="btn btn-success" mat-raised-button (click)="downloadAssemblies()">Download all Assemblies</button>
                   <mat-form-field class="search-bar">
                     <mat-label>Search</mat-label>
@@ -593,10 +606,14 @@
                       </div>
                     </mat-expansion-panel>
                     <br />
-                    <button type="button" style="float: right; background-color: #4BBEFD; color: #ffffff;"
-                      class="btn btn-primary" mat-raised-button
-                      (click)="exporter.exportTable('csv', {fileName:'experiments-metadata'})">
-                    Download metadata</button>
+
+                  <button type="button" style="float: right; background-color: #4BBEFD; color: #ffffff;"
+                          class="btn btn-primary" mat-raised-button
+                          (click)="downloadCSV('relatedFilesTable', 'related-experiments-metadata')">
+                      Download metadata
+                  </button>
+
+
                     <button type="button" style="float: right; background-color: #4BBEFD; color: #ffffff;"
                       class="btn btn-success" mat-raised-button (click)="downloadRawFiles()">
                     Download all FASTQ files</button>

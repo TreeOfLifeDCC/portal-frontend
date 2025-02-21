@@ -48,7 +48,6 @@ import { MatInput } from '@angular/material/input';
 import {MatAnchor, MatButton } from '@angular/material/button';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { ApiService } from 'src/app/api.service';
-import { DownloadConfirmationDialogComponent } from 'src/app/download-confirmation-dialog-component/download-confirmation-dialog.component';
 import { QueryFilter } from 'src/app/shared/query-filter';
 import { GenomeNoteListComponent } from '../genome-note-list-component/genome-note-list.component';
 import {FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators} from '@angular/forms';
@@ -561,16 +560,6 @@ export class DashboardComponent implements OnInit, AfterViewInit {
     return genomeNotesURL;
   }
 
-  // openGenomeNoteDialog(data: any) {
-  //   const dialogRef = this.dialog.open(GenomeNoteListComponent, {
-  //     width: '550px',
-  //     autoFocus: false,
-  //     data: {
-  //       genomNotes: data.genome_notes,
-  //     }
-  //   });
-  // }
-
   onCancelDialog() {
     this.dialogRef.close();
   }
@@ -631,24 +620,6 @@ export class DashboardComponent implements OnInit, AfterViewInit {
       this.itemLimit = 5;
       this.isCollapsed = true;
     }
-  }
-  openDialog() {
-    const dialogRef = this.dialog.open(DownloadConfirmationDialogComponent, {
-      width: '550px',
-      autoFocus: false,
-      data: {
-        message: 'Are you sure want to donload?',
-        activeFilters: this.activeFilters.toString(),
-        sort: this.sort,
-        taxonomy: { rank: 'superkingdom', taxonomy: 'Eukaryota', childRank: 'kingdom' },
-        searchText: this.searchValue,
-        selectedOptions: [0, 1, 2],
-        hideAnnotation: this.aggregations?.annotation_complete.buckets.length === 0 &&
-            this.aggregations?.annotation_complete.buckets.length === 0 ,
-        hideAssemblies: this.aggregations?.assemblies_status.buckets.length === 0 ,
-        hideRawData: this.aggregations?.raw_data.buckets.length === 0
-      }
-    });
   }
 
   expanded() {
