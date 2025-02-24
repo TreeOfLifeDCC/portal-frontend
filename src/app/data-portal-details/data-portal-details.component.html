@@ -207,7 +207,7 @@
                                         }
 
                                         <table matTableExporter mat-table [dataSource]="dataSourceRecords" matSort
-                                               style="width: 100%;" class="relatedOrganismsTable">
+                                               style="width: 100%;" class="relatedOrganismsTable" #sortOrganisms="matSort">
                                             <ng-container matColumnDef="accession">
                                                 <mat-header-cell *matHeaderCellDef mat-sort-header> BioSample ID
                                                 </mat-header-cell>
@@ -263,9 +263,9 @@
                                             <mat-header-row *matHeaderRowDef="specDisplayedColumns"></mat-header-row>
                                             <mat-row *matRowDef="let row; columns: specDisplayedColumns;"></mat-row>
                                         </table>
-                                        <mat-paginator #relatedOrganisms style="width: 100%;"
+                                        <mat-paginator style="width: 100%;"
                                                        [pageSizeOptions]="[10, 20, 30]" showFirstLastButtons
-                                                       [length]="specBioSampleTotalCount"></mat-paginator>
+                                                       [length]="specBioSampleTotalCount" #paginatorOrganisms></mat-paginator>
                                     </div>
                                 </div>
                             </div>
@@ -311,7 +311,7 @@
                                 <input matInput (keyup)="relatedAnnotationSearch($event)" #input>
                             </mat-form-field>
                             <table mat-table matTableExporter [dataSource]="dataSourceRelatedAnnotation" matSort
-                                   style="width: 100%;">
+                                   #sortAnnotation="matSort" style="width: 100%;">
                                 <ng-container matColumnDef="study_accession">
                                     <mat-header-cell *matHeaderCellDef> Study Accession</mat-header-cell>
                                     <mat-cell *matCellDef="let element" class="txt-center">
@@ -502,7 +502,7 @@
                                 <mat-header-row *matHeaderRowDef="displayedColumnsAnnotations"></mat-header-row>
                                 <mat-row *matRowDef="let row; columns: displayedColumnsAnnotations;"></mat-row>
                             </table>
-                            <mat-paginator #relatedAnnotationTable [pageSizeOptions]="[10, 20, 30]" showFirstLastButtons
+                            <mat-paginator #paginatorAnnotation [pageSizeOptions]="[10, 20, 30]" showFirstLastButtons
                                            [length]="dataSourceRelatedAnnotationCount"
                                            style="width: 100%;"></mat-paginator>
                         </div>
@@ -528,6 +528,7 @@
                                 <input matInput (keyup)="annotationSearch($event)" #input>
                             </mat-form-field>
                             <table mat-table matTableExporter [dataSource]="dataSourceAnnotation" matSort
+                                   #sortAnnotationSection="matSort"
                                    style="width: 100%;" class="annotationTable">
                                 <ng-container matColumnDef="accession">
                                     <mat-header-cell *matHeaderCellDef> Accession</mat-header-cell>
@@ -587,7 +588,7 @@
                                 <mat-header-row *matHeaderRowDef="displayedColumnsAnnotation"></mat-header-row>
                                 <mat-row *matRowDef="let row; columns: displayedColumnsAnnotation;"></mat-row>
                             </table>
-                            <mat-paginator #annotationTable [pageSizeOptions]="[10, 20, 30]" showFirstLastButtons
+                            <mat-paginator #paginatorAnnotationSection [pageSizeOptions]="[10, 20, 30]" showFirstLastButtons
                                            [length]="dataSourceAnnotationCount" style="width: 100%;"></mat-paginator>
                         </div>
                     }
@@ -612,6 +613,7 @@
                                 <input matInput (keyup)="assembliesSearch($event)" placeholder="Ex. ILLUMINA" #input>
                             </mat-form-field>
                             <table mat-table matTableExporter [dataSource]="dataSourceAssemblies" matSort
+                                   #sortAssemblies="matSort"
                                    style="width: 100%;" class="relatedAssembliesTable">
                                 <ng-container matColumnDef="accession">
                                     <mat-header-cell *matHeaderCellDef> Accession</mat-header-cell>
@@ -638,7 +640,7 @@
                                 <mat-header-row *matHeaderRowDef="displayedColumnsAssemblies"></mat-header-row>
                                 <mat-row *matRowDef="let row; columns: displayedColumnsAssemblies;"></mat-row>
                             </table>
-                            <mat-paginator #assembliesTable [pageSizeOptions]="[10, 20, 30]" showFirstLastButtons
+                            <mat-paginator #paginatorAssemblies [pageSizeOptions]="[10, 20, 30]" showFirstLastButtons
                                            [length]="dataSourceAssembliesCount" style="width: 100%;"></mat-paginator>
                         </div>
                     }
@@ -684,7 +686,8 @@
                                 <input matInput (keyup)="filesSearch($event)" placeholder="Ex. ILLUMINA" #input>
                             </mat-form-field>
                             <div class="table-container">
-                                <table mat-table matTableExporter [dataSource]="dataSourceFiles"
+                                <table mat-table matTableExporter [dataSource]="dataSourceFiles" matSort
+                                       #sortFiles="matSort"
                                        class="relatedFilesTable">
                                     <ng-container matColumnDef="study_accession">
                                         <mat-header-cell *matHeaderCellDef> Study Accession</mat-header-cell>
@@ -1081,7 +1084,7 @@
                                     <mat-row *matRowDef="let row; columns: displayedColumnsFiles;"></mat-row>
                                 </table>
                             </div>
-                            <mat-paginator #experimentsTable [pageSizeOptions]="[10, 20, 30]" showFirstLastButtons
+                            <mat-paginator #paginatorFiles [pageSizeOptions]="[10, 20, 30]" showFirstLastButtons
                                            [length]="dataSourceFilesCount"></mat-paginator>
                         </div>
                     }
@@ -1100,7 +1103,7 @@
                                 <div class="col-md-12">
                                     <div class="row">
                                         <table matTableExporter mat-table [dataSource]="dataSourceSymbiontsRecords"
-                                               matSort style="width: 100%;">
+                                               matSort #sortSymbionts="matSort" style="width: 100%;">
                                             <ng-container matColumnDef="accession">
                                                 <mat-header-cell *matHeaderCellDef mat-sort-header> BioSample ID
                                                 </mat-header-cell>
@@ -1156,7 +1159,7 @@
                                             <mat-header-row *matHeaderRowDef="specDisplayedColumns"></mat-header-row>
                                             <mat-row *matRowDef="let row; columns: specDisplayedColumns;"></mat-row>
                                         </table>
-                                        <mat-paginator #relatedOrganisms style="width: 100%;"
+                                        <mat-paginator #paginatorSymbionts style="width: 100%;"
                                                        [pageSizeOptions]="[10, 20, 30]" showFirstLastButtons
                                                        [length]="specSymbiontsTotalCount"></mat-paginator>
                                     </div>
@@ -1172,7 +1175,7 @@
                                 <div class="col-md-12">
                                     <div class="row">
                                         <table mat-table matTableExporter [dataSource]="dataSourceSymbiontsAssemblies"
-                                               matSort style="width: 100%;">
+                                               matSort #sortSymbiontsAssemblies="matSort" style="width: 100%;">
                                             <ng-container matColumnDef="accession">
                                                 <mat-header-cell *matHeaderCellDef> Accession</mat-header-cell>
                                                 <mat-cell *matCellDef="let element" class="txt-center">
@@ -1205,7 +1208,7 @@
                                             <mat-row
                                                     *matRowDef="let row; columns: displayedColumnsAssemblies;"></mat-row>
                                         </table>
-                                        <mat-paginator #assembliesTable [pageSizeOptions]="[10, 20, 30]"
+                                        <mat-paginator #paginatorSymbiontsAssemblies [pageSizeOptions]="[10, 20, 30]"
                                                        showFirstLastButtons
                                                        [length]="dataSourceSymbiontsAssembliesCount"
                                                        style="width: 100%;"></mat-paginator>

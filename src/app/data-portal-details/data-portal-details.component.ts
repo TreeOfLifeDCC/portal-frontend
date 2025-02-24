@@ -102,8 +102,6 @@ export class DataPortalDetailsComponent implements OnInit, AfterViewInit {
     z: 'archea'
   };
 
-  @ViewChild(MatPaginator) paginator: MatPaginator;
-  @ViewChild(MatSort) sort: MatSort;
   bioSampleId: string;
   bioSampleObj;
   aggregations;
@@ -224,15 +222,33 @@ export class DataPortalDetailsComponent implements OnInit, AfterViewInit {
   @Input() image: string;
   dataDownloaded: any = [];
   isLoading: boolean;
-
-
   displayedColumnsGoatInfo = ['name', 'value', 'count', 'aggregation_method', 'aggregation_source'];
 
-  @ViewChild('experimentsTable') exPaginator: MatPaginator;
-  @ViewChild('assembliesTable') asPaginator: MatPaginator;
-  @ViewChild('annotationTable') anPaginator: MatPaginator;
-  @ViewChild('relatedOrganisms') relatedOrganismsTable: MatPaginator;
-  @ViewChild('relatedAnnotationTable') relatedAnnotationTable: MatPaginator;
+  @ViewChild(MatPaginator) paginator: MatPaginator | undefined;
+  @ViewChild(MatSort) sort: MatSort | undefined;
+
+
+
+  @ViewChild('paginatorOrganisms') paginatorOrganisms!: MatPaginator;
+  @ViewChild('sortOrganisms') sortOrganisms!: MatSort;
+
+  @ViewChild('paginatorAnnotation') paginatorAnnotation!: MatPaginator;
+  @ViewChild('sortAnnotation') sortAnnotation!: MatSort;
+
+  @ViewChild('paginatorAnnotationSection') paginatorAnnotationSection!: MatPaginator;
+  @ViewChild('sortAnnotationSection') sortAnnotationSection!: MatSort;
+
+  @ViewChild('paginatorAssemblies') paginatorAssemblies!: MatPaginator;
+  @ViewChild('sortAssemblies') sortAssemblies!: MatSort;
+
+  @ViewChild('paginatorFiles') paginatorFiles!: MatPaginator;
+  @ViewChild('sortFiles') sortFiles!: MatSort;
+
+  @ViewChild('paginatorSymbionts') paginatorSymbionts!: MatPaginator;
+  @ViewChild('sortSymbionts') sortSymbionts!: MatSort;
+
+  @ViewChild('paginatorSymbiontsAssemblies') paginatorSymbiontsAssemblies!: MatPaginator;
+  @ViewChild('sortSymbiontsAssemblies') sortSymbiontsAssemblies!: MatSort;
 
 
   geoLocation: boolean;
@@ -369,71 +385,116 @@ export class DataPortalDetailsComponent implements OnInit, AfterViewInit {
 
           this.organismName = this.bioSampleObj.organism;
           this.dataDownloaded = unpackedData;
+          
 
-          this.dataSourceRecords = new MatTableDataSource<any>(unpackedData);
-          this.dataSourceSymbiontsRecords = new MatTableDataSource<any>(unpackedSymbiontsData);
-          this.specBioSampleTotalCount = unpackedData?.length;
-          this.specSymbiontsTotalCount = unpackedSymbiontsData?.length;
-          this.genomeNotes = this.bioSampleObj.genome_notes;
-          if (this.bioSampleObj.experiment != null) {
-            this.dataSourceFiles = new MatTableDataSource<Sample>(this.bioSampleObj.experiment);
-            this.dataSourceFilesCount = this.bioSampleObj.experiment?.length;
-          }
-          else {
+          // related organisms tab
+          this.dataSourceRecords = new MatTableDataSource<any>(unpackedData ?? []);
+          setTimeout(() => {
+            this.dataSourceRecords.paginator = this.paginatorOrganisms;
+            this.dataSourceRecords.sort = this.sortOrganisms;
+          });
+
+          // related symbionts tab
+          this.dataSourceSymbiontsRecords = new MatTableDataSource<any>(unpackedSymbiontsData ?? []);
+          setTimeout(() => {
+            this.dataSourceSymbiontsRecords.paginator = this.paginatorSymbionts;
+            this.dataSourceSymbiontsRecords.sort = this.sortSymbionts;
+          });
+
+          // related files tab
+          if (this.bioSampleObj?.experiment) {
+            this.dataSourceFiles = new MatTableDataSource<any>(this.bioSampleObj.experiment);
+            this.dataSourceFilesCount = this.bioSampleObj.experiment.length;
+          } else {
             this.dataSourceFiles = new MatTableDataSource<Sample>();
             this.dataSourceFilesCount = 0;
           }
-          if (this.bioSampleObj.assemblies != null) {
+          setTimeout(() => {
+            if (this.paginator && this.sort) {
+              this.dataSourceFiles.paginator = this.paginatorFiles;
+              this.dataSourceFiles.sort = this.sortFiles;
+            }
+          });
+
+          // related assemblies
+          if (this.bioSampleObj?.assemblies) {
             this.dataSourceAssemblies = new MatTableDataSource<any>(this.bioSampleObj.assemblies);
-            this.dataSourceAssembliesCount = this.bioSampleObj.assemblies?.length;
+            this.dataSourceAssembliesCount = this.bioSampleObj.assemblies.length;
             for (let i = 0; i < this.bioSampleObj.assemblies.length ; i++) {
               this.assembliesurls.push(this.ENA_PORTAL_API_BASE_URL_FASTA + this.bioSampleObj.assemblies[i].accession + '?download=true&gzip=true');
             }
-          }
-          else {
+          } else {
             this.dataSourceAssemblies = new MatTableDataSource<Sample>();
             this.dataSourceAssembliesCount = 0;
           }
-          if (this.bioSampleObj.symbionts_assemblies != null) {
-            console.log('here');
+          setTimeout(() => {
+            if (this.paginator && this.sort) {
+              this.dataSourceAssemblies.paginator = this.paginatorAssemblies;
+              this.dataSourceAssemblies.sort = this.sortAssemblies;
+            }
+          });
+
+
+          // annotation section
+          if (this.bioSampleObj?.annotation) {
+            this.dataSourceAnnotation = new MatTableDataSource<any>(this.bioSampleObj.annotation);
+            this.dataSourceAnnotationCount = this.bioSampleObj.annotation.length;
+            for (let i = 0; i < this.bioSampleObj.annotation.length ; i++) {
+              this.annotationsurls.push(this.ENA_PORTAL_API_BASE_URL_FASTA + this.bioSampleObj.annotation[i].accession + '?download=true&gzip=true');
+            }
+          } else {
+            this.dataSourceAnnotation = new MatTableDataSource<Sample>();
+            this.dataSourceAnnotationCount = 0;
+          }
+          setTimeout(() => {
+            if (this.paginator && this.sort) {
+              this.dataSourceAnnotation.paginator = this.paginatorAnnotationSection;
+              this.dataSourceAnnotation.sort = this.sortAnnotationSection;
+            }
+          });
+
+
+          // related annotation
+          if (this.bioSampleObj?.related_annotation) {
+            this.dataSourceRelatedAnnotation = new MatTableDataSource<any>(this.bioSampleObj.related_annotation);
+            this.dataSourceRelatedAnnotationCount = this.bioSampleObj.related_annotation?.length;
+            for (let i = 0; i < this.bioSampleObj.annotation.length ; i++) {
+              this.annotationsurls.push(this.ENA_PORTAL_API_BASE_URL_FASTA + this.bioSampleObj.annotation[i].accession + '?download=true&gzip=true');
+            }
+          } else {
+            this.dataSourceRelatedAnnotation = new MatTableDataSource<Sample>();
+            this.dataSourceRelatedAnnotationCount = 0;
+          }
+          setTimeout(() => {
+            if (this.paginator && this.sort) {
+              this.dataSourceRelatedAnnotation.paginator = this.paginatorAnnotation;
+              this.dataSourceRelatedAnnotation.sort = this.sortAnnotation;
+            }
+          });
+
+
+
+          // symbionts assemblies
+          if (this.bioSampleObj?.symbionts_assemblies) {
             this.dataSourceSymbiontsAssemblies = new MatTableDataSource<any>(this.bioSampleObj.symbionts_assemblies);
             this.dataSourceSymbiontsAssembliesCount = this.bioSampleObj.symbionts_assemblies?.length;
           } else {
             this.dataSourceSymbiontsAssemblies = new MatTableDataSource<Sample>();
             this.dataSourceSymbiontsAssembliesCount = 0;
           }
-          if (this.bioSampleObj.annotation != null) {
-            this.dataSourceAnnotation = new MatTableDataSource<any>(this.bioSampleObj.annotation);
-            this.dataSourceAnnotationCount = this.bioSampleObj.annotation?.length;
-            for (let i = 0; i < this.bioSampleObj.annotation.length ; i++) {
-              this.annotationsurls.push(this.ENA_PORTAL_API_BASE_URL_FASTA + this.bioSampleObj.annotation[i].accession + '?download=true&gzip=true');
+          setTimeout(() => {
+            if (this.paginator && this.sort) {
+              this.dataSourceSymbiontsAssemblies.paginator = this.paginatorSymbiontsAssemblies;
+              this.dataSourceSymbiontsAssemblies.sort = this.sortSymbiontsAssemblies;
             }
-          }
-          else {
-            this.dataSourceAnnotation = new MatTableDataSource<Sample>();
-            this.dataSourceAnnotationCount = 0;
-          }
+          });
 
-          if (this.bioSampleObj.related_annotation != null) {
-            this.dataSourceRelatedAnnotation = new MatTableDataSource<any>(this.bioSampleObj.related_annotation);
-            this.dataSourceRelatedAnnotation = this.bioSampleObj.related_annotation?.length;
-          }
-          else {
-            this.dataSourceRelatedAnnotation = new MatTableDataSource<Sample>();
-            this.dataSourceRelatedAnnotationCount = 0;
-          }
 
-          this.dataSourceFiles.paginator = this.exPaginator;
-          this.dataSourceAssemblies.paginator = this.asPaginator;
-          this.dataSourceAnnotation.paginator = this.anPaginator;
-          this.dataSourceRecords.paginator = this.relatedOrganismsTable;
-          this.dataSourceRelatedAnnotation.paginator = this.relatedAnnotationTable;
 
-          this.dataSourceRecords.sort = this.sort;
-          this.dataSourceFiles.sort = this.sort;
-          this.dataSourceAssemblies.sort = this.sort;
-          this.dataSourceAnnotation.sort = this.sort;
-          this.dataSourceRelatedAnnotation.sort = this.sort;
+
+          this.specBioSampleTotalCount = unpackedData?.length;
+          this.specSymbiontsTotalCount = unpackedSymbiontsData?.length;
+          this.genomeNotes = this.bioSampleObj.genome_notes;
 
 
           setTimeout(() => {
