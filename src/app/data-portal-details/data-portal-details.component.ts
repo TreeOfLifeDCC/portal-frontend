@@ -5,7 +5,7 @@ import { MatSort, MatSortHeader } from '@angular/material/sort';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatCell, MatCellDef, MatColumnDef, MatHeaderCell, MatHeaderCellDef, MatHeaderRow, MatHeaderRowDef, MatNoDataRow, MatRow, MatRowDef, MatTable, MatTableDataSource } from '@angular/material/table';
 import { NgxSpinnerModule, NgxSpinnerService } from 'ngx-spinner';
-import {DomSanitizer, SafeResourceUrl} from '@angular/platform-browser';
+import {DomSanitizer, SafeResourceUrl, SafeHtml} from '@angular/platform-browser';
 import {ApiService} from '../api.service';
 import {MatTab, MatTabContent, MatTabGroup} from '@angular/material/tabs';
 import {MatCard, MatCardActions, MatCardTitle} from '@angular/material/card';
@@ -137,7 +137,7 @@ export class DataPortalDetailsComponent implements OnInit, AfterViewInit {
     organismPart: '',
     trackingSystem: ''
   };
-
+  popupImage: string | null = null;
   dataSourceFiles;
   dataSourceFilesCount;
   dataSourceAssemblies;
@@ -385,7 +385,7 @@ export class DataPortalDetailsComponent implements OnInit, AfterViewInit {
 
           this.organismName = this.bioSampleObj.organism;
           this.dataDownloaded = unpackedData;
-          
+
 
           // related organisms tab
           this.dataSourceRecords = new MatTableDataSource<any>(unpackedData ?? []);
@@ -885,6 +885,18 @@ export class DataPortalDetailsComponent implements OnInit, AfterViewInit {
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
+  }
+
+  sanitizeHTML(content: string): SafeHtml {
+    return this.sanitizer.bypassSecurityTrustHtml(content);
+  }
+
+  openPopup(imageUrl: string) {
+    this.popupImage = imageUrl;
+  }
+
+  closePopup() {
+    this.popupImage = null;
   }
 
 }

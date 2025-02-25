@@ -1235,25 +1235,22 @@
                                         <div>
                                             <div class="card figpanel">
                                                 <div class="row">
-                                                    <h1 class="page-header">{{ gen.title }}</h1>
+                                                    <h1 class="page-header" [innerHTML]="sanitizeHTML(gen.title)"></h1>
                                                 </div>
                                                 <div class="row">
                                                     <div class="col-md-2">
                                                         <img class="card-img-left" src="{{gen.figureURI}}"
-                                                             style="width: 150px;float: left;">
+                                                             style="width: 150px;float: left;"
+                                                             (click)="openPopup(gen.figureURI)">
                                                     </div>
                                                     <div class="col-md-10">
                                                         <!-- <h1>Abstract</h1> -->
                                                         <p>{{ gen.abstract }}</p>
-                                                        <a href="{{gen.url}}" class="btn btn-success" target="_blank">Read
-                                                            the Genome
-                                                            Note
-                                                            in
-                                                            full
-                                                            here</a>
+                                                        <a href="{{gen.url}}" class="btn btn-success" target="_blank">
+                                                            Read the Genome Note in full here</a>
                                                     </div>
                                                 </div>
-                                                <div class="row">
+                                                <div class="row caption-div">
                                                     <div class="col-md-12">
                                                         <h5 class="card-title rounded mx-auto d-block">{{ gen.caption }}</h5>
                                                     </div>
@@ -1269,6 +1266,15 @@
                                 </mat-expansion-panel>
                             }
                         </div>
+
+                        <!-- popup Modal -->
+                        @if(popupImage) {
+                            <div class="popup-overlay" (click)="closePopup()">
+                                <div class="popup-content">
+                                    <img [src]="popupImage" class="popup-image">
+                                </div>
+                            </div>
+                        }
                     }
 
                 </mat-tab>
