@@ -8,8 +8,8 @@ import {ActivatedRoute, Router} from '@angular/router';
 })
 export class GetDataService {
 
-  // private API_BASE_URL = 'https://portal.darwintreeoflife.org/statuses_update/';
-  private API_BASE_URL = 'http://127.0.0.1:8000';
+  private API_BASE_URL = 'https://portal.darwintreeoflife.org/statuses_update/';
+  // private API_BASE_URL = 'http://127.0.0.1:8000';
 
   constructor(private http: HttpClient,
               private router: Router,
