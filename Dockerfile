@@ -1,4 +1,4 @@
-FROM node:21.6.2 as build
+FROM node:20.15.0 as build
 
 WORKDIR /source
 
@@ -13,7 +13,7 @@ COPY . .
 
 RUN npm run build --prod
 
-FROM nginx:alpine
+FROM nginx:1.15
 COPY --from=build /source/dist/tree-of-life-portal /usr/share/nginx/html
 COPY --from=build /source/default.conf /etc/nginx/conf.d/
 EXPOSE 8080
