@@ -14,6 +14,7 @@ import {tap} from "rxjs/operators";
 export class DashboardService {
 
   private API_BASE_URL = 'https://python-portal-backend-725097469588.europe-west2.run.app';
+  // private API_BASE_URL = 'http://localhost:8000';
   private ENA_PORTAL_API_BASE_URL = 'https://www.ebi.ac.uk/ena/portal/api/files';
 
   constructor(private http: HttpClient, private bytesPipe: BytesPipe,  private dialog: MatDialog) { }
