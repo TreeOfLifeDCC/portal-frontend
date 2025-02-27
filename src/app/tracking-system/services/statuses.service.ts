@@ -7,9 +7,9 @@ import {Observable} from "rxjs";
 })
 export class StatusesService {
 
-  private API_BASE_URL = 'https://python-portal-backend-725097469588.europe-west2.run.app/';
+  private API_BASE_URL = 'https://python-portal-backend-725097469588.europe-west2.run.app';
   // private API_BASE_URL = 'http://45.88.81.118/api';
-  // private API_BASE_URL = 'http://localhost:8080';
+  // private API_BASE_URL = 'http://localhost:8000';
 
   constructor(private http: HttpClient) { }
 
