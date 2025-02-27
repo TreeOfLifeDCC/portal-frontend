@@ -1,4 +1,4 @@
-FROM node:20.15.0 as build-stage
+FROM node:20.15.0 as build
 
 WORKDIR /source
 
