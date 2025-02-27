@@ -1,251 +1,567 @@
-<div>
-    <ngx-spinner bdColor="rgba(0,0,0,0.9)" [fullScreen]="true" size="large" color="#fff" type="ball-clip-rotate-pulse">
-    </ngx-spinner>
+<div >
+  <!-- <ngx-spinner bdColor="rgba(0,0,0,0.9)" [fullScreen]="true" size="large" color="#fff" type="ball-clip-rotate-pulse">
+</ngx-spinner> -->
 
-    <div class="jumbotron jumbotron-fluid">
-        <div class="container">
-            <div class="row">
-                <div class="col-md-3">
-                </div>
-            </div>
-        </div>
+<div class="jumbotron jumbotron-fluid">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-3">
+      </div>
     </div>
-
-    <div class="container" style="padding-top: 20px;">
-        <div class="row">
-            <div class="col-md-2">
-                <div class="row">
-                    <div class="col-md-12 col-sm-6">
-                        <app-filter title="Data Status" isShowCount=true></app-filter>
-                    </div>
-                </div>
-
-                <div class="row">
-                    <div class="col-md-12 col-sm-6">
-                        <app-filter title="Symbionts" isShowCount=true ></app-filter>
-                    </div>
-                </div>
-
-                <app-phylogeny-filter isShowCount=true></app-phylogeny-filter>
-                <app-filter title="Experiment Type" isShowCount="true" filterSize="5"></app-filter>
-            </div>
-            <div class="col-md-10">
-                <h1 class="page-header">Organisms</h1>
-
-                <mat-expansion-panel (opened)="expanded()" class="column-header">
-                    <mat-expansion-panel-header class="page-header">
-                        Column Selection
-                    </mat-expansion-panel-header>
-                    <div class="col-md-12">
-                        <div class="row">
-                            <mat-checkbox *ngFor="let data of dataColumnsDefination" class="col-md-4" color="primary"
-                                          (click)="$event.stopPropagation()" (keydown)="$event.stopPropagation()"
-                                          [checked]="data.selected" (change)="showSelectedColumn(data, $event.checked)">
-                                {{data.name}}
-                            </mat-checkbox>
-                        </div>
-                    </div>
-                </mat-expansion-panel>
-                <br/>
-                <div class="column-header">
-
-                  <button *ngIf="filterService.activeFilters.length > 0  && (filterService.AnnotationFilters.length > 0 || filterService.AnnotationCompleteFilters.length > 0 || filterService.AssembliesFilters.length > 0 || filterService.RawDataFilters.length > 0)"
-                            type="button"
-                            style="float: right; background-color: #4BBEFD; color: #ffffff;"
-                            class="btn btn-primary" mat-raised-button (click)="openDialog()">Download
-                    </button>
-
-                    <button type="button" style="float: right; background-color: #4BBEFD; color: #ffffff;"
-                            class="btn btn-primary" mat-raised-button (click)="downloadCSV()">Download metadata
-                    </button>
-
-                    <div *ngIf="hasActiveFilters()">
-                        <app-active-filter true></app-active-filter>
-
-                        <span *ngIf="(filterService.selectedFilterValue!= undefined && filterService.selectedFilterValue != '')">
-                    <button type="button" class="btn btn-success">{{filterService.selectedFilterValue.taxonomy}}
-                        <span class="badge badge-light"
-                              (click)="filterService.removeTaxaFilter(filterService.selectedFilterValue.taxonomy)">X</span>
-                    </button>
-                </span>
-                        <button class="btn btn-primary" type="button" (click)="removeFilter()">Remove all filters
-                        </button>
-
-                    </div>
-                </div>
-                <mat-form-field class="column-header" style="margin-top: 15px;">
-                    <mat-label>Search</mat-label>
-                    <input #searchInput matInput [(ngModel)]='filterService.searchText'
-                           (ngModelChange)="this.searchUpdate.next($event)" placeholder="Ex. lutra" #input>
-                </mat-form-field>
-
-                    <table mat-table matTableExporter  #table [dataSource]="dataSource"
-                           matSort
-                           (matSortChange)="customSort($event)" class="organismsMainTable">
-                        <ng-container matColumnDef="organism">
-                            <mat-header-cell *matHeaderCellDef mat-sort-header [ngClass]="'w-150 th-left'"> Organism
-                            </mat-header-cell>
-                            <mat-cell *matCellDef="let element" [ngClass]="'w-150 th-left'">
-                                <a [routerLink]="['/data/root/details/', element.id]">
-                                    {{element.organism}} </a>
-                            </mat-cell>
-                        </ng-container>
-
-                        <ng-container matColumnDef="tolid">
-                            <mat-header-cell *matHeaderCellDef [ngClass]="'w-200 th-left'"> ToL ID</mat-header-cell>
-                            <mat-cell *matCellDef="let element"
-                                      [ngClass]="'w-200 th-left'"> {{typeofTol(element?.tolid)}}</mat-cell>
-                        </ng-container>
-
-                        <ng-container matColumnDef="INSDC_ID">
-                            <mat-header-cell *matHeaderCellDef [ngClass]="'w-100 th-left'"> INSDC ID</mat-header-cell>
-                            <mat-cell *matCellDef="let element"
-                                      [ngClass]="'w-100 th-left'"> {{element?.INSDC_ID}}</mat-cell>
-                        </ng-container>
-
-                        <ng-container matColumnDef="commonName">
-                            <mat-header-cell *matHeaderCellDef mat-sort-header [ngClass]="'w-120 th-left'">Common Name
-                            </mat-header-cell>
-                            <mat-cell *matCellDef="let element" [ngClass]="'w-120 th-left'">
-                                {{element?.commonName}}
-                            </mat-cell>
-                        </ng-container>
-
-                        <ng-container matColumnDef="commonNameSource">
-                            <mat-header-cell *matHeaderCellDef mat-sort-header [ngClass]="'w-120 th-center'">Common Name
-                                Source
-                            </mat-header-cell>
-                            <mat-cell *matCellDef="let element" style="justify-content: center;"
-                                      [ngClass]="'w-120 th-center'">
-                                <mat-chip *ngIf="checkElement(element)"
-                                          [ngStyle]="{'background-color': getCommonNameSourceColour(element)[0]}">
-                                    <span [ngClass]="getCommonNameSourceColour(element)[1]">{{element.commonNameSource}}</span>
-                                </mat-chip>
-                            </mat-cell>
-                        </ng-container>
-
-                        <ng-container matColumnDef="currentStatus">
-                            <mat-header-cell *matHeaderCellDef mat-sort-header [ngClass]="'w-150 th-left'"> Current
-                                status
-                            </mat-header-cell>
-                            <mat-cell *matCellDef="let element" [ngClass]="'w-150 th-left current_status_chip'">
-                                <mat-chip
-                                        [ngStyle]="{'background-color': getCurrentStatusColour(element.currentStatus)[0]}">
-                                    <span [ngClass]="getCurrentStatusColour(element.currentStatus)[1]">{{element.currentStatus}}</span>
-                                </mat-chip>
-                            </mat-cell>
-                        </ng-container>
-                        <ng-container matColumnDef="goatInfo">
-                            <mat-header-cell *matHeaderCellDef style=" padding-right: 0px;" [ngClass]="'w-219 th-left'">
-                                External references
-                            </mat-header-cell>
-                            <mat-cell *matCellDef="let element" style="padding-right: 0px;" [ngClass]="'w-219 th-left external_references_class'">
-                            <span>
-                                    <mat-chip [ngStyle]="{'background-color': '#4BBEFD'}">
-                                        <a class="goat-color" target="_blank" href="{{element?.goatInfo}}"
-                                           style="cursor: pointer">
-                                            GoaT info
-                                        </a>
-                                    </mat-chip>
-                                <ng-container *ngIf="checkTolidExists(element)">
-                                        <mat-chip [ngStyle]="{'background-color': '#5cc45e'}" class="tol_qc">
-                                            <a class="goat-color2" target="_blank"
-                                               href="{{generateTolidLink(element)}}">ToL QC</a>
-                                        </mat-chip>
-                                </ng-container>
-                                <ng-container *ngIf="checkGenomeExists(element)">
-                                        <mat-chip [ngStyle]="{'background-color': 'grey'}" class="tol_qc">
-                                            <a *ngIf="this.genomelength == 1" class="genome" target="_blank"
-                                               href="{{getGenomeURL(element)}}">Genome Note</a>
-                                            <a *ngIf="this.genomelength > 1" class="genome" target="_blank" (click)="openGenomeNoteDialog(element)">
-                                                Genome Note</a>
-                                        </mat-chip>
-
-                                </ng-container>
-                                <ng-container *ngIf="checkNbnAtlasExists(element)">
-                                        <mat-chip [ngStyle]="{'background-color': '#FFc107'}" class="tol_qc">
-                                            <a class="nbn" target="_blank"
-                                               href="{{element.nbnatlas}}">NBN Atlas</a>
-                                        </mat-chip>
-                                </ng-container>
-                            </span>
-                            </mat-cell>
-
-
-                        </ng-container>
-
-                        <ng-container matColumnDef="biosamples">
-                            <mat-header-cell *matHeaderCellDef mat-sort-header [ngClass]="'th-center'"> Metadata submitted to BioSamples
-                            </mat-header-cell>
-                            <mat-cell *matCellDef="let element">
-                                <mat-chip
-                                        [ngStyle]="{'background-color': getCurrentStatusColour(element.biosamples)[0]}">
-                                    <span [ngClass]="getCurrentStatusColour(element.biosamples)[1]">{{element.biosamples}}</span>
-                                </mat-chip>
-                            </mat-cell>
-                        </ng-container>
-
-                        <ng-container matColumnDef="raw_data">
-                            <mat-header-cell *matHeaderCellDef mat-sort-header [ngClass]="'th-center'"> Raw data submitted to ENA
-                            </mat-header-cell>
-                            <mat-cell *matCellDef="let element">
-                                <mat-chip [ngStyle]="{'background-color': getCurrentStatusColour(element.raw_data)[0]}">
-                                    <span [ngClass]="getCurrentStatusColour(element.raw_data)[1]">{{element.raw_data}}</span>
-                                </mat-chip>
-                            </mat-cell>
-                        </ng-container>
-
-                        <ng-container matColumnDef="mapped_reads">
-                            <mat-header-cell *matHeaderCellDef mat-sort-header [ngClass]="'th-center'"> Mapped reads submitted to ENA
-                            </mat-header-cell>
-                            <mat-cell *matCellDef="let element">
-                                <mat-chip
-                                        [ngStyle]="{'background-color': getCurrentStatusColour(element.mapped_reads)[0]}">
-                                    <span [ngClass]="getCurrentStatusColour(element.mapped_reads)[1]">{{element.mapped_reads}}</span>
-                                </mat-chip>
-                            </mat-cell>
-                        </ng-container>
-
-                        <ng-container matColumnDef="assemblies">
-                            <mat-header-cell *matHeaderCellDef mat-sort-header [ngClass]="'th-center'"> Assemblies submitted to ENA
-                            </mat-header-cell>
-                            <mat-cell *matCellDef="let element">
-                                <mat-chip
-                                        [ngStyle]="{'background-color': getCurrentStatusColour(element.assemblies_status)[0]}">
-                                    <span [ngClass]="getCurrentStatusColour(element.assemblies_status)[1]">{{element.assemblies_status}}</span>
-                                </mat-chip>
-                            </mat-cell>
-                        </ng-container>
-
-                        <ng-container matColumnDef="annotation_complete">
-                            <mat-header-cell *matHeaderCellDef mat-sort-header> Annotation complete</mat-header-cell>
-                            <mat-cell *matCellDef="let element">
-                                <mat-chip
-                                        [ngStyle]="{'background-color': getCurrentStatusColour(element.annotation_complete)[0]}">
-                                    <span [ngClass]="getCurrentStatusColour(element.annotation_complete)[1]">{{element.annotation_complete}}</span>
-                                </mat-chip>
-                            </mat-cell>
-                        </ng-container>
-
-                        <ng-container matColumnDef="annotation">
-                            <mat-header-cell *matHeaderCellDef mat-sort-header> Annotation submitted to ENA
-                            </mat-header-cell>
-                            <mat-cell *matCellDef="let element">
-                                <mat-chip
-                                        [ngStyle]="{'background-color': getCurrentStatusColour(element.annotation_status)[0]}">
-                                    <span [ngClass]="getCurrentStatusColour(element.annotation_status)[1]">{{element.annotation_status}}</span>
-                                </mat-chip>
-                            </mat-cell>
-                        </ng-container>
-
-                        <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-                        <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
-                    </table>
-                    <mat-paginator [pageSizeOptions]="[20, 40, 60, 100]" showFirstLastButtons
-                                   [length]="bioSampleTotalCount"
-                                   (page)="pageChanged($event)"></mat-paginator>
-            </div>
-        </div>
-    </div>
-
+  </div>
 </div>
+
+<div class="container" style="padding-top: 20px;" >
+  <div class="row">
+    <div  class="col-md-2">
+      <mat-card class="card  filter-top" >
+        <mat-card-title class="card-header filter-heading">Data status</mat-card-title>
+        <mat-card-actions style="padding: 0px;">
+          <ul role="list"  class="list-group">
+            @if (getStatusCount(aggregations?.biosamples.buckets)) {
+                            <li role="listitem" class="biosample
+                                           list-group-item d-flex justify-content-between
+                                           align-items-center biosamples-inactive"
+                [style]="checkStyle('BioSamples - Submitted')"
+                (click)="onFilterClick('BioSamples - Submitted')"
+                style="cursor: pointer">
+                <span>BioSamples - Submitted</span>
+                <span
+                                      class="badge badge-pill badge-space
+                                      badge-info">
+                  {{getStatusCount(aggregations?.biosamples.buckets)}}
+                </span>
+
+              </li>
+            }
+            @if (getStatusCount(aggregations?.raw_data.buckets)) {
+              <li role="listitem"
+                               class="list-group-item d-flex justify-content-between
+                                           align-items-center"
+                [style]="checkStyle('Raw Data - Submitted')"
+                (click)="onFilterClick('Raw Data - Submitted')"
+                style="cursor: pointer">
+
+                <span>Raw Data - Submitted</span>
+                <span
+                  class="badge badge-pill badge-info badge-space">{{ getStatusCount(aggregations?.raw_data.buckets) }}
+                </span>
+
+              </li>
+            }
+            @if (getStatusCount(aggregations?.assemblies_status.buckets)) {
+              <li role="listitem"
+                               class="list-group-item d-flex justify-content-between
+                                           align-items-center"
+                [style]="checkStyle('Assemblies - Submitted')"
+                (click)="onFilterClick('Assemblies - Submitted')"
+                style="cursor: pointer">
+                <span> Assemblies - Submitted</span>
+
+                <span
+                  class="badge badge-pill badge-info badge-space">
+
+                  {{ getStatusCount(aggregations?.assemblies_status.buckets) }}
+
+                </span>
+
+              </li>
+            }
+            @if (getStatusCount(aggregations?.annotation_complete.buckets)) {
+              <li role="listitem"
+                               class="list-group-item d-flex justify-content-between
+                                           align-items-center"
+                [style]="checkStyle('Annotation Complete - Done')"
+                (click)="onFilterClick('Annotation Complete - Done')"
+                style="cursor: pointer">
+
+                <span >
+                Annotation Complete - Done  </span>
+
+                <span class="badge badge-pill badge-info badge-space">
+
+                  {{ getStatusCount(aggregations?.annotation_complete.buckets) }}
+
+                </span>
+
+              </li>
+            }
+              @if (aggregations?.genome_notes != undefined && aggregations?.genome_notes.doc_count) {
+                  <li role="listitem" class="list-group-item d-flex justify-content-between align-items-center"
+                      [style]="checkStyle('Genome Notes - Submitted')"
+                      (click)="onFilterClick('Genome Notes - Submitted')"
+                      style="cursor: pointer">
+                <span>
+                Genome Notes - Submitted</span>
+                      <span class="badge badge-pill badge-info badge-space">
+                  {{ aggregations?.genome_notes.genome_count.doc_count }}
+                </span>
+                  </li>
+              }
+          </ul>
+        </mat-card-actions>
+      </mat-card>
+      <br>
+        <mat-card  class="card  filter-top">
+          <mat-card-title class="card-header filter-heading">Symbionts</mat-card-title>
+          <mat-card-actions style="padding: 0px;">
+            <ul role="list"  class="list-group" >
+              @for (filter of symbiontsFilters; track $index) {
+                <li role="listitem"
+                               class="list-group-item d-flex justify-content-between
+                                           align-items-center"
+                  [style]="checkStyle(filter.label + '-' + filter.key)"
+                  (click)="onFilterClick(filter.label + '-' + filter.key)"
+                  style="cursor: pointer">
+
+                  <span >{{ filter.key }}</span>
+                  <span
+                    class="badge badge-pill badge-info badge-space">{{ filter.doc_count }}
+                  </span>
+
+                </li>
+              }
+            </ul>
+          </mat-card-actions>
+        </mat-card>
+        <br>
+          <mat-card class="card  filter-top">
+            <mat-card-title class="card-header filter-heading">
+              Phylogeny/{{ currentClass }}
+              @if (phylogenyFilters.length !== 0) {
+                <mat-icon (click)="onRefreshClick()"
+                  style="cursor: pointer">
+                  refresh
+                </mat-icon>
+              }
+              @if (phylogenyFilters.length !== 0) {
+                <mat-icon (click)="onHistoryClick()"
+                  style="cursor: pointer">
+                  arrow_circle_left
+                </mat-icon>
+              }
+            </mat-card-title>
+            <mat-card-actions style="padding: 0px;display: block;">
+              <ul role="list"  class="list-group" >
+                @for (phylogeny_name of aggregations?.taxonomies[currentClass]?.buckets; track $index) {
+                  <li role="listitem"
+                                class="list-group-item d-flex justify-content-between
+                                           align-items-center"
+                    style="cursor: pointer"
+                    [style]="checkStyle(phylogeny_name.key)"
+                    (click)="onFilterClick(phylogeny_name.key, true)">
+                    <span> {{ phylogeny_name.key }}</span>
+
+                    <span class="badge badge-pill badge-info badge-space">
+                      {{ phylogeny_name.doc_count }}
+                    </span>
+                  </li>
+                }
+              </ul>
+            </mat-card-actions>
+          </mat-card>
+
+          <br>
+            <mat-card  class="card  filter-top">
+              <mat-card-title class="card-header filter-heading">Experiment Type
+                @if
+                  (experimentTypeFilters.length > itemLimit && isCollapsed) {
+                  <i class="material-icons float-right"
+                  (click)="toggleCollapse()">add</i>
+                }
+                @if(experimentTypeFilters.length < itemLimit && !isCollapsed) {
+                  <i class="material-icons float-right" (click)="toggleCollapse()">remove</i>
+                }
+              </mat-card-title>
+
+              <mat-card-actions style="padding: 0px;">
+                <ul role="list"  class="list-group" >
+                  @for (filter of experimentTypeFilters; track $index) {
+                    @if($index<itemLimit){
+                      <li role="listitem"
+                           class="list-group-item d-flex justify-content-between
+                           align-items-center"
+                        [style]="checkStyle(filter.label + '_' + filter.key)"
+                        (click)="onFilterClick(filter.label + '_' + filter.key)"
+                        style="cursor: pointer">
+
+                        <span >{{ filter.key }}</span>
+                        <span class="badge badge-pill badge-info badge-space">
+                            {{filter?.distinct_docs?.parent_doc_count?.value}}
+                        </span>
+
+                      </li>
+                    }
+                  }
+                </ul>
+              </mat-card-actions>
+            </mat-card>
+            <br>
+            </div>
+            <div  class="col-md-10" >
+              <h1 class="page-header">Organisms</h1>
+
+              <mat-expansion-panel (opened)="expanded()" class="column-header">
+                <mat-expansion-panel-header class="page-header">
+                  Column Selection
+                </mat-expansion-panel-header>
+                <div class="col-md-12">
+                  <div class="row">
+                    @for (data of dataColumnsDefination; track data) {
+                      <mat-checkbox class="col-md-4" color="primary"
+                        (click)="$event.stopPropagation()" (keydown)="$event.stopPropagation()"
+                        [checked]="data.selected" (change)="showSelectedColumn(data, $event.checked)">
+                        {{data.name}}
+                      </mat-checkbox>
+                    }
+                  </div>
+                </div>
+              </mat-expansion-panel>
+              <br/>
+              <br/>
+              <div  class="column-header">
+                @if (isLoadingResults || isRateLimitReached) {
+                  <div class="example-loading-shade">
+                    @if (isLoadingResults) {
+                      <mat-spinner></mat-spinner>
+                    }
+                    @if (isRateLimitReached) {
+                      <div class="example-rate-limit-reached">
+                        Something went wrong, please try again!
+                      </div>
+                    }
+
+                  </div>
+                }
+                <div class="example-table-container">
+                  @if(activeFilters.length > 0 || phylogenyFilters.length > 0){
+                    <h1 >Filters: </h1>
+                  }
+                  @if(activeFilters.length > 0){
+                    @for(field of activeFilters;track $index){
+                      <button type="button" class="btn btn-success">
+                        {{displayActiveFilterName(field)}} <span class="badge badge-light" (click)="onFilterClick(field)">X</span>
+                      </button>
+                    }
+                  }
+                  @if(phylogenyFilters.length > 0){
+                    <button type="button" class="btn btn-success">
+                      {{displayActiveFilterName(lastPhylogenyVal)}} <span class="badge badge-light" (click)="removePhylogenyFilters()">X</span>
+                    </button>
+                  }
+                 @if(activeFilters.length > 0 || phylogenyFilters.length > 0){
+                    <button class="btn btn-primary" type="button" (click)="refreshPage()"> Remove all filters </button>
+                 }
+                  <br>
+
+                    @if (displayProgressBar) {
+                        <div style="padding: 15px">
+                            <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+                        </div>
+                    }
+
+
+                    <button  class="btn btn-primary" style="float: right;
+                    background-color: #4BBEFD; color: #ffffff;" mat-raised-button
+                             (click)="downloadFile('metadata', false)"
+                             [disabled]="displayProgressBar">
+                      Download metadata
+                    </button>
+
+                    <button type="button"
+                            style="float: right; background-color: #4BBEFD; color: #ffffff;"
+                            class="btn btn-primary" mat-raised-button
+                            (click)="openDownloadDialog(this.activeFilters[0])">Download
+                    </button>
+
+                  </div>
+
+                  <mat-form-field class="search_field column-header"  style="margin-top: 15px;">
+                    <mat-label>Search</mat-label>
+                    <input matInput (keyup)="applyFilter($event)" [(ngModel)]='searchValue'
+                      placeholder="ex. Salmo trutta">
+                  </mat-form-field>
+
+
+                  <table mat-table [dataSource]="this.data" class="organismsMainTable"
+                    matSort
+                    matSortActive="currentStatus"
+                    matSortDirection="asc" >
+                    <!-- Number Column -->
+                    <ng-container matColumnDef="organism" style=" max-width: 200px !important;">
+                      <th mat-header-cell *matHeaderCellDef mat-sort-header  [ngClass]="'w-150 th-left'" disableClear >Organism
+                      </th>
+                      <td mat-cell *matCellDef="let row"  [ngClass]="'w-150 th-left'">
+                        <a [routerLink]="['/data',row._source.organism]">
+                          {{ row['_source']['organism'] }}
+                        </a>
+                      </td>
+                    </ng-container>
+
+                    <!-- Title Column -->
+                    <ng-container matColumnDef="tolid">
+                      <th mat-header-cell *matHeaderCellDef [ngClass]="'w-200 th-left'"
+                        disableClear >ToL ID
+                      </th>
+                      <td mat-cell
+                        *matCellDef="let row" [ngClass]="'w-200 th-left'"> {{typeofTol(row['_source']['tolid'])}}
+                      </td>
+                    </ng-container>
+
+                    <!-- Title Column -->
+                    <ng-container matColumnDef="INSDC_ID" >
+                      <th mat-header-cell *matHeaderCellDef [ngClass]="'w-100-dashboard th-left'"
+                        disableClear
+                        >INSDC ID
+                      </th>
+                      <td mat-cell *matCellDef="let row" [ngClass]="'w-100-dashboard th-left'"
+                        >
+                        {{getINSDC_ID(row)}}
+                      </td>
+
+                    </ng-container>
+                    <!-- Title Column -->
+                    <ng-container matColumnDef="commonName">
+                      <th mat-header-cell *matHeaderCellDef [ngClass]="'w-120 th-left'"
+                        mat-sort-header disableClear
+                        >Common Name
+                      </th>
+                      <td mat-cell
+                        *matCellDef="let row" [ngClass]="'w-120 th-left'"
+
+                        >{{row['_source']['commonName']}}
+                      </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="commonNameSource">
+                      <th mat-header-cell *matHeaderCellDef [ngClass]="'w-120 th-center'"
+                        >Common Name
+                        Source
+                      </th>
+                      <td mat-cell *matCellDef="let row" style="justify-content: center;" [ngClass]="'w-120 th-center'">
+                        @if (row['_source']['commonNameSource'] &&
+                          row['_source']['commonName']) {
+                          <mat-chip
+                            [style]="getCommonNameSourceStyle(row['_source']['commonNameSource'])">
+                            {{row['_source']['commonNameSource']}}
+                          </mat-chip>
+                        }
+                      </td>
+                    </ng-container>
+
+
+                    <ng-container matColumnDef="currentStatus">
+                      <th mat-header-cell *matHeaderCellDef
+                        mat-sort-header disableClear >Current
+                      Status </th>
+                      <td mat-cell *matCellDef="let row"  [ngClass]="'w-150 th-left current_status_chip'">
+                        <mat-chip
+                          [style]="getStyle(row['_source']['currentStatus'])"
+                          >
+                          {{ row._source.currentStatus }}
+                        </mat-chip>
+                      </td>
+                    </ng-container>
+
+
+                    <ng-container matColumnDef="goatInfo">
+                      <th mat-header-cell *matHeaderCellDef style="padding: 5px 0;"  [ngClass]="'w-219 th-left'">External
+                        References
+                      </th>
+                      <td mat-cell *matCellDef="let row"  style="padding: 5px 0;" [ngClass]="'w-219 th-left external_references_class'">
+                        <span>
+                          <mat-chip style="background-color: #4BBEFD">
+                            <a class="goat-color" target="_blank" href="{{generateGoatInfoLink(row._source)}}"
+                              style="cursor: pointer">
+                              GoaT info
+                            </a>
+                          </mat-chip>
+                          @if(checkTolidExists(row._source)){
+                            <ng-container >
+                              <mat-chip style="background-color: #5cc45e" class="tol_qc">
+                                <a class="goat-color2" target="_blank"
+                                href="{{generateTolidLink(row['_source'])}}">ToL QC</a>
+                              </mat-chip>
+                            </ng-container>
+                          }
+                          @if(checkGenomeExists(row._source)){
+                            <ng-container >
+                              <mat-chip style="background-color: grey" class="tol_qc">
+                                @if(this.genomelength == 1){
+                                  <a  class="genome" target="_blank"
+                                  href="{{getGenomeURL(row['_source'])}}">Genome Note</a>
+                                }
+
+                                @if(this.genomelength > 1){
+                                  <a class="genome" target="_blank" (click)="openGenomeNoteDialog(row._source)">
+                                  Genome Note</a>
+                                }
+                              </mat-chip>
+
+                            </ng-container>
+                          }
+                          @if(checkNbnAtlasExists(row._source)){
+                            <ng-container >
+                              <mat-chip style="background-color: #FFc107" class="tol_qc">
+                                <a class="nbn" target="_blank"
+                                href="{{row['_source']['nbnatlas']}}">NBN Atlas</a>
+                              </mat-chip>
+                            </ng-container>
+                          }
+
+                        </span>
+                      </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="biosamples">
+                      <th [ngClass]="'th-center'" mat-header-cell
+                        *matHeaderCellDef
+                        mat-sort-header disableClear>Metadata submitted to BioSamples
+                      </th>
+                      <td mat-cell *matCellDef="let row">
+                        <mat-chip
+                          [style]="getCurrentStatusColour(row['_source']['biosamples'])[0]"
+                          [class]="getCurrentStatusColour(row['_source']['biosamples'])[1]">
+                          {{row._source.biosamples}}
+                        </mat-chip>
+                      </td>
+                    </ng-container>
+
+
+                    <ng-container matColumnDef="raw_data">
+                      <th [ngClass]="'th-center'" mat-header-cell
+                        *matHeaderCellDef
+                        mat-sort-header disableClear>Raw data submitted to ENA
+                      </th>
+                      <td mat-cell *matCellDef="let row">
+                        <mat-chip
+                          [style]="getCurrentStatusColour(row['_source']['raw_data'])[0]"
+                          [class]="getCurrentStatusColour(row['_source']['raw_data'])[1]">
+                          {{row._source.raw_data}}
+                        </mat-chip>
+                      </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="mapped_reads">
+                      <th [ngClass]="'th-center'" mat-header-cell
+                        *matHeaderCellDef
+                        mat-sort-header disableClear>Mapped reads submitted to ENA
+                      </th>
+                      <td mat-cell *matCellDef="let row">
+                        <mat-chip
+                          [style]="{'background-color': getCurrentStatusColour(row['_source']['mapped_reads'])[0]}"
+                          [class]="getCurrentStatusColour(row['_source']['mapped_reads'])[1]">
+                          {{row._source.mapped_reads}}
+                        </mat-chip>
+                      </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="assemblies_status">
+                      <th [ngClass]="'th-center'" mat-header-cell
+                        *matHeaderCellDef
+                        mat-sort-header disableClear>Assemblies submitted to ENA
+                      </th>
+                      <td mat-cell *matCellDef="let row">
+                        <mat-chip
+                          [style]=" getCurrentStatusColour(row['_source']['assemblies_status'])[0]"
+                          [class]="getCurrentStatusColour(row['_source']['assemblies_status'])[1]">
+                          {{row._source.assemblies_status}}
+                        </mat-chip>
+                      </td>
+                    </ng-container>
+
+
+                    <ng-container matColumnDef="annotation_complete">
+                      <th [ngClass]="'th-center'" mat-header-cell
+                        *matHeaderCellDef
+                        mat-sort-header disableClear> Annotation complete
+                      </th>
+                      <td mat-cell *matCellDef="let row">
+                        <mat-chip
+                          [style]="getCurrentStatusColour(row['_source']['annotation_complete'])[0]"
+                          [class]="getCurrentStatusColour(row['_source']['annotation_complete'])[1]">
+                          {{row._source.annotation_complete}}
+                        </mat-chip>
+                      </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="annotation_status">
+                      <th [ngClass]="'th-center'" mat-header-cell
+                        *matHeaderCellDef
+                        mat-sort-header disableClear> Annotation submitted to ENA
+                      </th>
+                      <td mat-cell *matCellDef="let row">
+                        <mat-chip
+                          [style]=" getCurrentStatusColour(row['_source']['annotation_status'])[0]"
+                          [class]="getCurrentStatusColour(row['_source']['annotation_status'])[1]">
+                          {{row._source.annotation_status}}
+                        </mat-chip>
+                      </td>
+                    </ng-container>
+                    <tr mat-header-row
+                    *matHeaderRowDef="displayedColumns"></tr>
+                    <tr mat-row
+                    *matRowDef="let row; columns: displayedColumns;"></tr>
+                    <tr class="mat-row" *matNoDataRow>
+                      <td class="mat-cell" colspan="4">No data matching
+                        the filter
+                      </td>
+                    </tr>
+                  </table>
+
+                </div>
+
+
+                <mat-paginator [pageSizeOptions]="[20, 40, 60, 100]" showFirstLastButtons
+                  [length]="resultsLength"
+                ></mat-paginator>
+
+              </div>
+
+
+            </div>
+          </div>
+        </div>>
+
+
+
+
+<!-- Download Dialog Box -->
+<ng-template let-data #downloadTemplate>
+    <div mat-dialog-content class="centerContents">
+        <p class="mat-dialog-title-font">{{downloadDialogTitle}}</p>
+        @if (displayProgressBar) {
+            <div style="padding: 15px">
+                <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+            </div>
+        }
+        <form [formGroup]="downloadForm" novalidate>
+            <p>
+                <mat-radio-group aria-label="Select an option" formControlName="downloadOption">
+                    <div><mat-radio-button value="assemblies" color="primary">All Assemblies</mat-radio-button></div>
+                    <div><mat-radio-button value="annotation" color="primary" class="radio">Annotation</mat-radio-button></div>
+                </mat-radio-group>
+                @if (displayError('downloadOption', 'required') && displayErrorMsg) {
+                    <mat-error class="errorMsg">
+                        <div>
+                            Please select an option!
+                        </div>
+                    </mat-error>
+                }
+            </p>
+            <div>
+                To download data outside of the web interface, please see
+                <a target="_blank" [routerLink]="['/bulk-downloads/']">Bulk Downloads</a>
+            </div>
+        </form>
+
+        <div mat-dialog-actions class="buttonContainer">
+            <button mat-button (click)="onCancelDialog()" class="flex-item cancel-button">Cancel</button>
+            <button mat-button (click)="onDownload()"
+                    [disabled]="downloadForm.get('downloadOption')?.invalid || displayProgressBar"
+                    class="flex-item download-button">
+                Download
+            </button>
+        </div>
+    </div>
+</ng-template>

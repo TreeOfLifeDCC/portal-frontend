@@ -16,13 +16,59 @@
             <div class="col-md-2">
                 <div class="row">
                     <div class="col-md-12 col-sm-6">
-                        <app-filter title="Article Type" isShowCount="true"></app-filter>
+                      
+                                <div class="card bg-lite mb-3 filter-top">
+                                    <h3 class="card-header filter-heading" >Article Type</h3>
+                                <ul class="list-group">
+                                    @for(filter of articleTypeFilters; track $index){
+                                        <li class="biosample list-group-item d-flex justify-content-between align-items-center
+                                        biosamples-inactive" [ngClass]="checkFilterIsActive(filter.key)"
+                                        (click)="onFilterClick(filter.label + '-' + filter.key)" style="cursor: pointer">
+                                        <span>{{filter.key}}</span>
+                                        <span class="badge badge-pill badge-info">{{filter.doc_count}}</span>
+                                        </li>
+                                    }
+                                
+                                </ul>
+
+                                </div>
                     </div>
                     <div class="col-md-12 col-sm-6">
-                        <app-filter title="Journal" isShowCount=true></app-filter>
+                       
+                        <div class="card bg-lite mb-3 filter-top">
+                            <h3 class="card-header filter-heading" >Journal</h3>
+                            <ul class="list-group" >
+                                @for(filter of journalFilters; track $index ){
+
+                                    <li class="biosample list-group-item d-flex justify-content-between align-items-center
+                                            biosamples-inactive" [ngClass]="checkFilterIsActive(filter.key)"
+                                        (click)="onFilterClick(filter.label + '-' + filter.key)" style="cursor: pointer">
+                                        <span>{{filter.key}}</span>
+                                        <span class="badge badge-pill badge-info">{{filter.doc_count}}</span>
+                                    </li>
+                                }
+                            
+                            
+                            </ul>
+                        </div>
+
                     </div>
                     <div class="col-md-12 col-sm-6">
-                        <app-filter title="Publication Year" isShowCount="true"></app-filter>
+                        
+                                <div class="card bg-lite mb-3 filter-top">
+                                    <h3 class="card-header filter-heading" >Publication Year</h3>
+                        <ul class="list-group" >
+                            @for(filter of pubYearFilters; track $index){
+                                <li class="biosample list-group-item d-flex justify-content-between align-items-center
+                                biosamples-inactive" [ngClass]="checkFilterIsActive(filter.key)"
+                                (click)="onFilterClick(filter.label + '-' + filter.key)" style="cursor: pointer">
+                                <span>{{filter.key}}</span>
+                                <span class="badge badge-pill badge-info">{{filter.doc_count}}</span>
+                                </li>
+                            }
+                        
+                        </ul>
+                                </div>
                     </div>
                 </div>
 
@@ -32,42 +78,52 @@
                 <h1 class="page-header">Publications</h1>
                 <br />
                 <div class="column-header" >
-<!--                    <button *ngIf="filterService.activeFilters.length > 0 || filterService.selectedFilterValue != ''-->
-<!--                    && (filterService.AnnotationFilters.length > 0 ||-->
-<!--                    filterService.AnnotationCompleteFilters.length > 0 || filterService.AssembliesFilters.length > 0-->
-<!--                    || filterService.RawDataFilters.length > 0)" type="button" style="float: right;"-->
-<!--                            class="btn btn-primary" mat-raised-button (click)="openDialog()">Download</button>-->
+                    <!-- @if (isLoadingResults || isRateLimitReached) {
+                        <div class="example-loading-shade">
+                            @if (isLoadingResults) {
+                                <mat-spinner></mat-spinner>
+                            }
+                            @if (isRateLimitReached) {
+                                <div class="example-rate-limit-reached">
+                                    Something went wrong, please try again!
+                                </div>
+                            }
 
-<!--                    <button type="button" style="float: right;" class="btn btn-primary"-->
-<!--                            mat-raised-button (click)="downloadCSV()">Download metadata</button>-->
-                    <div *ngIf="hasActiveFilters()">
-                        <app-active-filter true></app-active-filter>
-
-                        <span *ngIf="(filterService.selectedFilterValue!= undefined &&
-                        filterService.selectedFilterValue != '')">
-                    <button type="button" class="btn btn-success">{{filterService.selectedFilterValue.taxonomy}}
-                        <span class="badge badge-light" (click)="filterService.removeTaxaFilter(
-                        filterService.selectedFilterValue.taxonomy)">X</span>
-                    </button>
-                </span>
-                        <button class="btn btn-primary" type = "button" (click)="removeFilter()">
-                            Remove all filters</button>
-
+                        </div>
+                    } -->
+                    <div class="example-table-container">
+                        @if(activeFilters.length > 0){
+                            <h1 >Filters: </h1>
+                        }
+                    @if((activeFilters.length > 0)){
+                        @for(field of activeFilters;track $index){
+                            
+                                <button type="button" class="btn btn-success">
+                                    {{field}} <span class="badge badge-light" (click)="onFilterClick(field)">X</span>
+                                </button>
+                            
+                        
+                        }
+                        <button class="btn btn-primary" type="button" (click)="removeFilter()">Remove all filters
+                        </button>
+                    }
+                        <br>
                     </div>
                 </div>
-<!--                <mat-form-field class="column-header">-->
-<!--                    <mat-label>Search</mat-label>-->
-<!--                    <input  #searchInput matInput [(ngModel)]='filterService.searchText'-->
-<!--                            (ngModelChange)="this.searchUpdate.next($event)" placeholder="Ex. lutra" #input>-->
-<!--                </mat-form-field>-->
+
                 <table mat-table  matTableExporter  #table
-                       [dataSource]="dataSource" matSort (matSortChange)="customSort($event)">
+                       [dataSource]="dataSource" matSort (matSortChange)="customSort($event)"
+                       matSortActive="pubYear"
+                       matSortDisableClear
+                       matSortDirection="asc">
 
                     <ng-container matColumnDef="title">
                         <mat-header-cell *matHeaderCellDef mat-sort-header
                                          [ngClass]="'w-80 th-left'">Title</mat-header-cell>
                         <mat-cell *matCellDef="let element" [ngClass]="'w-80 th-left'">
-                            <a href="{{element['_source']['url']}}">{{element['_source']['title']}}</a>
+                            <a [href]="element['_source']['url']" [title]="element['_source']['title']"
+                               [innerHTML]="element['_source']['title']">
+                            </a>
                         </mat-cell>
                     </ng-container>
 
@@ -97,7 +153,7 @@
                         <mat-header-cell *matHeaderCellDef [ngClass]="'w-150 th-left'">Organism Name</mat-header-cell>
                         <mat-cell *matCellDef="let element"
                                   [ngClass]="'w-150 th-left'">
-                            <a [routerLink]="['/data/root/details/', element['_source']['organism_name']]">
+                            <a [routerLink]="['/data/root/organism-details/', element['_source']['organism_name']]">
                                 {{element['_source']['organism_name']}}
                             </a>
                         </mat-cell>
@@ -108,7 +164,7 @@
                     <mat-row *matRowDef="let row; columns: columns;"></mat-row>
                 </table>
                 <mat-paginator [pageSizeOptions]="[20, 40, 60, 100]" showFirstLastButtons
-                               [length]="dataCount" (page)="pageChanged($event)"></mat-paginator>
+                               [length]="dataCount" ></mat-paginator>
             </div>
         </div>
     </div>

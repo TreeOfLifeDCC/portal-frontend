@@ -1,20 +1,21 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
-import { TaxanomyComponent } from './taxanomy.component';
+import { OrganismDetailsComponent } from './organism-details.component';
 
-describe('TaxanomyComponent', () => {
-  let component: TaxanomyComponent;
-  let fixture: ComponentFixture<TaxanomyComponent>;
+// @ts-ignore
+describe('DetailsComponent', () => {
+  let component: OrganismDetailsComponent;
+  let fixture: ComponentFixture<OrganismDetailsComponent>;
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ TaxanomyComponent ]
-    })
+    imports: [OrganismDetailsComponent]
+})
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(TaxanomyComponent);
+    fixture = TestBed.createComponent(OrganismDetailsComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

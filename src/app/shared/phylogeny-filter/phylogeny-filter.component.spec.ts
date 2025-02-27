@@ -8,8 +8,8 @@ describe('PhylogenyFilterComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ PhylogenyFilterComponent ]
-    })
+    declarations: [PhylogenyFilterComponent]
+})
     .compileComponents();
   }));
 

@@ -1,1218 +1,422 @@
-import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
-import { ActivatedRoute, Params, Router } from '@angular/router';
-import { MatPaginator } from '@angular/material/paginator';
-import { MatSort } from '@angular/material/sort';
-import { MatTableDataSource } from '@angular/material/table';
-import { Title } from '@angular/platform-browser';
-import { StatusesService } from "../services/statuses.service";
-import { NgxSpinnerService } from 'ngx-spinner';
+import {
+    AfterViewInit,
+    Component,
+    EventEmitter, inject,
+    OnInit,
+    ViewChild
+} from '@angular/core';
 
-import { Taxonomy } from 'src/app/taxanomy/taxonomy.model';
-import { TaxanomyService } from 'src/app/taxanomy/taxanomy.service';
+import {MatPaginator} from '@angular/material/paginator';
+import {MatSort, MatSortHeader} from '@angular/material/sort';
+import {merge, of as observableOf} from 'rxjs';
+import {catchError, map, startWith, switchMap} from 'rxjs/operators';
+import {MatCard, MatCardActions, MatCardTitle} from '@angular/material/card';
+import {MatList, MatListItem} from '@angular/material/list';
 
-import 'jquery';
+import {MatLine} from '@angular/material/core';
+import {MatChip, MatChipSet} from '@angular/material/chips';
+import { NgClass, NgStyle } from '@angular/common';
+import {MatIcon} from '@angular/material/icon';
+import {MatProgressSpinner} from '@angular/material/progress-spinner';
+import {MatFormField, MatLabel} from '@angular/material/form-field';
+import {
+  MatCell,
+  MatCellDef,
+  MatColumnDef,
+  MatHeaderCell,
+  MatHeaderCellDef, MatHeaderRow, MatHeaderRowDef,
+  MatNoDataRow, MatRow, MatRowDef,
+  MatTable
+} from '@angular/material/table';
+import {ActivatedRoute, NavigationEnd, Router, RouterLink} from '@angular/router';
+import {MatAnchor, MatButton} from '@angular/material/button';
+import {MatInput} from '@angular/material/input';
+import {HttpClient} from '@angular/common/http';
+import { ApiService } from 'src/app/api.service';
+import {MatProgressBar} from '@angular/material/progress-bar';
+import {FormsModule} from '@angular/forms';
 
 @Component({
   selector: 'app-tracking-system',
   templateUrl: './tracking-system.component.html',
-  styleUrls: ['./tracking-system.component.css']
+  styleUrls: ['./tracking-system.component.css'],
+  standalone: true,
+    imports: [
+        MatCard,
+        MatCardTitle,
+        MatCardActions,
+        MatListItem,
+        MatList,
+        MatLine,
+        MatChipSet,
+        MatChip,
+        MatIcon,
+        MatProgressSpinner,
+        MatTable,
+        RouterLink,
+        MatHeaderCell,
+        MatColumnDef,
+        MatSortHeader,
+        MatCell,
+        MatHeaderCellDef,
+        MatCellDef,
+        MatPaginator,
+        MatNoDataRow,
+        MatSort,
+        MatAnchor,
+        MatHeaderRow,
+        MatRow,
+        MatInput,
+        MatLabel,
+        MatFormField,
+        MatHeaderRowDef,
+        MatRowDef,
+        NgClass,
+        NgStyle,
+        MatButton,
+        MatProgressBar,
+        FormsModule
+    ]
 })
 export class TrackingSystemComponent implements OnInit, AfterViewInit {
-  displayedColumns = ['organism', 'commonName', 'metadata_submitted_to_biosamples',
-    'raw_data_submitted_to_ena',  'assemblies_submitted_to_ena',
-    'annotation_complete'];
-  loading = true;
-  dataSource = new MatTableDataSource<any>();
-  orgDataSource = new MatTableDataSource<any>();
+  displayedColumns: string[] = ['organism', 'commonName', 'biosamples', 'raw_data', 'assemblies_status',
+      'annotation_complete'];
+  data: any;
+  searchValue: string;
+  searchChanged = new EventEmitter<any>();
+  filterChanged = new EventEmitter<any>();
+
+  resultsLength = 0;
+  isLoadingResults = true;
+  isRateLimitReached = false;
+  aggregations: any;
+  filters: any;
+  activeFilters = new Array<string>();
+  queryParams: any = {};
+  lastPhylogenyVal = '';
+  isPhylogenyFilterProcessing = false; // Flag to prevent double-clicking
+
+  currentStyle: string;
+  currentClass = 'kingdom';
+  classes = ['superkingdom', 'kingdom', 'subkingdom', 'superphylum', 'phylum', 'subphylum', 'superclass', 'class',
+      'subclass', 'infraclass', 'cohort', 'subcohort', 'superorder', 'order', 'suborder', 'infraorder', 'parvorder',
+      'section', 'subsection', 'superfamily', 'family', ' subfamily', ' tribe', 'subtribe', 'genus', 'series', 'subgenus',
+      'species_group', 'species_subgroup', 'species', 'subspecies', 'varietas', 'forma'];
+  timer: any;
+  phylogenyFilters: string[] = [];
+  symbiontsFilters: any[] = [];
+  displayProgressBar = false;
+
   @ViewChild(MatPaginator) paginator: MatPaginator;
-  @ViewChild(MatSort, { static: true }) sort: MatSort;
+  @ViewChild(MatSort) sort: MatSort;
+  private activatedRoute = inject(ActivatedRoute);
 
-  filtersMap;
-  isBiosampleFilterCollapsed = true;
-  isEnaFilterCollapsed = true;
-  filterKeyName = '';
-  itemLimitBiosampleFilter: number;
-  itemLimitEnaFilter: number;
-  filterSize: number;
-  urlAppendFilterArray = [];
-  searchText = '';
-  activeFilters = [];
-  symbiontsFilters = [];
-  BiosamplesFilters = [];
-  RawDataFilters = [];
-
-  AssembliesFilters = [];
-  AnnotationFilters = [];
-  AnnotationCompleteFilters = [];
-  statusesTotalCount = 0;
-  orgTotalCount = 0;
-  unpackedData;
-  showOrganismTable: boolean;
-  orgName = '';
-
-  childTaxanomy: Taxonomy;
-  selectedTaxonomy: any;
-  isSingleClick: Boolean = true;
-  currentTaxonomyTree: any;
-  showElement: Boolean = true;
-  taxonomies = [];
-  currentTaxonomy: any;
-  modalTaxa = '';
-  isFilterSelected: Boolean;
-  isDoubleClick: Boolean;
-  selectedFilterValue;
-  currentTaxaOnExpand;
-
-  taxaRankArray = ["superkingdom", "kingdom","subkingdom","superphylum","phylum","subphylum","superclass","class","subclass","infraclass","cohort","subcohort","superorder","order","suborder","infraorder","parvorder","section","subsection","superfamily","family","subfamily","tribe","subtribe","genus","series","subgenus","species_group","species_subgroup","species","subspecies","varietas","forma"]
-  phylSelectedRank = '';
-
-  constructor(private titleService: Title, private statusesService: StatusesService,
-    private activatedRoute: ActivatedRoute, private router: Router, private spinner: NgxSpinnerService, private taxanomyService: TaxanomyService) { }
+  constructor(private _apiService: ApiService, private router: Router) {
+  }
 
   ngOnInit(): void {
-    this.spinner.show();
-    this.isFilterSelected = false;
-    this.searchText = '';
-    this.showOrganismTable = false;
-    this.activeFilters = [];
-    this.urlAppendFilterArray = [];
-    this.filterSize = 3;
-    this.itemLimitBiosampleFilter = this.filterSize;
-    this.itemLimitEnaFilter = this.filterSize;
-    this.titleService.setTitle('Status tracking');
-    this.getStatusesQueryParamonInit();
-    this.selectedTaxonomy = [];
-    this.selectedFilterValue = '';
-    this.currentTaxaOnExpand = '';
-    this.resetTaxaTree();
-    $('[data-toggle="tooltip"]').tooltip();
-    this.currentTaxonomyTree = [];
-    this.isDoubleClick = false;
-    this.getChildTaxonomyRank('superkingdom', 'Eukaryota', 'kingdom');
+      // reload page if user clicks on menu link
+      this.router.events.subscribe((event) => {
+          if (event instanceof NavigationEnd) {
+              if (event.urlAfterRedirects === '/tracking') {
+                  this.refreshPage();
+              }
+          }
+      });
+
+      // get url parameters
+      const queryParamMap = this.activatedRoute.snapshot['queryParamMap'];
+      const params = queryParamMap['params'];
+      if (Object.keys(params).length !== 0) {
+          for (const key in params) {
+              if (params.hasOwnProperty(key)) {
+                  if (params[key].includes('phylogenyFilters - ')) {
+                      const phylogenyFilters = params[key].split('phylogenyFilters - ')[1];
+                      // Remove square brackets and split by comma
+                      this.phylogenyFilters = phylogenyFilters.slice(1, -1).split(',');
+                  } else if (params[key].includes('phylogenyCurrentClass - ')) {
+                      const phylogenyCurrentClass = params[key].split('phylogenyCurrentClass - ')[1];
+                      this.currentClass = phylogenyCurrentClass;
+                  } else if (params[key].includes('searchValue - ')) {
+                      this.searchValue = params[key].split('searchValue - ')[1];
+                  } else {
+                      this.activeFilters.push(params[key]);
+                  }
+
+              }
+          }
+      }
+
   }
 
-  // tslint:disable-next-line:typedef
   ngAfterViewInit() {
-    this.dataSource.paginator = this.paginator;
-    this.dataSource.sort = this.sort;
+      // If the user changes the metadataSort order, reset back to the first page.
+      this.sort.sortChange.subscribe(() => (this.paginator.pageIndex = 0));
+      this.searchChanged.subscribe(() => (this.paginator.pageIndex = 0));
+      this.filterChanged.subscribe(() => (this.paginator.pageIndex = 0));
+      merge(this.paginator.page, this.sort.sortChange, this.searchChanged, this.filterChanged)
+          .pipe(
+              startWith({}),
+              switchMap(() => {
+                  this.isLoadingResults = true;
+                  return this._apiService.getData(this.paginator.pageIndex,
+                      this.paginator.pageSize, this.searchValue, this.sort.active, this.sort.direction, this.activeFilters,
+                      this.currentClass, this.phylogenyFilters, 'tracking_status_27feb2025'
+                  ).pipe(catchError(() => observableOf(null)));
+              }),
+              map(data => {
+                  // Flip flag to show that loading has finished.
+                  this.isLoadingResults = false;
+                  this.isRateLimitReached = data === null;
+
+                  if (data === null) {
+                      return [];
+                  }
+
+                  // Only refresh the result length if there is new metadataData. In case of rate
+                  // limit errors, we do not want to reset the metadataPaginator to zero, as that
+                  // would prevent users from re-triggering requests.
+                  this.resultsLength = data.count;
+                  this.aggregations = data.aggregations;
+
+
+
+                  // symbionts
+                  this.symbiontsFilters = [];
+                  if (this.aggregations.symbionts_biosamples_status.buckets.length > 0) {
+                      this.symbiontsFilters = this.merge(this.symbiontsFilters,
+                          this.aggregations.symbionts_biosamples_status.buckets,
+                          'symbionts_biosamples_status');
+                  }
+                  if (this.aggregations.symbionts_raw_data_status.buckets.length > 0) {
+                      this.symbiontsFilters = this.merge(this.symbiontsFilters,
+                          this.aggregations.symbionts_raw_data_status.buckets,
+                          'symbionts_raw_data_status');
+                  }
+                  if (this.aggregations.symbionts_assemblies_status.buckets.length > 0) {
+                      this.symbiontsFilters = this.merge(this.symbiontsFilters,
+                          this.aggregations.symbionts_assemblies_status.buckets,
+                          'symbionts_assemblies_status');
+                  }
+                  // get last phylogeny element for filter button
+                  this.lastPhylogenyVal = this.phylogenyFilters.slice(-1)[0];
+
+                  // add filters to URL query parameters
+                  this.queryParams = [...this.activeFilters];
+
+                  // add search value to URL query param
+                  if (this.searchValue) {
+                      this.queryParams.push(`searchValue - ${this.searchValue}`);
+                  }
+
+                  if (this.phylogenyFilters && this.phylogenyFilters.length) {
+                      const index = this.queryParams.findIndex(element => element.includes('phylogenyFilters - '));
+                      if (index > -1) {
+                          this.queryParams[index] = `phylogenyFilters - [${this.phylogenyFilters}]`;
+                      } else {
+                          this.queryParams.push(`phylogenyFilters - [${this.phylogenyFilters}]`);
+                      }
+                  }
+
+                  // update url with the value of the phylogeny current class
+                  this.updateQueryParams('phylogenyCurrentClass');
+
+                  this.replaceUrlQueryParams();
+                  return data.results;
+              }),
+          )
+          .subscribe(data => (this.data = data));
   }
 
-  getStatusesQueryParamonInit() {
-    const queryParamMap = this.activatedRoute.snapshot['queryParamMap'];
-    const params = queryParamMap['params'];
-    if (Object.keys(params).length != 0) {
-      for (let key in params) {
-        if(key == 'phylogeny') {
-          this.isFilterSelected = true;
-          this.phylSelectedRank = params[key];
+  merge = (first: any[], second: any[], filterLabel: string) => {
+      for (let i = 0; i < second.length; i++) {
+          second[i].label = filterLabel;
+          first.push(second[i]);
+      }
+      return first;
+  }
+
+    checkFilterIsActive = (filter: string) => {
+        // console.log(this.filterService.activeFilters);
+        if (this.activeFilters.indexOf(filter) !== -1) {
+            return 'active-filter';
         }
-        this.appendActiveFilters(key, params);
-      }
-      setTimeout(() => {
-        this.getActiveFiltersAndResult();
-      }, 80);
-    }
-    else {
-      this.getAllStatuses(0, 15, this.sort.active, this.sort.direction);
-    }
-  }
 
-  appendActiveFilters(key, params) {
-    setTimeout(() => {
-      let filterValue = params[key];
-      if (key === 'symbionts_biosamples_status'){
-        filterValue = 'symbiontsBioSamplesStatus-' + params[key];
-      } else if (key === 'symbionts_raw_data_status'){
-        filterValue = 'symbiontsRawDataStatus-' + params[key];
-      } else if (key === 'symbionts_assemblies_status'){
-        filterValue = 'symbiontsAssembliesStatus-' + params[key];
-      }
-      this.urlAppendFilterArray.push({ name: key, value: filterValue });
-      this.activeFilters.push(filterValue);
-    }, 10);
-  }
+    }
+    getStatusCount(data: any) {
+        if (data) {
+            for (let i = 0; i < data.length; ++i) {
+                if (data[i].key === 'Done') {
+                    return data[i].doc_count;
+                }
+            }
+        }
+    }
 
-  getActiveFiltersAndResult(taxa?) {
-    let taxonomy;
-    if (taxa) {
-      taxonomy = [taxa];
+    applyFilter(event: Event) {
+        this.searchValue = (event.target as HTMLInputElement).value;
+        this.searchChanged.emit();
     }
-    else {
-      taxonomy = [this.currentTaxonomyTree];
+
+    updateQueryParams(urlParam: string){
+        if (urlParam === 'phylogenyCurrentClass'){
+            const queryParamIndex = this.queryParams.findIndex((element: any) => element.includes('phylogenyCurrentClass - '));
+            if (queryParamIndex > -1) {
+                this.queryParams[queryParamIndex] = `phylogenyCurrentClass - ${this.currentClass}`;
+            } else {
+                this.queryParams.push(`phylogenyCurrentClass - ${this.currentClass}`);
+            }
+        }
     }
-    this.statusesService.getFilterResults(this.activeFilters.toString(), this.sort.active, this.sort.direction, 0, 15, taxonomy, this.searchText)
-      .subscribe(
-        data => {
-          const unpackedData = [];
-          for (const item of data.hits.hits) {
-            unpackedData.push(this.unpackData(item));
-          }
-          this.statusesTotalCount = data.hits.total.value;
-          this.dataSource = new MatTableDataSource<any>(unpackedData);
-          this.dataSource.sort = this.sort;
-          this.dataSource.filterPredicate = this.filterPredicate;
-          this.unpackedData = unpackedData;
-          this.parseFilterAggregation(data);
-          this.childTaxanomy['superkingdom'] = [{ 'parent': 'Eukaryota', 'rank': 'kingdom', 'expanded': false, 'taxId': 2759, 'childData': data.aggregations.kingdomRank.scientificName.buckets }];
-          if(this.phylSelectedRank != '') {
-            let taxa = { 'rank': this.phylSelectedRank.split(' - ')[0], 'taxonomy': data.aggregations.childRank.scientificName.buckets[0].key, 'commonName': data.aggregations.childRank.scientificName.buckets[0].commonName.buckets[0].key, 'taxId': data.aggregations.childRank.scientificName.buckets[0].taxId.buckets[0].key};
-            this.selectedFilterValue = taxa;
-          }
-          for (let i = 0; i < this.urlAppendFilterArray.length; i++) {
+
+    onFilterClick(filterValue: string, phylogenyFilter: boolean = false) {
+        if (phylogenyFilter) {
+            if (this.isPhylogenyFilterProcessing) {
+                return;
+            }
+            // Set flag to prevent further clicks
+            this.isPhylogenyFilterProcessing = true;
+
+            this.phylogenyFilters.push(`${this.currentClass}:${filterValue}`);
+            const index = this.classes.indexOf(this.currentClass) + 1;
+            this.currentClass = this.classes[index];
+
+            // update url with the value of the phylogeny current class
+            this.updateQueryParams('phylogenyCurrentClass');
+
+            // Replace current parameters with new parameters.
+            this.replaceUrlQueryParams();
+            this.filterChanged.emit();
+
+            // Reset isPhylogenyFilterProcessing flag
             setTimeout(() => {
-              let inactiveClassName = '.' + this.urlAppendFilterArray[i].name + '-inactive';
-              let element = "li:contains('" + this.urlAppendFilterArray[i].value + "')";
-              $(element).addClass('active');
-            }, 1);
-
-            if (i == (this.urlAppendFilterArray.length - 1)) {
-              this.spinner.hide();
-            }
-          }
-
-        },
-        err => {
-          console.log(err);
-          this.spinner.hide();
+                this.isPhylogenyFilterProcessing = false;
+            }, 500);
+        } else {
+            clearTimeout(this.timer);
+            const index = this.activeFilters.indexOf(filterValue);
+            index !== -1 ? this.activeFilters.splice(index, 1) : this.activeFilters.push(filterValue);
+            this.filterChanged.emit();
         }
-      )
-  }
+    }
 
-  // tslint:disable-next-line:typedef
-  getAllStatuses(offset, limit, sortColumn?, sortOrder?) {
-    this.getFilters();
-    this.spinner.show();
-    this.statusesService.getAllStatuses(offset, limit, sortColumn, sortOrder, this.searchText)
-      .subscribe(
-        data => {
-          const unpackedData = [];
-          for (const item of data.biosampleStatus) {
-            unpackedData.push(this.unpackData(item));
-          }
-          this.statusesTotalCount = data.count;
-          this.dataSource = new MatTableDataSource<any>(unpackedData);
-          this.dataSource.sort = this.sort;
-          this.dataSource.filterPredicate = this.filterPredicate;
-          this.unpackedData = unpackedData;
-          setTimeout(() => {
-            this.spinner.hide();
-          }, 100)
-        },
-        err => {
-          console.log(err);
-          this.spinner.hide();
+    removePhylogenyFilters() {
+        // update url with the value of the phylogeny current class
+        const queryParamPhyloIndex = this.queryParams.findIndex(element => element.includes('phylogenyFilters - '));
+        if (queryParamPhyloIndex > -1) {
+            this.queryParams.splice(queryParamPhyloIndex, 1);
         }
-      );
-  }
 
-  getNextStatuses(currentSize, offset, limit, sortColumn?, sortOrder?) {
-    this.spinner.show();
-    this.statusesService.getAllStatuses(offset, limit, sortColumn, sortOrder, this.searchText)
-      .subscribe(
-        data => {
-          const unpackedData = [];
-          for (const item of data.biosampleStatus) {
-            unpackedData.push(this.unpackData(item));
-          }
-          this.dataSource = new MatTableDataSource<any>(unpackedData);
-          this.dataSource.sort = this.sort;
-          this.dataSource.filterPredicate = this.filterPredicate;
-          this.unpackedData = unpackedData;
-          this.spinner.hide();
-        },
-        err => {
-          console.log(err);
-          this.spinner.hide();
+        const queryParamCurrentClassIndex = this.queryParams.findIndex(element => element.includes('phylogenyCurrentClass - '));
+        if (queryParamCurrentClassIndex > -1) {
+            this.queryParams.splice(queryParamCurrentClassIndex, 1);
         }
-      )
-  }
-
-  pageChanged(event) {
-    let taxonomy = [this.currentTaxonomyTree];
-    let pageIndex = event.pageIndex;
-    let pageSize = event.pageSize;
-    let previousSize = pageSize * pageIndex;
-
-    let from = pageIndex * pageSize;
-    let size = pageSize;
-
-    if (this.activeFilters.length !== 0 || this.currentTaxonomyTree.length !== 0) {
-      this.getFilterResults(this.activeFilters.toString(), this.sort.active, this.sort.direction, from, size, taxonomy);
-      setTimeout(() => {
-        $('#' + this.modalTaxa + '-kingdom').addClass('active-filter');
-      }, 250);
-    }
-    else if (this.searchText.length !== 0) {
-      this.getSearchResults(from, size);
-    }
-    else {
-      this.getNextStatuses(previousSize, from, size, this.sort.active, this.sort.direction);
-      setTimeout(() => {
-        $('#' + this.modalTaxa + '-kingdom').addClass('active-filter');
-      }, 250);
-    }
-  }
-
-  // orgPageChanged(event) {
-  //   let pageIndex = event.pageIndex;
-  //   let pageSize = event.pageSize;
-  //   let previousSize = pageSize * pageIndex;
-
-  //   let from = pageIndex * pageSize;
-  //   let size = 0;
-  //   if ((from + pageSize) < this.statusesTotalCount) {
-  //     size = from + pageSize;
-  //   }
-  //   else {
-  //     size = this.statusesTotalCount;
-  //   }
-
-  //   this.findBioSampleByOrganismName(this.orgName, from, size);
-  // }
-
-  customSort(event) {
-    let taxonomy = [this.currentTaxonomyTree];
-    this.paginator.pageIndex = 0;
-    let pageIndex = this.paginator.pageIndex;
-    let pageSize = this.paginator.pageSize;
-    let from = pageIndex * pageSize;
-    let size = 0;
-    if ((from + pageSize) < this.statusesTotalCount) {
-      size = from + pageSize;
-    }
-    else {
-      size = this.statusesTotalCount;
+        // Replace current url parameters with new parameters.
+        this.replaceUrlQueryParams();
+        // reset phylogeny variables
+        this.phylogenyFilters = [];
+        this.currentClass = 'kingdom';
+        this.filterChanged.emit();
     }
 
-    if (this.activeFilters.length !== 0 || this.currentTaxonomyTree.length !== 0) {
-      this.getFilterResults(this.activeFilters.toString(), this.sort.active, this.sort.direction, from, size, taxonomy);
-      setTimeout(() => {
-        $('#' + this.modalTaxa + '-kingdom').addClass('active-filter');
-      }, 250);
-    }
-    else if (this.searchText.length !== 0) {
-      this.getSearchResults(from, size);
-    }
-    else {
-      this.getAllStatuses((pageIndex).toString(), pageSize.toString(), event.active, event.direction);
-    }
-
-  }
-
-  // orgSort(event) {
-  //   let pageIndex = this.paginator.pageIndex;
-  //   let pageSize = this.paginator.pageSize;
-  //   let from = pageIndex * pageSize;
-  //   let size = 0;
-  //   if ((from + pageSize) < this.statusesTotalCount) {
-  //     size = from + pageSize;
-  //   }
-  //   else {
-  //     size = this.orgTotalCount;
-  //   }
-
-  //   if (this.activeFilters.length !== 0) {
-  //     this.getFilterResults(this.activeFilters.toString(), this.sort.active, this.sort.direction, from, size);
-  //   }
-  //   else if (this.searchText.length !== 0) {
-  //     this.getSearchResults(from, size);
-  //   }
-  //   else {
-  //     this.getAllStatuses((pageIndex).toString(), pageSize.toString(), event.active, event.direction);
-  //   }
-
-  // }
-
-  // tslint:disable-next-line:typedef
-  filterPredicate(data: any, filterValue: any): boolean {
-    const filters = filterValue.split('|');
-    if (filters[1] === 'Metadata submitted to BioSamples') {
-      return data.biosampleStatus === filters[0].split(' - ')[1];
-    } else {
-      const ena_filters = filters[0].split(' - ');
-      if (ena_filters[0] === 'Raw Data') {
-        return data.raw_data === ena_filters[1];
-      }  else if (ena_filters[0] === 'Assemblies') {
-        return data.assemblies === ena_filters[1];
-      } else if (ena_filters[0] === 'Annotation complete') {
-        return data.annotation_complete === ena_filters[1];
-      } else if (ena_filters[0] === 'Annotation') {
-        return data.annotation === ena_filters[1];
-      }
-    }
-  }
-
-  // tslint:disable-next-line:typedef
-  unpackData(data: any) {
-    const dataToReturn = {};
-    dataToReturn['tax_id'] = data['_id'];
-    if (data.hasOwnProperty('_source')) {
-      data = data._source;
-    }
-    for (const key of Object.keys(data)) {
-      if (typeof data[key] === 'object') {
-        if (key === 'organism') {
-          dataToReturn[key] = data.organism.text;
-        }
-      } else {
-        dataToReturn[key] = data[key];
-      }
-    }
-    return dataToReturn;
-  }
-
-  // tslint:disable-next-line:typedef
-  checkFilterIsActive(filter: string) {
-    if (this.activeFilters.indexOf(filter) !== -1) {
-      return 'active-filter';
-    }
-    if (this.selectedTaxonomy.indexOf(filter) !== -1) {
-      return 'active-filter';
-    }
-
-  }
-
-  // tslint:disable-next-line:typedef
-  onFilterClick(event, label: string, filter: string) {
-    if (label === 'symbionts_biosamples_status'){
-      filter = 'symbiontsBioSamplesStatus-' + filter;
-    } else if (label === 'symbionts_raw_data_status'){
-      filter = 'symbiontsRawDataStatus-' + filter;
-    } else if (label === 'symbionts_assemblies_status'){
-      filter = 'symbiontsAssembliesStatus-' + filter;
-    }
-    this.paginator.pageIndex = 0;
-    let taxonomy = [this.currentTaxonomyTree];
-    // this.searchText = '';
-    let inactiveClassName = label.toLowerCase().replace(" ", "-") + '-inactive';
-    const filterIndex = this.activeFilters.indexOf(filter);
-    if (filterIndex !== -1) {
-      this.removeFilter(filter);
-    } else {
-      this.selectedFilterArray(label, filter);
-      this.activeFilters.push(filter);
-      this.dataSource.filter = `${filter.trim().toLowerCase()}|${label}`;
-      this.getFilterResults(this.activeFilters.toString(), this.sort.active, this.sort.direction, 0, 15, taxonomy);
-      this.updateActiveRouteParams();
-      if (this.currentTaxonomyTree.length > 1) {
-        setTimeout(() => {
-          $('#' + this.modalTaxa + '-kingdom').addClass('active-filter');
-        }, 250);
-      }
-    }
-
-  }
-
-
-  selectedFilterArray(key: string, filterValue: string) {
-    let jsonObj: {};
-
-    switch (key.toLowerCase()) {
-      case 'biosamples':
-        jsonObj = { name: 'biosamples', value: filterValue };
-        this.urlAppendFilterArray.push(jsonObj);
-        break;
-      case 'raw-data':
-        jsonObj = { name: 'raw_data', value: filterValue };
-        this.urlAppendFilterArray.push(jsonObj);
-        break;
-      case 'assemblies':
-        jsonObj = { name: 'assemblies', value: filterValue };
-        this.urlAppendFilterArray.push(jsonObj);
-        break;
-      case 'annotation-complete':
-        jsonObj = { name: 'annotation_complete', value: filterValue };
-        this.urlAppendFilterArray.push(jsonObj);
-        break;
-      case 'annotation':
-        jsonObj = { name: 'annotation', value: filterValue };
-        this.urlAppendFilterArray.push(jsonObj);
-        break;
-      case 'phylogeny':
-        jsonObj = { name: 'phylogeny', value: filterValue };
-        this.urlAppendFilterArray.push(jsonObj);
-        break;
-      case 'symbionts_biosamples_status':
-        filterValue = filterValue.replace(/^symbiontsBioSamplesStatus-/, '');
-        jsonObj = { name: 'symbionts_biosamples_status', value: filterValue };
-        this.urlAppendFilterArray.push(jsonObj);
-        break;
-      case 'symbionts_raw_data_status':
-        filterValue = filterValue.replace(/^symbiontsRawDataStatus-/, '');
-        jsonObj = { name: 'symbionts_raw_data_status', value: filterValue };
-        this.urlAppendFilterArray.push(jsonObj);
-        break;
-      case 'symbionts_assemblies_status':
-        filterValue = filterValue.replace(/^symbiontsAssembliesStatus-/, '');
-        jsonObj = { name: 'symbionts_assemblies_status', value: filterValue };
-        this.urlAppendFilterArray.push(jsonObj);
-        break;
-      default:
-        console.log(`Sorry, filter ${key} does not exist.`);
-    }
-
-  }
-
-  updateActiveRouteParams() {
-    const params = {};
-    const paramArray = this.urlAppendFilterArray.map(x => Object.assign({}, x));
-    if (paramArray.length != 0) {
-      for (let i = 0; i < paramArray.length; i++) {
-        params[paramArray[i].name] = paramArray[i].value;
-      }
-      this.router.navigate(['tracking'], { queryParams: params });
-    }
-    else {
-      this.router.navigate(['tracking']);
-    }
-  }
-
-  // tslint:disable-next-line:typedef
-  removeAllFilters() {
-    this.paginator.pageIndex = 0;
-    this.isFilterSelected = false;
-    this.selectedFilterValue = '';
-    this.phylSelectedRank = '';
-    $('#' + this.modalTaxa + '-kingdom').removeClass('active-filter')
-    this.resetTaxaTree()
-    this.modalTaxa = "";
-    this.activeFilters = [];
-    this.urlAppendFilterArray = [];
-    this.dataSource.filter = undefined;
-    if (this.searchText.length != 0) {
-      this.getFilterResults(this.activeFilters.toString(), this.sort.active, this.sort.direction, 0, 15, [this.currentTaxonomyTree]);
-      this.getChildTaxonomyRank('superkingdom', 'Eukaryota', 'kingdom');
-    }
-    else {
-      this.getFilters();
-      this.getAllStatuses(0, 15, this.sort.active, this.sort.direction);
-      this.getChildTaxonomyRank('superkingdom', 'Eukaryota', 'kingdom');
-    }
-    this.router.navigate(['tracking'], {});
-    this.spinner.show();
-    setTimeout(() => {
-      this.spinner.hide();
-    }, 800);
-  }
-
-  // tslint:disable-next-line:typedef
-  removeFilter(filter: string) {
-    this.paginator.pageIndex = 0;
-    if (filter != undefined) {
-      this.updateDomForRemovedFilter(filter);
-      this.updateActiveRouteParams();
-      const filterIndex = this.activeFilters.indexOf(filter);
-      this.activeFilters.splice(filterIndex, 1);
-      if (this.activeFilters.length !== 0) {
-        this.dataSource.filter = this.activeFilters[0].trim().toLowerCase();
-        this.getFilterResults(this.activeFilters.toString(), this.sort.active, this.sort.direction, 0, 15, [this.currentTaxonomyTree]);
-        if (this.currentTaxonomyTree.length > 1) {
-          setTimeout(() => {
-            $('#' + this.modalTaxa + '-kingdom').addClass('active-filter')
-          }, 250);
-        }
-      }
-      else if (this.currentTaxonomyTree.length > 1) {
-        this.getFilterResults(this.activeFilters.toString(), this.sort.active, this.sort.direction, 0, 15, [this.currentTaxonomyTree]);
-        setTimeout(() => {
-          $('#' + this.modalTaxa + '-kingdom').addClass('active-filter')
-        }, 250);
-      }
-      else if (this.searchText.length != 0) {
-        this.modalTaxa = "";
-        this.router.navigate(['tracking'], {});
-        this.isFilterSelected = false;
-        this.removeRankFromTaxaTree('superkingdom');
-        this.dataSource.filter = undefined;
-        this.activeFilters = [];
-        this.urlAppendFilterArray = [];
-        this.dataSource.filter = undefined;
-        this.getFilterResults(this.activeFilters.toString(), this.sort.active, this.sort.direction, 0, 15, [this.currentTaxonomyTree]);
-        this.getChildTaxonomyRank('superkingdom', 'Eukaryota', 'kingdom');
-      }
-      else {
-        this.isFilterSelected = false;
-        this.selectedFilterValue = '';
-        this.phylSelectedRank = '';
-        this.removeRankFromTaxaTree('superkingdom');
-        this.dataSource.filter = undefined;
-        this.activeFilters = [];
-        this.urlAppendFilterArray = [];
-        this.dataSource.filter = undefined;
-        this.getFilters();
-        this.getAllStatuses(0, 15, this.sort.active, this.sort.direction);
-        this.getChildTaxonomyRank('superkingdom', 'Eukaryota', 'kingdom');
-        this.modalTaxa = "";
-        this.router.navigate(['tracking'], {});
-      }
-    }
-  }
-
-  updateDomForRemovedFilter(filter: string) {
-    // update filter name for symbionts
-    if (filter.startsWith('symbiontsBioSamplesStatus-')){
-      filter = filter.replace(/^symbiontsBioSamplesStatus-/, '');
-    }
-    if (filter.startsWith('symbiontsRawDataStatus-')){
-      filter = filter.replace(/^symbiontsRawDataStatus-/, '');
-    }
-    if (filter.startsWith('symbiontsAssembliesStatus-')){
-      filter = filter.replace(/^symbiontsAssembliesStatus-/, '');
-    }
-    if (this.urlAppendFilterArray.length != 0) {
-      let inactiveClassName: string;
-      this.urlAppendFilterArray.filter(obj => {
-        if (obj.value == filter) {
-          inactiveClassName = obj.name + '-inactive';
-          $('.' + inactiveClassName).removeClass('active');
-          const filterIndex = this.urlAppendFilterArray.indexOf(obj);
-          this.urlAppendFilterArray.splice(filterIndex, 1);
-        }
-      });
-    }
-  }
-
-  updateDomForRemovedPhylogenyFilter(filter: string) {
-    if (this.urlAppendFilterArray.length != 0) {
-      let inactiveClassName: string;
-      this.urlAppendFilterArray.filter(obj => {
-        if (obj.value == filter) {
-          const filterIndex = this.urlAppendFilterArray.indexOf(obj);
-          this.urlAppendFilterArray.splice(filterIndex, 1);
-        }
-      });
-    }
-  }
-
-  // tslint:disable-next-line:typedef
-  getFilters() {
-    this.statusesService.getStatusesFilters().subscribe(
-      data => {
-        this.filtersMap = data;
-        this.BiosamplesFilters = this.filtersMap.biosamples.filter(i => i !== "");
-        this.RawDataFilters = this.filtersMap.raw_data.filter(i => i !== "");
-
-        this.AssembliesFilters = this.filtersMap.assemblies.filter(i => i !== "");
-        this.AnnotationCompleteFilters = this.filtersMap.annotation_complete.filter(i => i !== "");
-        this.AnnotationFilters = this.filtersMap.annotation.filter(i => i !== "");
-
-        // symbionts
-        this.symbiontsFilters = [];
-        if (this.filtersMap.symbionts_biosamples_status) {
-          this.symbiontsFilters = this.merge(this.symbiontsFilters,
-              this.filtersMap.symbionts_biosamples_status,
-              'symbionts_biosamples_status',
-              'symbiontsBioSamplesStatus');
-        }
-        if (this.filtersMap.symbionts_raw_data_status) {
-          this.symbiontsFilters = this.merge(this.symbiontsFilters,
-              this.filtersMap.symbionts_raw_data_status,
-              'symbionts_raw_data_status',
-              'symbiontsRawDataStatus');
-        }
-        if (this.filtersMap.symbionts_assemblies_status) {
-          this.symbiontsFilters = this.merge(this.symbiontsFilters,
-              this.filtersMap.symbionts_assemblies_status,
-              'symbionts_assemblies_status',
-              'symbiontsAssembliesStatus');
-        }
-      },
-      err => console.log(err)
-    );
-  }
-
-
-  merge = (first: any[], second: any[], filterLabel, filterPrefix) => {
-    for (let i = 0; i < second.length; i++) {
-      second[i].label = filterLabel;
-      second[i].filterPrefix = filterPrefix;
-      first.push(second[i]);
-    }
-    return first;
-  }
-
-  getStatusClass(status: string) {
-    if (status != undefined) {
-      if (status.toLowerCase().includes('waiting')) {
-        return 'badge badge-pill badge-warning';
-      } else {
-        return 'badge badge-pill badge-success';
-      }
-    }
-  }
-
-  getStatusStyle(status: string) {
-    if (status !== undefined) {
-      if (status.toLowerCase().includes('waiting')) {
-        return ['#FFC107', 'dark_text_chip'];
-      } else {
-        return ['#8FBC45', 'white_text_chip'];
-      }
-    }
-  }
-
-
-  getFilterResults(filter, sortColumn?, sortOrder?, from?, size?, taxonomyFilter?) {
-    this.spinner.show();
-    this.statusesService.getFilterResults(filter, this.sort.active, this.sort.direction, from, size, taxonomyFilter, this.searchText)
-      .subscribe(
-        data => {
-          const unpackedData = [];
-          for (const item of data.hits.hits) {
-            unpackedData.push(this.unpackData(item));
-          }
-          this.statusesTotalCount = data.hits.total.value;
-          this.dataSource = new MatTableDataSource<any>(unpackedData);
-          this.dataSource.sort = this.sort;
-          this.dataSource.filterPredicate = this.filterPredicate;
-          this.unpackedData = unpackedData;
-          this.parseFilterAggregation(data);
-          this.childTaxanomy['superkingdom'] = [{ 'parent': 'Eukaryota', 'rank': 'kingdom', 'expanded': false, 'taxId': 2759, 'childData': data.aggregations.kingdomRank.scientificName.buckets }];
-          if (data.aggregations.filters != undefined) {
-            this.selectedTaxonomy.push(data.aggregations.childRank.scientificName.buckets[0]);
-          }
-          this.spinner.hide();
-        },
-        err => {
-          console.log(err);
-          this.spinner.hide();
-        }
-      )
-  }
-
-  // tslint:disable-next-line:typedef
-  getSearchResults(from?, size?) {
-    this.router.navigate(['tracking'], {});
-    this.resetTaxaTree();
-    this.getChildTaxonomyRank('superkingdom', 'Eukaryota', 'kingdom');
-    $('.kingdom, .subkingdom').removeClass('non-disp active-filter');
-    $('.biosamples-inactive').removeClass('non-disp active-filter');
-    $('.raw-data-inactive').removeClass('non-disp active-filter');
-    $('.mapped-reads-inactive').removeClass('non-disp active-filter');
-    $('.assemblies-inactive').removeClass('non-disp active-filter');
-    $('.annotation-complete-inactive').removeClass('non-disp active-filter');
-    $('.annotation-inactive').removeClass('non-disp active-filter');
-
-    // this.spinner.show();
-    if (this.searchText.length == 0) {
-      this.getAllStatuses(0, 15, this.sort.active, this.sort.direction);
-      this.getChildTaxonomyRank('superkingdom', 'Eukaryota', 'kingdom');
-    }
-    else {
-      this.spinner.show()
-      this.isFilterSelected = false;
-      this.activeFilters = [];
-      this.selectedFilterValue = '';
-      this.statusesService.getSearchResults(this.searchText, this.sort.active, this.sort.direction, from, size)
-        .subscribe(
-          data => {
-            const unpackedData = [];
-            for (const item of data.hits.hits) {
-              unpackedData.push(this.unpackData(item));
-            }
-            this.statusesTotalCount = data.hits.total.value;
-            this.dataSource = new MatTableDataSource<any>(unpackedData);
-            this.dataSource.sort = this.sort;
-            this.dataSource.filterPredicate = this.filterPredicate;
-            this.unpackedData = unpackedData;
-            this.childTaxanomy['superkingdom'] = [{ 'parent': 'Eukaryota', 'rank': 'kingdom', 'expanded': false, 'taxId': 2759, 'childData': data.aggregations.kingdomRank.scientificName.buckets }];
-            this.parseFilterAggregation(data);
-            if (data.aggregations.filters != undefined) {
-              this.selectedTaxonomy.push(data.aggregations.childRank.scientificName.buckets[0]);
-            }
-            this.spinner.hide();
-          },
-          err => {
-            console.log(err);
-            this.spinner.hide();
-          }
-        )
-    }
-  }
-
-  toggleCollapse(filterKey) {
-    if (filterKey == 'Metadata submitted to BioSamples') {
-      if (this.isBiosampleFilterCollapsed) {
-        this.itemLimitBiosampleFilter = 10000;
-        this.isBiosampleFilterCollapsed = false;
-      } else {
-        this.itemLimitBiosampleFilter = 3;
-        this.isBiosampleFilterCollapsed = true;
-      }
-    }
-    else if (filterKey == 'Data submitted to ENA') {
-      if (this.isEnaFilterCollapsed) {
-        this.itemLimitEnaFilter = 10000;
-        this.isEnaFilterCollapsed = false;
-      } else {
-        this.itemLimitEnaFilter = 3;
-        this.isEnaFilterCollapsed = true;
-      }
-    }
-  }
-
-  toggleOrganismTable() {
-    $("#org-table").hide();
-    $("#overlay").css({ "display": "none" });
-    this.showOrganismTable = false;
-    this.orgDataSource = new MatTableDataSource<any>();
-    this.orgDataSource.sort = this.sort;
-  }
-
-  parseFilterAggregation(data: any) {
-    this.filtersMap = data;
-    this.symbiontsFilters = [];
-    this.BiosamplesFilters = this.filtersMap.aggregations.biosamples.buckets.filter(i => {
-      if (i !== "" && i.key.toLowerCase() === "done") {
-        let obj = i;
-        obj.key = "Biosamples - " + obj.key;
-        return obj;
-      }
-    });
-    this.RawDataFilters = this.filtersMap.aggregations.raw_data.buckets.filter(i => {
-      if (i !== "" && i.key.toLowerCase() === "done") {
-        let obj = i;
-        obj.key = "Raw data - " + obj.key;
-        return obj;
-      }
-    });
-
-    this.AssembliesFilters = this.filtersMap.aggregations.assemblies.buckets.filter(i => {
-      if (i !== "" && i.key.toLowerCase() === "done") {
-        let obj = i;
-        obj.key = "Assemblies - " + obj.key;
-        return obj;
-      }
-    });
-    this.AnnotationCompleteFilters = this.filtersMap.aggregations.annotation_complete.buckets.filter(i => {
-      if (i !== "" && i.key.toLowerCase() === "done") {
-        let obj = i;
-        obj.key = "Annotation complete - " + obj.key;
-        return obj;
-      }
-    });
-    this.AnnotationFilters = this.filtersMap.aggregations.annotation.buckets.filter(i => {
-      if (i !== "" && i.key.toLowerCase() === "done") {
-        let obj = i;
-        obj.key = "Annotation - " + obj.key;
-        return obj;
-      }
-    });
-
-    // symbionts
-    if (this.filtersMap.aggregations.symbionts_biosamples_status) {
-      this.symbiontsFilters = this.merge(this.symbiontsFilters,
-          this.filtersMap.aggregations.symbionts_biosamples_status.buckets,
-          'symbionts_biosamples_status',
-          'symbiontsBioSamplesStatus');
-    }
-    if (this.filtersMap.aggregations.symbionts_raw_data_status) {
-      this.symbiontsFilters = this.merge(this.symbiontsFilters,
-          this.filtersMap.aggregations.symbionts_raw_data_status.buckets,
-          'symbionts_raw_data_status',
-          'symbiontsRawDataStatus');
-    }
-    if (this.filtersMap.aggregations.symbionts_assemblies_status) {
-      this.symbiontsFilters = this.merge(this.symbiontsFilters,
-          this.filtersMap.aggregations.symbionts_assemblies_status.buckets,
-          'symbionts_assemblies_status',
-          'symbiontsAssembliesStatus');
-    }
-  }
-
-
-  // Ontology aware filter
-  initTaxonomyObject() {
-    this.childTaxanomy = {
-      cellularorganism: [{ parent: 'Root', rank: 'superkingdom', expanded: false, taxId: 2759, childData: [{ key: 'Eukaryota', doc_count: '1', commonName: {buckets:[]}, taxId: {buckets:[]} }] }],
-      superkingdom: [],
-      kingdom: [],
-      subkingdom: [],
-      superphylum: [],
-      phylum: [],
-      subphylum: [],
-      superclass: [],
-      class: [],
-      subclass: [],
-      infraclass: [],
-      cohort: [],
-      subcohort: [],
-      superorder: [],
-      order: [],
-      parvorder: [],
-      suborder: [],
-      infraorder: [],
-      section: [],
-      subsection: [],
-      superfamily: [],
-      family: [],
-      subfamily: [],
-      tribe: [],
-      subtribe: [],
-      genus: [],
-      series: [],
-      subgenus: [],
-      species_group: [],
-      species_subgroup: [],
-      species: [],
-      subspecies: [],
-      varietas: [],
-      forma: []
-    };
-    this.taxonomies = [
-      "cellularorganism",
-      "superkingdom",
-      "kingdom",
-      "subkingdom",
-      "superphylum",
-      "phylum",
-      "subphylum",
-      "superclass",
-      "class",
-      "subclass",
-      "infraclass",
-      "cohort",
-      "subcohort",
-      "superorder",
-      "order",
-      "parvorder",
-      "suborder",
-      "infraorder",
-      "section",
-      "subsection",
-      "superfamily",
-      "family",
-      "subfamily",
-      "tribe",
-      "subtribe",
-      "genus",
-      "series",
-      "subgenus",
-      "species_group",
-      "species_subgroup",
-      "species",
-      "subspecies",
-      "varietas",
-      "forma"
-    ];
-    $('#myUL, #root-list, #Eukaryota-superkingdom').toggleClass("active");
-  }
-
-  toggleTaxanomy(rank, taxonomy) {
-    $('#' + rank).toggleClass("active");
-  }
-
-  showTaxonomyModal(event: any, rank: string, taxonomy: string, childRank: string) {
-    this.paginator.pageIndex = 0;
-    // this.searchText = "";
-    this.isDoubleClick = false;
-    setTimeout(() => {
-      if (!this.isDoubleClick) {
-        $('#myUL').css('display', 'none');
-        this.modalTaxa = taxonomy;
-        if ($(event.target).hasClass('active-filter')) {
-          this.spinner.show();
-          let filter = this.selectedFilterValue.rank + ' - ' +this.selectedFilterValue.taxId;
-          const filterIndex = this.activeFilters.indexOf(filter);
-          if (filterIndex !== -1) {
-            this.activeFilters.splice(filterIndex);
-          }
-          this.isFilterSelected = false;
-          this.phylSelectedRank = '';
-          setTimeout(() => {
-            this.updateDomForRemovedPhylogenyFilter(filter);
-            this.updateActiveRouteParams();
-          }, 100);
-          let taxa = { 'rank': 'superkingdom', 'taxonomy': 'Eukaryota', 'childRank': 'kingdom' };
-          this.currentTaxonomyTree = [];
-          this.currentTaxonomyTree = [taxa];
-          this.currentTaxonomy = taxa;
-          this.selectedFilterValue = '';
-          $(event.target).removeClass('active-filter');
-          $('#myUL').css('display', 'block');
-          this.getActiveFiltersAndResult();
-          setTimeout(() => {
-            this.spinner.hide()
-          }, 400);
-        }
-        else {
-          this.spinner.show();
-          this.resetTaxaTree();
-          this.getChildTaxonomyRank('superkingdom', 'Eukaryota', 'kingdom');
-          $('.kingdom, .subkingdom').removeClass('active-filter');
-          setTimeout(() => {
-            this.getChildTaxonomyRank(rank, taxonomy, childRank);
-            $(event.target).addClass('active-filter');
-            this.modalTaxa = taxonomy;
-          }, 150);
-
-          setTimeout(() => {
-            $('#myUL').css('display', 'block');
-            $('.subkingdom').addClass('active');
-            $('#taxonomyModal').modal({ backdrop: 'static', keyboard: false });
-            $('#taxonomyModal').modal('show');
-            $(".modal-backdrop").show();
-            this.spinner.hide();
-          }, 900);
-        }
-      }
-    }, 250);
-  }
-
-  removeTaxaFilter(taxonomy: any) {
-    this.spinner.show();
-    let filter = this.selectedFilterValue.rank + ' - ' +this.selectedFilterValue.taxId;
-    const filterIndex = this.activeFilters.indexOf(filter);
-    if (filterIndex !== -1) {
-      this.activeFilters.splice(filterIndex);
-    }
-    this.isFilterSelected = false;
-    this.phylSelectedRank = '';
-    setTimeout(() => {
-      this.updateDomForRemovedPhylogenyFilter(filter);
-      this.updateActiveRouteParams();
-    }, 100);
-    let taxa = { 'rank': 'superkingdom', 'taxonomy': 'Eukaryota', 'childRank': 'kingdom' };
-    this.currentTaxonomyTree = [];
-    this.currentTaxonomyTree = [taxa];
-    this.currentTaxonomy = taxa;
-    this.selectedFilterValue = '';
-    $(taxonomy+'-kingdom').removeClass('active-filter');
-    $('#myUL').css('display', 'block');
-    this.getActiveFiltersAndResult();
-    setTimeout(() => {
-      this.spinner.hide()
-    }, 400);
-  }
-
-  getChildTaxonomyRank(rank: string, taxonomy: string, childRank: string) {
-    let taxa = { 'rank': rank, 'taxonomy': taxonomy, 'childRank': childRank };
-    this.currentTaxonomy = taxa;
-    this.createTaxaTree(rank, taxa);
-    if (this.showElement) {
-      this.taxanomyService.getChildTaxonomyRank(this.activeFilters, rank, taxonomy, childRank, this.currentTaxonomyTree, 'status', this.searchText).subscribe(
-        data => {
-          this.parseAndPushTaxaData(rank, data);
-          setTimeout(() => {
-            let childRankIndex = this.taxonomies.findIndex(x => x === data[rank].rank);
-            let childData = data[rank].childData;
-            if (childData.length == 1 && childData[0].key.toLowerCase() === 'other') {
-              if (this.taxonomies[childRankIndex + 1] != undefined) {
-                let taxa = { 'rank': data[rank].rank, 'taxonomy': 'Other', 'childRank': this.taxonomies[childRankIndex + 1] };
-                this.getChildTaxonomyRank(taxa.rank, taxa.taxonomy, taxa.childRank);
-              }
-            }
-            else {
-              this.currentTaxaOnExpand = this.currentTaxonomy;
-              if ((childData.length > 1 && childData.filter(function (e) { return e.key.toLowerCase() === 'other'; }).length > 0) || (childData.length == 1 && this.currentTaxaOnExpand.taxonomy.toLowerCase() === 'other')) {
-                let childClass = 'other-' + this.currentTaxaOnExpand.childRank;
-                $('ul.' + childClass).css('padding-inline-start', '40px');
-              }
-            }
-            setTimeout(() => {
-              $('.' + taxonomy + '-' + childRank).addClass("active");
-            }, 120);
-          }, 100);
-        },
-        err => {
-          console.log(err);
+    replaceUrlQueryParams() {
+        this.router.navigate([], {
+            relativeTo: this.activatedRoute,
+            queryParams: this.queryParams,
+            replaceUrl: true,
+            skipLocationChange: false
         });
     }
-  }
 
-  getChildTaxonomyRankEvent(event, rank: string, taxonomy: string, childRank: string) {
-    this.spinner.show();
-    $('#myUL').css('display', 'none');
-    setTimeout(() => {
-      let taxa = { 'rank': rank, 'taxonomy': taxonomy, 'childRank': childRank };
-      this.currentTaxaOnExpand = taxa;
-      if ($(event.target).hasClass('fa-plus-circle')) {
-        this.getChildTaxonomyRank(rank, taxonomy, childRank);
-        setTimeout(() => {
-          $(event.target).removeClass('fa-plus-circle');
-          $(event.target).addClass('fa-minus-circle');
-          setTimeout(() => {
-            $('#myUL').css('display', 'block');
-            this.spinner.hide();
-          }, 850);
-        }, 100);
+  checkStyle(filterValue: string) {
+      if (this.activeFilters.includes(filterValue)) {
+          return 'background-color: #A8BAA8';
+      } else {
+          return '';
       }
-      else if ($(event.target).hasClass('fa-minus-circle')) {
-        this.spinner.show();
-        // TODO check removeRankFromTaxaTree to remove this
-        $(event.target).removeClass('fa-minus-circle');
-        $(event.target).addClass('fa-plus-circle');
-        this.removeRankFromTaxaTree(taxa);
-        setTimeout(() => {
-          $('#myUL').css('display', 'block');
-          this.spinner.hide();
-        }, 200);
+  }
+
+  displayActiveFilterName(filterName: string) {
+      if (filterName && filterName.startsWith('symbionts_')) {
+          return 'Symbionts-' + filterName.split('-')[1];
       }
-    }, 250);
+      return filterName;
   }
 
-  filterTaxonomy(rank: string, taxonomy: string, childRank: string, commonName, taxId) {
-    let taxa = { 'rank': rank, 'taxonomy': taxonomy, 'childRank': childRank, 'commonName': commonName, 'taxId': taxId };
-    this.selectedFilterValue = taxa;
-    let filterObj = rank + ' - ' +taxId;
-    this.selectedFilterArray('phylogeny', filterObj);
-    this.updateActiveRouteParams();
-    this.paginator.pageIndex = 0;
-    this.isDoubleClick = true;
-    this.createTaxaTree(rank, taxa);
-    this.selectedTaxonomy.push(taxa);
-    $('#taxonomyModal').modal('hide');
-    $(".modal-backdrop").hide();
-    setTimeout(() => {
-      let treeLength = this.currentTaxonomyTree.length;
-      this.currentTaxonomy = this.currentTaxonomyTree[treeLength - 1];
-      this.getActiveFiltersAndResult(this.currentTaxonomyTree);
-    }, 300);
-    setTimeout(() => {
-      this.isFilterSelected = true;
-      $('#' + this.modalTaxa + '-kingdom').addClass('active-filter');
-      this.isDoubleClick = false;
-    }, 350);
-
+  onHistoryClick() {
+      this.phylogenyFilters.splice(this.phylogenyFilters.length - 1, 1);
+      const previousClassIndex = this.classes.indexOf(this.currentClass) - 1;
+      this.currentClass = this.classes[previousClassIndex];
+      this.filterChanged.emit();
   }
 
-  parseAndPushTaxaData(rank, data) {
-    let temp = this.childTaxanomy[rank];
-
-    if (temp.length > 0) {
-      if (!(temp.filter(function (e) { return e.parent === data[rank].parent; }).length > 0)) {
-        this.childTaxanomy[rank].push(data[rank]);
-      }
-    }
-    else {
-      this.childTaxanomy[rank].push(data[rank]);
-    }
-  }
-
-  createTaxaTree(rank, taxa) {
-    let temp = this.currentTaxonomyTree;
-    if (temp.length > 0) {
-      if (!(temp.filter(function (e) { return e.rank === taxa.rank; }).length > 0)) {
-        if (!(temp.filter(function (e) { return (e.taxonomy === taxa.taxonomy && e.rank === taxa.rank) }).length > 0)) {
-          this.currentTaxonomyTree.push(taxa);
+    onRefreshClick() {
+        this.phylogenyFilters = [];
+        this.currentClass = 'kingdom';
+        // remove phylogenyFilters param from url
+        const index = this.queryParams.findIndex(element => element.includes('phylogenyFilters - '));
+        if (index > -1) {
+            this.queryParams.splice(index, 1);
+            // Replace current parameters with new parameters.
+            this.replaceUrlQueryParams();
         }
-      }
-      else {
-        if (!(temp.filter(function (e) { return (e.taxonomy === taxa.taxonomy && e.rank === taxa.rank) }).length > 0)) {
-          let index = temp.findIndex(x => x.rank === taxa.rank);
-          let itemsToremove = this.currentTaxonomyTree;
-          let prevTaxaToRemove = this.currentTaxonomyTree[this.currentTaxonomyTree.length - 1];
-          this.currentTaxonomyTree = this.currentTaxonomyTree.slice(0, index);
-          itemsToremove = itemsToremove.splice(index);
-          itemsToremove.forEach(element => {
-            $('.' + element.taxonomy + '-' + element.childRank).removeClass("active");
-          });
-          let taxaIndex = this.taxonomies.findIndex(x => x === taxa.rank) + 1;
+        this.filterChanged.emit();
+    }
 
-          for (let i = taxaIndex; i < this.taxonomies.length; i++) {
-            this.childTaxanomy[this.taxonomies[i]] = [];
-          }
-          this.currentTaxonomyTree.push(taxa);
-          this.showElement = true;
-          $('#' + prevTaxaToRemove.taxonomy + '-' + prevTaxaToRemove.rank).prev().removeClass('fa-minus-circle');
-          $('#' + prevTaxaToRemove.taxonomy + '-' + prevTaxaToRemove.rank).prev().addClass('fa-plus-circle');
+  getStyle(status: string) {
+      if (status === 'Done') {
+          return 'background-color: #A8BAA8; color: black';
+      } else {
+          return 'background-color: #D8BCAA; color: black';
+      }
+  }
+    refreshPage() {
+        clearTimeout(this.timer);
+        this.activeFilters = [];
+        this.phylogenyFilters = [];
+        this.searchValue = '';
+        this.currentClass = 'kingdom';
+        this.filterChanged.emit();
+
+    }
+
+    getStatusStyle(status: string) {
+      if (status !== undefined) {
+            if (status.toString().toLowerCase().includes('waiting')) {
+                return ['#FFC107', 'dark_text_chip'];
+            } else {
+                return ['#8FBC45', 'white_text_chip'];
+            }
         }
-        else {
-          let index = temp.findIndex(x => x.rank === taxa.rank);
-          let itemsToremove = this.currentTaxonomyTree;
-          let prevTaxaToRemove = this.currentTaxonomyTree[this.currentTaxonomyTree.length - 1];
-          this.currentTaxonomyTree = this.currentTaxonomyTree.slice(0, index);
-          itemsToremove = itemsToremove.splice(index);
-          itemsToremove.forEach(element => {
-            $('.' + element.taxonomy + '-' + element.childRank).removeClass("active");
-          });
-          let taxaIndex = this.taxonomies.findIndex(x => x === taxa.rank) + 1;
-          for (let i = taxaIndex; i < this.taxonomies.length; i++) {
-            this.childTaxanomy[this.taxonomies[i]] = [];
-          }
-          if (this.isDoubleClick) {
-            this.currentTaxonomyTree.push(taxa);
-          }
-          this.showElement = true;
-          $('#' + prevTaxaToRemove.taxonomy + '-' + prevTaxaToRemove.rank).prev().removeClass('fa-minus-circle');
-          $('#' + prevTaxaToRemove.taxonomy + '-' + prevTaxaToRemove.rank).prev().addClass('fa-plus-circle');
-        }
-      }
+      // default background colour
+      return ['#8FBC45', 'white_text_chip'];
     }
-    else {
-      this.currentTaxonomyTree.push(taxa);
-    }
-  }
 
-  resetTaxaTree() {
-    $('.nested').removeClass("active");
-    this.selectedTaxonomy = [];
-    this.currentTaxonomyTree = [];
-    this.modalTaxa = "";
-    this.initTaxonomyObject();
-  }
 
-  hideTaxaModal() {
-    this.spinner.show();
-    this.resetTaxaTree();
-    this.getChildTaxonomyRank('superkingdom', 'Eukaryota', 'kingdom');
-    $('.kingdom, .subkingdom').removeClass('active-filter');
-    setTimeout(() => {
-      if (this.activeFilters.length !== 0 || this.currentTaxonomyTree.length != 0) {
-        let taxa = [this.currentTaxonomyTree];
-        this.getFilterResults(this.activeFilters.toString(), this.sort.active, this.sort.direction, 0, 15, taxa);
-      }
-      else {
-        this.router.navigate(['data'], {});
-        this.dataSource.filter = undefined;
-        this.getFilters();
-        this.getAllStatuses(0, 15, this.sort.active, this.sort.direction);
-        this.getChildTaxonomyRank('superkingdom', 'Eukaryota', 'kingdom');
-      }
-      this.spinner.hide();
-    }, 250);
-  }
+    downloadFile(downloadOption: string, dialog: boolean) {
+        this.displayProgressBar = true;
+        this._apiService.downloadData(downloadOption, this.paginator.pageIndex,
+            this.paginator.pageSize, this.searchValue || '', this.sort.active, this.sort.direction, this.activeFilters,
+            this.currentClass, this.phylogenyFilters, 'tracking_status_27feb2025').subscribe({
+            next: (response: Blob) => {
+                const blobUrl = window.URL.createObjectURL(response);
+                const a = document.createElement('a');
+                a.href = blobUrl;
+                a.download = 'download.csv';
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                this.displayProgressBar = false;
+            },
+            error: error => {
+                console.error('Error downloading the CSV file:', error);
+            },
+            complete: () => {
+                this.displayProgressBar = false;
+            }
+        });
+    }
 
-  removeRankFromTaxaTree(taxa) {
-    let temp = this.currentTaxonomyTree;
-    let index = temp.findIndex(x => x.rank === taxa.rank);
-    let itemsToremove = this.currentTaxonomyTree;
-    this.currentTaxonomyTree = this.currentTaxonomyTree.slice(0, index);
-    itemsToremove = itemsToremove.splice(index);
-    let taxaIndex = this.taxonomies.findIndex(x => x === taxa.rank);
-    for (let i = taxaIndex; i < this.taxonomies.length; i++) {
-      let taxRank = this.taxonomies[i];
-      this.childTaxanomy[taxRank] = [];
-    }
-    setTimeout(() => {
-      this.currentTaxonomy = this.currentTaxonomyTree[this.currentTaxonomyTree.length - 1];
-    }, 50);
-  }
 
-  downloadCSV() {
-    let taxonomy = [this.currentTaxonomyTree];
-    this.statusesService.downloadCSV(this.activeFilters.toString(), this.sort.active, this.sort.direction, 0, 5000, taxonomy, this.searchText).subscribe(data => {
-			const blob = new Blob([data], {type: 'application/csv'});
-      var downloadURL = window.URL.createObjectURL(data);
-      var link = document.createElement('a');
-      link.href = downloadURL;
-      link.download = "organism-statuses-metadata.csv";
-      link.click();
-		}), error => console.log('Error downloading the file'),
-                 () => console.info('File downloaded successfully');
-  }
-
-  displayActiveFilterName(filterName: string){
-    if (filterName.includes('symbiontsBioSamplesStatus-')){
-      return filterName.replace(/^symbiontsBioSamplesStatus-/, 'Symbionts-');
-    }
-    if (filterName.includes('symbiontsRawDataStatus-')){
-      return filterName.replace(/^symbiontsRawDataStatus-/, 'Symbionts-');
-    }
-    if (filterName.includes('symbiontsAssembliesStatus-')){
-      return filterName.replace(/^symbiontsAssembliesStatus-/, 'Symbionts-');
-    }
-    return filterName;
-  }
 
 }

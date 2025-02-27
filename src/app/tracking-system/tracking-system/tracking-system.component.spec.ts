@@ -8,8 +8,8 @@ describe('TrackingSystemComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ TrackingSystemComponent ]
-    })
+    imports: [TrackingSystemComponent]
+})
     .compileComponents();
   }));
 

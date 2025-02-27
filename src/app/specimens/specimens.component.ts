@@ -1,18 +1,24 @@
 import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Sample, samples } from '../../dashboard/model/dashboard.model';
+import { Sample, samples } from '../dashboard/model/dashboard.model';
 import { MatSort } from '@angular/material/sort';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
-import { DashboardService } from '../../dashboard/services/dashboard.service';
+import { DashboardService } from '../dashboard/services/dashboard.service';
+import {ApiService} from '../api.service';
+import {ImageSliderComponent} from '../image-slider/image-slider.component';
 
 
 @Component({
   selector: 'app-specimens',
   templateUrl: './specimens.component.html',
-  styleUrls: ['./specimens.component.css']
+  styleUrls: ['./specimens.component.css'],
+  imports: [
+    ImageSliderComponent
+  ],
+  standalone: true
 })
-export class SpecimensComponent implements OnInit {
+export class SpecimenDetailsComponent implements OnInit {
 
   bioSampleId;
   bioSampleObj;
@@ -52,8 +58,8 @@ export class SpecimensComponent implements OnInit {
   lng;
   geoLocation: Boolean = false;
 
-  constructor(private route: ActivatedRoute, private dashboardService: DashboardService, private router: Router) {
-    this.route.params.subscribe(param => this.bioSampleId = param.id);
+  constructor(private route: ActivatedRoute, private apiService: ApiService, private router: Router) {
+    this.route.params.subscribe(param => this.bioSampleId = param.specimenId);
   }
 
   ngOnInit(): void {
@@ -62,21 +68,17 @@ export class SpecimensComponent implements OnInit {
     this.itemLimitSexFilter = this.filterSize;
     this.itemLimitOrgFilter = this.filterSize;
     this.relatedRecords = [];
-    this.filterJson['sex'] = '';
-    this.filterJson['organismPart'] = '';
+    this.filterJson.sex = '';
+    this.filterJson.organismPart = '';
     this.getBiosamples();
   }
 
   // tslint:disable-next-line:typedef
   getBiosamples() {
-    this.dashboardService.getSpecimenByAccession(this.bioSampleId)
+    this.apiService.getSpecimenByAccession(this.bioSampleId)
       .subscribe(
         data => {
-          const unpackedData = [];
-          for (const item of data.hits.hits) {
-            unpackedData.push(this.unpackData(item));
-          }
-          this.bioSampleObj = unpackedData[0];
+          this.bioSampleObj = data.results[0]._source;;
           this.slides = this.generateSlides(this.bioSampleObj);
           this.organismName = this.bioSampleObj.organism;
           this.lat = this.bioSampleObj.geographicLocationLatitude?.text;
@@ -103,7 +105,7 @@ export class SpecimensComponent implements OnInit {
       }
       else {
         if (key === 'commonName' && data[key] == null) {
-          dataToReturn[key] = "-"
+          dataToReturn[key] = '-'
         }
         else {
           dataToReturn[key] = data[key];
