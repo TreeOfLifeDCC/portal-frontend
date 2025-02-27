@@ -161,9 +161,9 @@ export class DashboardComponent implements OnInit, AfterViewInit {
     { name: 'External references', column: 'goatInfo', selected: true },
     { name: 'Submitted to Biosamples', column: 'biosamples', selected: false },
     { name: 'Raw data submitted to ENA', column: 'raw_data', selected: false },
-    { name: 'Assemblies submitted to ENA', column: 'assemblies', selected: false },
+    { name: 'Assemblies submitted to ENA', column: 'assemblies_status', selected: false },
     { name: 'Annotation complete', column: 'annotation_complete', selected: false },
-    { name: 'Annotation submitted to ENA', column: 'annotation', selected: false }];
+    { name: 'Annotation submitted to ENA', column: 'annotation_status', selected: false }];
   displayedColumns = [];
   currentStyle: string;
   currentClass = 'kingdom';

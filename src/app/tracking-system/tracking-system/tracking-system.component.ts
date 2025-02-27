@@ -161,7 +161,7 @@ export class TrackingSystemComponent implements OnInit, AfterViewInit {
                   this.isLoadingResults = true;
                   return this._apiService.getData(this.paginator.pageIndex,
                       this.paginator.pageSize, this.searchValue, this.sort.active, this.sort.direction, this.activeFilters,
-                      this.currentClass, this.phylogenyFilters, 'tracking_status'
+                      this.currentClass, this.phylogenyFilters, 'tracking_status_27feb2025'
                   ).pipe(catchError(() => observableOf(null)));
               }),
               map(data => {
@@ -397,7 +397,7 @@ export class TrackingSystemComponent implements OnInit, AfterViewInit {
         this.displayProgressBar = true;
         this._apiService.downloadData(downloadOption, this.paginator.pageIndex,
             this.paginator.pageSize, this.searchValue || '', this.sort.active, this.sort.direction, this.activeFilters,
-            this.currentClass, this.phylogenyFilters, 'tracking_status').subscribe({
+            this.currentClass, this.phylogenyFilters, 'tracking_status_27feb2025').subscribe({
             next: (response: Blob) => {
                 const blobUrl = window.URL.createObjectURL(response);
                 const a = document.createElement('a');
