@@ -1,4 +1,4 @@
-FROM node:21.6.2 as build
+FROM node:20.15.0 as build
 
 WORKDIR /source
 
@@ -6,7 +6,7 @@ WORKDIR /source
 COPY package*.json ./
 # Run ci only for the production dependencies
 RUN npm cache clean --force
-RUN npm install
+RUN npm install --legacy-peer-deps
 
 # Copy the rest of the files into the container and build
 COPY . .
