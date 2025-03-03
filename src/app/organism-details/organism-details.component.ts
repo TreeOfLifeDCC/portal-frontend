@@ -55,8 +55,12 @@ export class OrganismDetailsComponent implements OnInit {
   relationshipRecords: any;
   slides: any[];
 
-  @ViewChild(MatPaginator) paginator: MatPaginator;
-  @ViewChild(MatSort) sort: MatSort;
+  @ViewChild('paginatorRelationships') paginatorRelationships!: MatPaginator;
+  @ViewChild('sortRelationships') sortRelationships!: MatSort;
+
+  @ViewChild('paginatorSpecimens') paginatorSpecimens!: MatPaginator;
+  @ViewChild('sortSpecimens') sortSpecimens!: MatSort;
+
   dataSourceRecords;
   specBioSampleTotalCount;
   specDisplayedColumns = ['accession', 'organism', 'commonName', 'sex', 'organismPart'];
@@ -129,15 +133,15 @@ export class OrganismDetailsComponent implements OnInit {
                 } else {
                   this.specBioSampleTotalCount = 0;
                 }
-                this.dataSourceRecords.paginator = this.paginator;
-                this.dataSourceRecords.sort = this.sort;
+                this.dataSourceRecords.paginator = this.paginatorSpecimens;
+                this.dataSourceRecords.sort = this.sortSpecimens;
               }, 50);
 
 
               this.relationshipRecords = new MatTableDataSource<any>(this.bioSampleObj?.relationships ?? []);
               setTimeout(() => {
-                this.relationshipRecords.paginator = this.paginator;
-                this.relationshipRecords.sort = this.sort;
+                this.relationshipRecords.paginator = this.paginatorRelationships;
+                this.relationshipRecords.sort = this.sortRelationships;
               });
             },
             err => console.log(err)
