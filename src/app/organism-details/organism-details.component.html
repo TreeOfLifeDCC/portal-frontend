@@ -48,7 +48,7 @@
                 <h1 class="col-sm-12 page-header">Relationships</h1>
 
                 <div class="table-container">
-                    <table mat-table [dataSource]="relationshipRecords" matSort class="mat-elevation-z8">
+                    <table mat-table [dataSource]="relationshipRecords" matSort #sortRelationships="matSort" class="mat-elevation-z8">
 
                         <ng-container matColumnDef="source">
                             <th mat-header-cell *matHeaderCellDef mat-sort-header> Source</th>
@@ -72,7 +72,7 @@
                         <tr mat-row *matRowDef="let row; columns: relationshipDisplayedColumns;"></tr>
                         </tbody>
                     </table>
-                    <mat-paginator pageSize="10" [length]="bioSampleObj['relationships']"></mat-paginator>
+                    <mat-paginator #paginatorRelationships pageSize="10" [length]="bioSampleObj['relationships']"></mat-paginator>
                 </div>
             </div>
 
@@ -187,7 +187,7 @@
                                 </h1>
                             }
 
-                            <table mat-table matTableExporter [dataSource]="dataSourceRecords" matSort
+                            <table mat-table matTableExporter [dataSource]="dataSourceRecords" matSort #sortSpecimens="matSort"
                                    style="width: 100%;">
                                 <ng-container matColumnDef="accession">
                                     <mat-header-cell *matHeaderCellDef mat-sort-header> BioSample ID</mat-header-cell>
@@ -224,8 +224,8 @@
                                 <mat-header-row *matHeaderRowDef="specDisplayedColumns"></mat-header-row>
                                 <mat-row *matRowDef="let row; columns: specDisplayedColumns;"></mat-row>
                             </table>
-                            <mat-paginator style="width: 100%;" [pageSizeOptions]="[20, 30, 50]" showFirstLastButtons
-                                           [length]="bioSampleTotalCount"></mat-paginator>
+                            <mat-paginator #paginatorSpecimens style="width: 100%;" [pageSizeOptions]="[20, 30, 50]" showFirstLastButtons
+                                           [length]="specBioSampleTotalCount"></mat-paginator>
                         </div>
                     </div>
                 </div>
