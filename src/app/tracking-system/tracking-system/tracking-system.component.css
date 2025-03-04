@@ -71,6 +71,8 @@ ul.long-list {
 .filter-heading {
     font-size: unset;
     font-weight: 400;
+    margin: 0px !important;
+    padding-right: 5px;
 }
 
 .main-table {
@@ -210,9 +212,7 @@ hr {
     font-size: large;
 }
 
-.filter-heading {
-    margin: 0px !important;
-}
+
 
 .left {
     float: left;
