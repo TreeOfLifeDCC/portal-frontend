@@ -1,8 +1,14 @@
-<app-header></app-header>
-<!-- <div class="alert alert-danger alert-dismissible fade show" style=" margin-bottom: 0px; text-align: center; ">
-    Backend is not accessible at the moment due to issue with EMBL-EBI cloud infrastructure. We are aware of the issue and our systems teams are actively working to resolve this.
-</div> -->
-<main>
-  <router-outlet></router-outlet>
-</main>
-<app-footer></app-footer>
+@if (isHomeRoute) {
+    <!-- Special case for the home page to display the banner with a flexible footer -->
+    <app-header></app-header>
+    <router-outlet></router-outlet>
+    <app-footer></app-footer>
+} @else {
+    <div class="layout-container">
+        <app-header></app-header>
+        <div class="content">
+            <router-outlet></router-outlet>
+        </div>
+        <app-footer></app-footer>
+    </div>
+}
