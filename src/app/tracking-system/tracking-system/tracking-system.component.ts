@@ -330,7 +330,7 @@ export class TrackingSystemComponent implements OnInit, AfterViewInit {
 
   checkStyle(filterValue: string) {
       if (this.activeFilters.includes(filterValue)) {
-          return 'background-color: #A8BAA8';
+          return 'background-color: #4BBEFD;';
       } else {
           return '';
       }
