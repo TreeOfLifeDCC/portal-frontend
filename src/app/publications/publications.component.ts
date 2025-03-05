@@ -19,8 +19,9 @@ import { MatExpansionModule } from '@angular/material/expansion';
 
 import { MatInput } from '@angular/material/input';
 import { catchError, map, merge, startWith, switchMap } from 'rxjs';
-import { ApiService } from '../api.service';
 import {NgClass} from "@angular/common";
+import {ReactiveFormsModule} from "@angular/forms";
+import { FormsModule } from '@angular/forms';
 
 @Component({
     selector: 'app-publications',
@@ -62,7 +63,10 @@ import {NgClass} from "@angular/common";
         MatExpansionModule,
         MatCheckboxModule,
         NgClass,
-        NgxSpinnerModule
+        NgxSpinnerModule,
+        ReactiveFormsModule,
+        FormsModule
+
     ]
 })
 export class PublicationsComponent implements OnInit, AfterViewInit, OnDestroy {
@@ -74,6 +78,7 @@ export class PublicationsComponent implements OnInit, AfterViewInit, OnDestroy {
     data: any;
     dataCount = 0;
     searchValue: string;
+    searchChanged = new EventEmitter<any>();
     pagesize = 20;
     urlAppendFilterArray = []
     activeFilters = new Array<string>();
@@ -102,8 +107,14 @@ export class PublicationsComponent implements OnInit, AfterViewInit, OnDestroy {
         if (Object.keys(params).length !== 0) {
             this.resetFilter();
             for (const key in params) {
-                this.urlAppendFilterArray.push({name: key, value: params[key]});
-                this.activeFilters.push(params[key]);
+                if (params.hasOwnProperty(key)) {
+                    if (params[key].includes('searchValue - ')) {
+                        this.searchValue = params[key].split('searchValue - ')[1];
+                    } else {
+                        this.urlAppendFilterArray.push({name: key, value: params[key]});
+                        this.activeFilters.push(params[key]);
+                    }
+                }
             }
         }
     }
@@ -111,8 +122,9 @@ export class PublicationsComponent implements OnInit, AfterViewInit, OnDestroy {
     ngAfterViewInit() {
         // If the user changes the metadataSort order, reset back to the first page.
         this.sort.sortChange.subscribe(() => (this.paginator.pageIndex = 0));
+        this.searchChanged.subscribe(() => (this.paginator.pageIndex = 0));
         this.filterChanged.subscribe(() => (this.paginator.pageIndex = 0));
-        merge(this.paginator.page, this.sort.sortChange, this.filterChanged)
+        merge(this.paginator.page, this.sort.sortChange,  this.searchChanged, this.filterChanged)
             .pipe(
                 startWith({}),
                 switchMap(() => {
@@ -264,6 +276,12 @@ export class PublicationsComponent implements OnInit, AfterViewInit, OnDestroy {
     ngOnDestroy(): void {
         this.resetFilter();
     }
+
+    applyFilter(event: Event) {
+        this.searchValue = (event.target as HTMLInputElement).value;
+        this.searchChanged.emit();
+    }
+
 
 }
 

@@ -111,6 +111,13 @@
                     </div>
                 </div>
 
+
+                <mat-form-field class="search_field column-header"  style="margin-top: 15px;">
+                    <mat-label>Search</mat-label>
+                    <input matInput (keyup)="applyFilter($event)" [(ngModel)]='searchValue'
+                           placeholder="ex. Salmo trutta">
+                </mat-form-field>
+
                 <table mat-table  matTableExporter  #table
                        [dataSource]="dataSource" matSort (matSortChange)="customSort($event)"
                        matSortActive="pubYear"
