@@ -207,7 +207,6 @@
                         @if(activeFilters.length > 0 || phylogenyFilters.length > 0){
                             <button class="btn btn-primary" type="button" (click)="refreshPage()">Remove all filters </button>
                         }
-
                         <br>
                         @if (displayProgressBar) {
                             <div style="padding: 15px">
@@ -221,6 +220,7 @@
                                  [disabled]="displayProgressBar">
                             Download metadata
                         </button>
+                    </div>
                 <mat-form-field class="searchField">
                     <mat-label>Search</mat-label>
                     <input matInput (keyup)="applyFilter($event)" [(ngModel)]='searchValue' placeholder="Ex. lutra" >
@@ -358,8 +358,10 @@
                         </table>
 
                         <mat-paginator [pageSizeOptions]="[15, 30, 50, 100]" showFirstLastButtons [length]="resultsLength" ></mat-paginator>
-            </div>
+                </div>
         </div>
     </div>
-
+    </div>
 </div>
+
+

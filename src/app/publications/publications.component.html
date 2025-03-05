@@ -153,7 +153,7 @@
                         <mat-header-cell *matHeaderCellDef [ngClass]="'w-150 th-left'">Organism Name</mat-header-cell>
                         <mat-cell *matCellDef="let element"
                                   [ngClass]="'w-150 th-left'">
-                            <a [routerLink]="['/data/root/organism-details/', element['_source']['organism_name']]">
+                            <a [routerLink]="['/data/', element['_source']['organism_name']]">
                                 {{element['_source']['organism_name']}}
                             </a>
                         </mat-cell>

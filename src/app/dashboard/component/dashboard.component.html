@@ -174,13 +174,13 @@
                 }
               </mat-card-title>
 
-              <mat-card-actions style="padding: 0px;">
+              <mat-card-actions style="padding: 0px;display: block;">
                 <ul role="list"  class="list-group" >
                   @for (filter of experimentTypeFilters; track $index) {
                     @if($index<itemLimit){
                       <li role="listitem"
-                           class="list-group-item d-flex justify-content-between
-                           align-items-center"
+                          class="list-group-item d-flex justify-content-between
+                                           align-items-center"
                         [style]="checkStyle(filter.label + '_' + filter.key)"
                         (click)="onFilterClick(filter.label + '_' + filter.key)"
                         style="cursor: pointer">
