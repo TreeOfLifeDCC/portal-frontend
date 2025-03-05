@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { NgcCookieConsentConfig, NgcCookieConsentService} from 'ngx-cookieconsent';
 import { HeaderComponent } from './shared/header/header.component';
-import { RouterOutlet } from '@angular/router';
+import {Router, RouterOutlet } from '@angular/router';
 import { FooterComponent } from './shared/footer/footer.component';
 
 export const cookieConfig: NgcCookieConsentConfig = {
@@ -60,11 +60,15 @@ export const cookieConfig: NgcCookieConsentConfig = {
 })
 export class AppComponent implements OnInit {
   title = 'tree-of-life-portal';
+  isHomeRoute: boolean = false;
 
-  constructor(
+  constructor(private router: Router
   ) {}
 
   ngOnInit() {
+    this.router.events.subscribe(() => {
+      this.isHomeRoute = this.router.url === '/home';
+    });
   }
 
 }

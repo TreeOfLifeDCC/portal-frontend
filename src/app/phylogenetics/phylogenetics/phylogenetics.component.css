@@ -119,3 +119,7 @@
 .search-bar {
     margin-left: 22px;
 }
+.phylogeny-container {
+    width: 100%;
+    height: 100vh;
+}
