@@ -75,29 +75,27 @@
                             <div class="row">
                                 <div class="col-md-2">
                                     <div class="row">
-                                        @if (sexFilters.length) {
+                                        @if (metadataSexFilters.length) {
                                             <div class="col-md-12 col-md-6">
                                                 <div class="card bg-lite mb-3 filter-top">
                                                     <h3 class="card-header filter-heading">
                                                         <span #lbltextSex>Sex</span>
-                                                        @if (sexFilters.length > 3 && isSexFilterCollapsed) {
-                                                            <i class="material-icons float-right sex-inactive"
-                                                               (click)="toggleCollapse(lbltextSex.innerText)">add</i>
-                                                        }
-                                                        @if (sexFilters.length > 3 && !isSexFilterCollapsed) {
-                                                            <i class="material-icons float-right sex-inactive"
-                                                               (click)="toggleCollapse(lbltextSex.innerText)">remove</i>
-
+                                                        @if(metadataSexFilters.length > 3){
+                                                            <mat-icon
+                                                                    (click)="toggleCollapse('metadataTab', 'sex')"
+                                                                    style="cursor: pointer; margin-left: auto;">
+                                                                {{ isCollapsed['metadataTab_sex'] ? 'add' : 'remove' }}
+                                                            </mat-icon>
                                                         }
                                                     </h3>
                                                     <ul id="sex-inactive" class="list-group"
                                                         [ngClass]="{'long-list': itemLimitSexFilter > filterSize}">
-                                                        @for (filter of sexFilters; track $index) {
+                                                        @for (filter of metadataSexFilters; track $index) {
                                                             @if ($index < itemLimitSexFilter && filter.key != '') {
                                                                 <li id="{{$index}}"
                                                                     class="list-group-item d-flex justify-content-between align-items-center sex-inactive"
                                                                     [ngClass]="checkFilterIsActive(filter.key)"
-                                                                    (click)="onFilterClick($event, lbltextSex.innerText, filter.key)"
+                                                                    (click)="applyFilter('sex', filter.key,dataSourceRecords, 'metadataTab')"
                                                                     style="cursor: pointer; padding: .75rem 0.25rem;"
                                                                 >
                                                                     {{ filter.key }}
@@ -112,67 +110,62 @@
                                             </div>
                                         }
 
-                                        @if (organismPartFilters.length) {
+                                        @if (metadataOrganismPartFilters.length) {
                                             <div class="col-md-12 col-md-6">
                                                 <div class="card bg-lite mb-3 filter-top">
                                                     <h3 class="card-header filter-heading">
                                                         <span #lbltextOrgPart>Organism Part</span>
-                                                        @if (organismPartFilters.length > 3 && isOrganismPartCollapsed) {
-                                                            <i class="material-icons float-right org-part-inactive"
-                                                               (click)="toggleCollapse(lbltextOrgPart.innerText)">add</i>
-
-                                                        }
-                                                        @if (organismPartFilters.length > 3 && !isOrganismPartCollapsed) {
-                                                            <i class="material-icons float-right org-part-inactive"
-                                                               (click)="toggleCollapse(lbltextOrgPart.innerText)">remove</i>
+                                                        @if(metadataOrganismPartFilters.length > 3){
+                                                            <mat-icon
+                                                                    (click)="toggleCollapse('metadataTab','organismPart')"
+                                                                    style="cursor: pointer; margin-left: auto;">
+                                                                {{ isCollapsed['metadataTab_organismPart'] ? 'add' : 'remove' }}
+                                                            </mat-icon>
                                                         }
                                                     </h3>
                                                     <ul id="org-part-inactive" class="list-group"
                                                         [ngClass]="{'long-list': itemLimitOrgFilter > filterSize}">
 
-                                                        @for (filter of organismPartFilters; track $index) {
+                                                        @for (filter of metadataOrganismPartFilters; track $index) {
                                                             @if ($index < itemLimitOrgFilter && filter.key != '') {
                                                                 <li id="{{$index}}"
                                                                     class="list-group-item d-flex justify-content-between align-items-center org-part-inactive"
                                                                     [ngClass]="checkFilterIsActive(filter.key)"
-                                                                    (click)="onFilterClick($event, lbltextOrgPart.innerText, filter.key)"
+                                                                    (click)="applyFilter('organismPart', filter.key,dataSourceRecords,'metadataTab')"
                                                                     style="cursor: pointer; padding: .75rem 0.25rem;"
                                                                 >
                                                                     {{ filter.key }}
                                                                     <span class="badge badge-pill badge-info">{{ filter.doc_count }}</span>
                                                                 </li>
                                                             }
-
-
                                                         }
                                                     </ul>
                                                 </div>
                                             </div>
                                         }
 
-                                        @if (trackingSystemFilters.length) {
+                                        @if (metadataTrackingSystemFilters.length) {
                                             <div class="col-md-12 col-md-6">
                                                 <div class="card bg-lite mb-3 filter-top">
                                                     <h3 class="card-header filter-heading">
                                                         <span #lbltextTrack>Tracking Status</span>
-                                                        @if (trackingSystemFilters.length > 3 && isTrackCollapsed) {
-                                                            <i class="material-icons float-right tracking-status-inactive"
-                                                               (click)="toggleCollapse(lbltextTrack.innerText)">add</i>
-                                                        }
-                                                        @if (trackingSystemFilters.length > 3 && !isTrackCollapsed) {
-                                                            <i class="material-icons float-right tracking-status-inactive"
-                                                               (click)="toggleCollapse(lbltextTrack.innerText)">remove</i>
+                                                        @if(metadataTrackingSystemFilters.length > 3){
+                                                            <mat-icon
+                                                                    (click)="toggleCollapse('metadataTab','trackingSystem')"
+                                                                    style="cursor: pointer; margin-left: auto;">
+                                                                {{ isCollapsed['metadataTab_trackingSystem'] ? 'add' : 'remove' }}
+                                                            </mat-icon>
                                                         }
 
                                                     </h3>
                                                     <ul id="tracking-status-inactive" class="list-group"
                                                         [ngClass]="{'long-list': itemLimitTrackFilter > filterSize}">
-                                                        @for (filter of trackingSystemFilters; track $index) {
+                                                        @for (filter of metadataTrackingSystemFilters; track $index) {
                                                             @if ($index < itemLimitOrgFilter && filter.key != '') {
                                                                 <li id="{{$index}}"
                                                                     class="list-group-item d-flex justify-content-between align-items-center tracking-status-inactive"
                                                                     [ngClass]="checkFilterIsActive(filter.key)"
-                                                                    (click)="onFilterClick($event, lbltextTrack.innerText, filter.key)"
+                                                                    (click)="applyFilter('trackingSystem',filter.key, dataSourceRecords,'metadataTab')"
                                                                     style="cursor: pointer; padding: .75rem 0.25rem;"
                                                                 >
                                                                     {{ filter.key }}
@@ -195,7 +188,7 @@
                                                     <button type="button" class="btn btn-success">
                                                         {{ filter }}
                                                         <span class="badge badge-light"
-                                                              (click)="removeFilter(filter)">X</span>
+                                                              (click)="removeFilter(filter,dataSourceRecords, 'metadataTab')">X</span>
                                                     </button>
                                                 }
 
