@@ -1,5 +1,6 @@
 .filter-top {
     margin-top: 1rem !important;
+    width: 112%;
 }
 
 .jumbotron {
@@ -19,7 +20,7 @@ table {
 }
 
 button {
-    margin-left: 5px;
+    margin: 2px;
 }
 
 .card-header,
@@ -299,4 +300,12 @@ ul[class*="Other-"] {
 
 .white_text_chip {
     color: #fff;
+}
+.column-header {
+    width:1059px;
+}
+div.mat-dialog-actions mat-button {
+    margin:0 auto;
+    display:block;
+    color: red;
 }

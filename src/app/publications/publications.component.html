@@ -111,6 +111,13 @@
                     </div>
                 </div>
 
+
+                <mat-form-field class="search_field column-header"  style="margin-top: 15px;">
+                    <mat-label>Search</mat-label>
+                    <input matInput (keyup)="applyFilter($event)" [(ngModel)]='searchValue'
+                           placeholder="ex. Salmo trutta">
+                </mat-form-field>
+
                 <table mat-table  matTableExporter  #table
                        [dataSource]="dataSource" matSort (matSortChange)="customSort($event)"
                        matSortActive="pubYear"
@@ -153,7 +160,7 @@
                         <mat-header-cell *matHeaderCellDef [ngClass]="'w-150 th-left'">Organism Name</mat-header-cell>
                         <mat-cell *matCellDef="let element"
                                   [ngClass]="'w-150 th-left'">
-                            <a [routerLink]="['/data/root/organism-details/', element['_source']['organism_name']]">
+                            <a [routerLink]="['/data/', element['_source']['organism_name']]">
                                 {{element['_source']['organism_name']}}
                             </a>
                         </mat-cell>
