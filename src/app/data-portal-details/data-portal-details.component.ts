@@ -145,6 +145,19 @@ export class DataPortalDetailsComponent implements OnInit, AfterViewInit {
     trackingSystemFilters = [];
     organismPartFilters = [];
 
+    showAllFilters = {
+        metadataTab: {
+            sex: false,
+            organismPart: false,
+            trackingSystem: false,
+        },
+        symbiontsTab: {
+            sex: false,
+            organismPart: false,
+            trackingSystem: false,
+        }
+    };
+
 
 // koosum just added
     metadataFilters = {
@@ -346,7 +359,11 @@ export class DataPortalDetailsComponent implements OnInit, AfterViewInit {
     toggleCollapse(tabKey: string, filterKey: string): void {
         const key = `${tabKey}_${filterKey}`; // Create a unique key
         this.isCollapsed[key] = !this.isCollapsed[key];
+    }
 
+
+    toggleFilter(key1: string, key2: string): void {
+        this.showAllFilters[key1][key2] = !this.showAllFilters[key1][key2];
     }
 
     initializeCollapsedState(tabKey: string, filters: any[], filterKey: string): void {
@@ -600,6 +617,20 @@ export class DataPortalDetailsComponent implements OnInit, AfterViewInit {
 
 
     applyFilter(label: string, filterValue: string, dataSource: MatTableDataSource<any>, tabName: string): void {
+        // reset showAllFilters
+        this.showAllFilters = {
+            metadataTab: {
+                sex: false,
+                organismPart: false,
+                trackingSystem: false,
+            },
+            symbiontsTab: {
+                sex: false,
+                organismPart: false,
+                trackingSystem: false,
+            }
+        };
+
         const index = this.activeFilters.indexOf(filterValue);
         this.createFilterJson(label, filterValue, dataSource);
         this.searchText = '';

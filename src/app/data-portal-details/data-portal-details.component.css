@@ -243,3 +243,7 @@ table {
     }
 }
 
+
+.pointer-cursor {
+    cursor: pointer;
+}
