@@ -115,7 +115,6 @@ export class DataPortalDetailsComponent implements OnInit, AfterViewInit {
         y: 'bacteria',
         z: 'archea'
     };
-
     bioSampleId: string;
     bioSampleObj;
     aggregations;
@@ -124,26 +123,15 @@ export class DataPortalDetailsComponent implements OnInit, AfterViewInit {
     specBioSampleTotalCount;
     specSymbiontsTotalCount;
     specDisplayedColumns = ['accession', 'organism', 'commonName', 'sex', 'organismPart', 'trackingSystem'];
-
     private ENA_PORTAL_API_BASE_URL_FASTA = 'https://www.ebi.ac.uk/ena/browser/api/fasta/';
-    isSexFilterCollapsed = true;
-    isTrackCollapsed = true;
-    isOrganismPartCollapsed = true;
-    itemLimitSexFilter: number;
-    itemLimitOrgFilter: number;
-    itemLimitTrackFilter: number;
     filterSize: number;
     searchText = '';
     activeFilters = [];
-    filtersMap;
     filters = {
         sex: {},
         trackingSystem: {},
         organismPart: {}
     };
-    sexFilters = [];
-    trackingSystemFilters = [];
-    organismPartFilters = [];
 
     showAllFilters = {
         metadataTab: {
@@ -158,23 +146,6 @@ export class DataPortalDetailsComponent implements OnInit, AfterViewInit {
         }
     };
 
-
-// koosum just added
-    metadataFilters = {
-        sex: {},
-        trackingSystem: {},
-        organismPart: {}
-    };
-    symbiontsFilters = {
-        sex: {},
-        trackingSystem: {},
-        organismPart: {}
-    };
-    metagenomeFilters = {
-        sex: {},
-        trackingSystem: {},
-        organismPart: {}
-    };
     metadataSexFilters = [];
     metadataTrackingSystemFilters = [];
     metadataOrganismPartFilters = [];
@@ -314,12 +285,11 @@ export class DataPortalDetailsComponent implements OnInit, AfterViewInit {
     specGeoList: any;
     nbnatlasMapUrl: string;
     url: SafeResourceUrl;
-    nbntalMapurl: string;
     @ViewChild('tabgroup', {static: false}) tabgroup: MatTabGroup;
     private http: any;
 
-    // tslint:disable-next-line:max-line-length
-    constructor(private route: ActivatedRoute, private apiService: ApiService, private spinner: NgxSpinnerService, private router: Router, private sanitizer: DomSanitizer) {
+    constructor(private route: ActivatedRoute, private apiService: ApiService, private spinner: NgxSpinnerService,
+                private router: Router, private sanitizer: DomSanitizer) {
         this.route.params.subscribe(param => this.bioSampleId = param.id);
         this.isLoading = true;
     }
@@ -333,9 +303,6 @@ export class DataPortalDetailsComponent implements OnInit, AfterViewInit {
         this.dataSourceGoatInfo = {};
         this.activeFilters = [];
         this.filterSize = 3;
-        this.itemLimitSexFilter = this.filterSize;
-        this.itemLimitOrgFilter = this.filterSize;
-        this.itemLimitTrackFilter = this.filterSize;
         this.relatedRecords = [];
         this.filterJson.sex = '';
         this.filterJson.organismPart = '';
@@ -356,10 +323,6 @@ export class DataPortalDetailsComponent implements OnInit, AfterViewInit {
 
     }
 
-    toggleCollapse(tabKey: string, filterKey: string): void {
-        const key = `${tabKey}_${filterKey}`; // Create a unique key
-        this.isCollapsed[key] = !this.isCollapsed[key];
-    }
 
 
     toggleFilter(key1: string, key2: string): void {
@@ -371,13 +334,6 @@ export class DataPortalDetailsComponent implements OnInit, AfterViewInit {
         this.isCollapsed[key] = true; // Default to collapsed
     }
 
-    getLimitedFilters(filters: any[], filterKey: string, tabKey: string): any[] {
-        const key = `${tabKey}_${filterKey}`;
-        if (this.isCollapsed[key]) {
-            return filters.slice(0, 3);
-        }
-        return filters;
-    }
 
     getAnnotationDisplayedColumns() {
         this.displayedColumnsAnnotations = [];
@@ -455,13 +411,8 @@ export class DataPortalDetailsComponent implements OnInit, AfterViewInit {
                         this.INSDC_ID = this.bioSampleObj.experiment[0].study_accession;
                     }
                     if (this.bioSampleObj.nbnatlas != null) {
-                        // https://species.nbnatlas.org/species/['NHMSYS0000080159']
-                        // https://species.nbnatlas.org/species/NHMSYS0000080159
-                        // tslint:disable-next-line:max-line-length
                         this.nbnatlasMapUrl = 'https://easymap.nbnatlas.org/Image?tvk=' + this.bioSampleObj.nbnatlas.split('/')[4] + '&ref=0&w=400&h=600&b0fill=6ecc39&title=0';
                         this.url = this.sanitizer.bypassSecurityTrustResourceUrl(this.nbnatlasMapUrl);
-                        // tslint:disable-next-line:no-unused-expression
-                        // @ts-ignore
                         this.nbnatlasMapUrl = 'https://records.nbnatlas.org/occurrences/search?q=lsid:' + this.bioSampleObj.nbnatlas.split('/')[4] + '+&nbn_loading=true&fq=-occurrence_status%3A%22absent%22#tab_mapView';
                     }
                     for (const item of this.bioSampleObj.records) {
@@ -827,15 +778,10 @@ export class DataPortalDetailsComponent implements OnInit, AfterViewInit {
                 const e = !filter || data.commonName.toLowerCase().includes(filter.toLowerCase());
                 return a || b || c || d || e;
             };
-            // this.getFiltersForSelectedFilterForMetaData(this.dataSourceRecords.filteredData);
             this.generateFilters(this.dataSourceRecords.filteredData, 'metadata');
         }
     }
 
-    redirectTo(accession: string) {
-        this.router.navigateByUrl('/', {skipLocationChange: true}).then(() =>
-            this.router.navigate(['/data/root/details/' + accession]));
-    }
 
     checkTolidExists(data) {
         return data != undefined && data.tolid != undefined && data.tolid != null && data.tolid.length > 0 &&
@@ -854,19 +800,6 @@ export class DataPortalDetailsComponent implements OnInit, AfterViewInit {
                 return `https://tolqc.cog.sanger.ac.uk/darwin/${clade}/${organismName}`;
             }
         }
-    }
-
-    checkGenomeExists(data) {
-        return data.genome_notes != null;
-    }
-
-    getGenomeURL(data) {
-        const genomeNotes = data.genome_notes;
-        let genomeNotesURL = '#';
-        if (genomeNotes != null) {
-            genomeNotesURL = genomeNotes[0].url;
-        }
-        return genomeNotesURL;
     }
 
 
