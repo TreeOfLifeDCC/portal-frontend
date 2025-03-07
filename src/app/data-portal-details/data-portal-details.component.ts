@@ -570,16 +570,8 @@ export class DataPortalDetailsComponent implements OnInit, AfterViewInit {
     applyFilter(label: string, filterValue: string, dataSource: MatTableDataSource<any>, tabName: string): void {
         // reset showAllFilters
         this.showAllFilters = {
-            metadataTab: {
-                sex: false,
-                organismPart: false,
-                trackingSystem: false,
-            },
-            symbiontsTab: {
-                sex: false,
-                organismPart: false,
-                trackingSystem: false,
-            }
+            metadataTab: { sex: false, organismPart: false, trackingSystem: false },
+            symbiontsTab: { sex: false, organismPart: false, trackingSystem: false }
         };
 
         const index = this.activeFilters.indexOf(filterValue);
@@ -671,6 +663,10 @@ export class DataPortalDetailsComponent implements OnInit, AfterViewInit {
         };
     }
 
+
+
+
+
     unpackData(data: any) {
         const dataToReturn = {};
         if (data.hasOwnProperty('_source')) {
@@ -700,6 +696,7 @@ export class DataPortalDetailsComponent implements OnInit, AfterViewInit {
         this.activeFilters = [];
         this.filterJson = {sex: '', organismPart: '', trackingSystem: '', search: ''};
         this.dataSourceRecords.filter = JSON.stringify(this.filterJson);
+        this.dataSourceSymbiontsRecords.filter = JSON.stringify(this.filterJson);
         this.getBiosampleById();
     }
 
@@ -878,8 +875,29 @@ export class DataPortalDetailsComponent implements OnInit, AfterViewInit {
     }
 
     tabClick({$event}: { $event: any }) {
+        this.resetDataset($event.tab.textLabel);
+    }
+
+
+    resetDataset(tabName){
         this.activeFilters = [];
         this.searchText = '';
+        this.filterJson = {
+            sex: '',
+            organismPart: '',
+            trackingSystem: '',
+            search: ''
+        };
+        this.dataSourceRecords.filterPredicate = (data, filter) => true;
+        this.dataSourceRecords.filter = '';
+        this.dataSourceSymbiontsRecords.filterPredicate = (data, filter) => true;
+        this.dataSourceSymbiontsRecords.filter = '';
+        console.log(tabName)
+        if (tabName === 'metadataTab') {
+            this.generateFilters(this.dataSourceRecords.filteredData, 'metadata');
+        } else if (tabName === 'symbiontsTab') {
+            this.generateFilters(this.dataSourceSymbiontsRecords.filteredData, 'symbionts');
+        }
     }
 
 }

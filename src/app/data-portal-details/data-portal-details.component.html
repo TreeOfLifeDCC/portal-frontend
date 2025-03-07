@@ -55,7 +55,7 @@
 
         <mat-tab-group dynamicHeight #tabgroup (selectedTabChange)="tabClick({$event : $event});">
             @if (bioSampleObj?.records && bioSampleObj?.records.length) {
-                <mat-tab label="Metadata">
+                <mat-tab label="metadataTab">
                     <!-- Related Organisms -->
                     @if (bioSampleObj?.records.length) {
                         <div class="col-md-12">
@@ -95,7 +95,7 @@
                                                                 <li id="{{$index}}"
                                                                     class="list-group-item d-flex justify-content-between align-items-center"
                                                                     [ngClass]="checkFilterIsActive(filter.key)"
-                                                                    (click)="applyFilter('sex', filter.key,dataSourceRecords, 'metadataTab')"
+                                                                    (click)="applyFilter('sex', filter.key, dataSourceRecords, 'metadataTab')"
                                                                     style="cursor: pointer; padding: .75rem 0.25rem;">
                                                                     {{ filter.key }}
                                                                     <span class="badge badge-pill badge-info">{{ filter.doc_count }}</span>
@@ -129,7 +129,7 @@
                                                                 <li id="{{$index}}"
                                                                     class="list-group-item d-flex justify-content-between align-items-center"
                                                                     [ngClass]="checkFilterIsActive(filter.key)"
-                                                                    (click)="applyFilter('organismPart', filter.key,dataSourceRecords,'metadataTab')"
+                                                                    (click)="applyFilter('organismPart', filter.key, dataSourceRecords,'metadataTab')"
                                                                     style="cursor: pointer; padding: .75rem 0.25rem;">
                                                                     {{ filter.key }}
                                                                     <span class="badge badge-pill badge-info">{{ filter.doc_count }}</span>
@@ -188,7 +188,7 @@
                                                 }
 
                                                 <button type="button" class="btn btn-primary"
-                                                        (click)="removeAllFilters()">
+                                                        (click)="resetDataset('metadataTab')">
                                                     Remove all filters
                                                 </button>
                                             </h1>
@@ -263,7 +263,7 @@
                 </mat-tab>
             }
             @if (dataSourceRelatedAnnotationCount != 0 || dataSourceAnnotationCount != 0 || dataSourceAssembliesCount != 0 || dataSourceFilesCount != 0) {
-                <mat-tab label="Data">
+                <mat-tab label="DataTab">
                     @if (dataSourceRelatedAnnotationCount != 0) {
                         <!-- Related Annotation Section -->
                         <div class="col-md-12">
@@ -1082,7 +1082,7 @@
 
 
             @if (bioSampleObj?.symbionts_records && bioSampleObj?.symbionts_records.length) {
-                <mat-tab label="Symbionts">
+                <mat-tab label="symbiontsTab">
                     @if (bioSampleObj?.symbionts_records.length) {
                         <div class="col-md-12">
                             <hr>
@@ -1206,7 +1206,7 @@
                                                 }
 
                                                 <button type="button" class="btn btn-primary"
-                                                        (click)="removeAllFilters()">
+                                                        (click)="resetDataset('symbiontsTab')">
                                                     Remove all filters
                                                 </button>
                                             </h1>
@@ -1331,7 +1331,7 @@
                 </mat-tab>
             }
             @if (bioSampleObj?.genome_notes && bioSampleObj?.genome_notes.length) {
-                <mat-tab label="Publications">
+                <mat-tab label="PublicationsTab">
                     @if (bioSampleObj?.genome_notes) {
                         <!-- Genome Notes Section -->
                         <div class="goat-box">
@@ -1390,7 +1390,7 @@
                 </mat-tab>
             }
             @if (bioSampleObj?.goat_info && (bioSampleObj?.goat_info) != '{}') {
-                <mat-tab label="Genome Stats (GoAT)">
+                <mat-tab label="GenomeStatsTab">
                     @if (bioSampleObj?.goat_info) {
                         <!-- Goat Info Section -->
                         <div class="tab-box">
@@ -1453,7 +1453,7 @@
                 </mat-tab>
             }
 
-            <mat-tab label="Geo Location Maps">
+            <mat-tab label="GeoLocationMapsTab">
                 <ng-template matTabContent>
                     <mat-tab-group>
                         @if (geoLocation) {
