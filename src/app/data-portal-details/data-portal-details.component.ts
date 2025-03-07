@@ -584,8 +584,6 @@ export class DataPortalDetailsComponent implements OnInit, AfterViewInit {
 
         const index = this.activeFilters.indexOf(filterValue);
         this.createFilterJson(label, filterValue, dataSource);
-        this.searchText = '';
-        const inactiveClassName = label.toLowerCase().replace(' ', '-') + '-inactive';
         if (index !== -1) {
             this.removeFilter(filterValue, dataSource, tabName);
         } else {
@@ -741,13 +739,6 @@ export class DataPortalDetailsComponent implements OnInit, AfterViewInit {
         }
     }
 
-    getStatusClass(status: string) {
-        if (status === 'Annotation Complete') {
-            return 'badge badge-pill badge-success';
-        } else {
-            return 'badge badge-pill badge-warning';
-        }
-    }
 
     getStatusStyle(status: string) {
         if (status === 'Annotation Complete') {
@@ -884,6 +875,11 @@ export class DataPortalDetailsComponent implements OnInit, AfterViewInit {
 
     closePopup() {
         this.popupImage = null;
+    }
+
+    tabClick({$event}: { $event: any }) {
+        this.activeFilters = [];
+        this.searchText = '';
     }
 
 }
