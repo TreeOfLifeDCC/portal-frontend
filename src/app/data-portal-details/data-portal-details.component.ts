@@ -1,6 +1,6 @@
 import {AfterViewInit, Component, Input, OnInit, ViewChild} from '@angular/core';
 import {ActivatedRoute, Router, RouterLink} from '@angular/router';
-import {Sample, samples} from '../dashboard/model/dashboard.model';
+import {Sample} from '../dashboard/model/dashboard.model';
 import {MatSort, MatSortHeader} from '@angular/material/sort';
 import {MatPaginator} from '@angular/material/paginator';
 import {
@@ -179,7 +179,6 @@ export class DataPortalDetailsComponent implements OnInit, AfterViewInit {
     dataSourceRelatedAnnotation;
     dataSourceRelatedAnnotationCount;
 
-    // tslint:disable-next-line:max-line-length
     experimentColumnsDefination = [{column: 'study_accession', selected: true},
         {column: 'secondary_study_accession', selected: false},
         {column: 'sample_accession', selected: true}, {column: 'secondary_sample_accession', selected: false},
@@ -211,7 +210,8 @@ export class DataPortalDetailsComponent implements OnInit, AfterViewInit {
     displayedColumnsFiles = [];
     displayedColumnsAnnotations = [];
     displayedColumnsAssemblies = ['accession', 'assembly_name', 'description', 'version'];
-    displayedColumnsAnnotation = ['accession', 'annotation', 'proteins', 'transcripts', 'softmasked_genome', 'other_data', 'view_in_browser'];
+    displayedColumnsAnnotation = ['accession', 'annotation', 'proteins', 'transcripts',
+        'softmasked_genome', 'other_data', 'view_in_browser'];
     displayedColumnsRelatedAnnotation = [
         {name: 'Study Accession', column: 'study_accession', selected: true},
         {name: 'Sample Accession', column: 'sample_accession', selected: true},
@@ -587,7 +587,6 @@ export class DataPortalDetailsComponent implements OnInit, AfterViewInit {
         this.searchText = '';
         const inactiveClassName = label.toLowerCase().replace(' ', '-') + '-inactive';
         if (index !== -1) {
-            $('.' + inactiveClassName).removeClass('non-disp');
             this.removeFilter(filterValue, dataSource, tabName);
         } else {
             this.activeFilters.push(filterValue);
@@ -700,9 +699,6 @@ export class DataPortalDetailsComponent implements OnInit, AfterViewInit {
     }
 
     removeAllFilters() {
-        $('.sex-inactive').removeClass('non-disp');
-        $('.tracking-status-inactive').removeClass('non-disp');
-        $('.org-part-inactive').removeClass('non-disp');
         this.activeFilters = [];
         this.filterJson = {sex: '', organismPart: '', trackingSystem: '', search: ''};
         this.dataSourceRecords.filter = JSON.stringify(this.filterJson);
@@ -762,10 +758,7 @@ export class DataPortalDetailsComponent implements OnInit, AfterViewInit {
     }
 
     getSearchResults(from?, size?) {
-        $('.sex-inactive').removeClass('non-disp active');
-        $('.tracking-status-inactive').removeClass('non-disp active');
-        $('.org-part-inactive').removeClass('non-disp active');
-        if (this.searchText.length == 0) {
+        if (this.searchText.length === 0) {
             this.getBiosampleById();
         } else {
             this.activeFilters = [];
