@@ -1093,8 +1093,132 @@
                             <hr>
                             <h1 class="col-md-12 page-header">Related Symbionts</h1>
                             <div class="row">
-                                <div class="col-md-12">
+                                <div class="col-md-2">
                                     <div class="row">
+                                        @if (symbiontsSexFilters.length) {
+                                            <div class="col-md-12 col-md-6">
+                                                <div class="card bg-lite mb-3 filter-top">
+                                                    <h3 class="card-header filter-heading">
+                                                        <span #lbltextSex>Sex</span>
+                                                        @if(symbiontsSexFilters.length > 3){
+                                                            <mat-icon
+                                                                    (click)="toggleCollapse('symbiontsTab', 'sex')"
+                                                                    style="cursor: pointer; margin-left: auto;">
+                                                                {{ isCollapsed['symbiontsTab_sex'] ? 'add' : 'remove' }}
+                                                            </mat-icon>
+                                                        }
+                                                    </h3>
+                                                    <ul id="sex-inactive" class="list-group"
+                                                        [ngClass]="{'long-list': itemLimitSexFilter > filterSize}">
+                                                        @for (filter of symbiontsSexFilters; track $index) {
+                                                            @if ($index < itemLimitSexFilter && filter.key != '') {
+                                                                <li id="{{$index}}"
+                                                                    class="list-group-item d-flex justify-content-between align-items-center sex-inactive"
+                                                                    [ngClass]="checkFilterIsActive(filter.key)"
+                                                                    (click)="applyFilter('sex', filter.key, dataSourceSymbiontsRecords, 'symbiontsTab')"
+                                                                    style="cursor: pointer; padding: .75rem 0.25rem;"
+                                                                >
+                                                                    {{ filter.key }}
+                                                                    <span class="badge badge-pill badge-info">{{ filter.doc_count }}</span>
+                                                                </li>
+                                                            }
+
+                                                        }
+
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        }
+
+                                        @if (symbiontsOrganismPartFilters.length) {
+                                            <div class="col-md-12 col-md-6">
+                                                <div class="card bg-lite mb-3 filter-top">
+                                                    <h3 class="card-header filter-heading">
+                                                        <span #lbltextOrgPart>Organism Part</span>
+                                                        @if(symbiontsOrganismPartFilters.length > 3){
+                                                            <mat-icon
+                                                                    (click)="toggleCollapse('symbiontsTab','organismPart')"
+                                                                    style="cursor: pointer; margin-left: auto;">
+                                                                {{ isCollapsed['symbiontsTab_organismPart'] ? 'add' : 'remove' }}
+                                                            </mat-icon>
+                                                        }
+                                                    </h3>
+                                                    <ul id="org-part-inactive" class="list-group"
+                                                        [ngClass]="{'long-list': itemLimitOrgFilter > filterSize}">
+
+                                                        @for (filter of symbiontsOrganismPartFilters; track $index) {
+                                                            @if ($index < itemLimitOrgFilter && filter.key != '') {
+                                                                <li id="{{$index}}"
+                                                                    class="list-group-item d-flex justify-content-between align-items-center org-part-inactive"
+                                                                    [ngClass]="checkFilterIsActive(filter.key)"
+                                                                    (click)="applyFilter('organismPart', filter.key, dataSourceSymbiontsRecords,'symbiontsTab')"
+                                                                    style="cursor: pointer; padding: .75rem 0.25rem;"
+                                                                >
+                                                                    {{ filter.key }}
+                                                                    <span class="badge badge-pill badge-info">{{ filter.doc_count }}</span>
+                                                                </li>
+                                                            }
+                                                        }
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        }
+
+                                        @if (symbiontsTrackingSystemFilters.length) {
+                                            <div class="col-md-12 col-md-6">
+                                                <div class="card bg-lite mb-3 filter-top">
+                                                    <h3 class="card-header filter-heading">
+                                                        <span #lbltextTrack>Tracking Status</span>
+                                                        @if(symbiontsTrackingSystemFilters.length > 3){
+                                                            <mat-icon
+                                                                    (click)="toggleCollapse('symbiontsTab','trackingSystem')"
+                                                                    style="cursor: pointer; margin-left: auto;">
+                                                                {{ isCollapsed['symbiontsTab_trackingSystem'] ? 'add' : 'remove' }}
+                                                            </mat-icon>
+                                                        }
+
+                                                    </h3>
+                                                    <ul id="tracking-status-inactive" class="list-group"
+                                                        [ngClass]="{'long-list': itemLimitTrackFilter > filterSize}">
+                                                        @for (filter of symbiontsTrackingSystemFilters; track $index) {
+                                                            @if ($index < itemLimitOrgFilter && filter.key != '') {
+                                                                <li id="{{$index}}"
+                                                                    class="list-group-item d-flex justify-content-between align-items-center tracking-status-inactive"
+                                                                    [ngClass]="checkFilterIsActive(filter.key)"
+                                                                    (click)="applyFilter('trackingSystem',filter.key, dataSourceSymbiontsRecords,'symbiontsTab')"
+                                                                    style="cursor: pointer; padding: .75rem 0.25rem;"
+                                                                >
+                                                                    {{ filter.key }}
+                                                                    <span class="badge badge-pill badge-info">{{ filter.doc_count }}</span>
+                                                                </li>
+                                                            }
+                                                        }
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        }
+
+                                    </div>
+                                </div>
+                                <div class="col-md-10">
+                                    <div class="row">
+                                        @if (activeFilters.length !== 0) {
+                                            <h1>Filters:
+                                                @for (filter of activeFilters; track $index) {
+                                                    <button type="button" class="btn btn-success">
+                                                        {{ filter }}
+                                                        <span class="badge badge-light"
+                                                              (click)="removeFilter(filter, dataSourceSymbiontsRecords, 'symbiontsTab')">X</span>
+                                                    </button>
+                                                }
+
+                                                <button type="button" class="btn btn-primary"
+                                                        (click)="removeAllFilters()">
+                                                    Remove all filters
+                                                </button>
+                                            </h1>
+                                        }
+
                                         <table matTableExporter mat-table [dataSource]="dataSourceSymbiontsRecords"
                                                matSort #sortSymbionts="matSort" style="width: 100%;">
                                             <ng-container matColumnDef="accession">
