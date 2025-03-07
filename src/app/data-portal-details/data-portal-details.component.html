@@ -89,11 +89,11 @@
                                                         }
                                                     </h3>
 
-                                                    <ul id="sex-inactive" class="list-group">
+                                                    <ul class="list-group">
                                                         @for (filter of (showAllFilters['metadataTab']['sex'] ? metadataSexFilters : metadataSexFilters.slice(0, 3)); track $index ) {
                                                             @if (filter.key != '') {
                                                                 <li id="{{$index}}"
-                                                                    class="list-group-item d-flex justify-content-between align-items-center sex-inactive"
+                                                                    class="list-group-item d-flex justify-content-between align-items-center"
                                                                     [ngClass]="checkFilterIsActive(filter.key)"
                                                                     (click)="applyFilter('sex', filter.key,dataSourceRecords, 'metadataTab')"
                                                                     style="cursor: pointer; padding: .75rem 0.25rem;">
@@ -123,11 +123,11 @@
                                                         }
                                                     </h3>
 
-                                                    <ul id="org-part-inactive" class="list-group">
+                                                    <ul class="list-group">
                                                         @for (filter of (showAllFilters['metadataTab']['organismPart'] ? metadataOrganismPartFilters : metadataOrganismPartFilters.slice(0, 3)); track $index ) {
                                                             @if (filter.key != '') {
                                                                 <li id="{{$index}}"
-                                                                    class="list-group-item d-flex justify-content-between align-items-center org-part-inactive"
+                                                                    class="list-group-item d-flex justify-content-between align-items-center"
                                                                     [ngClass]="checkFilterIsActive(filter.key)"
                                                                     (click)="applyFilter('organismPart', filter.key,dataSourceRecords,'metadataTab')"
                                                                     style="cursor: pointer; padding: .75rem 0.25rem;"
@@ -156,11 +156,11 @@
                                                         }
                                                     </h3>
 
-                                                    <ul id="tracking-status-inactive" class="list-group">
+                                                    <ul class="list-group">
                                                         @for (filter of (showAllFilters['metadataTab']['trackingSystem'] ? metadataTrackingSystemFilters : metadataTrackingSystemFilters.slice(0, 3)); track $index ) {
                                                             @if (filter.key != '') {
                                                                 <li id="{{$index}}"
-                                                                    class="list-group-item d-flex justify-content-between align-items-center tracking-status-inactive"
+                                                                    class="list-group-item d-flex justify-content-between align-items-center"
                                                                     [ngClass]="checkFilterIsActive(filter.key)"
                                                                     (click)="applyFilter('trackingSystem',filter.key, dataSourceRecords,'metadataTab')"
                                                                     style="cursor: pointer; padding: .75rem 0.25rem;"
@@ -1106,11 +1106,11 @@
                                                         }
                                                     </h3>
 
-                                                    <ul id="sex-inactive" class="list-group">
+                                                    <ul class="list-group">
                                                         @for (filter of (showAllFilters['symbiontsTab']['sex'] ? symbiontsSexFilters : symbiontsSexFilters.slice(0, 3)); track $index ) {
                                                             @if (filter.key != '') {
                                                                 <li id="{{$index}}"
-                                                                    class="list-group-item d-flex justify-content-between align-items-center sex-inactive"
+                                                                    class="list-group-item d-flex justify-content-between align-items-center"
                                                                     [ngClass]="checkFilterIsActive(filter.key)"
                                                                     (click)="applyFilter('sex', filter.key, dataSourceSymbiontsRecords, 'symbiontsTab')"
                                                                     style="cursor: pointer; padding: .75rem 0.25rem;"
@@ -1141,12 +1141,12 @@
                                                         }
                                                     </h3>
 
-                                                    <ul id="org-part-inactive" class="list-group">
+                                                    <ul class="list-group">
 
                                                         @for (filter of (showAllFilters['symbiontsTab']['organismPart'] ? symbiontsOrganismPartFilters : symbiontsOrganismPartFilters.slice(0, 3)); track $index ) {
                                                             @if (filter.key != '') {
                                                                 <li id="{{$index}}"
-                                                                    class="list-group-item d-flex justify-content-between align-items-center org-part-inactive"
+                                                                    class="list-group-item d-flex justify-content-between align-items-center"
                                                                     [ngClass]="checkFilterIsActive(filter.key)"
                                                                     (click)="applyFilter('organismPart', filter.key, dataSourceSymbiontsRecords,'symbiontsTab')"
                                                                     style="cursor: pointer; padding: .75rem 0.25rem;">
@@ -1174,11 +1174,11 @@
                                                         }
                                                     </h3>
 
-                                                    <ul id="tracking-status-inactive" class="list-group">
+                                                    <ul class="list-group">
                                                         @for (filter of (showAllFilters['symbiontsTab']['trackingSystem'] ? symbiontsTrackingSystemFilters : symbiontsTrackingSystemFilters.slice(0, 3)); track $index ) {
                                                             @if (filter.key != '') {
                                                                 <li id="{{$index}}"
-                                                                    class="list-group-item d-flex justify-content-between align-items-center tracking-status-inactive"
+                                                                    class="list-group-item d-flex justify-content-between align-items-center"
                                                                     [ngClass]="checkFilterIsActive(filter.key)"
                                                                     (click)="applyFilter('trackingSystem',filter.key, dataSourceSymbiontsRecords,'symbiontsTab')"
                                                                     style="cursor: pointer; padding: .75rem 0.25rem;"
