@@ -592,7 +592,6 @@ export class DataPortalDetailsComponent implements OnInit, AfterViewInit {
     }
 
     getFilters() {
-        console.log(this.aggregations)
         this.metadataSexFilters = this.aggregations.metadata_filters.sex_filter.buckets;
         this.metadataTrackingSystemFilters = this.aggregations.metadata_filters.tracking_status_filter.buckets;
         this.metadataOrganismPartFilters = this.aggregations.metadata_filters.organism_part_filter.buckets;
@@ -664,9 +663,6 @@ export class DataPortalDetailsComponent implements OnInit, AfterViewInit {
     }
 
 
-
-
-
     unpackData(data: any) {
         const dataToReturn = {};
         if (data.hasOwnProperty('_source')) {
@@ -690,14 +686,6 @@ export class DataPortalDetailsComponent implements OnInit, AfterViewInit {
         if (this.activeFilters.indexOf(filter) !== -1) {
             return 'active';
         }
-    }
-
-    removeAllFilters() {
-        this.activeFilters = [];
-        this.filterJson = {sex: '', organismPart: '', trackingSystem: '', search: ''};
-        this.dataSourceRecords.filter = JSON.stringify(this.filterJson);
-        this.dataSourceSymbiontsRecords.filter = JSON.stringify(this.filterJson);
-        this.getBiosampleById();
     }
 
 
@@ -797,7 +785,6 @@ export class DataPortalDetailsComponent implements OnInit, AfterViewInit {
         this.download_files(this.assembliesurls);
     }
 
-    // tslint:disable-next-line:typedef
     download_files(files) {
         function download_next(i) {
             if (i >= files.length) {
@@ -821,7 +808,7 @@ export class DataPortalDetailsComponent implements OnInit, AfterViewInit {
             a.parentNode.removeChild(a);
             // Download the next file with a small timeout. The timeout is necessary
             // for IE, which will otherwise only download the first file.
-            setTimeout(function () {
+            setTimeout(function() {
                 download_next(i + 1);
             }, 500);
         }
@@ -892,7 +879,6 @@ export class DataPortalDetailsComponent implements OnInit, AfterViewInit {
         this.dataSourceRecords.filter = '';
         this.dataSourceSymbiontsRecords.filterPredicate = (data, filter) => true;
         this.dataSourceSymbiontsRecords.filter = '';
-        console.log(tabName)
         if (tabName === 'metadataTab') {
             this.generateFilters(this.dataSourceRecords.filteredData, 'metadata');
         } else if (tabName === 'symbiontsTab') {
