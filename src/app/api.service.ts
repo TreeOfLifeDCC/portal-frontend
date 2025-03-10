@@ -12,7 +12,7 @@ import { Observable } from 'rxjs';
 export class ApiService {
 
     private ENA_PORTAL_API_BASE_URL = 'https://www.ebi.ac.uk/ena/portal/api/files';
-    private API_BASE_URL = 'https://python-portal-backend-725097469588.europe-west2.run.app';
+    private API_BASE_URL = 'https://portal.darwintreeoflife.org/api';
     // private API_BASE_URL = 'http://localhost:8000';
     dialog: any;
     bytesPipe: any;
