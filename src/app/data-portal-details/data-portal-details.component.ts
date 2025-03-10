@@ -580,7 +580,10 @@ export class DataPortalDetailsComponent implements OnInit, AfterViewInit {
         if (index !== -1) {
             this.removeFilter(filterValue, dataSource, tabName);
         } else {
-            this.activeFilters.push(filterValue);
+            if (label !== 'search') {
+                this.activeFilters.push(filterValue);
+            }
+
             dataSource.filter = JSON.stringify(this.filterJson);
             if (tabName === 'metadataTab') {
                 this.generateFilters(dataSource.filteredData, 'metadata');
