@@ -10,7 +10,7 @@ export class GetDataService {
 
   // private API_BASE_URL = 'https://portal.darwintreeoflife.org/statuses_update/';
   // private API_BASE_URL = 'http://127.0.0.1:8000';
-  private API_BASE_URL = 'https://python-portal-backend-725097469588.europe-west2.run.app';
+  private API_BASE_URL = 'https://portal.darwintreeoflife.org/api';
 
   constructor(private http: HttpClient,
               private router: Router,
