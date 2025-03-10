@@ -126,6 +126,7 @@ export class DataPortalDetailsComponent implements OnInit, AfterViewInit {
     private ENA_PORTAL_API_BASE_URL_FASTA = 'https://www.ebi.ac.uk/ena/browser/api/fasta/';
     filterSize: number;
     searchText = '';
+    searchSymbiontsText = '';
     activeFilters = [];
     filters = {
         sex: {},
@@ -639,6 +640,7 @@ export class DataPortalDetailsComponent implements OnInit, AfterViewInit {
         this[`${filterType}OrganismPartFilters`] = createFilterArray(filters.organismPart);
     }
 
+
     createFilterJson(key, value, dataSource) {
         if (key === 'sex') {
             this.filterJson.sex = value;
@@ -646,7 +648,53 @@ export class DataPortalDetailsComponent implements OnInit, AfterViewInit {
             this.filterJson.organismPart = value;
         } else if (key === 'trackingSystem') {
             this.filterJson.trackingSystem = value;
+        } else if (key === 'search') {  // Add support for search text
+            this.filterJson.search = value.toLowerCase();
         }
+
+        dataSource.filterPredicate = (data, filter): boolean => {
+            const filterObj: {
+                sex: string,
+                organismPart: string,
+                trackingSystem: string,
+                search: string
+            } = JSON.parse(filter);
+
+            const sex = !filterObj.sex || data.sex === filterObj.sex;
+            const organismPart = !filterObj.organismPart || data.organismPart === filterObj.organismPart;
+            const trackingSystem = !filterObj.trackingSystem || data.trackingSystem === filterObj.trackingSystem;
+
+            // Apply text search on relevant fields
+            const searchText = filterObj.search?.toLowerCase() || "";
+            const searchMatch = !searchText ||
+                data.sex?.toLowerCase().includes(searchText) ||
+                data.organismPart?.toLowerCase().includes(searchText) ||
+                data.trackingSystem?.toLowerCase().includes(searchText) ||
+                data.accession?.toLowerCase().includes(searchText) ||  // Add any other relevant fields
+                data.commonName?.toLowerCase().includes(searchText);
+
+            return sex && organismPart && trackingSystem && searchMatch;
+        };
+    }
+
+    getSearchResultsNew() {
+        this.onSearchInput(this.searchText, this.dataSourceRecords);
+    }
+
+    onSearchInput(searchText: string, dataSource: MatTableDataSource<any>) {
+        this.applyFilter('search', searchText, dataSource, 'metadataTab');
+    }
+
+
+    createFilterJsonOLD(key, value, dataSource) {
+        if (key === 'sex') {
+            this.filterJson.sex = value;
+        } else if (key === 'organismPart') {
+            this.filterJson.organismPart = value;
+        } else if (key === 'trackingSystem') {
+            this.filterJson.trackingSystem = value;
+        }
+
 
         dataSource.filterPredicate = (data, filter): boolean => {
             const filterObj: {
@@ -735,7 +783,7 @@ export class DataPortalDetailsComponent implements OnInit, AfterViewInit {
 
     getSearchResults(from?, size?) {
         if (this.searchText.length === 0) {
-            this.getBiosampleById();
+            this.resetDataset('metadataTab');
         } else {
             this.activeFilters = [];
             this.dataSourceRecords.filter = this.searchText.trim();
@@ -748,6 +796,25 @@ export class DataPortalDetailsComponent implements OnInit, AfterViewInit {
                 return a || b || c || d || e;
             };
             this.generateFilters(this.dataSourceRecords.filteredData, 'metadata');
+        }
+    }
+
+
+    getSymbiontsSearchResults() {
+        if (this.searchSymbiontsText.length === 0) {
+            this.resetDataset('symbiontsTab');
+        } else {
+            this.activeFilters = [];
+            this.dataSourceSymbiontsRecords.filter = this.searchSymbiontsText.trim();
+            this.dataSourceSymbiontsRecords.filterPredicate = (data, filter): boolean => {
+                const a = !filter || data.sex.toLowerCase().includes(filter.toLowerCase());
+                const b = !filter || data.organismPart.toLowerCase().includes(filter.toLowerCase());
+                const c = !filter || data.trackingSystem.toLowerCase().includes(filter.toLowerCase());
+                const d = !filter || data.accession.toLowerCase().includes(filter.toLowerCase());
+                const e = !filter || data.commonName.toLowerCase().includes(filter.toLowerCase());
+                return a || b || c || d || e;
+            };
+            this.generateFilters(this.dataSourceSymbiontsRecords.filteredData, 'symbionts');
         }
     }
 
@@ -869,19 +936,20 @@ export class DataPortalDetailsComponent implements OnInit, AfterViewInit {
     resetDataset(tabName){
         this.activeFilters = [];
         this.searchText = '';
+        this.searchSymbiontsText = '';
         this.filterJson = {
             sex: '',
             organismPart: '',
             trackingSystem: '',
             search: ''
         };
-        this.dataSourceRecords.filterPredicate = (data, filter) => true;
-        this.dataSourceRecords.filter = '';
-        this.dataSourceSymbiontsRecords.filterPredicate = (data, filter) => true;
-        this.dataSourceSymbiontsRecords.filter = '';
         if (tabName === 'metadataTab') {
+            this.dataSourceRecords.filterPredicate = (data, filter) => true;
+            this.dataSourceRecords.filter = '';
             this.generateFilters(this.dataSourceRecords.filteredData, 'metadata');
         } else if (tabName === 'symbiontsTab') {
+            this.dataSourceSymbiontsRecords.filterPredicate = (data, filter) => true;
+            this.dataSourceSymbiontsRecords.filter = '';
             this.generateFilters(this.dataSourceSymbiontsRecords.filteredData, 'symbionts');
         }
     }
