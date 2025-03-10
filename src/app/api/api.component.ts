@@ -12,7 +12,7 @@ export class ApiComponent implements OnInit {
   constructor() { }
 
   ngOnInit(): void {
-    this.titleService.setTitle('Api Documentation');
+
   }
 
 }
