@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { SwaggerUIBundle, SwaggerUIStandalonePreset } from "swagger-ui-dist"
+import {Title} from "@angular/platform-browser";
 
 @Component({
   selector: 'app-api',
@@ -9,19 +9,10 @@ import { SwaggerUIBundle, SwaggerUIStandalonePreset } from "swagger-ui-dist"
 })
 export class ApiComponent implements OnInit {
 
-  constructor() { }
+  constructor(private titleService: Title) { }
 
   ngOnInit(): void {
-    const ui = SwaggerUIBundle({
-      dom_id: '#swagger-ui',
-      layout: 'BaseLayout',
-      presets: [
-        SwaggerUIBundle.presets.apis,
-        SwaggerUIBundle.SwaggerUIStandalonePreset
-      ],
-      url: 'https://portal.darwintreeoflife.org/api/v2/api-docs',
-      operationsSorter: 'alpha'
-    });
+    this.titleService.setTitle('Api Documentation');
   }
 
 }
