@@ -69,7 +69,7 @@
 
                             <mat-form-field class="search-bar">
                                 <mat-label>Search</mat-label>
-                                <input matInput [(ngModel)]='searchText' (keyup)="getSearchResultsNew()"
+                                <input matInput [(ngModel)]='searchText' (keyup)="getSearchResults('relatedOrganisms')"
                                        placeholder="Ex. Salmo Trutta" #input>
                             </mat-form-field>
                             <div class="row">
@@ -1089,7 +1089,7 @@
                             <h1 class="col-md-12 page-header">Related Symbionts</h1>
                             <mat-form-field class="search-bar">
                                 <mat-label>Search</mat-label>
-                                <input matInput [(ngModel)]='searchSymbiontsText' (keyup)="getSymbiontsSearchResults()"
+                                <input matInput [(ngModel)]='searchSymbiontsText' (keyup)="getSearchResults('relatedSymbionts')"
                                        placeholder="Ex. Salmo Trutta" #input>
                             </mat-form-field>
                             <div class="row">

@@ -124,7 +124,6 @@ export class DataPortalDetailsComponent implements OnInit, AfterViewInit {
     specSymbiontsTotalCount;
     specDisplayedColumns = ['accession', 'organism', 'commonName', 'sex', 'organismPart', 'trackingSystem'];
     private ENA_PORTAL_API_BASE_URL_FASTA = 'https://www.ebi.ac.uk/ena/browser/api/fasta/';
-    filterSize: number;
     searchText = '';
     searchSymbiontsText = '';
     activeFilters = [];
@@ -154,11 +153,6 @@ export class DataPortalDetailsComponent implements OnInit, AfterViewInit {
     symbiontsSexFilters = [];
     symbiontsTrackingSystemFilters = [];
     symbiontsOrganismPartFilters = [];
-
-    metagenomesSexFilters = [];
-    metagenomesTrackingSystemFilters = [];
-    metagenomesOrganismPartFilters = [];
-
 
     organismName;
     relatedRecords;
@@ -303,7 +297,6 @@ export class DataPortalDetailsComponent implements OnInit, AfterViewInit {
         this.geoLocation = false;
         this.dataSourceGoatInfo = {};
         this.activeFilters = [];
-        this.filterSize = 3;
         this.relatedRecords = [];
         this.filterJson.sex = '';
         this.filterJson.organismPart = '';
@@ -311,28 +304,11 @@ export class DataPortalDetailsComponent implements OnInit, AfterViewInit {
         this.getDisplayedColumns();
         this.getAnnotationDisplayedColumns();
         this.getBiosampleById();
-
-        this.initializeCollapsedState('metadataTab', this.metadataSexFilters, 'sex');
-        this.initializeCollapsedState('symbiontsTab', this.symbiontsSexFilters, 'sex');
-        this.initializeCollapsedState('metagenomeTab', this.metagenomesSexFilters, 'sex');
-        this.initializeCollapsedState('metadataTab', this.metadataOrganismPartFilters, 'organismPart');
-        this.initializeCollapsedState('symbiontsTab', this.symbiontsOrganismPartFilters, 'organismPart');
-        this.initializeCollapsedState('metagenomeTab', this.metagenomesOrganismPartFilters, 'organismPart');
-        this.initializeCollapsedState('metadataTab', this.metadataTrackingSystemFilters, 'trackingSystem');
-        this.initializeCollapsedState('symbiontsTab', this.symbiontsTrackingSystemFilters, 'trackingSystem');
-        this.initializeCollapsedState('metagenomeTab', this.metagenomesTrackingSystemFilters, 'trackingSystem');
-
     }
-
 
 
     toggleFilter(key1: string, key2: string): void {
         this.showAllFilters[key1][key2] = !this.showAllFilters[key1][key2];
-    }
-
-    initializeCollapsedState(tabKey: string, filters: any[], filterKey: string): void {
-        const key = `${tabKey}_${filterKey}`;
-        this.isCollapsed[key] = true; // Default to collapsed
     }
 
 
@@ -587,8 +563,6 @@ export class DataPortalDetailsComponent implements OnInit, AfterViewInit {
             dataSource.filter = JSON.stringify(this.filterJson);
             if (tabName === 'metadataTab') {
                 this.generateFilters(dataSource.filteredData, 'metadata');
-            } else if (tabName === 'metagenomeTab') {
-                this.generateFilters(dataSource.filteredData, 'metagenomes');
             } else if (tabName === 'symbiontsTab') {
                 this.generateFilters(dataSource.filteredData, 'symbionts');
             }
@@ -603,10 +577,6 @@ export class DataPortalDetailsComponent implements OnInit, AfterViewInit {
         this.symbiontsSexFilters = this.aggregations.symbionts_filters.sex_filter.buckets;
         this.symbiontsTrackingSystemFilters = this.aggregations.symbionts_filters.tracking_status_filter.buckets;
         this.symbiontsOrganismPartFilters = this.aggregations.symbionts_filters.organism_part_filter.buckets;
-
-        this.metagenomesSexFilters = this.aggregations.metagenomes_filters.sex_filter.buckets;
-        this.metagenomesTrackingSystemFilters = this.aggregations.metagenomes_filters.tracking_status_filter.buckets;
-        this.metagenomesOrganismPartFilters = this.aggregations.metagenomes_filters.organism_part_filter.buckets;
     }
 
 
@@ -620,7 +590,6 @@ export class DataPortalDetailsComponent implements OnInit, AfterViewInit {
         this[`${filterType}SexFilters`] = [];
         this[`${filterType}TrackingSystemFilters`] = [];
         this[`${filterType}OrganismPartFilters`] = [];
-        this[`${filterType}Filters`] = filters;
 
         // generate filter counts
         for (const item of data) {
@@ -651,7 +620,7 @@ export class DataPortalDetailsComponent implements OnInit, AfterViewInit {
             this.filterJson.organismPart = value;
         } else if (key === 'trackingSystem') {
             this.filterJson.trackingSystem = value;
-        } else if (key === 'search') {  // Add support for search text
+        } else if (key === 'search') {
             this.filterJson.search = value.toLowerCase();
         }
 
@@ -667,50 +636,28 @@ export class DataPortalDetailsComponent implements OnInit, AfterViewInit {
             const organismPart = !filterObj.organismPart || data.organismPart === filterObj.organismPart;
             const trackingSystem = !filterObj.trackingSystem || data.trackingSystem === filterObj.trackingSystem;
 
-            // Apply text search on relevant fields
-            const searchText = filterObj.search?.toLowerCase() || "";
+            // apply text search on fields
+            const searchText = filterObj.search?.toLowerCase() || '';
             const searchMatch = !searchText ||
                 data.sex?.toLowerCase().includes(searchText) ||
                 data.organismPart?.toLowerCase().includes(searchText) ||
                 data.trackingSystem?.toLowerCase().includes(searchText) ||
-                data.accession?.toLowerCase().includes(searchText) ||  // Add any other relevant fields
+                data.accession?.toLowerCase().includes(searchText) ||
                 data.commonName?.toLowerCase().includes(searchText);
 
             return sex && organismPart && trackingSystem && searchMatch;
         };
     }
 
-    getSearchResultsNew() {
-        this.onSearchInput(this.searchText, this.dataSourceRecords);
-    }
-
-    onSearchInput(searchText: string, dataSource: MatTableDataSource<any>) {
-        this.applyFilter('search', searchText, dataSource, 'metadataTab');
-    }
-
-
-    createFilterJsonOLD(key, value, dataSource) {
-        if (key === 'sex') {
-            this.filterJson.sex = value;
-        } else if (key === 'organismPart') {
-            this.filterJson.organismPart = value;
-        } else if (key === 'trackingSystem') {
-            this.filterJson.trackingSystem = value;
+    getSearchResults(dataType) {
+        if (dataType === 'relatedOrganisms') {
+            this.applyFilter('search', this.searchText, this.dataSourceRecords, 'metadataTab');
         }
 
+        if (dataType === 'relatedSymbionts') {
+            this.applyFilter('search', this.searchSymbiontsText, this.dataSourceSymbiontsRecords, 'symbiontsTab');
+        }
 
-        dataSource.filterPredicate = (data, filter): boolean => {
-            const filterObj: {
-                sex: string,
-                organismPart: string,
-                trackingSystem: string,
-                search: string
-            } = JSON.parse(filter);
-            const sex = !filterObj.sex || data.sex === filterObj.sex;
-            const organismPart = !filterObj.organismPart || data.organismPart === filterObj.organismPart;
-            const trackingSystem = !filterObj.trackingSystem || data.trackingSystem === filterObj.trackingSystem;
-            return sex && organismPart && trackingSystem;
-        };
     }
 
 
@@ -749,8 +696,6 @@ export class DataPortalDetailsComponent implements OnInit, AfterViewInit {
                 dataSource.filter = JSON.stringify(this.filterJson);
                 if (tabName === 'metadataTab') {
                     this.generateFilters(dataSource.filteredData, 'metadata');
-                } else if (tabName === 'metagenomeTab') {
-                    this.generateFilters(dataSource.filteredData, 'metagenomes');
                 } else if (tabName === 'symbiontsTab') {
                     this.generateFilters(dataSource.filteredData, 'symbionts');
                 }
@@ -784,46 +729,9 @@ export class DataPortalDetailsComponent implements OnInit, AfterViewInit {
         }
     }
 
-    getSearchResults(from?, size?) {
-        if (this.searchText.length === 0) {
-            this.resetDataset('metadataTab');
-        } else {
-            this.activeFilters = [];
-            this.dataSourceRecords.filter = this.searchText.trim();
-            this.dataSourceRecords.filterPredicate = (data, filter): boolean => {
-                const a = !filter || data.sex.toLowerCase().includes(filter.toLowerCase());
-                const b = !filter || data.organismPart.toLowerCase().includes(filter.toLowerCase());
-                const c = !filter || data.trackingSystem.toLowerCase().includes(filter.toLowerCase());
-                const d = !filter || data.accession.toLowerCase().includes(filter.toLowerCase());
-                const e = !filter || data.commonName.toLowerCase().includes(filter.toLowerCase());
-                return a || b || c || d || e;
-            };
-            this.generateFilters(this.dataSourceRecords.filteredData, 'metadata');
-        }
-    }
-
-
-    getSymbiontsSearchResults() {
-        if (this.searchSymbiontsText.length === 0) {
-            this.resetDataset('symbiontsTab');
-        } else {
-            this.activeFilters = [];
-            this.dataSourceSymbiontsRecords.filter = this.searchSymbiontsText.trim();
-            this.dataSourceSymbiontsRecords.filterPredicate = (data, filter): boolean => {
-                const a = !filter || data.sex.toLowerCase().includes(filter.toLowerCase());
-                const b = !filter || data.organismPart.toLowerCase().includes(filter.toLowerCase());
-                const c = !filter || data.trackingSystem.toLowerCase().includes(filter.toLowerCase());
-                const d = !filter || data.accession.toLowerCase().includes(filter.toLowerCase());
-                const e = !filter || data.commonName.toLowerCase().includes(filter.toLowerCase());
-                return a || b || c || d || e;
-            };
-            this.generateFilters(this.dataSourceSymbiontsRecords.filteredData, 'symbionts');
-        }
-    }
-
 
     checkTolidExists(data) {
-        return data != undefined && data.tolid != undefined && data.tolid != null && data.tolid.length > 0 &&
+        return data !== undefined && data.tolid !== undefined && data.tolid != null && data.tolid.length > 0 &&
             data.show_tolqc === true;
     }
 
@@ -887,7 +795,6 @@ export class DataPortalDetailsComponent implements OnInit, AfterViewInit {
         download_next(0);
     }
 
-    // tslint:disable-next-line:typedef
     typeofTol(tolid: any) {
         if (typeof (tolid) === 'string') {
             return tolid;
