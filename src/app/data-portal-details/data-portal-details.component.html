@@ -55,7 +55,7 @@
 
         <mat-tab-group dynamicHeight #tabgroup (selectedTabChange)="tabClick({$event : $event});">
             @if (bioSampleObj?.records && bioSampleObj?.records.length) {
-                <mat-tab label="MetadataTab">
+                <mat-tab label="Metadata">
                     <!-- Related Organisms -->
                     @if (bioSampleObj?.records.length) {
                         <div class="col-md-12">
@@ -263,7 +263,7 @@
                 </mat-tab>
             }
             @if (dataSourceRelatedAnnotationCount != 0 || dataSourceAnnotationCount != 0 || dataSourceAssembliesCount != 0 || dataSourceFilesCount != 0) {
-                <mat-tab label="DataTab">
+                <mat-tab label="Data">
                     @if (dataSourceRelatedAnnotationCount != 0) {
                         <!-- Related Annotation Section -->
                         <div class="col-md-12">
@@ -1082,7 +1082,7 @@
 
 
             @if (bioSampleObj?.symbionts_records && bioSampleObj?.symbionts_records.length) {
-                <mat-tab label="SymbiontsTab">
+                <mat-tab label="Symbionts">
                     @if (bioSampleObj?.symbionts_records.length) {
                         <div class="col-md-12">
                             <hr>
@@ -1336,7 +1336,7 @@
                 </mat-tab>
             }
             @if (bioSampleObj?.genome_notes && bioSampleObj?.genome_notes.length) {
-                <mat-tab label="PublicationsTab">
+                <mat-tab label="Publications">
                     @if (bioSampleObj?.genome_notes) {
                         <!-- Genome Notes Section -->
                         <div class="goat-box">
@@ -1395,7 +1395,7 @@
                 </mat-tab>
             }
             @if (bioSampleObj?.goat_info && (bioSampleObj?.goat_info) != '{}') {
-                <mat-tab label="GenomeStatsTab">
+                <mat-tab label="Genome Stats (GoAT)">
                     @if (bioSampleObj?.goat_info) {
                         <!-- Goat Info Section -->
                         <div class="tab-box">
@@ -1458,7 +1458,7 @@
                 </mat-tab>
             }
 
-            <mat-tab label="GeoLocationMapsTab">
+            <mat-tab label="Geo Location Maps">
                 <ng-template matTabContent>
                     <mat-tab-group>
                         @if (geoLocation) {
