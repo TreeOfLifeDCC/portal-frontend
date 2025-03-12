@@ -55,7 +55,7 @@
 
         <mat-tab-group dynamicHeight #tabgroup (selectedTabChange)="tabClick({$event : $event});">
             @if (bioSampleObj?.records && bioSampleObj?.records.length) {
-                <mat-tab label="MetadataTab">
+                <mat-tab label="metadataTab">
                     <!-- Related Organisms -->
                     @if (bioSampleObj?.records.length) {
                         <div class="col-md-12">
@@ -178,7 +178,7 @@
                                 <div class="col-md-10">
                                     <div class="row">
                                         @if (activeFilters.length !== 0) {
-                                            <h1 class="filters-container">Filters:
+                                            <h1>Filters:
                                                 @for (filter of activeFilters; track $index) {
                                                     <button type="button" class="btn btn-success">
                                                         {{ filter }}
@@ -187,7 +187,7 @@
                                                     </button>
                                                 }
 
-                                                <button type="button" class="btn btn-primary removeFiltersButton"
+                                                <button type="button" class="btn btn-primary"
                                                         (click)="resetDataset('metadataTab')">
                                                     Remove all filters
                                                 </button>
@@ -1082,7 +1082,7 @@
 
 
             @if (bioSampleObj?.symbionts_records && bioSampleObj?.symbionts_records.length) {
-                <mat-tab label="SymbiontsTab">
+                <mat-tab label="symbiontsTab">
                     @if (bioSampleObj?.symbionts_records.length) {
                         <div class="col-md-12">
                             <hr>
@@ -1201,7 +1201,7 @@
                                 <div class="col-md-10">
                                     <div class="row">
                                         @if (activeFilters.length !== 0) {
-                                            <h1 class="filters-container"> Filters:
+                                            <h1>Filters:
                                                 @for (filter of activeFilters; track $index) {
                                                     <button type="button" class="btn btn-success">
                                                         {{ filter }}
@@ -1209,16 +1209,16 @@
                                                               (click)="removeFilter(filter, dataSourceSymbiontsRecords, 'symbiontsTab')">X</span>
                                                     </button>
                                                 }
-                                                <button type="button" class="btn btn-primary removeFiltersButton"
+
+                                                <button type="button" class="btn btn-primary"
                                                         (click)="resetDataset('symbiontsTab')">
                                                     Remove all filters
                                                 </button>
                                             </h1>
-
                                         }
 
                                         <table matTableExporter mat-table [dataSource]="dataSourceSymbiontsRecords"
-                                               matSort #sortSymbionts="matSort" style="width: 100%;" class="relatedSymbiontsTable">
+                                               matSort #sortSymbionts="matSort" style="width: 100%;">
                                             <ng-container matColumnDef="accession">
                                                 <mat-header-cell *matHeaderCellDef mat-sort-header> BioSample ID
                                                 </mat-header-cell>

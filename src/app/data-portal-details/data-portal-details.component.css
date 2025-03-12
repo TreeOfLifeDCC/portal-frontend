@@ -130,16 +130,6 @@ table {
     color: #ffffff;
 }
 
-.relatedSymbiontsTable mat-header-cell {
-    text-align: center;
-    justify-content: center;
-}
-
-.relatedSymbiontsTable mat-cell {
-    padding: 8px 8px 8px 0;
-    word-break: break-word;
-}
-
 .relatedOrganismsTable mat-header-cell {
     text-align: center;
     justify-content: center;
@@ -257,25 +247,3 @@ table {
 .pointer-cursor {
     cursor: pointer;
 }
-
-
-.filters-container {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    gap: 4px;
-}
-
-.removeFiltersButton {
-    margin-top: 0;
-    transition: margin 0.2s ease-in-out;
-}
-
-/* apply margin-top when button is on a new line */
-@media (max-width: 600px) {
-    .filters-container .removeFiltersButton {
-        flex-basis: 100%;
-        margin-top: 20px;
-    }
-}
-
