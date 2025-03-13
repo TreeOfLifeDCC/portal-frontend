@@ -1223,8 +1223,8 @@
                                                 <mat-header-cell *matHeaderCellDef mat-sort-header> BioSample ID
                                                 </mat-header-cell>
                                                 <mat-cell *matCellDef="let element" class="txt-center">
-                                                    <a [routerLink]="['/data/organism/organism-details/', element.accession]">
-                                                        {{ element.accession }}</a>
+                                                    <a href="http://www.ebi.ac.uk/biosamples/samples/{{element?.accession}}"
+                                                       target="_blank">{{ element?.accession }}</a>
                                                 </mat-cell>
                                             </ng-container>
 
