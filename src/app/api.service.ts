@@ -97,29 +97,47 @@ export class ApiService {
                  indexName: string) {
 
         const url = `${this.API_BASE_URL}/data-download`;
-        const projectNames = ['DToL', '25 genomes', 'ERGA', 'CBP', 'ASG'];
-
         // phylogeny
         const phylogenyStr = phylogenyFilters.length ? phylogenyFilters.join('-') : '';
+        if (phylogenyFilters.length !== 0) {
+            let phylogenyStr = '';
+            for (let i = 0; i < phylogenyFilters.length; i++) {
+                phylogenyStr === '' ? phylogenyStr += `${phylogenyFilters[i]}` : phylogenyStr += `-${phylogenyFilters[i]}`;
+            }
+
+
+        }
 
         // filter string
         let filterStr = '';
-
-        if (filterValue.length > 0) {
-            filterStr = filterValue.map(value => {
-                if (projectNames.includes(value)) {
-                    return value === 'DToL' ? 'project_name:dtol' : `project_name:${value}`;
-                } else if (value.includes('-')) {
-                    if (value.startsWith('symbionts')) {
-                        return value.replace('-', ':');
+        if (filterValue.length !== 0) {
+            let filterItem;
+            for (let i = 0; i < filterValue.length; i++) {
+                 if (filterValue[i].includes('-') && !filterValue[i].startsWith('experimentType')) {
+                    if (filterValue[i].startsWith('symbionts')) {
+                        filterItem = filterValue[i].replace('-', ':');
                     } else {
-                        const status = value.split(' - ')[0].toLowerCase().replace(/\s/g, '_');
-                        return status === 'assemblies' ? 'assemblies_status:Done' : `${status}:Done`;
+                        filterItem = filterValue[i].split(' - ')[0].toLowerCase().split(' ').join('_');
+                        if (filterItem === 'assemblies') {
+                            filterItem = 'assemblies_status:Done';
+                        }else if (filterItem === 'genome_notes') {
+                            filterItem = 'genome_notes:Submitted';
+                        } else {
+                            filterItem = `${filterItem}:Done`;
+                        }
                     }
-                } else {
-                    return `${currentClass}:${value}`;
+                }else if (filterValue[i].includes('_') && filterValue[i].startsWith('experimentType')) {
+                    filterItem = filterValue[i].replace('_', ':');
+
                 }
-            }).join(',');
+                else {
+                    filterItem = `${currentClass}:${filterValue[i]}`;
+                }
+
+                filterStr === '' ? filterStr += `${filterItem}` : filterStr += `,${filterItem}`;
+
+            }
+
         }
 
         const payload = {
@@ -129,8 +147,8 @@ export class ApiService {
             sortValue: `${sortActive}:${sortDirection}`,
             filterValue: filterStr || '',
             currentClass,
-            phylogenyFilters: phylogenyStr,
-            indexName,
+            phylogeny_filters: phylogenyStr,
+            index_name: indexName,
             downloadOption
         };
 
