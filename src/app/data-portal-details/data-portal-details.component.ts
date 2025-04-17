@@ -853,11 +853,12 @@ export class DataPortalDetailsComponent implements OnInit, AfterViewInit {
             trackingSystem: '',
             search: ''
         };
-        if (tabName === 'metadataTab') {
+
+        if (tabName === 'Metadata') {
             this.dataSourceRecords.filterPredicate = (data, filter) => true;
             this.dataSourceRecords.filter = '';
             this.generateFilters(this.dataSourceRecords.filteredData, 'metadata');
-        } else if (tabName === 'symbiontsTab') {
+        } else if (tabName === 'Symbionts') {
             this.dataSourceSymbiontsRecords.filterPredicate = (data, filter) => true;
             this.dataSourceSymbiontsRecords.filter = '';
             this.generateFilters(this.dataSourceSymbiontsRecords.filteredData, 'symbionts');
