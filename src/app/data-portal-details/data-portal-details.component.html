@@ -523,49 +523,80 @@
                                 <ng-container matColumnDef="annotation">
                                     <mat-header-cell *matHeaderCellDef> Annotation</mat-header-cell>
                                     <mat-cell *matCellDef="let element">
-                      <span>
-                        <a class="no-underline" target="_blank" href="{{element.annotation.GTF}}">GTF</a>,
-                      </span>
-                                        <span>
-                        <a class="no-underline" target="_blank" href="{{element.annotation.GFF3}}">GFF3</a>
-                      </span>
+
+                                        @if (element['annotation']['GTF']) {
+                                            <a class="no-underline" target="_blank"
+                                               href="{{element['annotation']['GTF']}}">GTF</a>
+                                        }
+                                        @if (element['annotation']['GTF'] && element['annotation']['GFF3']) {
+                                            ,&nbsp;
+                                        }
+                                        @if (element['annotation']['GFF3']) {
+                                            <a class="no-underline" target="_blank"
+                                               href="{{element['annotation']['GFF3']}}">GFF3</a>
+                                        }
+                                        @if (!element['annotation']['GTF'] && !element['annotation']['GFF3']) {
+                                            NA
+                                        }
                                     </mat-cell>
                                 </ng-container>
                                 <ng-container matColumnDef="proteins">
                                     <mat-header-cell *matHeaderCellDef> Proteins</mat-header-cell>
                                     <mat-cell *matCellDef="let element">
-                                        <a class="no-underline" target="_blank"
-                                           href="{{element.proteins.FASTA}}">FASTA</a>
+                                        @if (element.proteins.FASTA) {
+                                            <a class="no-underline" target="_blank"
+                                               href="{{element.proteins.FASTA}}">FASTA</a>
+                                        } @else {
+                                            NA
+                                        }
                                     </mat-cell>
                                 </ng-container>
 
                                 <ng-container matColumnDef="transcripts">
                                     <mat-header-cell *matHeaderCellDef> Transcripts</mat-header-cell>
                                     <mat-cell *matCellDef="let element">
-                                        <a class="no-underline" target="_blank" href="{{element.transcripts.FASTA}}">FASTA</a>
+                                        @if (element.transcripts.FASTA) {
+                                            <a class="no-underline" target="_blank"
+                                               href="{{element.transcripts.FASTA}}">FASTA</a>
+                                        } @else {
+                                            NA
+                                        }
                                     </mat-cell>
                                 </ng-container>
 
                                 <ng-container matColumnDef="softmasked_genome">
                                     <mat-header-cell *matHeaderCellDef> Softmasked genome</mat-header-cell>
                                     <mat-cell *matCellDef="let element">
-                                        <a class="no-underline" target="_blank"
-                                           href="{{element.softmasked_genome.FASTA}}">FASTA</a>
+                                        @if (element.softmasked_genome.FASTA) {
+                                            <a class="no-underline" target="_blank"
+                                               href="{{element.softmasked_genome.FASTA}}">FASTA</a>
+                                        } @else {
+                                            NA
+                                        }
                                     </mat-cell>
                                 </ng-container>
 
                                 <ng-container matColumnDef="other_data">
                                     <mat-header-cell *matHeaderCellDef> Other data</mat-header-cell>
                                     <mat-cell *matCellDef="let element">
-                                        <a class="no-underline" target="_blank" href="{{element.other_data.ftp_dumps}}">FTP
-                                            dumps</a>
+                                        @if (element.other_data.ftp_dumps) {
+                                            <a class="no-underline" target="_blank"
+                                               href="{{element.other_data.ftp_dumps}}">FTP dumps</a>
+                                        } @else {
+                                            NA
+                                        }
                                     </mat-cell>
                                 </ng-container>
 
                                 <ng-container matColumnDef="view_in_browser">
                                     <mat-header-cell *matHeaderCellDef> View in browser</mat-header-cell>
                                     <mat-cell *matCellDef="let element">
-                                        <a class="no-underline" target="_blank" href="{{element.view_in_browser}}">ensembl.org</a>
+                                        @if (element.view_in_browser) {
+                                            <a class="no-underline" target="_blank"
+                                               href="{{element.view_in_browser}}">ensembl.org</a>
+                                        } @else {
+                                            NA
+                                        }
                                     </mat-cell>
                                 </ng-container>
 
