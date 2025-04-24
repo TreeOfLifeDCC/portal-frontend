@@ -36,10 +36,10 @@ export const cookieConfig: NgcCookieConsentConfig = {
         'By using the site you are agreeing to this as outlined in our ',
 
     privacyNoticeLink: 'Privacy Notice',
-    privacyNoticeHref: 'https://www.ebi.ac.uk/data-protection/privacy-notice/darwin-tree-of-life-data-portal',
+    privacyNoticeHref: '/assets/gdpr/dtol_gdpr.pdf',
 
     touLink: 'Terms of Use',
-    touHref: 'https://www.ebi.ac.uk/about/terms-of-use',
+    touHref: '/assets/gdpr/terms_of_use.pdf',
 
     dismiss: 'Accept cookies',
     deny: 'Refuse cookies',
@@ -62,8 +62,8 @@ export class AppComponent implements OnInit {
   title = 'tree-of-life-portal';
   isHomeRoute: boolean = false;
 
-  constructor(private router: Router
-  ) {}
+  constructor(private router: Router,
+              private ccService: NgcCookieConsentService) {}
 
   ngOnInit() {
     this.router.events.subscribe(() => {
