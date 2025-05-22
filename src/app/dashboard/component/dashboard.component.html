@@ -125,6 +125,27 @@
           </mat-card-actions>
         </mat-card>
         <br>
+        <div class="card bg-lite mb-3 filter-top">
+            <h3 class="card-header filter-heading">
+                Metagenomes
+            </h3>
+            <ul class="list-group">
+                @for (filter of metagenomesFilters; track $index) {
+                    <li role="listitem"
+                        class="list-group-item d-flex justify-content-between
+                                           align-items-center"
+                        [style]="checkStyle(filter.label + '-' + filter.key)"
+                        (click)="onFilterClick(filter.label + '-' + filter.key)"
+                        style="cursor: pointer">
+                        <span >{{ filter.key }}</span>
+                        <span
+                                class="badge badge-pill badge-info badge-space">{{ filter.doc_count }}
+                                    </span>
+                    </li>
+                }
+            </ul>
+        </div>
+        <br>
           <mat-card class="card  filter-top">
             <mat-card-title class="card-header filter-heading">
               Phylogeny/{{ currentClass }}

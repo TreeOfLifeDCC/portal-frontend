@@ -120,8 +120,12 @@ export class DataPortalDetailsComponent implements OnInit, AfterViewInit {
     aggregations;
     dataSourceRecords;
     dataSourceSymbiontsRecords;
+    dataSourceMetagenomesRecords;
+    dataSourceMetagenomesAssemblies;
+    dataSourceMetagenomesAssembliesCount;
     specBioSampleTotalCount;
     specSymbiontsTotalCount;
+    searchMetagenomesText;
     specDisplayedColumns = ['accession', 'organism', 'commonName', 'sex', 'organismPart', 'trackingSystem'];
     private ENA_PORTAL_API_BASE_URL_FASTA = 'https://www.ebi.ac.uk/ena/browser/api/fasta/';
     searchText = '';
@@ -143,6 +147,11 @@ export class DataPortalDetailsComponent implements OnInit, AfterViewInit {
             sex: false,
             organismPart: false,
             trackingSystem: false,
+        },
+        metagenomesTab : {
+            sex: {},
+            trackingSystem: {},
+            organismPart: {}
         }
     };
 
@@ -153,6 +162,10 @@ export class DataPortalDetailsComponent implements OnInit, AfterViewInit {
     symbiontsSexFilters = [];
     symbiontsTrackingSystemFilters = [];
     symbiontsOrganismPartFilters = [];
+
+    metagenomesSexFilters = [];
+    metagenomesTrackingSystemFilters = [];
+    metagenomesOrganismPartFilters = [];
 
     organismName;
     relatedRecords;
@@ -173,6 +186,7 @@ export class DataPortalDetailsComponent implements OnInit, AfterViewInit {
     dataSourceAnnotationCount;
     dataSourceRelatedAnnotation;
     dataSourceRelatedAnnotationCount;
+    dataSourceMetagenomesRecordsCount;
 
     experimentColumnsDefination = [{column: 'study_accession', selected: true},
         {column: 'secondary_study_accession', selected: false},
@@ -274,6 +288,13 @@ export class DataPortalDetailsComponent implements OnInit, AfterViewInit {
     @ViewChild('paginatorSymbiontsAssemblies') paginatorSymbiontsAssemblies!: MatPaginator;
     @ViewChild('sortSymbiontsAssemblies') sortSymbiontsAssemblies!: MatSort;
 
+
+    @ViewChild('paginatorMetagenomes') paginatorMetagenomes!: MatPaginator;
+    @ViewChild('sortMetagenomes') sortMetagenomes!: MatSort;
+
+    @ViewChild('paginatorMetagenomesAssemblies') paginatorMetagenomesAssemblies!: MatPaginator;
+    @ViewChild('sortMetagenomesAssemblies') sortMetagenomesAssemblies!: MatSort;
+
     isCollapsed: { [key: string]: boolean } = {};
     geoLocation: boolean;
     orgGeoList: any;
@@ -359,7 +380,7 @@ export class DataPortalDetailsComponent implements OnInit, AfterViewInit {
 
     getBiosampleById() {
         this.spinner.show();
-        this.apiService.getRootOrganismById(this.bioSampleId, 'data_portal')
+        this.apiService.getRootOrganismById(this.bioSampleId, 'data_portal_test')
             .subscribe(
                 data => {
                     const unpackedData = [];
@@ -417,9 +438,20 @@ export class DataPortalDetailsComponent implements OnInit, AfterViewInit {
 
                     // related symbionts tab
                     this.dataSourceSymbiontsRecords = new MatTableDataSource<any>(unpackedSymbiontsData ?? []);
+                    this.dataSourceMetagenomesRecords = new MatTableDataSource<any>(this.bioSampleObj.metagenomes_records ?? []);
+                    this.dataSourceMetagenomesAssemblies = new MatTableDataSource<any>(this.bioSampleObj.metagenomes_assemblies ?? []);
+                    this.dataSourceMetagenomesRecordsCount = this.bioSampleObj.metagenomes_records &&
+                    this.bioSampleObj.metagenomes_records.length > 0 ? this.bioSampleObj.metagenomes_records.length : 0 ;
+                    this.dataSourceMetagenomesAssembliesCount = this.bioSampleObj.metagenomes_assemblies &&
+                    this.bioSampleObj.metagenomes_assemblies.length > 0 ? this.bioSampleObj.metagenomes_assemblies.length : 0 ;
+
                     setTimeout(() => {
                         this.dataSourceSymbiontsRecords.paginator = this.paginatorSymbionts;
                         this.dataSourceSymbiontsRecords.sort = this.sortSymbionts;
+                        this.dataSourceMetagenomesRecords.paginator = this.paginatorMetagenomes;
+                        this.dataSourceMetagenomesRecords.sort = this.sortMetagenomes;
+                        this.dataSourceMetagenomesAssemblies.paginator = this.paginatorMetagenomesAssemblies;
+                        this.dataSourceMetagenomesAssemblies.sort = this.sortMetagenomesAssemblies;
                     });
 
                     // related files tab
@@ -544,11 +576,24 @@ export class DataPortalDetailsComponent implements OnInit, AfterViewInit {
     }
 
 
+
+    metagenomesAssembliesSearch(event: Event) {
+        const filterValue = (event.target as HTMLInputElement).value;
+        this.dataSourceMetagenomesAssemblies.filter = filterValue.trim().toLowerCase();
+    }
+
+    symbiontsAssembliesSearch(event: Event) {
+        const filterValue = (event.target as HTMLInputElement).value;
+        this.dataSourceSymbiontsAssemblies.filter = filterValue.trim().toLowerCase();
+    }
+
+
     applyFilter(label: string, filterValue: string, dataSource: MatTableDataSource<any>, tabName: string): void {
         // reset showAllFilters
         this.showAllFilters = {
             metadataTab: { sex: false, organismPart: false, trackingSystem: false },
-            symbiontsTab: { sex: false, organismPart: false, trackingSystem: false }
+            symbiontsTab: { sex: false, organismPart: false, trackingSystem: false },
+            metagenomesTab: { sex: false, organismPart: false, trackingSystem: false }
         };
 
         const index = this.activeFilters.indexOf(filterValue);
@@ -565,6 +610,8 @@ export class DataPortalDetailsComponent implements OnInit, AfterViewInit {
                 this.generateFilters(dataSource.filteredData, 'metadata');
             } else if (tabName === 'symbiontsTab') {
                 this.generateFilters(dataSource.filteredData, 'symbionts');
+            }else if (tabName === 'metagenomesTab'){
+                this.generateFilters(dataSource.filteredData, 'metagenomes');
             }
         }
     }
@@ -577,6 +624,10 @@ export class DataPortalDetailsComponent implements OnInit, AfterViewInit {
         this.symbiontsSexFilters = this.aggregations.symbionts_filters.sex_filter.buckets;
         this.symbiontsTrackingSystemFilters = this.aggregations.symbionts_filters.tracking_status_filter.buckets;
         this.symbiontsOrganismPartFilters = this.aggregations.symbionts_filters.organism_part_filter.buckets;
+
+        this.metagenomesSexFilters = this.aggregations.metagenomes_filters.sex_filter.buckets;
+        this.metagenomesTrackingSystemFilters = this.aggregations.metagenomes_filters.tracking_status_filter.buckets;
+        this.metagenomesOrganismPartFilters = this.aggregations.metagenomes_filters.organism_part_filter.buckets;
     }
 
 
@@ -657,6 +708,9 @@ export class DataPortalDetailsComponent implements OnInit, AfterViewInit {
         if (dataType === 'relatedSymbionts') {
             this.applyFilter('search', this.searchSymbiontsText, this.dataSourceSymbiontsRecords, 'symbiontsTab');
         }
+        if (dataType === 'relatedMetagenomes') {
+            this.applyFilter('search', this.searchMetagenomesText, this.dataSourceMetagenomesRecords, 'metagenomesTab');
+        }
 
     }
 
@@ -698,6 +752,8 @@ export class DataPortalDetailsComponent implements OnInit, AfterViewInit {
                     this.generateFilters(dataSource.filteredData, 'metadata');
                 } else if (tabName === 'symbiontsTab') {
                     this.generateFilters(dataSource.filteredData, 'symbionts');
+                }else if (tabName === 'metagenomesTab') {
+                        this.generateFilters(dataSource.filteredData, 'metagenomes');
                 }
 
             } else {
@@ -705,7 +761,7 @@ export class DataPortalDetailsComponent implements OnInit, AfterViewInit {
                 this.filterJson.organismPart = '';
                 this.filterJson.trackingSystem = '';
                 dataSource.filter = JSON.stringify(this.filterJson);
-                this.getBiosampleById();
+                // this.getBiosampleById();
             }
         }
     }
@@ -847,6 +903,7 @@ export class DataPortalDetailsComponent implements OnInit, AfterViewInit {
         this.activeFilters = [];
         this.searchText = '';
         this.searchSymbiontsText = '';
+        this.searchMetagenomesText = '';
         this.filterJson = {
             sex: '',
             organismPart: '',
@@ -862,6 +919,10 @@ export class DataPortalDetailsComponent implements OnInit, AfterViewInit {
             this.dataSourceSymbiontsRecords.filterPredicate = (data, filter) => true;
             this.dataSourceSymbiontsRecords.filter = '';
             this.generateFilters(this.dataSourceSymbiontsRecords.filteredData, 'symbionts');
+        }else if (tabName === 'Metagenomes') {
+            this.dataSourceMetagenomesRecords.filterPredicate = (data, filter) => true;
+            this.dataSourceMetagenomesRecords.filter = '';
+            this.generateFilters(this.dataSourceMetagenomesRecords.filteredData, 'metagenomes');
         }
     }
 

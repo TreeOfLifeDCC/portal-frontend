@@ -150,20 +150,20 @@ export class DashboardComponent implements OnInit, AfterViewInit {
   isPhylogenyFilterProcessing = false; // Flag to prevent double-clicking
   displayErrorMsg = false;
   displayProgressBar = false;
-
+  metagenomesFilters: any[] = [];
   activeFilters = new Array<string>();
-  dataColumnsDefination = [{ name: 'Organism', column: 'organism', selected: true },
-    { name: 'ToL ID', column: 'tolid', selected: true },
-    { name: 'INSDC ID', column: 'INSDC_ID', selected: true },
-    { name: 'Common Name', column: 'commonName', selected: true },
-    { name: 'Common Name Source', column: 'commonNameSource', selected: true },
-    { name: 'Current Status', column: 'currentStatus', selected: true },
-    { name: 'External references', column: 'goatInfo', selected: true },
-    { name: 'Submitted to Biosamples', column: 'biosamples', selected: false },
-    { name: 'Raw data submitted to ENA', column: 'raw_data', selected: false },
-    { name: 'Assemblies submitted to ENA', column: 'assemblies_status', selected: false },
-    { name: 'Annotation complete', column: 'annotation_complete', selected: false },
-    { name: 'Annotation submitted to ENA', column: 'annotation_status', selected: false }];
+  dataColumnsDefination = [{name: 'Organism', column: 'organism', selected: true},
+    {name: 'ToL ID', column: 'tolid', selected: true},
+    {name: 'INSDC ID', column: 'INSDC_ID', selected: true},
+    {name: 'Common Name', column: 'commonName', selected: true},
+    {name: 'Common Name Source', column: 'commonNameSource', selected: true},
+    {name: 'Current Status', column: 'currentStatus', selected: true},
+    {name: 'External references', column: 'goatInfo', selected: true},
+    {name: 'Submitted to Biosamples', column: 'biosamples', selected: false},
+    {name: 'Raw data submitted to ENA', column: 'raw_data', selected: false},
+    {name: 'Assemblies submitted to ENA', column: 'assemblies_status', selected: false},
+    {name: 'Annotation complete', column: 'annotation_complete', selected: false},
+    {name: 'Annotation submitted to ENA', column: 'annotation_status', selected: false}];
   displayedColumns = [];
   currentStyle: string;
   currentClass = 'kingdom';
@@ -186,6 +186,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
   dialogRef: any;
   public downloadForm!: FormGroup;
   @ViewChild('downloadTemplate') downloadTemplate = {} as TemplateRef<any>;
+
 
   constructor(private apiService: ApiService, private dialog: MatDialog, private titleService: Title, private router: Router) {
   }
@@ -219,7 +220,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
           } else if (params[key].includes('phylogenyCurrentClass - ')) {
             const phylogenyCurrentClass = params[key].split('phylogenyCurrentClass - ')[1];
             this.currentClass = phylogenyCurrentClass;
-          } else if (params[key].includes('searchValue - ')){
+          } else if (params[key].includes('searchValue - ')) {
             this.searchValue = params[key].split('searchValue - ')[1];
           } else {
             this.activeFilters.push(params[key]);
@@ -252,7 +253,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
               this.isLoadingResults = true;
               return this.apiService.getData(this.paginator.pageIndex,
                   this.paginator.pageSize, this.searchValue, this.sort.active, this.sort.direction, this.activeFilters,
-                  this.currentClass, this.phylogenyFilters, 'data_portal'
+                  this.currentClass, this.phylogenyFilters, 'data_portal_test'
               ).pipe(catchError(() => observableOf(null)));
             }),
             map(data => {
@@ -289,10 +290,28 @@ export class DashboardComponent implements OnInit, AfterViewInit {
                     'symbionts_assemblies_status');
               }
 
+              this.metagenomesFilters = [];
+              if (this.aggregations.metagenomes_biosamples_status.buckets.length > 0) {
+                this.metagenomesFilters = this.merge(this.metagenomesFilters,
+                    this.aggregations.metagenomes_biosamples_status.buckets,
+                    'metagenomes_biosamples_status');
+              }
+              if (this.aggregations.metagenomes_raw_data_status.buckets.length > 0) {
+                this.metagenomesFilters = this.merge(this.metagenomesFilters,
+                    this.aggregations.metagenomes_raw_data_status.buckets,
+                    'metagenomes_raw_data_status');
+              }
+              if (this.aggregations.metagenomes_assemblies_status.buckets.length > 0) {
+                this.metagenomesFilters = this.merge(this.metagenomesFilters,
+                    this.aggregations.metagenomes_assemblies_status.buckets,
+                    'metagenomes_assemblies_status');
+              }
+
+
               this.experimentTypeFilters = [];
               if (this.aggregations?.experiment.library_construction_protocol.buckets.length > 0) {
                 this.experimentTypeFilters = this.merge(this.experimentTypeFilters,
-                  this.aggregations?.experiment.library_construction_protocol.buckets,
+                    this.aggregations?.experiment.library_construction_protocol.buckets,
                     'experimentType');
               }
 
@@ -365,8 +384,8 @@ export class DashboardComponent implements OnInit, AfterViewInit {
     this.searchChanged.emit();
   }
 
-  updateQueryParams(urlParam: string){
-    if (urlParam === 'phylogenyCurrentClass'){
+  updateQueryParams(urlParam: string) {
+    if (urlParam === 'phylogenyCurrentClass') {
       const queryParamIndex = this.queryParams.findIndex((element: any) => element.includes('phylogenyCurrentClass - '));
       if (queryParamIndex > -1) {
         this.queryParams[queryParamIndex] = `phylogenyCurrentClass - ${this.currentClass}`;
@@ -399,7 +418,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
       setTimeout(() => {
         this.isPhylogenyFilterProcessing = false;
       }, 500);
-    } else{
+    } else {
       clearTimeout(this.timer);
       const index = this.activeFilters.indexOf(filterValue);
       index !== -1 ? this.activeFilters.splice(index, 1) : this.activeFilters.push(filterValue);
@@ -449,7 +468,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
       return 'Symbionts-' + filterName.split('-')[1];
     }
     if (filterName && filterName.startsWith('experimentType_')) {
-      return  filterName.split('_')[1];
+      return filterName.split('_')[1];
     }
     return filterName;
   }
@@ -477,8 +496,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
   getStyle(status: string) {
     if (['Annotation Complete', 'Done', 'Submitted'].includes(status.trim())) {
       return 'background-color:#8FBc45; --mdc-chip-label-text-color: #fff; --mdc-chip-label-text-size: 10px;';
-    }
-    else {
+    } else {
       return 'background-color:#ffc107;color: black;--mdc-chip-label-text-size: 10px;';
     }
   }
@@ -506,6 +524,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
       return ['#4BBEFD', 'common_name_source_other'];
     }
   }
+
   checkGenomeNotes(data: any) {
     if (data.genome_notes && data.genome_notes.length !== 0) {
       this.genomelength = data.genome_notes.length;
@@ -529,27 +548,30 @@ export class DashboardComponent implements OnInit, AfterViewInit {
   checkNbnAtlasExists(data): boolean {
     return data !== undefined && data.nbnatlas !== undefined && data.nbnatlas !== null;
   }
+
   // tslint:disable-next-line:typedef
   generateTolidLink(data) {
     const organismName = data.organism.split(' ').join('_');
-    if (typeof(data.tolid) === 'string'){
+    if (typeof (data.tolid) === 'string') {
       const clade = this.codes[data.tolid.charAt(0)];
       return `https://tolqc.cog.sanger.ac.uk/darwin/${clade}/${organismName}`;
 
-    }else {
+    } else {
       if (data.tolid.length > 0) {
         const clade = this.codes[data.tolid[0].charAt(0)];
         return `https://tolqc.cog.sanger.ac.uk/darwin/${clade}/${organismName}`;
       }
     }
   }
+
   generateGoatInfoLink(data) {
-    if (data.goat_info){
+    if (data.goat_info) {
       return data.goat_info.url;
     }
 
 
   }
+
   // tslint:disable-next-line:typedef
   getGenomeURL(data) {
     const genomeNotes = data.genome_notes;
@@ -559,6 +581,8 @@ export class DashboardComponent implements OnInit, AfterViewInit {
     }
     return genomeNotesURL;
   }
+
+
 
   onCancelDialog() {
     this.dialogRef.close();
