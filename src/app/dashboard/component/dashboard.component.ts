@@ -520,6 +520,10 @@ export class DashboardComponent implements OnInit, AfterViewInit {
         data.show_tolqc === true;
   }
 
+  checkGoatInfoExists(data) {
+    return data?.goat_info?.url !== undefined && data?.goat_info?.url !== null;
+  }
+
   checkGenomeExists(data) {
     this.genomelength = data !== undefined && data.genome_notes !== undefined && data.genome_notes != null &&
     data.genome_notes.length ? data.genome_notes.length : 0;

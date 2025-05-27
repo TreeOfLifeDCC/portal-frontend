@@ -370,12 +370,14 @@
                       </th>
                       <td mat-cell *matCellDef="let row"  style="padding: 5px 0;" [ngClass]="'w-219 th-left external_references_class'">
                         <span>
-                          <mat-chip style="background-color: #4BBEFD">
-                            <a class="goat-color" target="_blank" href="{{generateGoatInfoLink(row._source)}}"
-                              style="cursor: pointer">
-                              GoaT info
-                            </a>
-                          </mat-chip>
+                          @if(checkGoatInfoExists(row._source)){
+                              <mat-chip style="background-color: #4BBEFD">
+                                <a class="goat-color" target="_blank" href="{{generateGoatInfoLink(row._source)}}"
+                                  style="cursor: pointer">
+                                  GoaT info
+                                </a>
+                              </mat-chip>
+                          }
                           @if(checkTolidExists(row._source)){
                             <ng-container >
                               <mat-chip style="background-color: #5cc45e" class="tol_qc">
