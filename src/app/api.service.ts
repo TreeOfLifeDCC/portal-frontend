@@ -13,7 +13,7 @@ export class ApiService {
 
     private ENA_PORTAL_API_BASE_URL = 'https://www.ebi.ac.uk/ena/portal/api/files';
     private API_BASE_URL = 'https://portal.darwintreeoflife.org/api';
-    // private API_BASE_URL = 'http://localhost:8000';
+
     dialog: any;
     bytesPipe: any;
 
@@ -39,7 +39,8 @@ export class ApiService {
                 if (projectNames.indexOf(filterValue[i]) !== -1) {
                     filterValue[i] === 'DToL' ? filterItem = 'project_name:dtol' : filterItem = `project_name:${filterValue[i]}`;
                 } else if (filterValue[i].includes('-') && !filterValue[i].startsWith('experimentType')) {
-                    if (filterValue[i].startsWith('symbionts')) {
+                    if (filterValue[i].startsWith('symbionts') || filterValue[i].startsWith('metagenomes') ||
+                        filterValue[i].startsWith('mgnify_status')) {
                         filterItem = filterValue[i].replace('-', ':');
                     } else {
                         filterItem = filterValue[i].split(' - ')[0].toLowerCase().split(' ').join('_');
@@ -114,7 +115,8 @@ export class ApiService {
             let filterItem;
             for (let i = 0; i < filterValue.length; i++) {
                  if (filterValue[i].includes('-') && !filterValue[i].startsWith('experimentType')) {
-                    if (filterValue[i].startsWith('symbionts')) {
+                    if (filterValue[i].startsWith('symbionts') || filterValue[i].startsWith('metagenomes') ||
+                        filterValue[i].startsWith('mgnify_status')) {
                         filterItem = filterValue[i].replace('-', ':');
                     } else {
                         filterItem = filterValue[i].split(' - ')[0].toLowerCase().split(' ').join('_');
