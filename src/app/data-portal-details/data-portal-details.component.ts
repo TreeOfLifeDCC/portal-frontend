@@ -380,7 +380,7 @@ export class DataPortalDetailsComponent implements OnInit, AfterViewInit {
 
     getBiosampleById() {
         this.spinner.show();
-        this.apiService.getRootOrganismById(this.bioSampleId, 'data_portal_test')
+        this.apiService.getRootOrganismById(this.bioSampleId, 'data_portal')
             .subscribe(
                 data => {
                     const unpackedData = [];

@@ -6,6 +6,7 @@
 .btn-success,
 .badge-success {
     background-color: #8FBC45;
+    margin: 0px;
 }
 
 .btn-primary,
@@ -278,4 +279,5 @@ table {
         margin-top: 20px;
     }
 }
+
 

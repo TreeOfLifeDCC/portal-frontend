@@ -253,7 +253,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
               this.isLoadingResults = true;
               return this.apiService.getData(this.paginator.pageIndex,
                   this.paginator.pageSize, this.searchValue, this.sort.active, this.sort.direction, this.activeFilters,
-                  this.currentClass, this.phylogenyFilters, 'data_portal_test'
+                  this.currentClass, this.phylogenyFilters, 'data_portal'
               ).pipe(catchError(() => observableOf(null)));
             }),
             map(data => {

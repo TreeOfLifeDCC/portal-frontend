@@ -12,8 +12,8 @@ import { Observable } from 'rxjs';
 export class ApiService {
 
     private ENA_PORTAL_API_BASE_URL = 'https://www.ebi.ac.uk/ena/portal/api/files';
-    // private API_BASE_URL = 'https://portal.darwintreeoflife.org/api';
-    private API_BASE_URL = 'http://localhost:8000';
+    private API_BASE_URL = 'https://portal.darwintreeoflife.org/api';
+
     dialog: any;
     bytesPipe: any;
 
@@ -79,7 +79,7 @@ export class ApiService {
         return this.http.get<any>(url);
     }
 
-    getRootOrganismById(organismName: any, indexName = 'data_portal_test') {
+    getRootOrganismById(organismName: any, indexName = 'data_portal') {
         const url = `${this.API_BASE_URL}/${indexName}/${organismName}`;
         return this.http.get<any>(url);
     }
