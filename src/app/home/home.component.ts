@@ -1,6 +1,9 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {Title} from '@angular/platform-browser';
 import {NavigationEnd, Router, RouterLink} from '@angular/router';
+import {ApiService} from '../api.service';
+import {MatChip} from '@angular/material/chips';
+
 
 @Component({
   selector: 'app-home',
@@ -9,17 +12,25 @@ import {NavigationEnd, Router, RouterLink} from '@angular/router';
   standalone: true,
   imports: [
     RouterLink,
+    MatChip
   ]
 })
 export class HomeComponent implements OnInit, OnDestroy {
   private twitter: any;
+  data: any;
+  statusKeys: string[] = [];
 
-  constructor(private titleService: Title, private router: Router) {
+
+  constructor(private titleService: Title, private router: Router, private apiService: ApiService) {
     this.initTwitterWidget();
   }
 
   ngOnInit(): void {
     this.titleService.setTitle('Home');
+    this.apiService.getSummaryData('summary', 'summary').subscribe(data => {
+      this.data = data['results'][0]['_source'];
+      this.statusKeys = Object.keys(this.data);
+    });
   }
 
   // tslint:disable-next-line:typedef
@@ -58,5 +69,17 @@ export class HomeComponent implements OnInit, OnDestroy {
   ngOnDestroy() {
     this.twitter.unsubscribe();
   }
+
+  getQueryParams(key: string) {
+    const mapping: { [original: string]: string } = {
+      'Genome Notes': 'Genome Notes - Submitted',
+      'Annotation Complete': 'Annotation Complete - Done'
+    };
+
+    const updatedKey = mapping[key] || key;
+
+    return { 0: updatedKey };
+  }
+
 
 }
