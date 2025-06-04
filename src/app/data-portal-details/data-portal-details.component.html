@@ -1539,7 +1539,9 @@
 
                                 }
                                 <div class="row">
-                                 <table mat-table matTableExporter [dataSource]="dataSourceMetagenomesRecords"
+                                    <div class="col-md-12">
+                                        <div class="row">
+                                            <table mat-table matTableExporter [dataSource]="dataSourceMetagenomesRecords"
                                                    matSort #sortMetagenomes="matSort" style="width: 100%;">
 
                                         <ng-container matColumnDef="accession">
@@ -1564,14 +1566,12 @@
                                             <mat-header-cell *matHeaderCellDef mat-sort-header> Organism part </mat-header-cell>
                                             <mat-cell *matCellDef="let element" class="txt-center">{{element.organismPart}}</mat-cell>
                                         </ng-container>
-                                        <ng-container matColumnDef="trackingSystem">
+                                        <ng-container matColumnDef="trackingSystem" style ="margin-right: 21px;"
+                                                      }>
                                             <mat-header-cell *matHeaderCellDef mat-sort-header> Tracking status </mat-header-cell>
-                                            <mat-cell *matCellDef="let element">
+                                            <mat-cell *matCellDef="let element" style ="margin-right: 21px;">
                                                 <mat-chip-set>
-                                                    <mat-chip
-                                                            [ngStyle]="{'background-color': getStatusStyle(element.trackingSystem)[0]}">
-                                                        <span [ngClass]="getStatusStyle(element.trackingSystem)[1]">{{ element.trackingSystem }}</span>
-                                                    </mat-chip>
+                                                    <mat-chip [ngStyle]="{'background-color': 'gold'}">{{element.trackingSystem}}</mat-chip>
                                                 </mat-chip-set>
                                             </mat-cell>
                                         </ng-container>
@@ -1582,12 +1582,13 @@
                                             </td>
                                         </tr>
                                     </table>
+
                                 </div>
-                                  <mat-paginator #paginatorMetagenomes
+                                <mat-paginator #paginatorMetagenomes
                                                [pageSizeOptions]="[10, 20, 30]"
                                                [length]="dataSourceMetagenomesRecordsCount" showFirstLastButtons></mat-paginator>
-
-
+                            </div>
+                                </div>
                             </div>
                         </div>
                     </div>
