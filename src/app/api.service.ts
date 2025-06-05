@@ -84,6 +84,11 @@ export class ApiService {
         return this.http.get<any>(url);
     }
 
+    getSummaryData(organismName: any, indexName: string) {
+        const url = `${this.API_BASE_URL}/${indexName}/${organismName}`;
+        return this.http.get<any>(url);
+    }
+
     public getBiosampleByAccession(accession: string): Observable<any> {
         return this.http.get(`${this.API_BASE_URL}/organisms_test/${accession}`);
     }

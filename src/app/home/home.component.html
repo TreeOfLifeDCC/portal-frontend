@@ -21,19 +21,44 @@
                 conservation and biotechnology.
             </h2>
             <div class="row">
-                <div class="col-md-6">
-                    <button type="button" class="btn btn-primary btn-lg btn-block" [routerLink]="['/data']">
-                        <span class="material-icons">table_chart</span>
-                        Data Portal
-                    </button>
+                <div class="col-md-2" style="left: 147px;top: 8px;"><h2><strong> Data Status :</strong></h2></div>
+                <div class="col-md-10" style="border-right-style: none;left: 84px;">
+                    <div style=" margin-top: 7px; align-content: center" >
+
+                        @for (key of statusKeys; track key) {
+
+                            <mat-chip  class="btn btn-primary btn-sm"
+                                    [routerLink]="['/data']"
+                                      [queryParams]="getQueryParams(key)"
+                                    style="margin-right: 10px; cursor: pointer" >
+                                <span style="margin-right: 10px;">{{ key }}</span>
+                                <span class="badge badge-pill badge-info badge-space">
+                                        {{data[key]}}
+                        </span>
+
+                            </mat-chip>
+
+                        }
+
+                    </div>
+
                 </div>
-                <div class="col-md-6">
-                    <button type="button" class="btn btn-primary btn-lg btn-block" [routerLink]="['/tracking']">
-                        <span class="material-icons">linear_scale</span>
-                        Status Tracking
-                    </button>
-                </div>
+
+        </div>
+            <div class="row">
+            <div class="col-md-6">
+                <button type="button" class="btn btn-primary btn-lg btn-block" [routerLink]="['/data']">
+                    <span class="material-icons">table_chart</span>
+                    Data Portal
+                </button>
             </div>
+            <div class="col-md-6">
+                <button type="button" class="btn btn-primary btn-lg btn-block" [routerLink]="['/tracking']">
+                    <span class="material-icons">linear_scale</span>
+                    Status Tracking
+                </button>
+            </div>
+        </div>
             <div class="row">
                 <div class="col-md-6">
                     <button type="button" class="btn btn-primary btn-lg btn-block" [routerLink]="['/tree']">
