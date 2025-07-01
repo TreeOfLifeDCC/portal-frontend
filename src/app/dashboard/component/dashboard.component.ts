@@ -729,6 +729,13 @@ export class DashboardComponent implements OnInit, AfterViewInit {
   }
 
 
-
+  getImagesAvailableTrueCount(data: any) {
+    if (data) {
+      for (let i = 0; i < data.length; ++i) {
+        if (data[i]['key_as_string'] === 'true')
+          return data[i]['doc_count'];
+      }
+    }
+  }
 
 }
