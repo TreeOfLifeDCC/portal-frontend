@@ -98,6 +98,19 @@
                 </span>
                   </li>
               }
+
+              @if (aggregations?.images_available != undefined && getImagesAvailableTrueCount(aggregations?.images_available.buckets)) {
+                  <li role="listitem" class="list-group-item d-flex justify-content-between align-items-center"
+                      [style]="checkStyle('Images - Available')"
+                      (click)="onFilterClick('Images - Available')"
+                      style="cursor: pointer">
+                <span>
+               Images - Available</span>
+                      <span class="badge badge-pill badge-info badge-space">
+                  {{getImagesAvailableTrueCount(aggregations?.images_available.buckets)}}
+                </span>
+                  </li>
+              }
           </ul>
         </mat-card-actions>
       </mat-card>
