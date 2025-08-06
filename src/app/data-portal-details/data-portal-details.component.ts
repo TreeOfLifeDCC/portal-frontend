@@ -387,9 +387,23 @@ export class DataPortalDetailsComponent implements OnInit, AfterViewInit {
                     const unpackedSymbiontsData = [];
                     this.bioSampleObj = data.results[0]._source;
                     this.aggregations = data.aggregations;
-                    console.log(this.bioSampleObj.orgGeoList);
-                    this.orgGeoList = this.bioSampleObj.orgGeoList;
-                    this.specGeoList = this.bioSampleObj.specGeoList;
+                    if (this.bioSampleObj.orgGeoList !== undefined && this.bioSampleObj.orgGeoList.length !== 0){
+                        // tslint:disable-next-line:only-arrow-functions
+                        this.orgGeoList = this.bioSampleObj.orgGeoList.filter(item => item.lat != null || item.lng != null);
+
+                    }else {
+                        this.orgGeoList = [];
+                    }
+
+                    if (this.bioSampleObj.specGeoList !== undefined && this.bioSampleObj.specGeoList.length !== 0){
+                        // tslint:disable-next-line:only-arrow-functions
+                        this.specGeoList = this.bioSampleObj.specGeoList.filter(function(item) {
+                            return item.lat != null || item.lng != null;
+                        });
+                    }else {
+                        this.specGeoList = [];
+                    }
+
                     if (this.orgGeoList !== undefined && this.orgGeoList.length !== 0) {
                         this.geoLocation = true;
                         setTimeout(() => {
