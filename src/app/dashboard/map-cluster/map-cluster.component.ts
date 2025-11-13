@@ -83,7 +83,7 @@ export class MapClusterComponent implements AfterViewInit {
       if (this.orgGeoList[i].lat != 'not collected' && this.orgGeoList[i].lat != 'not provided') {
         const latlng = L.latLng(this.orgGeoList[i].lat, this.orgGeoList[i].lng);
         const m = L.marker(latlng);
-        const accession = `<div><a target="_blank" href=/data/organism/details/${this.orgGeoList[i].accession}>${this.orgGeoList[i].accession}</a></div>`;
+        const accession = `<div><a target="_blank" href=/organism/${this.orgGeoList[i].accession}>${this.orgGeoList[i].accession}</a></div>`;
         // const organism = this.orgGeoList[i].organism != null ? `<div>${this.orgGeoList[i].organism}</div>` : '';
         const commonName = this.orgGeoList[i].commonName != null ? `<div>${this.orgGeoList[i].commonName}</div>` : '';
         const organismPart = `<div>${this.orgGeoList[i].organismPart}</div>`;
