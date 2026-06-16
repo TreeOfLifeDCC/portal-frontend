@@ -83,11 +83,12 @@ export class MapClusterComponent implements AfterViewInit {
       if (this.orgGeoList[i].lat != 'not collected' && this.orgGeoList[i].lat != 'not provided') {
         const latlng = L.latLng(this.orgGeoList[i].lat, this.orgGeoList[i].lng);
         const m = L.marker(latlng);
-        const accession = `<div><a target="_blank" href=/organism/${this.orgGeoList[i].accession}>${this.orgGeoList[i].accession}</a></div>`;
-        // const organism = this.orgGeoList[i].organism != null ? `<div>${this.orgGeoList[i].organism}</div>` : '';
-        const commonName = this.orgGeoList[i].commonName != null ? `<div>${this.orgGeoList[i].commonName}</div>` : '';
-        const organismPart = `<div>${this.orgGeoList[i].organismPart}</div>`;
-        const popupcontent = accession + commonName + organismPart;
+        const popupcontent = this.buildPopupContent(
+          `/organism/${encodeURIComponent(this.orgGeoList[i].accession)}`,
+          this.orgGeoList[i].accession,
+          this.orgGeoList[i].commonName,
+          this.orgGeoList[i].organismPart
+        );
         const popup = L.popup({
           closeOnClick: false,
           autoClose: true,
@@ -104,11 +105,12 @@ export class MapClusterComponent implements AfterViewInit {
       if (this.specGeoList[i].lat != 'not collected' && this.specGeoList[i].lat != 'not provided') {
         const latlng = L.latLng(this.specGeoList[i].lat, this.specGeoList[i].lng);
         const m = L.marker(latlng);
-        const accession = `<div><a target="_blank" href=/data/specimens/details/${this.specGeoList[i].accession}>${this.specGeoList[i].accession}</a></div>`;
-        // const organism = this.specGeoList[i].organism != null ? `<div>${this.specGeoList[i].organism}</div>` : '';
-        const commonName = this.specGeoList[i].commonName != null ? `<div>${this.specGeoList[i].commonName}</div>` : '';
-        const organismPart = `<div>${this.specGeoList[i].organismPart}</div>`;
-        const popupcontent = accession + commonName + organismPart;
+        const popupcontent = this.buildPopupContent(
+          `/data/specimens/details/${encodeURIComponent(this.specGeoList[i].accession)}`,
+          this.specGeoList[i].accession,
+          this.specGeoList[i].commonName,
+          this.specGeoList[i].organismPart
+        );
         const popup = L.popup({
           closeOnClick: false,
           autoClose: true,
@@ -118,6 +120,34 @@ export class MapClusterComponent implements AfterViewInit {
         this.markers.addLayer(m);
       }
     }
+  }
+
+  // Builds the marker popup using DOM APIs and textContent so that
+  // backend-supplied values (accession, commonName, organismPart) can never
+  // be interpreted as HTML. Leaflet renders a string argument to setContent()
+  // as raw innerHTML, bypassing Angular's sanitizer, so we pass an element.
+  private buildPopupContent(href: string, accession: any, commonName: any, organismPart: any): HTMLElement {
+    const container = document.createElement('div');
+
+    const accessionDiv = document.createElement('div');
+    const link = document.createElement('a');
+    link.target = '_blank';
+    link.href = href;
+    link.textContent = accession != null ? String(accession) : '';
+    accessionDiv.appendChild(link);
+    container.appendChild(accessionDiv);
+
+    if (commonName != null) {
+      const commonNameDiv = document.createElement('div');
+      commonNameDiv.textContent = String(commonName);
+      container.appendChild(commonNameDiv);
+    }
+
+    const organismPartDiv = document.createElement('div');
+    organismPartDiv.textContent = organismPart != null ? String(organismPart) : '';
+    container.appendChild(organismPartDiv);
+
+    return container;
   }
 
   showCursorCoordinates() {

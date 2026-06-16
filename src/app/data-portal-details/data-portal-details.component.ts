@@ -18,7 +18,7 @@ import {
     MatTableDataSource
 } from '@angular/material/table';
 import {NgxSpinnerModule, NgxSpinnerService} from 'ngx-spinner';
-import {DomSanitizer, SafeResourceUrl, SafeHtml} from '@angular/platform-browser';
+import {DomSanitizer, SafeResourceUrl} from '@angular/platform-browser';
 import {ApiService} from '../api.service';
 import {MatTab, MatTabContent, MatTabGroup} from '@angular/material/tabs';
 import {MatCard, MatCardActions, MatCardTitle} from '@angular/material/card';
@@ -894,10 +894,6 @@ export class DataPortalDetailsComponent implements OnInit, AfterViewInit {
         document.body.appendChild(a);
         a.click();
         document.body.removeChild(a);
-    }
-
-    sanitizeHTML(content: string): SafeHtml {
-        return this.sanitizer.bypassSecurityTrustHtml(content);
     }
 
     openPopup(imageUrl: string) {
